@@ -235,8 +235,7 @@ public final class RankAdminMenu implements Listener, CommandExecutor, TabComple
     private void checkAccess(Player player, java.util.function.Consumer<RankService.Access> success) {
         ranks.getAccess(player.getUniqueId()).whenComplete((access, error) ->
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                    if (error != null || access == null || !access.authorized()
-                            ) {
+                    if (error != null || access == null || !access.authorized()) {
                         player.closeInventory();
                         player.sendMessage(color("&cYou are no longer authorized to use this panel."));
                         return;
