@@ -22,7 +22,7 @@ velvet_sofa:
   material: PAPER
   name: "&dVelvet Sofa"
   lore:
-    - "&7A plush two-seat sofa."
+    - "&7A plush velvet sofa with one seat."
     - "&eShift-right-click: sit"
     - "&eRight-click: bounce the cushions"
   model: velvet_sofa
