@@ -40,9 +40,6 @@ commands:
     description: View and manage GASMP Shards.
     usage: /shards <balance|give|take|set>
     aliases: [shard, gshards]
-  shop:
-    description: Opens the GASMP Coins shop.
-    usage: /shop
   shardshop:
     description: Opens the GASMP Shard Shop.
     usage: /shardshop
@@ -131,9 +128,6 @@ permissions:
   gasmpcore.shards.admin:
     description: Allows managing Shards balances.
     default: op
-  gasmpcore.shop.admin:
-    description: Reserved for future shop administration.
-    default: false
   gasmpcore.combat.bypass:
     description: Bypasses GASMP combat tagging and logout punishment.
     default: false

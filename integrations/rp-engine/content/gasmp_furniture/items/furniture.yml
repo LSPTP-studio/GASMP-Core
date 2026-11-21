@@ -1,0 +1,20 @@
+gasmp_modern_sofa:
+  material: PAPER
+  name: "&b&lGASMP MODERN SOFA"
+  lore:
+    - "&7A three-seat modern sofa."
+    - "&8Walnut • teal velvet • brass"
+    - "&7Place on a solid floor."
+  texture: item/gasmp_modern_sofa
+  model: gasmp_modern_sofa
+  place:
+    facing: cardinal
+    scale: 1.0
+    solid: true
+    surface: floor
+    animations:
+      sit_press:
+        mode: once
+        speed: 1.0
+        priority: 8
+        blend: 0.12

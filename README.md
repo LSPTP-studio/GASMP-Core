@@ -44,7 +44,6 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 |---|---|---|
 | Player profiles | SQLite UUID profiles, first/last seen, kills/deaths/play ticks | Static checks only; live migration test required |
 | Shards | Persistent integer balance, give/take/set, transaction ledger | Separate from Coins; no transfers, cash-out or real-money top-ups |
-| Coins shop | Vault-backed categories, pages, confirm, purchase log and rollback/reconciliation | Verify provider behavior on the actual economy plugin |
 | RTP | Safe-location search, warmup, cooldown, combat restriction, movement cancellation | Depends on configured world being loaded and suitable terrain |
 | Combat | Combat tags, logout record/punishment, quit/join handling | Tune tag duration and punishment policy before launch |
 | Bounties | Vault-funded placements, kill claims, top list and refund/reconciliation paths | Economy provider failure can require staff reconciliation |
@@ -75,7 +74,6 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 
 On first start, Core copies the default resources into `plugins/GASMP-Core/`:
 - `config.yml` — master settings and module toggles
-- `shop.yml` — product list/prices/category settings
 - `rtp.yml` — safe teleport world, radius, attempts and cooldown
 - `casino.yml` — command-game enable flags, odds limits and bet range
 - `battlepass.yml` — season ID, levels and reward definitions
@@ -90,7 +88,7 @@ Read `docs/` before changing live data. Avoid manually editing the SQLite databa
 
 ## Commands
 
-The command list and aliases are declared in `src/main/resources/plugin.yml`. The key user commands include `/gasmp`, `/shards`, `/shop`, `/rtp`, `/bounty`, `/ah`, `/team`, `/battlepass`, `/casino` (virtual Coins; requires Vault Economy), and `/gvanish`. `/shardshop` opens the Shard Shop directly. Staff/admin commands include `/gasmpcore`, `/gasmpadmin`, `/crates`, `/gmaintenance`, `/gban`, `/gunban`, `/gmute`, `/gunmute`, `/gwarn`, `/gkick`, `/ghistory`, `/gholo`, `/gchatgame`, `/gtop` and `/gperf`.
+The command list and aliases are declared in `src/main/resources/plugin.yml`. The key user commands include `/gasmp`, `/shards`, `/rtp`, `/bounty`, `/ah`, `/team`, `/battlepass`, `/casino` (virtual Coins; requires Vault Economy), and `/gvanish`. `/shardshop` opens the Shard Shop directly. Staff/admin commands include `/gasmpcore`, `/gasmpadmin`, `/crates`, `/gmaintenance`, `/gban`, `/gunban`, `/gmute`, `/gunmute`, `/gwarn`, `/gkick`, `/ghistory`, `/gholo`, `/gchatgame`, `/gtop` and `/gperf`.
 
 ## Rank assets for Phase 2
 
@@ -109,7 +107,7 @@ The three rank-art bundles supplied by the server owner are preserved in `assets
 1. Build with JDK 25 and Gradle 9.x.
 2. Start a clean Paper 26.2 test server with LuckPerms, Vault and an economy provider.
 3. Confirm SQLite schema initialization and restart persistence.
-4. Test Shards, shop transactions, bounties and auction mailbox with normal players.
+4. Test Shard Shop transactions, bounties and auction mailbox with normal players.
 5. Test team invites, crate keys/rewards, Battle Pass claims and chat games.
 6. Test maintenance and staff permissions with separate Player, Builder, Mod, Admin, Developer and Owner accounts.
 7. Test with Java and Bedrock clients, and confirm TAB prefixes from LuckPerms.
@@ -132,8 +130,13 @@ The GitHub Actions workflow is included at `.github/workflows/build.yml`. It run
 
 ## Menu and Shard Shop update
 
-The player menu is organized into Economy, Arcade, Adventure, Decorations, Profile and Statistics. Utility menu entries execute their corresponding player commands rather than displaying placeholder notices. The Shard Shop is a separate, paginated catalogue with category filters and a confirmation screen. Its initial furniture and decor kits contain vanilla blocks/items and do not require a custom resource pack; they are not animated custom furniture models.
+The player menu is organized into Shard Shop, Arcade, Adventure, Decorations, Profile and Statistics. Utility menu entries execute their corresponding player commands rather than displaying placeholder notices. The Shard Shop is a separate, paginated catalogue with category filters and a confirmation screen. Its initial furniture and decor kits contain vanilla blocks/items and do not require a custom resource pack; custom Blockbench furniture models are added separately through the RP Engine content pack.
 
 The casino entry in the player menu opens the existing animated arcade GUI. Casino bets and payouts use only the configured Vault Economy provider's in-server Coins. The casino requires the two enabled configuration flags shown above and a working provider; it does not support real-money deposits, purchases or cash-outs.
 
 The Shard Shop checks the player's inventory before purchase, debits the persistent Shard balance through the SQLite transaction service, and refunds the balance if normal item delivery fails. Test server shutdown/recovery behavior on staging before production.
+
+
+## Storefront change
+
+The Coins Shop has been removed from the player menu and command set. GASMP uses Shards as its player-facing rewards storefront currency through /shardshop. Vault Coins remain available for configured gameplay systems such as the casino, bounties and team bank; this change does not remove the underlying Vault economy integration.

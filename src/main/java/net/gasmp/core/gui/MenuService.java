@@ -37,10 +37,6 @@ public final class MenuService implements Listener {
     }
 
     public void open(Player player, MenuPage page) {
-        if (page == MenuPage.SHOP) {
-            plugin.getShopService().open(player, 0);
-            return;
-        }
         if (page == MenuPage.SHARD_SHOP) {
             plugin.getShardShopService().open(player, 0);
             return;
@@ -61,7 +57,6 @@ public final class MenuService implements Listener {
 
         switch (page) {
             case MAIN -> buildMain(holder, inventory);
-            case SHOP -> buildShop(holder, inventory);
             case STATISTICS -> buildStatistics(holder, inventory, player);
             case DECORATIONS -> buildDecorations(holder, inventory);
             case MUSIC -> buildMusic(holder, inventory);
@@ -84,9 +79,13 @@ public final class MenuService implements Listener {
     }
 
     private void buildMain(MenuHolder holder, Inventory inventory) {
-        set(inventory, 11, Material.GOLD_INGOT, "&e&lEconomy",
-                "&7Coins shop and your Shards wallet", "&eClick to open");
-        holder.navigate(11, MenuPage.SHARDS);
+        set(inventory, 4, Material.NETHER_STAR, "&d&lGASMP NETWORK",
+                "&7Survival  &8•  &dShards  &8•  &6Arcade",
+                "&8Your server, your progression.");
+        set(inventory, 11, Material.AMETHYST_CLUSTER, "&d&lShard Shop",
+                "&7Furniture, decor and exclusive rewards",
+                "&7Browse the GASMP rewards catalogue", "&eClick to open");
+        holder.navigate(11, MenuPage.SHARD_SHOP);
         set(inventory, 13, Material.FIREWORK_ROCKET, "&6&lArcade",
                 "&7Animated GASMP mini-games", "&eClick to open");
         holder.navigate(13, MenuPage.CASINO);
@@ -94,10 +93,10 @@ public final class MenuService implements Listener {
                 "&7Teleport, teams, bounties and auctions", "&eClick to open");
         holder.navigate(15, MenuPage.UTILITY);
         set(inventory, 21, Material.ARMOR_STAND, "&9&lDecorations",
-                "&7Furniture kits and building decor", "&eClick to open");
+                "&7Furniture kits and building decor", "&eClick to browse");
         holder.navigate(21, MenuPage.DECORATIONS);
         set(inventory, 23, Material.PLAYER_HEAD, "&a&lProfile",
-                "&7Your player overview and wallet", "&eClick to open");
+                "&7Your player overview and Shards wallet", "&eClick to open");
         holder.navigate(23, MenuPage.PROFILE);
         set(inventory, 25, Material.WRITABLE_BOOK, "&d&lStatistics",
                 "&7Kills, deaths and playtime", "&eClick to open");
@@ -105,13 +104,7 @@ public final class MenuService implements Listener {
         set(inventory, 49, Material.BARRIER, "&c&lClose", "&7Close this menu");
     }
 
-    private void buildShop(MenuHolder holder, Inventory inventory) {
-        // The SHOP page is redirected to ShopService.open() before this builder is reached.
-        // Keep a safe fallback in case a future refactor changes that routing.
-        set(inventory, 22, Material.GOLD_INGOT, "&e&lCoins Shop", "&7The live Vault-backed catalogue is loading.");
-        holder.notice(22, "&eUse /shop to open the live GASMP Coins catalogue.");
-    }
-
+    
     private void buildUtility(MenuHolder holder, Inventory inventory) {
         set(inventory, 11, Material.ENDER_PEARL, "&b&lRandom Teleport",
                 "&7Search for a safe wilderness location", "&eClick to run /rtp");
@@ -170,17 +163,15 @@ public final class MenuService implements Listener {
     }
 
     private void buildShards(MenuHolder holder, Inventory inventory) {
-        set(inventory, 22, Material.AMETHYST_SHARD, "&d&lGASMP Shards", "&7Loading your balance...");
-        set(inventory, 11, Material.GOLD_INGOT, "&e&lCoins Shop",
-                "&7Buy survival supplies with Coins", "&eClick to browse");
-        holder.navigate(11, MenuPage.SHOP);
-        set(inventory, 15, Material.AMETHYST_CLUSTER, "&d&lShard Shop",
-                "&7Furniture kits, decor and utility rewards", "&eClick to browse");
+        set(inventory, 22, Material.AMETHYST_SHARD, "&d&lSHARD WALLET", "&7Loading your balance...");
+        set(inventory, 15, Material.AMETHYST_CLUSTER, "&d&lOpen Shard Shop",
+                "&7Browse furniture, decor and rewards", "&eClick to open");
         holder.navigate(15, MenuPage.SHARD_SHOP);
         set(inventory, 31, Material.BOOK, "&f&lAbout Shards",
-                "&7A separate GASMP reward currency.",
-                "&7Shards are not Coins and cannot be cashed out.");
-        holder.notice(31, "&dShards are separate from Coins and can be spent in the Shard Shop.");
+                "&7GASMP's progression and reward currency.",
+                "&7Earn Shards through server activities.",
+                "&7Spend them on furniture and cosmetics.");
+        holder.notice(31, "&dShards are GASMP's reward currency, separate from Vault Coins.");
     }
 
     private void refreshShards(Player player, MenuHolder holder) {
@@ -216,6 +207,7 @@ public final class MenuService implements Listener {
     private void buildProfile(MenuHolder holder, Inventory inventory, Player player) {
         set(inventory, 22, Material.PLAYER_HEAD, "&a&l" + player.getName(), "&7Your GASMP profile", "&7Kills: &f" + player.getStatistic(Statistic.PLAYER_KILLS), "&7Deaths: &f" + player.getStatistic(Statistic.DEATHS));
         set(inventory, 31, Material.AMETHYST_SHARD, "&d&lShards Wallet", "&7Loading your saved balance...");
+        holder.navigate(31, MenuPage.SHARDS);
     }
 
     private void refreshProfile(Player player, MenuHolder holder) {
@@ -288,26 +280,34 @@ public final class MenuService implements Listener {
     }
 
     private void fillFrame(Inventory inventory, MenuPage page) {
-        Material frame = switch (page) {
-            case MAIN, STATISTICS, PROFILE -> Material.MAGENTA_STAINED_GLASS_PANE;
-            case SHOP, DECORATIONS -> Material.BLUE_STAINED_GLASS_PANE;
-            case MUSIC -> Material.PURPLE_STAINED_GLASS_PANE;
-            case SHARDS, SHARD_SHOP -> Material.PURPLE_STAINED_GLASS_PANE;
-            case UTILITY -> Material.LIGHT_BLUE_STAINED_GLASS_PANE;
+        Material accent = switch (page) {
+            case MAIN, PROFILE, STATISTICS -> Material.MAGENTA_STAINED_GLASS_PANE;
+            case DECORATIONS -> Material.BLUE_STAINED_GLASS_PANE;
+            case MUSIC, SHARDS -> Material.PURPLE_STAINED_GLASS_PANE;
+            case SHARD_SHOP -> Material.PURPLE_STAINED_GLASS_PANE;
+            case UTILITY -> Material.CYAN_STAINED_GLASS_PANE;
             case CASINO -> Material.ORANGE_STAINED_GLASS_PANE;
             case SETTINGS -> Material.BLACK_STAINED_GLASS_PANE;
         };
-        ItemStack filler = item(frame, " ");
-        for (int slot = 0; slot < MENU_SIZE; slot++) {
-            int row = slot / 9;
-            int column = slot % 9;
-            if (row == 0 || row == 5 || column == 0 || column == 8) {
-                inventory.setItem(slot, filler.clone());
+        Material secondary = page == MenuPage.MAIN || page == MenuPage.PROFILE
+                ? Material.PURPLE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE;
+        ItemStack dark = item(Material.BLACK_STAINED_GLASS_PANE, " ");
+        for (int column = 0; column < 9; column++) {
+            if (column == 0 || column == 8) {
+                inventory.setItem(column, dark.clone());
+                inventory.setItem(45 + column, dark.clone());
+            } else {
+                inventory.setItem(column, item(column % 2 == 0 ? accent : secondary, " "));
+                inventory.setItem(45 + column, item(column % 2 == 0 ? secondary : accent, " "));
             }
+        }
+        for (int row = 1; row < 5; row++) {
+            inventory.setItem(row * 9, dark.clone());
+            inventory.setItem(row * 9 + 8, dark.clone());
         }
     }
 
-    private void set(Inventory inventory, int slot, Material material, String name, String... lore) {
+    private void set(Inventory inventory, int slot, Material material, String name, String... lore) {    private void set(Inventory inventory, int slot, Material material, String name, String... lore) {
         inventory.setItem(slot, item(material, name, lore));
     }
 
@@ -332,7 +332,6 @@ public final class MenuService implements Listener {
         String custom = plugin.getConfig().getString("menus.main-menu-title", "&d&lGASMP &8• &5Menu");
         return switch (page) {
             case MAIN -> color(custom);
-            case SHOP -> color("&9&lGASMP &8• &1Shop");
             case STATISTICS -> color("&d&lGASMP &8• &5Statistics");
             case DECORATIONS -> color("&9&lGASMP &8• &3Decorations");
             case MUSIC -> color("&5&lGASMP &8• &dMusic Player");

@@ -8,7 +8,6 @@ The command descriptor is the definitive list of registered commands. Commands a
 |---|---|
 | `/gasmp` | Opens the current GASMP menu framework. |
 | `/shards [balance]` | View your Shards balance. |
-| `/shop` | Opens the Coins shop. |
 | `/rtp` | Requests a safe random teleport. |
 | `/bounty place <player> <amount>` | Place a Coins bounty on an online player. |
 | `/bounty top` | View active bounties. |

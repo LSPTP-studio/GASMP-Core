@@ -45,3 +45,8 @@ Physical custom-block interactions call `/gcrateopen <player> <crate-id>` throug
 Open the `.bbmodel` files in Blockbench 5.x. Each crate contains a body group and a separate animated lid group. The `open` animation rotates the lid around its hinge pivot. Export/convert through the RP Engine workflow supported by the installed version.
 
 The textures are 64x64 pixel-art atlases with separate UV regions for crate body faces and lid faces. Replace textures in the pack's `assets/textures/block/` and update the inline texture source in the `.bbmodel` if you edit the model texture externally.
+
+
+## GASMP furniture content
+
+The separate `gasmp_furniture` content pack adds the editable GASMP Modern Sofa Blockbench 5 model and its original 128x128 texture. The model contains separate frame, upholstery, seat cushion, back cushion, throw pillow and brass hardware groups, plus a short `sit_press` cushion animation. Copy the entire `gasmp_furniture` folder into the RP Engine content directory before reloading/generating the resource pack. Test the resulting model and placement on the exact RP Engine and Geyser versions used by the server.

@@ -10,7 +10,6 @@ import net.gasmp.core.command.LeaderboardCommand;
 import net.gasmp.core.command.PerformanceCommand;
 import net.gasmp.core.command.RtpCommand;
 import net.gasmp.core.command.ShardCommand;
-import net.gasmp.core.command.ShopCommand;
 import net.gasmp.core.combat.CombatService;
 import net.gasmp.core.crates.CrateService;
 import net.gasmp.core.data.PlayerDataStore;
@@ -23,7 +22,6 @@ import net.gasmp.core.moderation.ModerationService;
 import net.gasmp.core.rank.RankAdminMenu;
 import net.gasmp.core.rank.RankService;
 import net.gasmp.core.rtp.RtpService;
-import net.gasmp.core.shop.ShopService;
 import net.gasmp.core.shardshop.ShardShopService;
 import net.gasmp.core.skills.ToolSkillsService;
 import net.gasmp.core.staff.CommandRestrictionService;
@@ -42,7 +40,6 @@ public final class GASMPCore extends JavaPlugin {
     private PlayerDataStore dataStore;
     private RankService rankService;
     private VaultEconomyBridge economyBridge;
-    private ShopService shopService;
     private ShardShopService shardShopService;
     private CombatService combatService;
     private RtpService rtpService;
@@ -60,7 +57,7 @@ public final class GASMPCore extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         for (String resource : new String[]{
-                "ranks.yml", "shop.yml", "rtp.yml", "casino.yml", "battlepass.yml",
+                "ranks.yml", "rtp.yml", "casino.yml", "battlepass.yml",
                 "crates.yml", "chat-games.yml", "maintenance.yml", "holograms.yml", "shard-shop.yml"
         }) saveIfMissing(resource);
 
@@ -84,9 +81,7 @@ public final class GASMPCore extends JavaPlugin {
         // LuckPerms is a soft dependency and is normally loaded before this plugin.
         StaffAccess staffAccess = new StaffAccess();
 
-        shopService = new ShopService(this);
-        getServer().getPluginManager().registerEvents(shopService, this);
-        shardShopService = new ShardShopService(this);
+        shardShopService = new ShardShopService(this);        shardShopService = new ShardShopService(this);
         getServer().getPluginManager().registerEvents(shardShopService, this);
         combatService = new CombatService(this);
         getServer().getPluginManager().registerEvents(combatService, this);
@@ -129,7 +124,6 @@ public final class GASMPCore extends JavaPlugin {
         bind("gasmp", coreCommand);
         bind("gasmpcore", coreCommand);
         bind("shards", new ShardCommand(this));
-        bind("shop", new ShopCommand(this));
         bind("shardshop", shardShopService);
         bind("rtp", new RtpCommand(this));
         bind("bounty", bountyService);
@@ -162,7 +156,7 @@ public final class GASMPCore extends JavaPlugin {
         if (getConfig().getBoolean("modules.chat-games", true)) chatGameService.startScheduler();
 
         getLogger().info("GASMP Core v" + getPluginMeta().getVersion() + " enabled.");
-        getLogger().info("Phase 1 active: profiles, Shards, Vault shop, RTP, combat logging, bounties, auction house, battle pass, crates, teams, moderation, maintenance, holograms, tool skills, chat games, casino (disabled by default), leaderboards, performance snapshot and staff utilities.");
+        getLogger().info("Phase 1 active: profiles, Shards, Vault economy integrations, RTP, combat logging, bounties, auction house, battle pass, crates, teams, moderation, maintenance, holograms, tool skills, chat games, casino (disabled by default), leaderboards, performance snapshot and staff utilities.");
         if (!BukkitCompatibleVault()) getLogger().warning("Vault economy unavailable; Coins features are disabled until a provider registers Economy.class.");
     }
 
@@ -192,7 +186,6 @@ public final class GASMPCore extends JavaPlugin {
     public PlayerDataStore getDataStore() { return dataStore; }
     public RankService getRankService() { return rankService; }
     public VaultEconomyBridge getEconomyBridge() { return economyBridge; }
-    public ShopService getShopService() { return shopService; }
     public ShardShopService getShardShopService() { return shardShopService; }
     public CasinoService getCasinoService() { return casinoService; }
     public CombatService getCombatService() { return combatService; }
@@ -200,7 +193,6 @@ public final class GASMPCore extends JavaPlugin {
 
     public void reloadCore() {
         reloadConfig();
-        if (shopService != null) shopService.reload();
         if (shardShopService != null) shardShopService.reload();
         if (rankService != null) {
             rankService.loadConfiguration();
