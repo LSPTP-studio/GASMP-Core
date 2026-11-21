@@ -1,6 +1,8 @@
 package net.gasmp.core.chatgame;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.gasmp.core.GASMPCore;
 import net.gasmp.core.data.PlayerDataStore;
 import net.gasmp.core.staff.StaffAccess;
@@ -74,12 +76,12 @@ public final class ChatGameService implements Listener, CommandExecutor, TabComp
 
     private void startRound(Round round) {
         if (!active.compareAndSet(null, round)) return;
-        Bukkit.broadcast(color("&d&lGASMP CHAT GAME &8» &f" + round.prompt()));
-        Bukkit.broadcast(color("&7First correct answer wins &8- &d" + config.getLong("reward-shards", 5) + " Shards"));
+        broadcast(color("&d&lGASMP CHAT GAME &8» &f" + round.prompt()));
+        broadcast(color("&7First correct answer wins &8- &d" + config.getLong("reward-shards", 5) + " Shards"));
         BukkitTask previousTimeout = timeout.getAndSet(null);
         if (previousTimeout != null) previousTimeout.cancel();
         BukkitTask newTimeout = Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (active.compareAndSet(round, null)) Bukkit.broadcast(color("&cTime is up! The answer was &f" + round.answer() + "&c."));
+            if (active.compareAndSet(round, null)) broadcast(color("&cTime is up! The answer was &f" + round.answer() + "&c."));
             timeout.set(null);
         }, Math.max(10L, config.getLong("round-timeout-seconds", 45L)) * 20L);
         timeout.set(newTimeout);
@@ -89,7 +91,7 @@ public final class ChatGameService implements Listener, CommandExecutor, TabComp
     public void onChat(AsyncChatEvent event) {
         Round round = active.get();
         if (round == null) return;
-        String answer = event.message().plainText().trim().toLowerCase(Locale.ROOT);
+        String answer = PlainTextComponentSerializer.plainText().serialize(event.message()).trim().toLowerCase(Locale.ROOT);
         if (!answer.equals(round.answer().toLowerCase(Locale.ROOT))) return;
         BukkitTask roundTimeout = timeout.get();
         if (!active.compareAndSet(round, null)) return;
@@ -107,9 +109,9 @@ public final class ChatGameService implements Listener, CommandExecutor, TabComp
                 .whenComplete((balance, error) -> Bukkit.getScheduler().runTask(plugin, () -> {
                     if (error != null) {
                         plugin.getLogger().severe("Chat game reward failed for " + winnerName + ": " + error.getMessage());
-                        Bukkit.broadcast(color("&d&lCHAT GAME &8» &f" + winnerName + " answered correctly, but reward delivery failed. Please contact staff."));
+                        broadcast(color("&d&lCHAT GAME &8» &f" + winnerName + " answered correctly, but reward delivery failed. Please contact staff."));
                     } else {
-                        Bukkit.broadcast(color("&d&lCHAT GAME &8» &f" + winnerName + " &awon! &d+" + reward + " Shards"));
+                        broadcast(color("&d&lCHAT GAME &8» &f" + winnerName + " &awon! &d+" + reward + " Shards"));
                     }
                 }));
     }
@@ -146,6 +148,10 @@ public final class ChatGameService implements Listener, CommandExecutor, TabComp
         }
         return shuffled;
     }
+    private void broadcast(String message) {
+        Bukkit.broadcast(LegacyComponentSerializer.legacySection().deserialize(message));
+    }
+
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         return args.length == 1 ? List.of("start", "stop", "resume", "status", "reload") : List.of();

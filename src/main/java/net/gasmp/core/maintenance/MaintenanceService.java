@@ -3,6 +3,7 @@ package net.gasmp.core.maintenance;
 import net.gasmp.core.GASMPCore;
 import net.gasmp.core.staff.StaffAccess;
 import org.bukkit.Bukkit;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -63,10 +64,10 @@ public final class MaintenanceService implements Listener, CommandExecutor, TabC
         }
         if (args[0].equalsIgnoreCase("on")) {
             config.set("enabled", true); save();
-            Bukkit.broadcast(color("&c&lGASMP is entering maintenance mode. New players will be temporarily blocked."));
+            broadcast(color("&c&lGASMP is entering maintenance mode. New players will be temporarily blocked."));
         } else if (args[0].equalsIgnoreCase("off")) {
             config.set("enabled", false); save();
-            Bukkit.broadcast(color("&a&lGASMP maintenance mode has ended. Welcome back!"));
+            broadcast(color("&a&lGASMP maintenance mode has ended. Welcome back!"));
         } else if (args[0].equalsIgnoreCase("reload")) {
             reload(); player.sendMessage(color("&aMaintenance config reloaded."));
         } else {
@@ -94,6 +95,10 @@ public final class MaintenanceService implements Listener, CommandExecutor, TabC
         try { config.save(file); }
         catch (Exception ex) { plugin.getLogger().severe("Could not save maintenance.yml: " + ex.getMessage()); }
     }
+    private void broadcast(String message) {
+        Bukkit.broadcast(LegacyComponentSerializer.legacySection().deserialize(message));
+    }
+
     private String color(String value) { return ChatColor.translateAlternateColorCodes('&', value); }
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) return List.of("on", "off", "status", "reload");
