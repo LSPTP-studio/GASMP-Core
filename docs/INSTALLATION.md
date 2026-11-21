@@ -21,7 +21,7 @@ gradle build
 Expected output:
 
 ```text
-build/libs/GASMP-Core-0.7.0.jar
+build/libs/GASMP-Core-0.8.0.jar
 ```
 
 This release archive has not been compiled in the preparation environment. Do not assume a JAR exists until the build completes successfully on your machine or CI runner.
