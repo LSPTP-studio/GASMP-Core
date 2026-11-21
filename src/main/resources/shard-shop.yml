@@ -5,12 +5,13 @@ settings:
   items-per-page: 21
 items:
   oak_chair:
-    material: ARMOR_STAND
+    material: PAPER
+    custom-id: "gasmp_furniture:oak_chair"
     amount: 1
-    price: 35
+    price: 85
     category: furniture
     display-name: "&6Oak Chair"
-    lore: ["&7Vanilla decorative stand item", "&7A simple furniture prop for builds"]
+    lore: ["&7Animated Blockbench furniture", "&eRight-click: rock", "&eShift-right-click: sit"]
   wall_paintings:
     material: PAINTING
     amount: 2
@@ -144,3 +145,44 @@ items:
     category: supplies
     display-name: "&cCooked Beef x16"
     lore: ["&7Food for your next adventure"]
+
+  velvet_sofa:
+    material: PAPER
+    custom-id: "gasmp_furniture:velvet_sofa"
+    amount: 1
+    price: 220
+    category: furniture
+    display-name: "&dVelvet Sofa"
+    lore: ["&7Two-seat animated sofa", "&eShift-right-click: sit", "&eRight-click: bounce"]
+  dining_table:
+    material: PAPER
+    custom-id: "gasmp_furniture:dining_table"
+    amount: 1
+    price: 160
+    category: furniture
+    display-name: "&6Dining Table"
+    lore: ["&7Animated wooden table", "&eRight-click: tap"]
+  crystal_lamp:
+    material: PAPER
+    custom-id: "gasmp_furniture:crystal_lamp"
+    amount: 1
+    price: 190
+    category: furniture
+    display-name: "&bPrismatic Crystal Lamp"
+    lore: ["&7Pulsing animated crystal", "&7Emits light level 14"]
+  arcade_cabinet:
+    material: PAPER
+    custom-id: "gasmp_furniture:arcade_cabinet"
+    amount: 1
+    price: 275
+    category: furniture
+    display-name: "&dGASMP Arcade Cabinet"
+    lore: ["&7Custom animated arcade cabinet", "&eRight-click: animate controls"]
+  gasmp_trophy:
+    material: PAPER
+    custom-id: "gasmp_furniture:gasmp_trophy"
+    amount: 1
+    price: 125
+    category: furniture
+    display-name: "&6GASMP Champion Trophy"
+    lore: ["&7Animated award display", "&eRight-click: spin"]
