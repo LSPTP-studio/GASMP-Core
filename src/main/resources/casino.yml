@@ -1,4 +1,4 @@
-# The arcade is intentionally OFF by default. Currency is virtual in-server Coins via Vault.
+# The arcade uses virtual in-server Coins via Vault. No real-money deposits or cash-out.
 settings:
   enabled: true
   default-bet: 10.0
