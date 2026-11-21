@@ -64,6 +64,7 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 ## Default release safety
 
 - Casino uses virtual in-server Coins only, with no real-money deposits or cash-out. Fresh installs enable it; for an existing 0.7.0 config, set `modules.casino: true` and `casino.yml` `settings.enabled: true` after reviewing limits and odds.
+- The named config-admin allowlist is in `config.yml`: `carltzy3k` is the Owner and `thommacide` is the Developer. It allows Core config reload and rank administration with Owner/Developer restrictions; it does not grant unrelated LuckPerms permissions.
 - Shards cannot go negative. Player-to-player transfers, real-money purchases and cash-outs are disabled.
 - `/crates` management is Owner/Developer-only; players open configured crate blocks with physical keys.
 - OpenInv is restricted to Builder/Developer/Owner policy as configured for your server, but the default permission mapping is read-only and does not grant inventory-edit nodes.
@@ -114,7 +115,7 @@ The three rank-art bundles supplied by the server owner are preserved in `assets
 6. Test maintenance and staff permissions with separate Player, Builder, Mod, Admin, Developer and Owner accounts.
 7. Test with Java and Bedrock clients, and confirm TAB prefixes from LuckPerms.
 8. Test with protection plugins installed; confirm vein miner/tree capitator do not bypass protection.
-9. Keep casino disabled until all bets/payouts and provider-failure scenarios are verified.
+9. Keep the casino on a staging server until every game, wager limit, payout and provider-failure/refund path has been tested. Only then enable it on the live server.
 10. Review console logs and database after repeated join/quit, plugin reload and server restart cycles.
 
 
