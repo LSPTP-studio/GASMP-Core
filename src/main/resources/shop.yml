@@ -1,0 +1,50 @@
+# Coins shop. Prices use the active Vault Economy provider's currency.
+settings:
+  enabled: true
+  title: "&9&lGASMP &8• &1Shop"
+  items-per-page: 21
+  max-quantity: 64
+items:
+  stone:
+    material: STONE
+    amount: 16
+    price: 24.00
+    category: blocks
+    display-name: "&fStone x16"
+    lore: ["&7Basic building block", "&eClick to purchase"]
+  oak_logs:
+    material: OAK_LOG
+    amount: 8
+    price: 48.00
+    category: blocks
+    display-name: "&6Oak Logs x8"
+    lore: ["&7Useful for building", "&eClick to purchase"]
+  iron_ingots:
+    material: IRON_INGOT
+    amount: 8
+    price: 120.00
+    category: materials
+    display-name: "&fIron Ingots x8"
+    lore: ["&7Smelted iron", "&eClick to purchase"]
+  golden_apples:
+    material: GOLDEN_APPLE
+    amount: 2
+    price: 300.00
+    category: combat
+    display-name: "&6Golden Apples x2"
+    lore: ["&7A valuable combat consumable", "&eClick to purchase"]
+  cooked_beef:
+    material: COOKED_BEEF
+    amount: 16
+    price: 64.00
+    category: food
+    display-name: "&cCooked Beef x16"
+    lore: ["&7Food for your adventures", "&eClick to purchase"]
+  ender_pearl:
+    material: ENDER_PEARL
+    amount: 4
+    price: 160.00
+    category: combat
+    display-name: "&5Ender Pearls x4"
+    lore: ["&7Teleportation utility", "&eClick to purchase"]
+
