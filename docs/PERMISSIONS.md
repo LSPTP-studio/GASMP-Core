@@ -25,12 +25,20 @@ The exact set is configured in `RankService`. Review it before using this candid
 - `gasmpcore.shards.admin` — Shards balance modification.
 - `gasmpcore.combat.bypass` — bypass combat logout tagging/punishment.
 - `gasmpcore.crates.manage` — crate management marker; command itself also requires `owner` or `dev`.
-- `gasmpcore.casino.play` — casino command permission. Casino remains disabled in default config.
+- `gasmpcore.casino.play` — casino command permission. Fresh installs enable the virtual-Coins arcade; review and test its odds and limits on staging before using it live.
 - `gasmpcore.maintenance.bypass` — bypass maintenance login gate.
 - `gasmpcore.skills.veinminer` — Vein Miner ability.
 - `gasmpcore.skills.treecap` — Tree Capitator ability.
 - `gasmpcore.staff.vanish` — marker for staff vanish; command itself checks group membership.
 - `gasmpcore.moderation.basic` / `gasmpcore.moderation.advanced` — documented markers; moderation command role checks are additionally enforced in the service.
+
+## Named GASMP config administrators
+
+The default `config.yml` allowlist contains:
+- `carltzy3k` under `config-admins.owners`.
+- `thommacide` under `config-admins.developers`.
+
+These case-insensitive names are authorized for `/gasmpcore reload` and the rank-administration panel. The Owner entry receives Owner-level rank assignment limits; the Developer entry cannot self-promote or grant Owner/Admin/Manager/Developer ranks and cannot modify protected top-staff accounts. This allowlist does not automatically add LuckPerms group membership or grant unrelated staff-tool permissions.
 
 ## Third-party staff access
 
