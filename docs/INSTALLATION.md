@@ -1,4 +1,4 @@
-# GASMP Core 0.7.0 — installation guide
+# GASMP Core 0.8.0 — installation guide
 
 ## 1. Required software
 
