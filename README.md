@@ -1,4 +1,4 @@
-# GASMP Core 0.7.0 — Day 1 stabilization candidate
+# GASMP Core 0.8.0 — menu, currency and furniture milestone
 
 **Target:** Paper 26.2 (Purpur compatibility only where the Paper API behavior is shared)  
 **Runtime:** Java 25  
@@ -7,7 +7,7 @@
 
 ## Important release status
 
-This is a **source release candidate**, not a verified production JAR. The workspace used to prepare it has Java 21 and does not have Gradle or cached Paper/Vault/LuckPerms dependencies. Static/source and database checks are possible here, but Paper 26.2 compilation and live server integration tests remain outstanding. Build it with JDK 25 and Gradle on a network-enabled development machine before installing it on GASMP.
+This is a feature milestone built on the 0.7.0 source. The earlier 0.7.0 baseline compiled successfully in GitHub Actions. This 0.8.0 branch still needs its own CI build and staging-server tests before the JAR should be installed on GASMP.
 
 ## Dependencies
 
@@ -34,7 +34,7 @@ This is a **source release candidate**, not a verified production JAR. The works
 gradle build
 ```
 
-Output: `build/libs/GASMP-Core-0.7.0.jar`.
+Output: `build/libs/GASMP-Core-0.8.0.jar`.
 
 The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 and VaultAPI 1.7. SQLite JDBC is included as a runtime dependency in the plugin JAR. Do not use JDK 21 for this target; compile and run with Java 25.
 
@@ -43,8 +43,8 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 | System | Current source implementation | Limitations / release notes |
 |---|---|---|
 | Player profiles | SQLite UUID profiles, first/last seen, kills/deaths/play ticks | Static checks only; live migration test required |
-| Shards | Persistent integer balance, give/take/set, transaction ledger | Separate from Coins; no transfers, cash-out or real-money top-ups |
-| Coins shop | Vault-backed categories, pages, confirm, purchase log and rollback/reconciliation | Verify provider behavior on the actual economy plugin |
+| Shards | Persistent integer balance, give/take/set, transaction ledger, separate paginated Shard Shop with confirmation and durable item-mail fallback | Separate from Coins; no transfers, cash-out or real-money top-ups; custom furniture items require RP Engine |
+| Coins shop | Expanded Vault-backed categories, pages, purchase confirmation, transaction log and rollback/reconciliation | Verify provider behavior on the actual economy plugin |
 | RTP | Safe-location search, warmup, cooldown, combat restriction, movement cancellation | Depends on configured world being loaded and suitable terrain |
 | Combat | Combat tags, logout record/punishment, quit/join handling | Tune tag duration and punishment policy before launch |
 | Bounties | Vault-funded placements, kill claims, top list and refund/reconciliation paths | Economy provider failure can require staff reconciliation |
@@ -52,7 +52,7 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 | Battle Pass | Season XP, ore/mob XP events, level rewards and claim records | Basic progression/reward implementation, not full mission/season GUI |
 | Crates | Configurable weighted rewards, physical key checks, location persistence, protected custom blocks, RP Engine keys and animated placed Vote/Legendary crate models | RP Engine content must be installed/reloaded; custom block variant is static, use the placed model for the lid animation; reward preview UI still needs work |
 | Teams | Leader/Co-Leader/Officer/Member roles, team bank, capacity upgrades, descriptions, named homes/list, alliances, invite expiry, team chat and membership management | Requires a Vault provider for Coins bank/upgrades; team missions, contribution tracking, friendly-fire/war and custom GUI still need work |
-| Casino | Casino selector GUI, wager selection, game-themed animated spin panels, server-side results, transaction audit, odds/help | Disabled by default; Blackjack, Poker and Tic-Tac-Toe are simplified quick-match simulations, not full interactive game rules/boards |
+| Casino | Main-menu button now opens the real casino GUI; bet selection, animated spin panels, server-side result and transaction audit | Enabled by default on fresh installs; uses virtual Coins only. Blackjack, Poker and Tic-Tac-Toe remain simplified quick-match simulations, not full interactive games |
 | Chat games | Scheduled/manual chat rounds and configured rewards | Text-based formats, not a large custom GUI game suite |
 | Moderation | Ban/unban, mute/unmute, warn, kick and history | Verify moderation policy, online/offline handling and persistence on live server |
 | Maintenance | Persistent enable/disable, login gate and MOTD change | Test bypass groups and server-list display with actual clients |
@@ -63,7 +63,7 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 
 ## Default release safety
 
-- Casino is disabled by default (`modules.casino: false`, `casino.yml settings.enabled: false`). Keep it disabled until odds, limits and provider error behavior are tested on the live economy plugin.
+- Casino uses virtual in-server Coins only, with no real-money deposits or cash-out. Fresh installs enable it; for an existing 0.7.0 config, set `modules.casino: true` and `casino.yml` `settings.enabled: true` after reviewing limits and odds.
 - Shards cannot go negative. Player-to-player transfers, real-money purchases and cash-outs are disabled.
 - `/crates` management is Owner/Developer-only; players open configured crate blocks with physical keys.
 - OpenInv is restricted to Builder/Developer/Owner policy as configured for your server, but the default permission mapping is read-only and does not grant inventory-edit nodes.
@@ -75,7 +75,8 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 
 On first start, Core copies the default resources into `plugins/GASMP-Core/`:
 - `config.yml` — master settings and module toggles
-- `shop.yml` — product list/prices/category settings
+- `shop.yml` — Coins product list/prices/category settings
+- `shard-shop.yml` — separate Shards catalogue, categories and prices
 - `rtp.yml` — safe teleport world, radius, attempts and cooldown
 - `casino.yml` — command-game enable flags, odds limits and bet range
 - `battlepass.yml` — season ID, levels and reward definitions
@@ -89,7 +90,7 @@ Read `docs/` before changing live data. Avoid manually editing the SQLite databa
 
 ## Commands
 
-The command list and aliases are declared in `src/main/resources/plugin.yml`. The key user commands include `/gasmp`, `/shards`, `/shop`, `/rtp`, `/bounty`, `/ah`, `/team`, `/battlepass`, `/casino` (disabled by default), and `/gvanish`. Staff/admin commands include `/gasmpcore`, `/gasmpadmin`, `/crates`, `/gmaintenance`, `/gban`, `/gunban`, `/gmute`, `/gunmute`, `/gwarn`, `/gkick`, `/ghistory`, `/gholo`, `/gchatgame`, `/gtop` and `/gperf`.
+The command list and aliases are declared in `src/main/resources/plugin.yml`. The key user commands include `/gasmp`, `/shards`, `/shardshop`, `/shop`, `/rtp`, `/bounty`, `/ah`, `/team`, `/battlepass`, `/casino`, and `/gvanish`. Staff/admin commands include `/gasmpcore`, `/gasmpadmin`, `/crates`, `/gmaintenance`, `/gban`, `/gunban`, `/gmute`, `/gunmute`, `/gwarn`, `/gkick`, `/ghistory`, `/gholo`, `/gchatgame`, `/gtop` and `/gperf`.
 
 ## Rank assets for Phase 2
 
@@ -127,3 +128,22 @@ The three rank-art bundles supplied by the server owner are preserved in `assets
 - Staging-server launch plan, dependency notes and GitHub Actions Java 25 build workflow.
 
 The GitHub Actions workflow is included at `.github/workflows/build.yml`. It runs static release validation and builds with Java 25 / Gradle 9.9.2, then uploads the JAR artifact. Follow `docs/GITHUB-ACTIONS.md` to publish this source to your GitHub repository and download the artifact. This source project has not been compiled here; live Paper 26.2 / Geyser / RP Engine testing remains necessary.
+
+
+## 0.8.0 feature milestone
+
+- Rewired the main-menu Casino tile to the real casino GUI and enabled the virtual-Coins arcade defaults for fresh installs.
+- Added a separate Shard Shop with category filters, pagination, purchase confirmation, atomic Shards debit and a durable mail fallback if a buyer disconnects during a purchase.
+- Expanded the Coins catalogue with Blocks, Materials, Tools, Combat, Food and Utility entries; the existing GUI keeps 21 items per page.
+- Added a cleaner main menu with direct links to Auction House, RTP, Teams, Battle Pass, Shards, Profile and Casino.
+- Added six original RP Engine furniture models: Oak Chair, Velvet Sofa, Dining Table, Prismatic Crystal Lamp, Arcade Cabinet and Champion Trophy. The chair and sofa have seats; the lamp emits light level 14; the models include authored click animations.
+- Added named config-admin allowlist defaults: `carltzy3k` (Owner) and `thommacide` (Developer). These names authorize GASMP config reload and the rank-admin panel with Owner/Developer limits; they do not grant unrelated LuckPerms permissions.
+
+### Remaining limitations
+
+- The new 0.8.0 branch still needs CI compilation, RP Engine pack reload, and live staging checks on Paper 26.2.
+- The six furniture models are Java/RP Engine assets; Geyser/Bedrock rendering and sit placement need real client tests.
+- The Shard Shop hides its custom furniture entries when RP Engine is absent; the regular vanilla décor stock remains separate.
+- Casino Blackjack, Poker and Tic-Tac-Toe are quick-match simulations. Crash is a fixed-target round rather than a live cash-out game. Full rule-driven versions remain future work.
+- Music playback and personal Settings controls are still placeholders. The decorations/furniture area is connected to the Shard Shop catalogue but is not yet a full furniture placement editor.
+- Custom font/glyph GUI artwork and the final dual-edition resource packs remain future work.
