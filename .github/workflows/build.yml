@@ -55,6 +55,7 @@ jobs:
             integrations/rp-engine/content/gasmp_furniture/*.yml \
             integrations/rp-engine/content/gasmp_furniture/items/*.yml
           python3 - <<'PY'
+          import base64
           import json
           from pathlib import Path
           models = sorted(Path("integrations/rp-engine/content/gasmp_furniture/assets/models").glob("*.bbmodel"))
@@ -65,7 +66,13 @@ jobs:
                   model = json.load(handle)
               if not model.get("elements") or not model.get("groups"):
                   raise SystemExit(f"Model is missing geometry or groups: {path}")
-              print(f"Blockbench JSON OK: {path}")
+              for texture in model.get("textures", []):
+                  source = texture.get("source", "")
+                  if source.startswith("data:image/png;base64,"):
+                      png = base64.b64decode(source.split(",", 1)[1], validate=True)
+                      if not png.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+                          raise SystemExit(f"Invalid embedded PNG in {path}")
+              print(f"Blockbench JSON and textures OK: {path}")
           PY
 
       - name: Build plugin
