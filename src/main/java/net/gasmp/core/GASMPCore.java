@@ -81,7 +81,7 @@ public final class GASMPCore extends JavaPlugin {
         // LuckPerms is a soft dependency and is normally loaded before this plugin.
         StaffAccess staffAccess = new StaffAccess();
 
-        shardShopService = new ShardShopService(this);        shardShopService = new ShardShopService(this);
+        shardShopService = new ShardShopService(this);
         getServer().getPluginManager().registerEvents(shardShopService, this);
         combatService = new CombatService(this);
         getServer().getPluginManager().registerEvents(combatService, this);
