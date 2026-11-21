@@ -1,0 +1,44 @@
+name: GASMP Core Build
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Java 25
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+      - name: Set up Python for release checks
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Run static release validation
+        run: |
+          python -m pip install --disable-pip-version-check PyYAML
+          python scripts/validate_release.py
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '9.9.2'
+      - name: Build plugin
+        run: gradle --no-daemon clean build
+      - name: Upload plugin JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: GASMP-Core-${{ github.sha }}
+          path: build/libs/GASMP-Core-*.jar
+          if-no-files-found: error
+          retention-days: 14
