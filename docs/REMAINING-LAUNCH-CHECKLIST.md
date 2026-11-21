@@ -1,4 +1,4 @@
-# Remaining launch checklist — GASMP Core 0.7.0
+# Remaining launch checklist — GASMP Core 0.8.0
 
 ## Added in this source milestone
 - [x] Advanced team roles: Leader, Co-Leader, Officer, Member.
