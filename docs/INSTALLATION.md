@@ -24,7 +24,7 @@ Expected output:
 build/libs/GASMP-Core-0.8.0.jar
 ```
 
-This release archive has not been compiled in the preparation environment. Do not assume a JAR exists until the build completes successfully on your machine or CI runner.
+The 0.8.0 branch has passed the Java 25 GitHub Actions compile. Download the JAR from the successful Actions run or build it locally. This confirms compilation, not live Paper/RP Engine behavior.
 
 ## 3. Install on a test server first
 
@@ -33,10 +33,17 @@ This release archive has not been compiled in the preparation environment. Do no
 3. Install and configure one Vault-compatible economy plugin if you want Coins systems.
 4. Copy `GASMP-Core-0.8.0.jar` into `plugins/` after building it.
 5. Start the server once. Confirm the console reports SQLite initialization and does not show plugin-load errors.
-6. Confirm `plugins/GASMP-Core/` contains `config.yml`, `shop.yml`, `rtp.yml`, `casino.yml`, `battlepass.yml`, `crates.yml`, `chat-games.yml`, `maintenance.yml`, `holograms.yml` and `ranks.yml`.
+6. Confirm `plugins/GASMP-Core/` contains `config.yml`, `shop.yml`, `shard-shop.yml`, `rtp.yml`, `casino.yml`, `battlepass.yml`, `crates.yml`, `chat-games.yml`, `maintenance.yml`, `holograms.yml` and `ranks.yml`.
 7. Stop the server and review each config before inviting players.
 8. Add your trusted staff accounts to LuckPerms groups. Review the group/permission setup in `docs/PERMISSIONS.md`.
 9. Start the server and use the test checklist in `docs/PHASE1-TEST-PLAN.md`.
+
+For an existing 0.7.0 installation:
+- Back up the entire `plugins/GASMP-Core/` folder first.
+- The new named config-admin defaults are copied into `config.yml` if the lists are missing. Confirm `carltzy3k` is under `config-admins.owners` and `thommacide` is under `config-admins.developers`.
+- Existing `config.yml` and `casino.yml` values are preserved. To enable the arcade on an existing server, set `modules.casino: true` in `config.yml` and `settings.enabled: true` in `casino.yml` after staging tests.
+- Review the new `shard-shop.yml` catalogue. Shards remain separate from Vault Coins.
+
 
 ## 4. Economy setup
 
