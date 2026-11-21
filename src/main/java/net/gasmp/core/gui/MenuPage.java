@@ -7,6 +7,7 @@ public enum MenuPage {
     DECORATIONS,
     MUSIC,
     SHARDS,
+    SHARD_SHOP,
     CASINO,
     PROFILE,
     SETTINGS
