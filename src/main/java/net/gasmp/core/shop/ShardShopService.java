@@ -43,7 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class ShardShopService implements Listener, CommandExecutor, TabCompleter {
     private record Entry(String key, String category, Material material, int amount, long price,
-                         String displayName, List<String> lore, String permission) { }
+                         String displayName, List<String> lore, String permission, String customId) { }
     private record Category(String key, String label, Material icon) { }
     private enum Stage { LIST, CONFIRM }
 
@@ -115,8 +115,9 @@ public final class ShardShopService implements Listener, CommandExecutor, TabCom
             String category = normalizeCategory(item.getString("category", "utility"));
             String displayName = item.getString("display-name", "&f" + material.name());
             String permission = item.getString("permission", "").trim();
+            String customId = item.getString("custom-id", "").trim();
             entries.put(key, new Entry(key, category, material, amount, price, displayName,
-                    List.copyOf(item.getStringList("lore")), permission));
+                    List.copyOf(item.getStringList("lore")), permission, customId));
         }
         plugin.getLogger().info("Loaded " + entries.size() + " valid Shard Shop entries.");
     }
@@ -316,6 +317,7 @@ public final class ShardShopService implements Listener, CommandExecutor, TabCom
         return entries.values().stream()
                 .filter(entry -> category.equals("all") || entry.category().equals(category))
                 .filter(entry -> entry.permission().isBlank() || player.hasPermission(entry.permission()))
+                .filter(entry -> entry.customId().isBlank() || isRpEngineEnabled())
                 .toList();
     }
 
@@ -357,14 +359,64 @@ public final class ShardShopService implements Listener, CommandExecutor, TabCom
     }
 
     private ItemStack makeItem(Entry entry) {
-        ItemStack item = new ItemStack(entry.material(), entry.amount());
+        ItemStack item = null;
+        if (!entry.customId().isBlank()) item = createEngineItem(entry.customId(), entry.amount());
+        if (item == null) item = new ItemStack(entry.material(), entry.amount());
+
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             meta.setDisplayName(color(entry.displayName()));
-            if (!entry.lore().isEmpty()) meta.setLore(entry.lore().stream().map(this::color).toList());
+            List<String> lore = new ArrayList<>(entry.lore().stream().map(this::color).toList());
+            if (!entry.customId().isBlank() && !isRpEngineEnabled()) {
+                lore.add(color("&cRequires RP Engine to place the 3D furniture model."));
+            }
+            meta.setLore(lore.isEmpty() ? null : lore);
             item.setItemMeta(meta);
         }
         return item;
+    }
+
+    private boolean isRpEngineEnabled() {
+        org.bukkit.plugin.Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        return engine != null && engine.isEnabled();
+    }
+
+    /** Mirrors the crate integration and keeps RP Engine optional at compile time. */
+    private ItemStack createEngineItem(String contentIdText, int amount) {
+        org.bukkit.plugin.Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        if (engine == null || !engine.isEnabled()) return null;
+        try {
+            ClassLoader loader = engine.getClass().getClassLoader();
+            Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
+            Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
+            if (!(parsed instanceof java.util.Optional<?> optional) || optional.isEmpty()) return null;
+            Object items = engine.getClass().getMethod("items").invoke(engine);
+            Object created = null;
+            for (java.lang.reflect.Method method : items.getClass().getMethods()) {
+                if (!method.getName().equals("create")) continue;
+                Class<?>[] types = method.getParameterTypes();
+                if (types.length == 2 && types[0].equals(contentIdClass) && types[1] == int.class) {
+                    created = method.invoke(items, optional.get(), amount);
+                    break;
+                }
+                if (types.length == 1 && types[0].equals(contentIdClass)) {
+                    created = method.invoke(items, optional.get());
+                    break;
+                }
+            }
+            if (created instanceof java.util.Optional<?> stackOptional && stackOptional.isPresent()) {
+                created = stackOptional.get();
+            }
+            if (created instanceof ItemStack stack) {
+                ItemStack result = stack.clone();
+                result.setAmount(Math.min(amount, result.getMaxStackSize()));
+                return result;
+            }
+        } catch (ReflectiveOperationException | RuntimeException error) {
+            plugin.getLogger().fine("RP Engine furniture item " + contentIdText
+                    + " is unavailable: " + safeMessage(error));
+        }
+        return null;
     }
 
     private Inventory create(Holder holder, int size, String title) {
