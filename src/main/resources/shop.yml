@@ -250,4 +250,4 @@ items:
     price: 420.00
     category: utility
     display-name: "&5Ender Chest"
-    lore: ["&7Access your personal storage", "&eClick to purchase"
+    lore: ["&7Access your personal storage", "&eClick to purchase"]
