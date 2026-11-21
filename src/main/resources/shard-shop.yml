@@ -1,0 +1,146 @@
+# Separate Shards storefront. Prices are whole Shards; no Coins or real-money conversion.
+settings:
+  enabled: true
+  title: "&5&lGASMP &8• &dShard Shop"
+  items-per-page: 21
+items:
+  oak_chair:
+    material: ARMOR_STAND
+    amount: 1
+    price: 35
+    category: furniture
+    display-name: "&6Oak Chair"
+    lore: ["&7Vanilla decorative stand item", "&7A simple furniture prop for builds"]
+  wall_paintings:
+    material: PAINTING
+    amount: 2
+    price: 18
+    category: furniture
+    display-name: "&dWall Paintings x2"
+    lore: ["&7Decorate your walls", "&7Vanilla placement"]
+  item_frames:
+    material: ITEM_FRAME
+    amount: 4
+    price: 16
+    category: furniture
+    display-name: "&6Item Frames x4"
+    lore: ["&7Display your favourite items"]
+  glow_frames:
+    material: GLOW_ITEM_FRAME
+    amount: 2
+    price: 22
+    category: furniture
+    display-name: "&bGlow Item Frames x2"
+    lore: ["&7Bright display frames"]
+  flower_pots:
+    material: FLOWER_POT
+    amount: 4
+    price: 14
+    category: furniture
+    display-name: "&cFlower Pots x4"
+    lore: ["&7Small decorative planters"]
+  lanterns:
+    material: LANTERN
+    amount: 4
+    price: 20
+    category: furniture
+    display-name: "&eLanterns x4"
+    lore: ["&7Warm decorative lighting"]
+  chains:
+    material: CHAIN
+    amount: 8
+    price: 16
+    category: furniture
+    display-name: "&7Chains x8"
+    lore: ["&7Industrial build details"]
+  campfire:
+    material: CAMPFIRE
+    amount: 1
+    price: 28
+    category: furniture
+    display-name: "&6Campfire"
+    lore: ["&7A cozy decorative fire"]
+  bookshelves:
+    material: BOOKSHELF
+    amount: 4
+    price: 30
+    category: furniture
+    display-name: "&6Bookshelves x4"
+    lore: ["&7For libraries and interiors"]
+  fireworks:
+    material: FIREWORK_ROCKET
+    amount: 16
+    price: 24
+    category: cosmetics
+    display-name: "&dFirework Rockets x16"
+    lore: ["&7Celebrate a win or event"]
+  magenta_dye:
+    material: MAGENTA_DYE
+    amount: 16
+    price: 18
+    category: cosmetics
+    display-name: "&dMagenta Dye x16"
+    lore: ["&7Colour for your builds"]
+  purple_dye:
+    material: PURPLE_DYE
+    amount: 16
+    price: 18
+    category: cosmetics
+    display-name: "&5Purple Dye x16"
+    lore: ["&7Colour for your builds"]
+  glow_ink:
+    material: GLOW_INK_SAC
+    amount: 8
+    price: 22
+    category: cosmetics
+    display-name: "&bGlow Ink Sacs x8"
+    lore: ["&7Make signs glow"]
+  name_tag:
+    material: NAME_TAG
+    amount: 1
+    price: 30
+    category: utility
+    display-name: "&eName Tag"
+    lore: ["&7Name a mob or pet"]
+  leads:
+    material: LEAD
+    amount: 4
+    price: 20
+    category: utility
+    display-name: "&fLeads x4"
+    lore: ["&7Move animals and mobs"]
+  ender_pearl:
+    material: ENDER_PEARL
+    amount: 4
+    price: 26
+    category: utility
+    display-name: "&5Ender Pearls x4"
+    lore: ["&7Teleportation utility"]
+  saddle:
+    material: SADDLE
+    amount: 1
+    price: 32
+    category: utility
+    display-name: "&6Saddle"
+    lore: ["&7Equipment for rideable mobs"]
+  experience_bottles:
+    material: EXPERIENCE_BOTTLE
+    amount: 8
+    price: 24
+    category: supplies
+    display-name: "&aExperience Bottles x8"
+    lore: ["&7A little boost for enchanting"]
+  golden_carrots:
+    material: GOLDEN_CARROT
+    amount: 8
+    price: 24
+    category: supplies
+    display-name: "&6Golden Carrots x8"
+    lore: ["&7Useful travel food"]
+  cooked_beef:
+    material: COOKED_BEEF
+    amount: 16
+    price: 20
+    category: supplies
+    display-name: "&cCooked Beef x16"
+    lore: ["&7Food for your next adventure"]
