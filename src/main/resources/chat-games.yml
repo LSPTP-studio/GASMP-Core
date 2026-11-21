@@ -1,4 +1,0 @@
-enabled: true
-interval-seconds: 600
-round-timeout-seconds: 45
-reward-shards: 10

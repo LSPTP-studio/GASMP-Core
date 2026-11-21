@@ -1,0 +1,115 @@
+oak_chair:
+  material: PAPER
+  name: "&6Oak Chair"
+  lore:
+    - "&7A sit-able wooden chair."
+    - "&eRight-click: rock the backrest"
+    - "&eShift-right-click: sit"
+  model: oak_chair
+  place:
+    facing: cardinal
+    surface: floor
+    scale: 1.0
+    solid: false
+    seat: 0.52
+    animations:
+      rock:
+        mode: once
+        speed: 1.0
+        priority: 10
+
+velvet_sofa:
+  material: PAPER
+  name: "&dVelvet Sofa"
+  lore:
+    - "&7A plush two-seat sofa."
+    - "&eShift-right-click: sit"
+    - "&eRight-click: bounce the cushions"
+  model: velvet_sofa
+  place:
+    facing: cardinal
+    surface: floor
+    scale: 1.0
+    solid: false
+    seat:
+      x: 0.0
+      y: 0.55
+      z: 0.0
+    animations:
+      bounce:
+        mode: once
+        speed: 1.0
+        priority: 10
+
+dining_table:
+  material: PAPER
+  name: "&6Dining Table"
+  lore:
+    - "&7An oak dining table."
+    - "&eRight-click: tap the table"
+  model: dining_table
+  place:
+    facing: cardinal
+    surface: floor
+    scale: 1.0
+    solid: false
+    animations:
+      tap:
+        mode: once
+        speed: 1.0
+        priority: 10
+
+crystal_lamp:
+  material: PAPER
+  name: "&bPrismatic Crystal Lamp"
+  lore:
+    - "&7A softly pulsing crystal lamp."
+    - "&eEmits light level 14"
+  model: crystal_lamp
+  place:
+    facing: cardinal
+    surface: floor
+    scale: 1.0
+    solid: false
+    light: 14
+    animations:
+      pulse:
+        mode: loop
+        speed: 1.0
+        priority: 5
+
+arcade_cabinet:
+  material: PAPER
+  name: "&dGASMP Arcade Cabinet"
+  lore:
+    - "&7A custom arcade cabinet."
+    - "&eRight-click: play the joystick animation"
+  model: arcade_cabinet
+  place:
+    facing: cardinal
+    surface: floor
+    scale: 1.0
+    solid: false
+    animations:
+      play:
+        mode: once
+        speed: 1.0
+        priority: 10
+
+gasmp_trophy:
+  material: PAPER
+  name: "&6GASMP Champion Trophy"
+  lore:
+    - "&7A rotating award display."
+    - "&eRight-click: spin the trophy"
+  model: gasmp_trophy
+  place:
+    facing: cardinal
+    surface: floor
+    scale: 1.0
+    solid: false
+    animations:
+      spin:
+        mode: once
+        speed: 1.0
+        priority: 10
