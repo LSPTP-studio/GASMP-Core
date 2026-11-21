@@ -153,7 +153,7 @@ items:
     price: 220
     category: furniture
     display-name: "&dVelvet Sofa"
-    lore: ["&7Two-seat animated sofa", "&eShift-right-click: sit", "&eRight-click: bounce"]
+    lore: ["&7Plush animated sofa with one seat", "&eShift-right-click: sit", "&eRight-click: bounce"]
   dining_table:
     material: PAPER
     custom-id: "gasmp_furniture:dining_table"
