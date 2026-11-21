@@ -195,6 +195,24 @@ public final class GASMPCore extends JavaPlugin {
     public ShopService getShopService() { return shopService; }
     public ShardShopService getShardShopService() { return shardShopService; }
     public CasinoService getCasinoService() { return casinoService; }
+
+    /**
+     * Returns the configured named-account role, or an empty string if the account
+     * is not on the explicit GASMP config-admin allowlist.
+     */
+    public String configAdminRole(String username) {
+        if (username == null || username.isBlank()) return "";
+        String candidate = username.trim();
+        var section = getConfig().getConfigurationSection("config-admins");
+        if (section == null) return "";
+        if (section.getStringList("owners").stream().anyMatch(name -> name.equalsIgnoreCase(candidate))) return "owner";
+        if (section.getStringList("developers").stream().anyMatch(name -> name.equalsIgnoreCase(candidate))) return "dev";
+        return "";
+    }
+
+    public boolean isConfigAdmin(String username) {
+        return !configAdminRole(username).isEmpty();
+    }
     public CombatService getCombatService() { return combatService; }
     public RtpService getRtpService() { return rtpService; }
 
