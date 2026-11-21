@@ -222,7 +222,7 @@ public final class ShardShopService implements Listener, CommandExecutor {
                             "&d&l" + balance + " ✦ Shards",
                             "&8Choose a kit and confirm before checkout."));
                 });
-            } catch (IllegalStateException ignored) {
+            } catch (RuntimeException ignored) {
                 // The plugin may be shutting down while the async balance query completes.
             }
         }).exceptionally(error -> {
