@@ -335,7 +335,7 @@ public final class MenuService implements Listener {
             case STATISTICS -> color("&d&lGASMP &8• &5Statistics");
             case DECORATIONS -> color("&9&lGASMP &8• &3Decorations");
             case MUSIC -> color("&5&lGASMP &8• &dMusic Player");
-            case SHARDS -> color("&d&lGASMP &8• &5Economy");
+            case SHARDS -> color("&d&lGASMP &8• &5Shard Wallet");
             case SHARD_SHOP -> color("&d&lGASMP &8• &5Shard Shop");
             case UTILITY -> color("&b&lGASMP &8• &3Adventure");
             case CASINO -> color("&6&lGASMP &8• &eCasino");

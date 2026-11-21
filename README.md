@@ -98,7 +98,7 @@ The three rank-art bundles supplied by the server owner are preserved in `assets
 
 - Final rank ladder/role tracks and rank prefix design using the supplied icons
 - Owner-only and Developer-only admin dashboards
-- Fully customized Owner/Developer dashboards and refreshed player/shop/team/auction/crate/casino/staff menus
+- Fully customized Owner/Developer dashboards and refreshed player/Shard Shop/team/auction/crate/casino/staff menus
 - Final rank ladder, rank art wiring and cinematic rank-up with sound, particles, emblems and optional model/texture effects
 - Final Java/Bedrock UI artwork, Geyser validation and cross-edition fallbacks
 

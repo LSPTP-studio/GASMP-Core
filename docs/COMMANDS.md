@@ -7,6 +7,7 @@ The command descriptor is the definitive list of registered commands. Commands a
 | Command | Purpose |
 |---|---|
 | `/gasmp` | Opens the current GASMP menu framework. |
+| `/shardshop` | Opens the Shard Shop for furniture, decor and rewards. |
 | `/shards [balance]` | View your Shards balance. |
 | `/rtp` | Requests a safe random teleport. |
 | `/bounty place <player> <amount>` | Place a Coins bounty on an online player. |
@@ -30,7 +31,7 @@ The command descriptor is the definitive list of registered commands. Commands a
 | `/team sethome [name]` / `/team home [name]` / `/team homes` | Named team homes and home listing. |
 | `/team ally <team>` / `/team allyaccept` / `/team unally <team>` / `/team allies` | Symmetric alliances with configurable limits. |
 | `/battlepass` / `/battlepass claim <level>` | View progress and claim milestone rewards. |
-| `/casino menu` / `/casino odds` / `/casino <game> ...` | Animated game-themed spin UI and virtual-Coins games; disabled by default. Poker/Tic-Tac-Toe remain simplified quick-match simulations. |
+| `/casino menu` / `/casino odds` / `/casino <game> ...` | Animated game-themed spin UI and virtual-Coins games; requires an available Vault Economy provider. Poker/Tic-Tac-Toe remain simplified quick-match simulations. |
 
 ## Staff and administration commands
 

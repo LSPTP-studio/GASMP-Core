@@ -203,6 +203,8 @@ public final class ShardShopService implements Listener, CommandExecutor {
             meta.setLore(lore);
             preview.setItemMeta(meta);
         }
+        set(inventory, 4, Material.AMETHYST_SHARD, "&d&lREVIEW REWARD",
+                "&7Check the bundle before spending Shards.");
         inventory.setItem(13, preview);
         set(inventory, 11, Material.LIME_CONCRETE, "&a&lCONFIRM",
                 "&7Spend " + product.price() + " Shards", "&7Receive this bundle.");
@@ -423,13 +425,23 @@ public final class ShardShopService implements Listener, CommandExecutor {
     private Inventory create(Holder holder, int size, String rawTitle) {
         Inventory inventory = Bukkit.createInventory(holder, size, color(rawTitle));
         holder.inventory = inventory;
-        ItemStack filler = item(Material.PURPLE_STAINED_GLASS_PANE, " ");
-        for (int slot = 0; slot < size; slot++) {
-            int row = slot / 9;
-            int column = slot % 9;
-            if (row == 0 || row == size / 9 - 1 || column == 0 || column == 8) {
-                inventory.setItem(slot, filler.clone());
+        ItemStack black = item(Material.BLACK_STAINED_GLASS_PANE, " ");
+        Material[] topPalette = {
+                Material.PURPLE_STAINED_GLASS_PANE,
+                Material.MAGENTA_STAINED_GLASS_PANE
+        };
+        for (int column = 0; column < 9; column++) {
+            if (column == 0 || column == 8) {
+                inventory.setItem(column, black.clone());
+                inventory.setItem(size - 9 + column, black.clone());
+            } else {
+                inventory.setItem(column, item(topPalette[column % 2], " "));
+                inventory.setItem(size - 9 + column, item(topPalette[(column + 1) % 2], " "));
             }
+        }
+        for (int row = 1; row < size / 9 - 1; row++) {
+            inventory.setItem(row * 9, black.clone());
+            inventory.setItem(row * 9 + 8, black.clone());
         }
         return inventory;
     }
