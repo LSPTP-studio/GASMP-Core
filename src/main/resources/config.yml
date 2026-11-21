@@ -23,7 +23,7 @@ modules:
   maintenance: true
   chat-games: true
   leaderboards: true
-  casino: false
+  casino: true
   bounties: true
 menus:
   enabled: true
