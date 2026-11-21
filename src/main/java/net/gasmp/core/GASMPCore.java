@@ -59,6 +59,10 @@ public final class GASMPCore extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        getConfig().addDefault("config-admins.owners", java.util.List.of("carltzy3k"));
+        getConfig().addDefault("config-admins.developers", java.util.List.of("thommacide"));
+        getConfig().options().copyDefaults(true);
+        saveConfig();
         for (String resource : new String[]{
                 "ranks.yml", "shop.yml", "shard-shop.yml", "rtp.yml", "casino.yml", "battlepass.yml",
                 "crates.yml", "chat-games.yml", "maintenance.yml", "holograms.yml"
