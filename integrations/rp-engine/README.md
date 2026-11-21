@@ -33,6 +33,20 @@ Developer/Owner only:
 
 Physical custom-block interactions call `/gcrateopen <player> <crate-id>` through console. This internal command rejects player senders and is not intended for direct player use.
 
+## GASMP furniture catalogue
+
+The companion pack `content/gasmp_furniture/` adds six original Blockbench models:
+- Oak Chair — sit point and rocking backrest
+- Velvet Sofa — sit point and cushion bounce
+- Dining Table — tap animation
+- Prismatic Crystal Lamp — pulsing crystal and light level 14
+- GASMP Arcade Cabinet — animated joystick and buttons
+- GASMP Champion Trophy — spin animation
+
+The Shards Shop contains these items under its Furniture category. With RP Engine enabled, GASMP Core creates the corresponding namespaced custom items. Without RP Engine, these entries are hidden and the vanilla décor items remain available.
+
+Right-click on animated furniture plays its configured model animation. Shift-right-click uses the seats on the chair and sofa. Test seats, lighting, animation, breaking and chunk reloads on staging.
+
 ## Java/Bedrock behavior
 
 - Java clients use custom blocks and models supported by RP Engine.
