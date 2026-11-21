@@ -1,0 +1,189 @@
+name: GASMP-Core
+version: '0.7.0'
+main: net.gasmp.core.GASMPCore
+api-version: '26.2'
+author: GASMP Development
+description: GASMP Core gameplay systems, persistence, economy, teams and custom crate content.
+depend:
+  - Vault
+  - LuckPerms
+softdepend:
+  - PlaceholderAPI
+  - ProtocolLib
+  - Geyser-Spigot
+  - floodgate
+  - TAB
+  - Nexo
+  - ItemsAdder
+  - ImageFrame
+  - Typewriter
+  - OpenInv
+  - LibsDisguises
+  - HeadDatabase
+  - HeadDB
+  - RPEngine
+commands:
+  gasmp:
+    description: Opens the GASMP player menu.
+    usage: /gasmp
+    aliases: [menu, gasmpmenu]
+    permission: gasmpcore.menu
+  gasmpcore:
+    description: GASMP Core status and administration command.
+    usage: /gasmpcore <status|reload|menu>
+    aliases: [gcore]
+  gasmpadmin:
+    description: Opens the restricted GASMP rank administration panel.
+    usage: /gasmpadmin [online-player]
+    aliases: [gadmin, gasmpranks]
+  shards:
+    description: View and manage GASMP Shards.
+    usage: /shards <balance|give|take|set>
+    aliases: [shard, gshards]
+  shardshop:
+    description: Opens the separate GASMP Shards storefront.
+    usage: /shardshop
+    aliases: [sshop, shardstore]
+    permission: gasmpcore.shards.shop
+  shop:
+    description: Opens the GASMP Coins shop.
+    usage: /shop
+  rtp:
+    description: Teleports you to a safe random location.
+    usage: /rtp
+  bounty:
+    description: Place, view, and claim Coins bounties.
+    usage: /bounty <place|top|help>
+  gvanish:
+    description: Toggle GASMP staff vanish.
+    usage: /gvanish
+    aliases: [gasmpvanish]
+  ah:
+    description: GASMP player auction house and Owner-only transaction review.
+    usage: /ah <list|sell|buy|cancel|mine|collect|review|review-release|review-settle>
+    aliases: [auctionhouse, auction]
+    permission: gasmpcore.auction
+  casino:
+    description: GASMP virtual-Coins arcade.
+    usage: /casino <menu|game> <bet> [choice]
+    permission: gasmpcore.casino.play
+  battlepass:
+    description: View Battle Pass progress and claim rewards.
+    usage: /battlepass [claim <level>]
+    aliases: [bp]
+  crates:
+    description: Restricted crate administration. Crate opening uses physical keys.
+    usage: /crates <list|set|unset|givekey|reload>
+  gcrateopen:
+    description: Internal console-only command triggered by RP Engine crate content.
+    usage: /gcrateopen <player> <crate-id>
+  team:
+    description: GASMP teams and team chat.
+    usage: /team <create|invite|accept|leave|kick|disband|info|chat|promote|demote|transfer|description|bank|sethome|home|homes|upgrade|ally>
+    aliases: [teams]
+  gban:
+    description: Temporarily or permanently ban a player.
+    usage: /gban <player> <duration|perm> <reason>
+  gunban:
+    description: Remove a GASMP ban.
+    usage: /gunban <player>
+  gmute:
+    description: Temporarily mute a player.
+    usage: /gmute <player> <duration> <reason>
+  gunmute:
+    description: Remove a GASMP chat mute.
+    usage: /gunmute <player>
+  gwarn:
+    description: Record a player warning.
+    usage: /gwarn <player> <reason>
+  gkick:
+    description: Kick a player with a reason.
+    usage: /gkick <player> <reason>
+  ghistory:
+    description: View recorded player moderation history.
+    usage: /ghistory <player>
+  gmaintenance:
+    description: Enable or disable server maintenance mode.
+    usage: /gmaintenance <on|off|status|reload>
+  gholo:
+    description: Manage persistent GASMP text holograms.
+    usage: /gholo <create|set|delete|list|reload>
+  gchatgame:
+    description: Manage GASMP chat games.
+    usage: /gchatgame <start|stop|status|reload>
+  gtop:
+    description: View GASMP player leaderboards.
+    usage: /gtop <kills|deaths|playtime|shards>
+  gperf:
+    description: View a lightweight server resource snapshot.
+    usage: /gperf
+permissions:
+  gasmpcore.menu:
+    description: Allows opening the GASMP main menu.
+    default: true
+  gasmpcore.admin:
+    description: Allows reloading GASMP Core and using administrative core commands.
+    default: op
+  gasmpcore.rankadmin:
+    description: Rank administration permission; also requires configured Developer/Owner group membership.
+    default: false
+  gasmpcore.shards.balance:
+    description: Allows viewing your own Shards balance.
+    default: true
+  gasmpcore.shards.shop:
+    description: Allows browsing and using the Shards storefront.
+    default: true
+  gasmpcore.shards.admin:
+    description: Allows managing Shards balances.
+    default: op
+  gasmpcore.shop.admin:
+    description: Reserved for future shop administration.
+    default: false
+  gasmpcore.combat.bypass:
+    description: Bypasses GASMP combat tagging and logout punishment.
+    default: false
+  gasmpcore.crates.manage:
+    description: Reserved crate administration permission; code also checks Owner/Developer group.
+    default: false
+  gasmpcore.casino.play:
+    description: Allows playing the enabled virtual-Coins arcade.
+    default: true
+  gasmpcore.casino.admin:
+    description: Allows configuring GASMP casino settings.
+    default: false
+  gasmpcore.staff.vanish:
+    description: Allows GASMP staff vanish.
+    default: false
+  gasmpcore.staff.openinv:
+    description: Reserved OpenInv integration marker.
+    default: false
+  gasmpcore.staff.disguise:
+    description: Reserved Lib's Disguises integration marker.
+    default: false
+  gasmpcore.staff.headdb:
+    description: Reserved HeadDatabase integration marker.
+    default: false
+  gasmpcore.auction:
+    description: Allows using the auction house.
+    default: true
+  gasmpcore.maintenance.bypass:
+    description: Bypasses maintenance mode.
+    default: false
+  gasmpcore.skills.veinminer:
+    description: Allows the Vein Miner ability.
+    default: false
+  gasmpcore.skills.treecap:
+    description: Allows the Tree Capitator ability.
+    default: false
+  gasmpcore.moderation.basic:
+    description: Allows warning and muting players (staff service still checks rank groups).
+    default: false
+  gasmpcore.moderation.advanced:
+    description: Allows banning, kicking and reviewing history (staff service still checks rank groups).
+    default: false
+  gasmpcore.hologram.admin:
+    description: Reserved hologram permission; code checks Owner/Developer/Admin group.
+    default: false
+  gasmpcore.chatgame.admin:
+    description: Reserved chat game administration permission; code checks Owner/Developer/Admin group.
+    default: false

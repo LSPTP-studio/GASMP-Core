@@ -1,0 +1,384 @@
+{
+  "meta": {
+    "format_version": "5.0",
+    "model_format": "free",
+    "box_uv": false
+  },
+  "name": "GASMP Legendary Crate",
+  "model_identifier": "gasmp_crates_legendary_crate",
+  "visible_box": [
+    2,
+    2,
+    2
+  ],
+  "variable_placeholders": [],
+  "resolution": {
+    "width": 64,
+    "height": 64
+  },
+  "elements": [
+    {
+      "name": "Crate Body",
+      "uuid": "ce0bb96a-15a1-432e-bea5-88001f8317b4",
+      "type": "cube",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        10,
+        15
+      ],
+      "origin": [
+        8,
+        5,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            0,
+            32,
+            16
+          ],
+          "texture": 0
+        }
+      },
+      "autouv": 0,
+      "rescale": false
+    },
+    {
+      "name": "Animated Lid",
+      "uuid": "6353f6e4-5b32-4cda-8034-111fa65e2277",
+      "type": "cube",
+      "from": [
+        0,
+        10,
+        0
+      ],
+      "to": [
+        16,
+        15,
+        16
+      ],
+      "origin": [
+        8,
+        10,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            32,
+            32,
+            48
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            32,
+            32,
+            48,
+            48
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            48,
+            16,
+            64
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            48,
+            48,
+            64
+          ],
+          "texture": 0
+        }
+      },
+      "autouv": 0,
+      "rescale": false
+    },
+    {
+      "name": "Front Seal",
+      "uuid": "11c94e09-3ace-44dc-85d5-32e67e8fdd9b",
+      "type": "cube",
+      "from": [
+        6,
+        4,
+        0.25
+      ],
+      "to": [
+        10,
+        8,
+        1.75
+      ],
+      "origin": [
+        8,
+        6,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        }
+      },
+      "autouv": 0,
+      "rescale": false
+    }
+  ],
+  "outliner": [
+    {
+      "uuid": "009c0622-c6bf-4a2e-a78e-c43741b7f29e",
+      "isOpen": true,
+      "children": [
+        "ce0bb96a-15a1-432e-bea5-88001f8317b4",
+        "11c94e09-3ace-44dc-85d5-32e67e8fdd9b"
+      ]
+    },
+    {
+      "uuid": "4f14d0c5-5f00-4dd1-a53a-2ac7cbf81c87",
+      "isOpen": true,
+      "children": [
+        "6353f6e4-5b32-4cda-8034-111fa65e2277"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "uuid": "009c0622-c6bf-4a2e-a78e-c43741b7f29e",
+      "name": "body",
+      "origin": [
+        8,
+        5,
+        8
+      ],
+      "color": 0
+    },
+    {
+      "uuid": "4f14d0c5-5f00-4dd1-a53a-2ac7cbf81c87",
+      "name": "lid",
+      "origin": [
+        8,
+        10,
+        0
+      ],
+      "color": 1
+    }
+  ],
+  "textures": [
+    {
+      "uuid": "01507f07-4e35-4def-b015-6d49d25b9d60",
+      "name": "legendary_crate.png",
+      "id": "01507f07-4e35-4def-b015-6d49d25b9d60",
+      "width": 64,
+      "height": 64,
+      "source": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACn0lEQVR42u1bPXKCQBR+MHsCes0dbGVMYc9YWRBO4IxVDsBQpLRyxhMYC6oMfYok5CBOenMEU61BWNjVt7h/vhnHdeUD3sfbhfexzxsGoyMotNfnd5WHB4I5iafVFGTg6fe15GHwhP4IowziJBAC7rYHKIv0rA+LVxoBAABxEsBuexACxUkAizmrbymIXzfwygmgVhYpbPI1c+PFfAlhlHWG9Hgwg8V8edpHvU230cX8escmXzOvZNURkbH9/fPGbOtmPquzTsIlzptmpO2PKgm2Ot8aAS5ZKwE07NvmBKsJqI95m0kgorP9PwkZd6fV21y9Te8I2hIQRhmEUdvmfOd1c1CYgN32cOGjbLMvTmZX45UTUBap8OMp6+SxeFXmuZ4OKydAiyGgWg9QiddGD1CFJ7LyeVPxpB4S+49JJ/jh8bM1n8fqASrwpE3xYT0ZiipGdGyOBzNmWyd8ZzZIQ8q5ZIg6TeWvMMqsJcHnOV+dZXVRcnsnYJOvG86WRdopiFo3BKokdCnF1ukB57N9drry7SmyfD3glnjCus+f2xRgJe48Vg+4NZ7IyudNxXvDYHR0ORlyPh32vl5+UQTo+Lrr4jkA+37eCj0Aa8brAVizQg+QEQUitsmDXvDS9ACM8RImnpNY/KV6gHQCeBPqPpr0ipeWDLlidwJcJ0D6HMB/KMl6xSsnAKsayVCdUHoAxppaAv8EZeJRegDWTNUDpBGgen3BtXjn02HjBRHsAgsr1gdYUS+gqt5A6voAE+sN/HpI0dyZLpOtt3nhVhYpxEnA/PCumozjS8kFMOv9Tas36CUZMqnegPS1Y1PqDe56QF87NqXewO/Ted7EqO0cgHk/b1q9AcHm0yxBw6R6A8nrA8yrN9CmXkBVvYHz6fAfW/+MBUoTN+QAAAAASUVORK5CYII=",
+      "visible": true,
+      "particle": true,
+      "render_mode": "normal"
+    }
+  ],
+  "animations": [
+    {
+      "name": "open",
+      "uuid": "38909d1f-9f79-4d95-afd8-ad0f3b1e1a19",
+      "loop": "once",
+      "override": false,
+      "length": 0.65,
+      "animators": {
+        "4f14d0c5-5f00-4dd1-a53a-2ac7cbf81c87": {
+          "name": "Lid",
+          "type": "bone",
+          "keyframes": [
+            {
+              "uuid": "cffdb4ca-d291-4d87-a5ee-ca413ce0cf8c",
+              "channel": "rotation",
+              "time": 0,
+              "interpolation": "catmullrom",
+              "data_points": [
+                {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              ]
+            },
+            {
+              "uuid": "a204a195-cbfe-424d-9295-acac6a2a00e4",
+              "channel": "rotation",
+              "time": 0.26,
+              "interpolation": "catmullrom",
+              "data_points": [
+                {
+                  "x": -102,
+                  "y": 0,
+                  "z": 0
+                }
+              ]
+            },
+            {
+              "uuid": "da41ae38-8ea1-4075-9a69-05b8bb49a723",
+              "channel": "rotation",
+              "time": 0.65,
+              "interpolation": "catmullrom",
+              "data_points": [
+                {
+                  "x": -102,
+                  "y": 0,
+                  "z": 0
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "display": {},
+  "overrides": [],
+  "animation_controller": {}
+}

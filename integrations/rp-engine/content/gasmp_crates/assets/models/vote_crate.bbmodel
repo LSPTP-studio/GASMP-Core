@@ -1,0 +1,384 @@
+{
+  "meta": {
+    "format_version": "5.0",
+    "model_format": "free",
+    "box_uv": false
+  },
+  "name": "GASMP Vote Crate",
+  "model_identifier": "gasmp_crates_vote_crate",
+  "visible_box": [
+    2,
+    2,
+    2
+  ],
+  "variable_placeholders": [],
+  "resolution": {
+    "width": 64,
+    "height": 64
+  },
+  "elements": [
+    {
+      "name": "Crate Body",
+      "uuid": "7058470e-8abf-4019-a08a-d1f0f6da8096",
+      "type": "cube",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        10,
+        15
+      ],
+      "origin": [
+        8,
+        5,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            16,
+            16,
+            32
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            16,
+            16,
+            32,
+            32
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            32,
+            16,
+            48,
+            32
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            16,
+            64,
+            32
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            0,
+            32,
+            16
+          ],
+          "texture": 0
+        }
+      },
+      "autouv": 0,
+      "rescale": false
+    },
+    {
+      "name": "Animated Lid",
+      "uuid": "b533a418-c810-4df7-bb8c-cce3ea46acbb",
+      "type": "cube",
+      "from": [
+        0,
+        10,
+        0
+      ],
+      "to": [
+        16,
+        15,
+        16
+      ],
+      "origin": [
+        8,
+        10,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            32,
+            32,
+            48
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            32,
+            32,
+            48,
+            48
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            32,
+            64,
+            48
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            48,
+            16,
+            64
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            48,
+            32,
+            64
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            48,
+            48,
+            64
+          ],
+          "texture": 0
+        }
+      },
+      "autouv": 0,
+      "rescale": false
+    },
+    {
+      "name": "Front Seal",
+      "uuid": "0d167c94-5561-4d2d-9271-a8a1d1ddb4ad",
+      "type": "cube",
+      "from": [
+        6,
+        4,
+        0.25
+      ],
+      "to": [
+        10,
+        8,
+        1.75
+      ],
+      "origin": [
+        8,
+        6,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "faces": {
+        "north": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            48,
+            64,
+            64
+          ],
+          "texture": 0
+        }
+      },
+      "autouv": 0,
+      "rescale": false
+    }
+  ],
+  "outliner": [
+    {
+      "uuid": "e0573f80-7429-4174-b7a9-e08cd2e3976d",
+      "isOpen": true,
+      "children": [
+        "7058470e-8abf-4019-a08a-d1f0f6da8096",
+        "0d167c94-5561-4d2d-9271-a8a1d1ddb4ad"
+      ]
+    },
+    {
+      "uuid": "7946e6d5-5786-43f8-94de-7760f589bfc3",
+      "isOpen": true,
+      "children": [
+        "b533a418-c810-4df7-bb8c-cce3ea46acbb"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "uuid": "e0573f80-7429-4174-b7a9-e08cd2e3976d",
+      "name": "body",
+      "origin": [
+        8,
+        5,
+        8
+      ],
+      "color": 0
+    },
+    {
+      "uuid": "7946e6d5-5786-43f8-94de-7760f589bfc3",
+      "name": "lid",
+      "origin": [
+        8,
+        10,
+        0
+      ],
+      "color": 1
+    }
+  ],
+  "textures": [
+    {
+      "uuid": "9d461e59-741a-4ba7-be4e-49940e87aee1",
+      "name": "vote_crate.png",
+      "id": "9d461e59-741a-4ba7-be4e-49940e87aee1",
+      "width": 64,
+      "height": 64,
+      "source": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACcUlEQVR42u1bsW6DMBC9IH9EKlWZyFyJraq6ZSFLRtQJdevSb4j4hi7dKkbGLGHJ1Crqxg+EqVP/op1cUWTHhjOxz/CWEMIj3GGffc++2dXN9Q9YxNPLvc2/B4Z5iNfnDzDB5599nYfhM/4ljUJItqUWschiyKv63zks32oLAABItiUUWaxFSrYlrDdL5bkufOsO4MirGva7k/Di9WYJaRSebdKL1RzWm+XfPdrH/BpXELRP7Hcn4dtpGqLTt78O38Jj1xCITrad0MV4amCyH5pO8NV4aQsYE6QO4M1eFhO8dkC7z/vsBKYb7bs4oTnMtY/5iOCsA9IoPDvWq+CagdoOKLIYNZUtshgSIDwVzqtau4mLHh7Lt4XZ2NNh6w5wogvY1gNs8p3RA2zxmal8niqftZvE5/HxLPn27k2az2P1ABt8JvOQaH6gqxjxvrlYzYXHLvGnbFAVLLq8eW8EkabBeVVDGoXeOiGQxQDe73lipDvEeNUFuNG+Gq/VBfrEAKwecEk+E43zGGD1gEvzmal8nirfGT3AFn9Kh7GChIvLXZ1jAHZ93gs9AAvyegAWXugBJlqBDmSLrVi+MT0AA5XkrTISy++qBxh3gCqgpsdwUL7RZGj0gsjkgDHMBE3fEDuzvPRSmXEHYJbWTfDRegAGulqCTNfH8lF6ABbk9QATEyCSekD2/oDSA6inw+QFEeyo4cX+AC/qBWzVGxjdH0Cx3oBh82lRhKVUbxDIHqTvfn9q9QaDJEOU6g3YUDemUm8w6QFD3ZhKvUEwpPGqwOhsDMCsz1OrN2DYfFokaFCqNzC7P4BgvYE3+wOmdLgnfgGrYZUosINXZgAAAABJRU5ErkJggg==",
+      "visible": true,
+      "particle": true,
+      "render_mode": "normal"
+    }
+  ],
+  "animations": [
+    {
+      "name": "open",
+      "uuid": "2259cecd-c073-42af-a7d0-c3ae17575845",
+      "loop": "once",
+      "override": false,
+      "length": 0.65,
+      "animators": {
+        "7946e6d5-5786-43f8-94de-7760f589bfc3": {
+          "name": "Lid",
+          "type": "bone",
+          "keyframes": [
+            {
+              "uuid": "2c24a85a-6965-435b-ad5e-a8856eeb2423",
+              "channel": "rotation",
+              "time": 0,
+              "interpolation": "catmullrom",
+              "data_points": [
+                {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              ]
+            },
+            {
+              "uuid": "88967ae1-a72e-4038-92ec-f9d1d0d78da5",
+              "channel": "rotation",
+              "time": 0.26,
+              "interpolation": "catmullrom",
+              "data_points": [
+                {
+                  "x": -102,
+                  "y": 0,
+                  "z": 0
+                }
+              ]
+            },
+            {
+              "uuid": "ca28b0ba-7a7f-4d41-8c66-561c3ab0861a",
+              "channel": "rotation",
+              "time": 0.65,
+              "interpolation": "catmullrom",
+              "data_points": [
+                {
+                  "x": -102,
+                  "y": 0,
+                  "z": 0
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "display": {},
+  "overrides": [],
+  "animation_controller": {}
+}

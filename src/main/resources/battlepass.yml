@@ -1,0 +1,37 @@
+season:
+  id: "season-1"
+  name: "GASMP Season One"
+progression:
+  xp-per-level: 100
+  max-level: 50
+rewards:
+  1:
+    type: shards
+    amount: 25
+  5:
+    type: item
+    material: IRON_INGOT
+    amount: 16
+  10:
+    type: coins
+    amount: 500
+  15:
+    type: shards
+    amount: 100
+  20:
+    type: item
+    material: DIAMOND
+    amount: 3
+  25:
+    type: coins
+    amount: 2500
+  30:
+    type: shards
+    amount: 250
+  40:
+    type: item
+    material: NETHERITE_INGOT
+    amount: 1
+  50:
+    type: shards
+    amount: 1000

@@ -1,0 +1,12 @@
+settings:
+  enabled: true
+  world: world
+  min-radius: 750
+  max-radius: 6000
+  max-attempts: 18
+  cooldown-seconds: 300
+  warmup-seconds: 3
+  avoid-water: true
+  avoid-danger: true
+  blocked-worlds: [world_nether, world_the_end]
+

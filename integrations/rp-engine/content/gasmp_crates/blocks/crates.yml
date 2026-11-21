@@ -1,0 +1,30 @@
+vote_crate_block:
+  base: note_block
+  model: vote_crate
+  hardness: 4.0
+  drop: gasmp_crates:vote_crate_block
+  name: "&a&lVOTE CRATE"
+  lore:
+    - "&7Protected GASMP crate block."
+    - "&8Right-click to open with a Vote Key."
+  sound: minecraft:block.chest.open
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} vote"
+legendary_crate_block:
+  base: note_block
+  model: legendary_crate
+  hardness: 4.0
+  drop: gasmp_crates:legendary_crate_block
+  name: "&5&lLEGENDARY CRATE"
+  lore:
+    - "&7Protected GASMP crate block."
+    - "&8Right-click to open with a Legendary Key."
+  sound: minecraft:block.chest.open
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} legendary"

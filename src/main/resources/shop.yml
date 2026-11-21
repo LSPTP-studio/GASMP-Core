@@ -1,0 +1,253 @@
+# Coins shop. Prices use the active Vault Economy provider's currency.
+settings:
+  enabled: true
+  title: "&9&lGASMP &8• &1Shop"
+  items-per-page: 21
+  max-quantity: 64
+items:
+  stone:
+    material: STONE
+    amount: 16
+    price: 24.00
+    category: blocks
+    display-name: "&fStone x16"
+    lore: ["&7Basic building block", "&eClick to purchase"]
+  oak_logs:
+    material: OAK_LOG
+    amount: 8
+    price: 48.00
+    category: blocks
+    display-name: "&6Oak Logs x8"
+    lore: ["&7Useful for building", "&eClick to purchase"]
+  iron_ingots:
+    material: IRON_INGOT
+    amount: 8
+    price: 120.00
+    category: materials
+    display-name: "&fIron Ingots x8"
+    lore: ["&7Smelted iron", "&eClick to purchase"]
+  golden_apples:
+    material: GOLDEN_APPLE
+    amount: 2
+    price: 300.00
+    category: combat
+    display-name: "&6Golden Apples x2"
+    lore: ["&7A valuable combat consumable", "&eClick to purchase"]
+  cooked_beef:
+    material: COOKED_BEEF
+    amount: 16
+    price: 64.00
+    category: food
+    display-name: "&cCooked Beef x16"
+    lore: ["&7Food for your adventures", "&eClick to purchase"]
+  ender_pearl:
+    material: ENDER_PEARL
+    amount: 4
+    price: 160.00
+    category: combat
+    display-name: "&5Ender Pearls x4"
+    lore: ["&7Teleportation utility", "&eClick to purchase"]
+
+  cobblestone:
+    material: COBBLESTONE
+    amount: 32
+    price: 28.00
+    category: blocks
+    display-name: "&7Cobblestone x32"
+    lore: ["&7A building essential", "&eClick to purchase"]
+  dirt:
+    material: DIRT
+    amount: 32
+    price: 18.00
+    category: blocks
+    display-name: "&6Dirt x32"
+    lore: ["&7Terraforming supplies", "&eClick to purchase"]
+  glass:
+    material: GLASS
+    amount: 16
+    price: 56.00
+    category: blocks
+    display-name: "&bGlass x16"
+    lore: ["&7Clear building blocks", "&eClick to purchase"]
+  bricks:
+    material: BRICKS
+    amount: 16
+    price: 96.00
+    category: blocks
+    display-name: "&cBricks x16"
+    lore: ["&7Decorative building blocks", "&eClick to purchase"]
+  oak_planks:
+    material: OAK_PLANKS
+    amount: 32
+    price: 36.00
+    category: blocks
+    display-name: "&6Oak Planks x32"
+    lore: ["&7Ready-to-build planks", "&eClick to purchase"]
+  coal:
+    material: COAL
+    amount: 16
+    price: 48.00
+    category: materials
+    display-name: "&8Coal x16"
+    lore: ["&7Fuel and crafting material", "&eClick to purchase"]
+  copper_ingots:
+    material: COPPER_INGOT
+    amount: 16
+    price: 112.00
+    category: materials
+    display-name: "&6Copper Ingots x16"
+    lore: ["&7Useful for building and crafting", "&eClick to purchase"]
+  gold_ingots:
+    material: GOLD_INGOT
+    amount: 8
+    price: 144.00
+    category: materials
+    display-name: "&6Gold Ingots x8"
+    lore: ["&7Valuable crafting material", "&eClick to purchase"]
+  redstone:
+    material: REDSTONE
+    amount: 32
+    price: 112.00
+    category: materials
+    display-name: "&cRedstone x32"
+    lore: ["&7For mechanisms and circuits", "&eClick to purchase"]
+  lapis:
+    material: LAPIS_LAZULI
+    amount: 16
+    price: 112.00
+    category: materials
+    display-name: "&9Lapis Lazuli x16"
+    lore: ["&7Enchanting material", "&eClick to purchase"]
+  iron_pickaxe:
+    material: IRON_PICKAXE
+    amount: 1
+    price: 180.00
+    category: tools
+    display-name: "&fIron Pickaxe"
+    lore: ["&7Reliable mining tool", "&eClick to purchase"]
+  iron_axe:
+    material: IRON_AXE
+    amount: 1
+    price: 160.00
+    category: tools
+    display-name: "&fIron Axe"
+    lore: ["&7Chopping and combat tool", "&eClick to purchase"]
+  iron_shovel:
+    material: IRON_SHOVEL
+    amount: 1
+    price: 120.00
+    category: tools
+    display-name: "&fIron Shovel"
+    lore: ["&7For dirt, sand and gravel", "&eClick to purchase"]
+  shears:
+    material: SHEARS
+    amount: 1
+    price: 90.00
+    category: tools
+    display-name: "&fShears"
+    lore: ["&7For wool and leaves", "&eClick to purchase"]
+  fishing_rod:
+    material: FISHING_ROD
+    amount: 1
+    price: 110.00
+    category: tools
+    display-name: "&bFishing Rod"
+    lore: ["&7A utility fishing tool", "&eClick to purchase"]
+  arrows:
+    material: ARROW
+    amount: 32
+    price: 96.00
+    category: combat
+    display-name: "&fArrows x32"
+    lore: ["&7Ammunition for bows", "&eClick to purchase"]
+  shield:
+    material: SHIELD
+    amount: 1
+    price: 220.00
+    category: combat
+    display-name: "&fShield"
+    lore: ["&7Defend yourself in combat", "&eClick to purchase"]
+  bow:
+    material: BOW
+    amount: 1
+    price: 240.00
+    category: combat
+    display-name: "&6Bow"
+    lore: ["&7Ranged combat weapon", "&eClick to purchase"]
+  crossbow:
+    material: CROSSBOW
+    amount: 1
+    price: 320.00
+    category: combat
+    display-name: "&6Crossbow"
+    lore: ["&7A powerful ranged weapon", "&eClick to purchase"]
+  bread:
+    material: BREAD
+    amount: 16
+    price: 64.00
+    category: food
+    display-name: "&6Bread x16"
+    lore: ["&7A reliable food supply", "&eClick to purchase"]
+  cooked_porkchop:
+    material: COOKED_PORKCHOP
+    amount: 16
+    price: 72.00
+    category: food
+    display-name: "&cCooked Porkchops x16"
+    lore: ["&7Filling food for long trips", "&eClick to purchase"]
+  baked_potatoes:
+    material: BAKED_POTATO
+    amount: 16
+    price: 60.00
+    category: food
+    display-name: "&6Baked Potatoes x16"
+    lore: ["&7Easy travel food", "&eClick to purchase"]
+  golden_carrots:
+    material: GOLDEN_CARROT
+    amount: 8
+    price: 176.00
+    category: food
+    display-name: "&6Golden Carrots x8"
+    lore: ["&7High-quality food", "&eClick to purchase"]
+  torches:
+    material: TORCH
+    amount: 32
+    price: 48.00
+    category: utility
+    display-name: "&eTorches x32"
+    lore: ["&7Light up your builds and mines", "&eClick to purchase"]
+  lanterns:
+    material: LANTERN
+    amount: 8
+    price: 96.00
+    category: utility
+    display-name: "&eLanterns x8"
+    lore: ["&7Decorative light source", "&eClick to purchase"]
+  name_tag:
+    material: NAME_TAG
+    amount: 1
+    price: 260.00
+    category: utility
+    display-name: "&eName Tag"
+    lore: ["&7Name a mob or pet", "&eClick to purchase"]
+  saddle:
+    material: SADDLE
+    amount: 1
+    price: 300.00
+    category: utility
+    display-name: "&6Saddle"
+    lore: ["&7Rideable-mob equipment", "&eClick to purchase"]
+  lead:
+    material: LEAD
+    amount: 2
+    price: 120.00
+    category: utility
+    display-name: "&fLeads x2"
+    lore: ["&7Move animals and mobs", "&eClick to purchase"]
+  ender_chest:
+    material: ENDER_CHEST
+    amount: 1
+    price: 420.00
+    category: utility
+    display-name: "&5Ender Chest"
+    lore: ["&7Access your personal storage", "&eClick to purchase"
