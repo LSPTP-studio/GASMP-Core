@@ -105,7 +105,7 @@ public final class MenuService implements Listener {
         set(inventory, 49, Material.BARRIER, "&c&lClose", "&7Close this menu");
     }
 
-    private void buildShop(MenuHolder holder, Inventory inventory) {    private void buildShop(MenuHolder holder, Inventory inventory) {
+    private void buildShop(MenuHolder holder, Inventory inventory) {
         // The SHOP page is redirected to ShopService.open() before this builder is reached.
         // Keep a safe fallback in case a future refactor changes that routing.
         set(inventory, 22, Material.GOLD_INGOT, "&e&lCoins Shop", "&7The live Vault-backed catalogue is loading.");
@@ -159,7 +159,7 @@ public final class MenuService implements Listener {
         holder.notice(31, "&7Vanilla kits work without a resource-pack plugin; animated custom models are a separate asset pack.");
     }
 
-    private void buildMusic(MenuHolder holder, Inventory inventory) {    private void buildMusic(MenuHolder holder, Inventory inventory) {
+    private void buildMusic(MenuHolder holder, Inventory inventory) {
         set(inventory, 13, Material.JUKEBOX, "&5&lGASMP Music Player", "&7Retro player-inspired menu", "&8No licensed tracks have been configured.");
         set(inventory, 29, Material.LIME_DYE, "&aPlay", "&7Playback controls will be added later.");
         set(inventory, 31, Material.GRAY_DYE, "&cStop", "&7Playback controls will be added later.");
@@ -183,7 +183,7 @@ public final class MenuService implements Listener {
         holder.notice(31, "&dShards are separate from Coins and can be spent in the Shard Shop.");
     }
 
-    private void refreshShards(Player player, MenuHolder holder) {    private void refreshShards(Player player, MenuHolder holder) {
+    private void refreshShards(Player player, MenuHolder holder) {
         plugin.getDataStore().getShards(player.getUniqueId()).thenAccept(balance ->
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     if (!player.isOnline()) return;

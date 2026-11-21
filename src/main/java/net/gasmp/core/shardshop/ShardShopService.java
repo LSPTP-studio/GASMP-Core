@@ -258,8 +258,18 @@ public final class ShardShopService implements Listener, CommandExecutor {
             try {
                 Bukkit.getScheduler().runTask(plugin, () ->
                         completePurchase(player, playerId, playerName, product, error));
-            } catch (IllegalStateException ignored) {
-                // If the server is stopping, no inventory mutation is attempted.
+            } catch (RuntimeException schedulingError) {
+                // A successful debit must not be silently stranded if shutdown prevents
+                // the inventory-delivery task from being scheduled.
+                if (error == null) {
+                    try {
+                        refund(playerId, playerName, product, "Server stopped before bundle delivery.");
+                    } catch (RuntimeException refundError) {
+                        plugin.getLogger().severe("Could not queue shutdown refund for " + playerName
+                                + ": " + refundError.getMessage());
+                    }
+                }
+                purchasing.remove(playerId);
             }
         });
     }
