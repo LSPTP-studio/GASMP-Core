@@ -31,7 +31,7 @@ This release archive has not been compiled in the preparation environment. Do no
 1. Stop the test server and back up the entire server directory.
 2. Install Paper 26.2, LuckPerms and Vault.
 3. Install and configure one Vault-compatible economy plugin if you want Coins systems.
-4. Copy `GASMP-Core-0.7.0.jar` into `plugins/` after building it.
+4. Copy `GASMP-Core-0.8.0.jar` into `plugins/` after building it.
 5. Start the server once. Confirm the console reports SQLite initialization and does not show plugin-load errors.
 6. Confirm `plugins/GASMP-Core/` contains `config.yml`, `shop.yml`, `rtp.yml`, `casino.yml`, `battlepass.yml`, `crates.yml`, `chat-games.yml`, `maintenance.yml`, `holograms.yml` and `ranks.yml`.
 7. Stop the server and review each config before inviting players.
