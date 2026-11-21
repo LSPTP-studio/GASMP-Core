@@ -7,7 +7,7 @@
 
 ## Important release status
 
-This is a feature milestone built on the 0.7.0 source. The earlier 0.7.0 baseline compiled successfully in GitHub Actions. This 0.8.0 branch still needs its own CI build and staging-server tests before the JAR should be installed on GASMP.
+This is a feature milestone built on the 0.7.0 source. The 0.8.0 branch has passed the Java 25 / Gradle 9.9.2 GitHub Actions build and YAML/Blockbench asset validation. Live Paper 26.2, economy-provider, RP Engine and Geyser staging tests are still required before production use.
 
 ## Dependencies
 
@@ -128,7 +128,7 @@ The three rank-art bundles supplied by the server owner are preserved in `assets
 - Casino payout calibration updates and honest descriptions for simplified quick-match simulations.
 - Staging-server launch plan, dependency notes and GitHub Actions Java 25 build workflow.
 
-The GitHub Actions workflow is included at `.github/workflows/build.yml`. It runs static release validation and builds with Java 25 / Gradle 9.9.2, then uploads the JAR artifact. Follow `docs/GITHUB-ACTIONS.md` to publish this source to your GitHub repository and download the artifact. This source project has not been compiled here; live Paper 26.2 / Geyser / RP Engine testing remains necessary.
+The GitHub Actions workflow is included at `.github/workflows/build.yml`. It parses the shipped YAML resources, validates the six furniture Blockbench models and their embedded PNG signatures, builds with Java 25 / Gradle 9.9.2, and uploads separate plugin-JAR and RP Engine furniture-pack artifacts. Live Paper 26.2 / Geyser / RP Engine testing remains necessary.
 
 
 ## 0.8.0 feature milestone
