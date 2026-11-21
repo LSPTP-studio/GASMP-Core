@@ -326,6 +326,7 @@ public final class ShardShopService implements Listener, CommandExecutor, TabCom
         result.add(new Category("all", "All Items", Material.COMPASS));
         entries.values().stream()
                 .filter(entry -> entry.permission().isBlank() || player.hasPermission(entry.permission()))
+                .filter(entry -> entry.customId().isBlank() || isRpEngineEnabled())
                 .map(Entry::category).distinct().sorted()
                 .limit(CATEGORY_SLOTS.length - 1L)
                 .forEach(key -> result.add(new Category(key, categoryLabel(key), categoryIcon(key))));
