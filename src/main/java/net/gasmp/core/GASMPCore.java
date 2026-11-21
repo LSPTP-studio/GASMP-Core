@@ -24,6 +24,7 @@ import net.gasmp.core.rank.RankAdminMenu;
 import net.gasmp.core.rank.RankService;
 import net.gasmp.core.rtp.RtpService;
 import net.gasmp.core.shop.ShopService;
+import net.gasmp.core.shop.ShardShopService;
 import net.gasmp.core.skills.ToolSkillsService;
 import net.gasmp.core.staff.CommandRestrictionService;
 import net.gasmp.core.staff.StaffAccess;
@@ -42,6 +43,7 @@ public final class GASMPCore extends JavaPlugin {
     private RankService rankService;
     private VaultEconomyBridge economyBridge;
     private ShopService shopService;
+    private ShardShopService shardShopService;
     private CombatService combatService;
     private RtpService rtpService;
     private AuctionService auctionService;
@@ -58,7 +60,7 @@ public final class GASMPCore extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         for (String resource : new String[]{
-                "ranks.yml", "shop.yml", "rtp.yml", "casino.yml", "battlepass.yml",
+                "ranks.yml", "shop.yml", "shard-shop.yml", "rtp.yml", "casino.yml", "battlepass.yml",
                 "crates.yml", "chat-games.yml", "maintenance.yml", "holograms.yml"
         }) saveIfMissing(resource);
 
@@ -84,6 +86,8 @@ public final class GASMPCore extends JavaPlugin {
 
         shopService = new ShopService(this);
         getServer().getPluginManager().registerEvents(shopService, this);
+        shardShopService = new ShardShopService(this);
+        getServer().getPluginManager().registerEvents(shardShopService, this);
         combatService = new CombatService(this);
         getServer().getPluginManager().registerEvents(combatService, this);
         rtpService = new RtpService(this, combatService);
@@ -125,6 +129,7 @@ public final class GASMPCore extends JavaPlugin {
         bind("gasmp", coreCommand);
         bind("gasmpcore", coreCommand);
         bind("shards", new ShardCommand(this));
+        bind("shardshop", shardShopService);
         bind("shop", new ShopCommand(this));
         bind("rtp", new RtpCommand(this));
         bind("bounty", bountyService);
@@ -188,12 +193,15 @@ public final class GASMPCore extends JavaPlugin {
     public RankService getRankService() { return rankService; }
     public VaultEconomyBridge getEconomyBridge() { return economyBridge; }
     public ShopService getShopService() { return shopService; }
+    public ShardShopService getShardShopService() { return shardShopService; }
+    public CasinoService getCasinoService() { return casinoService; }
     public CombatService getCombatService() { return combatService; }
     public RtpService getRtpService() { return rtpService; }
 
     public void reloadCore() {
         reloadConfig();
         if (shopService != null) shopService.reload();
+        if (shardShopService != null) shardShopService.reload();
         if (rankService != null) {
             rankService.loadConfiguration();
             rankService.initialize();
