@@ -307,7 +307,7 @@ public final class MenuService implements Listener {
         }
     }
 
-    private void set(Inventory inventory, int slot, Material material, String name, String... lore) {    private void set(Inventory inventory, int slot, Material material, String name, String... lore) {
+    private void set(Inventory inventory, int slot, Material material, String name, String... lore) {
         inventory.setItem(slot, item(material, name, lore));
     }
 
