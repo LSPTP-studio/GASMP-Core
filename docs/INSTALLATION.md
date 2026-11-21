@@ -69,7 +69,15 @@ Geyser does not automatically convert a Java resource pack into a Bedrock pack. 
 5. The placed model furniture items use the Blockbench lid-open animation on interaction. The custom block variant is static because an ordinary block model cannot animate like an entity model.
 6. Test Java and Bedrock clients through Geyser before placing the crates in the live spawn.
 
-## 8. Rollback
+## 8. Furniture pack (optional, requires RP Engine)
+
+1. Copy `integrations/rp-engine/content/gasmp_furniture/` into `plugins/RPEngine/content/gasmp_furniture/`.
+2. Run `/rp reload` and check the console for model/YAML warnings.
+3. Keep RP Engine enabled before opening the Shards Shop. Custom furniture entries are only shown while RP Engine is running.
+4. Test the Oak Chair and Velvet Sofa shift-right-click seats, the crystal lamp light, animations, furniture drops and chunk reloads on staging.
+5. Geyser/Bedrock model rendering needs separate live validation.
+
+## 9. Rollback
 
 1. Stop the server.
 2. Restore the previous Core JAR and matching data/config backup.
