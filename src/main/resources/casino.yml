@@ -1,6 +1,6 @@
 # The arcade is intentionally OFF by default. Currency is virtual in-server Coins via Vault.
 settings:
-  enabled: false
+  enabled: true
   minimum-bet: 1.0
   maximum-bet: 100.0
   cooldown-seconds: 5

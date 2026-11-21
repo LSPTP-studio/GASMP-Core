@@ -48,3 +48,158 @@ items:
     display-name: "&5Ender Pearls x4"
     lore: ["&7Teleportation utility", "&eClick to purchase"]
 
+
+  glass:
+    material: GLASS
+    amount: 16
+    price: 60.00
+    category: blocks
+    display-name: "&fGlass x16"
+    lore: ["&7Clear building block", "&eClick to purchase"]
+  stone_bricks:
+    material: STONE_BRICKS
+    amount: 16
+    price: 56.00
+    category: blocks
+    display-name: "&7Stone Bricks x16"
+    lore: ["&7For clean builds", "&eClick to purchase"]
+  bricks:
+    material: BRICKS
+    amount: 16
+    price: 88.00
+    category: blocks
+    display-name: "&cBricks x16"
+    lore: ["&7Classic building material", "&eClick to purchase"]
+  glowstone:
+    material: GLOWSTONE
+    amount: 8
+    price: 144.00
+    category: blocks
+    display-name: "&eGlowstone x8"
+    lore: ["&7Bright building block", "&eClick to purchase"]
+  obsidian:
+    material: OBSIDIAN
+    amount: 4
+    price: 180.00
+    category: blocks
+    display-name: "&5Obsidian x4"
+    lore: ["&7Durable building block", "&eClick to purchase"]
+  gold_ingots:
+    material: GOLD_INGOT
+    amount: 4
+    price: 240.00
+    category: materials
+    display-name: "&6Gold Ingots x4"
+    lore: ["&7Useful crafting material", "&eClick to purchase"]
+  redstone:
+    material: REDSTONE
+    amount: 16
+    price: 88.00
+    category: materials
+    display-name: "&cRedstone x16"
+    lore: ["&7For mechanisms and farms", "&eClick to purchase"]
+  lapis_lazuli:
+    material: LAPIS_LAZULI
+    amount: 16
+    price: 80.00
+    category: materials
+    display-name: "&9Lapis Lazuli x16"
+    lore: ["&7For enchanting", "&eClick to purchase"]
+  diamond:
+    material: DIAMOND
+    amount: 1
+    price: 420.00
+    category: materials
+    display-name: "&bDiamond"
+    lore: ["&7Rare crafting material", "&eClick to purchase"]
+  iron_pickaxe:
+    material: IRON_PICKAXE
+    amount: 1
+    price: 220.00
+    category: tools
+    display-name: "&fIron Pickaxe"
+    lore: ["&7Reliable mining tool", "&eClick to purchase"]
+  iron_axe:
+    material: IRON_AXE
+    amount: 1
+    price: 180.00
+    category: tools
+    display-name: "&fIron Axe"
+    lore: ["&7Woodcutting tool", "&eClick to purchase"]
+  iron_shovel:
+    material: IRON_SHOVEL
+    amount: 1
+    price: 130.00
+    category: tools
+    display-name: "&fIron Shovel"
+    lore: ["&7Excavation tool", "&eClick to purchase"]
+  bow:
+    material: BOW
+    amount: 1
+    price: 200.00
+    category: tools
+    display-name: "&fBow"
+    lore: ["&7Ranged weapon", "&eClick to purchase"]
+  arrows:
+    material: ARROW
+    amount: 16
+    price: 72.00
+    category: combat
+    display-name: "&fArrows x16"
+    lore: ["&7Ammunition for bows", "&eClick to purchase"]
+  shield:
+    material: SHIELD
+    amount: 1
+    price: 190.00
+    category: combat
+    display-name: "&fShield"
+    lore: ["&7Defensive equipment", "&eClick to purchase"]
+  bread:
+    material: BREAD
+    amount: 16
+    price: 72.00
+    category: food
+    display-name: "&6Bread x16"
+    lore: ["&7Simple travel food", "&eClick to purchase"]
+  baked_potatoes:
+    material: BAKED_POTATO
+    amount: 16
+    price: 64.00
+    category: food
+    display-name: "&6Baked Potatoes x16"
+    lore: ["&7Filling food", "&eClick to purchase"]
+  cooked_chicken:
+    material: COOKED_CHICKEN
+    amount: 16
+    price: 76.00
+    category: food
+    display-name: "&fCooked Chicken x16"
+    lore: ["&7Food for your travels", "&eClick to purchase"]
+  name_tag:
+    material: NAME_TAG
+    amount: 1
+    price: 240.00
+    category: special
+    display-name: "&eName Tag"
+    lore: ["&7Name a mob or pet", "&eClick to purchase"]
+  saddle:
+    material: SADDLE
+    amount: 1
+    price: 280.00
+    category: special
+    display-name: "&6Saddle"
+    lore: ["&7For rideable mobs", "&eClick to purchase"]
+  glow_item_frame:
+    material: GLOW_ITEM_FRAME
+    amount: 2
+    price: 180.00
+    category: special
+    display-name: "&eGlow Item Frames x2"
+    lore: ["&7Showcase your favorite items", "&eClick to purchase"]
+  ender_chest:
+    material: ENDER_CHEST
+    amount: 1
+    price: 720.00
+    category: special
+    display-name: "&5Ender Chest"
+    lore: ["&7Personal shared storage", "&eClick to purchase"]

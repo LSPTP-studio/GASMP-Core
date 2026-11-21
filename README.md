@@ -52,7 +52,7 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 | Battle Pass | Season XP, ore/mob XP events, level rewards and claim records | Basic progression/reward implementation, not full mission/season GUI |
 | Crates | Configurable weighted rewards, physical key checks, location persistence, protected custom blocks, RP Engine keys and animated placed Vote/Legendary crate models | RP Engine content must be installed/reloaded; custom block variant is static, use the placed model for the lid animation; reward preview UI still needs work |
 | Teams | Leader/Co-Leader/Officer/Member roles, team bank, capacity upgrades, descriptions, named homes/list, alliances, invite expiry, team chat and membership management | Requires a Vault provider for Coins bank/upgrades; team missions, contribution tracking, friendly-fire/war and custom GUI still need work |
-| Casino | Casino selector GUI, wager selection, game-themed animated spin panels, server-side results, transaction audit, odds/help | Disabled by default; Blackjack, Poker and Tic-Tac-Toe are simplified quick-match simulations, not full interactive game rules/boards |
+| Casino | Casino selector GUI, wager selection, game-themed animated spin panels, server-side results, transaction audit, odds/help | Enabled for virtual Coins by default when Vault Economy is available; Blackjack, Poker and Tic-Tac-Toe remain simplified quick-match simulations |
 | Chat games | Scheduled/manual chat rounds and configured rewards | Text-based formats, not a large custom GUI game suite |
 | Moderation | Ban/unban, mute/unmute, warn, kick and history | Verify moderation policy, online/offline handling and persistence on live server |
 | Maintenance | Persistent enable/disable, login gate and MOTD change | Test bypass groups and server-list display with actual clients |
@@ -63,7 +63,7 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 
 ## Default release safety
 
-- Casino is disabled by default (`modules.casino: false`, `casino.yml settings.enabled: false`). Keep it disabled until odds, limits and provider error behavior are tested on the live economy plugin.
+- Casino uses virtual in-server Coins only (`modules.casino: true`, `casino.yml settings.enabled: true`); it has no real-money deposits or cash-out. It requires a functioning Vault Economy provider and should be tested on staging before production.
 - Shards cannot go negative. Player-to-player transfers, real-money purchases and cash-outs are disabled.
 - `/crates` management is Owner/Developer-only; players open configured crate blocks with physical keys.
 - OpenInv is restricted to Builder/Developer/Owner policy as configured for your server, but the default permission mapping is read-only and does not grant inventory-edit nodes.
@@ -83,13 +83,14 @@ On first start, Core copies the default resources into `plugins/GASMP-Core/`:
 - `chat-games.yml` — chat-game timing and reward settings
 - `maintenance.yml` — maintenance status, kick message and MOTD
 - `holograms.yml` — persistent display definitions
+- `shard-shop.yml` — Shards catalogue, bundle contents, prices and categories
 - `ranks.yml` — LuckPerms group/rank definitions (Phase 2 polish)
 
 Read `docs/` before changing live data. Avoid manually editing the SQLite database.
 
 ## Commands
 
-The command list and aliases are declared in `src/main/resources/plugin.yml`. The key user commands include `/gasmp`, `/shards`, `/shop`, `/rtp`, `/bounty`, `/ah`, `/team`, `/battlepass`, `/casino` (disabled by default), and `/gvanish`. Staff/admin commands include `/gasmpcore`, `/gasmpadmin`, `/crates`, `/gmaintenance`, `/gban`, `/gunban`, `/gmute`, `/gunmute`, `/gwarn`, `/gkick`, `/ghistory`, `/gholo`, `/gchatgame`, `/gtop` and `/gperf`.
+The command list and aliases are declared in `src/main/resources/plugin.yml`. The key user commands include `/gasmp`, `/shards`, `/shop`, `/rtp`, `/bounty`, `/ah`, `/team`, `/battlepass`, `/casino` (disabled by default), and `/gvanish`. `/shardshop` opens the Shard Shop directly. Staff/admin commands include `/gasmpcore`, `/gasmpadmin`, `/crates`, `/gmaintenance`, `/gban`, `/gunban`, `/gmute`, `/gunmute`, `/gwarn`, `/gkick`, `/ghistory`, `/gholo`, `/gchatgame`, `/gtop` and `/gperf`.
 
 ## Rank assets for Phase 2
 
@@ -127,3 +128,12 @@ The three rank-art bundles supplied by the server owner are preserved in `assets
 - Staging-server launch plan, dependency notes and GitHub Actions Java 25 build workflow.
 
 The GitHub Actions workflow is included at `.github/workflows/build.yml`. It runs static release validation and builds with Java 25 / Gradle 9.9.2, then uploads the JAR artifact. Follow `docs/GITHUB-ACTIONS.md` to publish this source to your GitHub repository and download the artifact. This source project has not been compiled here; live Paper 26.2 / Geyser / RP Engine testing remains necessary.
+
+
+## Menu and Shard Shop update
+
+The player menu is organized into Economy, Arcade, Adventure, Decorations, Profile and Statistics. Utility menu entries execute their corresponding player commands rather than displaying placeholder notices. The Shard Shop is a separate, paginated catalogue with category filters and a confirmation screen. Its initial furniture and decor kits contain vanilla blocks/items and do not require a custom resource pack; they are not animated custom furniture models.
+
+The casino entry in the player menu opens the existing animated arcade GUI. Casino bets and payouts use only the configured Vault Economy provider's in-server Coins. The casino requires the two enabled configuration flags shown above and a working provider; it does not support real-money deposits, purchases or cash-outs.
+
+The Shard Shop checks the player's inventory before purchase, debits the persistent Shard balance through the SQLite transaction service, and refunds the balance if normal item delivery fails. Test server shutdown/recovery behavior on staging before production.

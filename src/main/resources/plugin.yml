@@ -43,6 +43,9 @@ commands:
   shop:
     description: Opens the GASMP Coins shop.
     usage: /shop
+  shardshop:
+    description: Opens the GASMP Shard Shop.
+    usage: /shardshop
   rtp:
     description: Teleports you to a safe random location.
     usage: /rtp
@@ -59,7 +62,7 @@ commands:
     aliases: [auctionhouse, auction]
     permission: gasmpcore.auction
   casino:
-    description: GASMP virtual-Coins arcade. Disabled by default.
+    description: GASMP virtual-Coins arcade. Requires a Vault Economy provider.
     usage: /casino <menu|game> <bet> [choice]
     permission: gasmpcore.casino.play
   battlepass:

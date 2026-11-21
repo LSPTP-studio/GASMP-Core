@@ -148,6 +148,24 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         return true;
     }
 
+    public void openGui(Player player) {
+        if (!plugin.getConfig().getBoolean("modules.casino", false)
+                || !config.getBoolean("settings.enabled", false)) {
+            player.sendMessage(color("&cThe GASMP arcade is disabled in the plugin configuration."));
+            return;
+        }
+        plugin.getEconomyBridge().refresh();
+        if (!plugin.getEconomyBridge().isAvailable()) {
+            player.sendMessage(color("&cThe arcade needs Vault and a Vault-compatible Coins provider."));
+            return;
+        }
+        if (spinTasks.containsKey(player.getUniqueId())) {
+            player.sendMessage(color("&eYour current arcade animation is still running."));
+            return;
+        }
+        openMenu(player, 10.0);
+    }
+
     private void openMenu(Player player, double selectedBet) {
         CasinoMenuHolder holder = new CasinoMenuHolder(CasinoMenuHolder.Stage.MENU, null, selectedBet);
         Inventory inventory = create(holder, 54, "&8GASMP &7• &6Arcade");
