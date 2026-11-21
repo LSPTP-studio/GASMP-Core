@@ -58,7 +58,7 @@ public final class RankAdminMenu implements Listener, CommandExecutor, TabComple
                         plugin.getLogger().warning("Rank panel access failed: " + error.getMessage());
                         return;
                     }
-                    if (!access.authorized() || !actor.hasPermission("gasmpcore.rankadmin")) {
+                    if (!access.authorized()) {
                         actor.sendMessage(color("&cOnly configured Developers and Owners can access this panel."));
                         return;
                     }
@@ -235,8 +235,7 @@ public final class RankAdminMenu implements Listener, CommandExecutor, TabComple
     private void checkAccess(Player player, java.util.function.Consumer<RankService.Access> success) {
         ranks.getAccess(player.getUniqueId()).whenComplete((access, error) ->
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                    if (error != null || access == null || !access.authorized()
-                            || !player.hasPermission("gasmpcore.rankadmin")) {
+                    if (error != null || access == null || !access.authorized()) {
                         player.closeInventory();
                         player.sendMessage(color("&cYou are no longer authorized to use this panel."));
                         return;

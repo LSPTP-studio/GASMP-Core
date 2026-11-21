@@ -1,4 +1,4 @@
-# Remaining launch checklist — GASMP Core 0.7.0
+# Remaining launch checklist — GASMP Core 0.8.0
 
 ## Added in this source milestone
 - [x] Advanced team roles: Leader, Co-Leader, Officer, Member.
@@ -12,12 +12,12 @@
 - [x] Staging test plan.
 
 ## Still requires owner/server-side work
-- [ ] Create/import a GitHub repository and run the Actions workflow.
-- [ ] Resolve any compiler errors surfaced by the cloud build.
+- [x] Publish the feature branch and open the 0.8.0 pull request.
+- [x] Compile the 0.8.0 branch with Java 25 / Gradle in GitHub Actions.
 - [ ] Install the resulting JAR on a staging Paper 26.2 server and smoke-test every command.
-- [ ] Install RP Engine and verify content pack reload without errors.
-- [ ] Test animated placed crate models on Java clients.
-- [ ] Test Bedrock pack delivery and model fallback through the actual Geyser/Floodgate version.
+- [ ] Install RP Engine and verify both crate and furniture content packs reload without errors.
+- [ ] Test animated placed crate models and all six furniture models on Java clients.
+- [ ] Test Bedrock pack delivery, furniture seats and model fallback through the actual Geyser/Floodgate version.
 - [ ] Confirm economy plugin provider and test deposits/refunds on staging.
 - [ ] Verify staff restrictions with real LuckPerms Builder, Developer, Admin and Owner test accounts.
 - [ ] Verify TAB primary groups and prefix rendering after reconnect.

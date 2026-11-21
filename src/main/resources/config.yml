@@ -1,8 +1,16 @@
-# GASMP Core 0.7.0 — Paper 26.2 / Java 25
+# GASMP Core 0.8.0 — Paper 26.2 / Java 25
 # Phase 1 gameplay systems. Rank and visual menu design are refined in Phase 2.
 general:
   debug: false
   brand: "&d&lGASMP"
+
+# Named accounts allowed to access GASMP configuration and rank administration.
+# Names are matched case-insensitively; this does not grant unrelated LuckPerms permissions.
+config-admins:
+  owners:
+    - carltzy3k
+  developers:
+    - thommacide
 storage:
   type: sqlite
   sqlite-file: data.db
@@ -23,7 +31,7 @@ modules:
   maintenance: true
   chat-games: true
   leaderboards: true
-  casino: false
+  casino: true
   bounties: true
 menus:
   enabled: true

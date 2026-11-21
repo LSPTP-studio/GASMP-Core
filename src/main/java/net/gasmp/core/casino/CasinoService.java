@@ -43,14 +43,15 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) { sender.sendMessage("Casino is a player command."); return true; }
-        if (!plugin.getConfig().getBoolean("modules.casino", false) || !config.getBoolean("settings.enabled", false)) {
-            player.sendMessage(color("&cThe GASMP arcade is currently disabled.")); return true;
+        if (!isArcadeEnabled()) {
+            player.sendMessage(color("&cThe GASMP arcade is currently disabled. Enable modules.casino and casino.yml settings.enabled."));
+            return true;
         }
         if (!plugin.getEconomyBridge().isAvailable()) {
             player.sendMessage(color("&cCoins provider unavailable. Install Vault and a Vault-compatible economy plugin.")); return true;
         }
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) { help(player); return true; }
-        if (args[0].equalsIgnoreCase("menu")) { openMenu(player, 10.0); return true; }
+        if (args[0].equalsIgnoreCase("menu")) { openMenu(player); return true; }
         if (args[0].equalsIgnoreCase("odds")) { showOdds(player); return true; }
         if (!spinTasks.isEmpty() && spinTasks.containsKey(player.getUniqueId())) {
             player.sendMessage(color("&cFinish or close your current arcade spin first."));
@@ -148,6 +149,25 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         return true;
     }
 
+    private boolean isArcadeEnabled() {
+        return plugin.getConfig().getBoolean("modules.casino", false)
+                && config.getBoolean("settings.enabled", false);
+    }
+
+    /** Opens the interactive casino from menus and commands using the same safety gates. */
+    public void openMenu(Player player) {
+        if (!isArcadeEnabled()) {
+            player.sendMessage(color("&cThe GASMP arcade is currently disabled. Enable modules.casino and casino.yml settings.enabled."));
+            return;
+        }
+        if (!plugin.getEconomyBridge().isAvailable()) {
+            player.sendMessage(color("&cCoins provider unavailable. Install Vault and a Vault-compatible economy plugin."));
+            return;
+        }
+        double defaultBet = config.getDouble("settings.default-bet", 10.0);
+        openMenu(player, defaultBet);
+    }
+
     private void openMenu(Player player, double selectedBet) {
         CasinoMenuHolder holder = new CasinoMenuHolder(CasinoMenuHolder.Stage.MENU, null, selectedBet);
         Inventory inventory = create(holder, 54, "&8GASMP &7• &6Arcade");
@@ -163,7 +183,7 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
             holder.action(betSlots[i], "BET:" + bet);
         }
         String[][] games = {
-                {"roulette", "Roulette", "WHEEL"}, {"drums", "Slot Drums", "JUKEBOX"},
+                {"roulette", "Roulette", "COMPASS"}, {"drums", "Slot Drums", "JUKEBOX"},
                 {"darts", "Darts", "TARGET"}, {"races", "Races", "SADDLE"},
                 {"pyramid", "Pyramid", "GOLD_BLOCK"}, {"stairs", "Stairs", "LADDER"},
                 {"lottery", "Lottery", "PAPER"}, {"crash", "Crash", "FIREWORK_ROCKET"},
@@ -381,7 +401,7 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
     private Inventory create(CasinoMenuHolder holder, int size, String title) {
         Inventory inventory = Bukkit.createInventory(holder, size, color(title));
         holder.inventory(inventory);
-        ItemStack filler = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+        ItemStack filler = new ItemStack(Material.ORANGE_STAINED_GLASS_PANE);
         ItemMeta meta = filler.getItemMeta();
         meta.setDisplayName(" ");
         filler.setItemMeta(meta);

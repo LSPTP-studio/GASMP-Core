@@ -1,4 +1,4 @@
-# GASMP Core 0.7.0 — installation guide
+# GASMP Core 0.8.0 — installation guide
 
 ## 1. Required software
 
@@ -21,22 +21,29 @@ gradle build
 Expected output:
 
 ```text
-build/libs/GASMP-Core-0.7.0.jar
+build/libs/GASMP-Core-0.8.0.jar
 ```
 
-This release archive has not been compiled in the preparation environment. Do not assume a JAR exists until the build completes successfully on your machine or CI runner.
+The 0.8.0 branch has passed the Java 25 GitHub Actions compile. Download the JAR from the successful Actions run or build it locally. This confirms compilation, not live Paper/RP Engine behavior.
 
 ## 3. Install on a test server first
 
 1. Stop the test server and back up the entire server directory.
 2. Install Paper 26.2, LuckPerms and Vault.
 3. Install and configure one Vault-compatible economy plugin if you want Coins systems.
-4. Copy `GASMP-Core-0.7.0.jar` into `plugins/` after building it.
+4. Copy `GASMP-Core-0.8.0.jar` into `plugins/` after building it.
 5. Start the server once. Confirm the console reports SQLite initialization and does not show plugin-load errors.
-6. Confirm `plugins/GASMP-Core/` contains `config.yml`, `shop.yml`, `rtp.yml`, `casino.yml`, `battlepass.yml`, `crates.yml`, `chat-games.yml`, `maintenance.yml`, `holograms.yml` and `ranks.yml`.
+6. Confirm `plugins/GASMP-Core/` contains `config.yml`, `shop.yml`, `shard-shop.yml`, `rtp.yml`, `casino.yml`, `battlepass.yml`, `crates.yml`, `chat-games.yml`, `maintenance.yml`, `holograms.yml` and `ranks.yml`.
 7. Stop the server and review each config before inviting players.
 8. Add your trusted staff accounts to LuckPerms groups. Review the group/permission setup in `docs/PERMISSIONS.md`.
 9. Start the server and use the test checklist in `docs/PHASE1-TEST-PLAN.md`.
+
+For an existing 0.7.0 installation:
+- Back up the entire `plugins/GASMP-Core/` folder first.
+- The new named config-admin defaults are copied into `config.yml` if the lists are missing. Confirm `carltzy3k` is under `config-admins.owners` and `thommacide` is under `config-admins.developers`.
+- Existing `config.yml` and `casino.yml` values are preserved. To enable the arcade on an existing server, set `modules.casino: true` in `config.yml` and `settings.enabled: true` in `casino.yml` after staging tests.
+- Review the new `shard-shop.yml` catalogue. Shards remain separate from Vault Coins.
+
 
 ## 4. Economy setup
 
@@ -69,7 +76,15 @@ Geyser does not automatically convert a Java resource pack into a Bedrock pack. 
 5. The placed model furniture items use the Blockbench lid-open animation on interaction. The custom block variant is static because an ordinary block model cannot animate like an entity model.
 6. Test Java and Bedrock clients through Geyser before placing the crates in the live spawn.
 
-## 8. Rollback
+## 8. Furniture pack (optional, requires RP Engine)
+
+1. Copy `integrations/rp-engine/content/gasmp_furniture/` into `plugins/RPEngine/content/gasmp_furniture/`.
+2. Run `/rp reload` and check the console for model/YAML warnings.
+3. Keep RP Engine enabled before opening the Shards Shop. Custom furniture entries are only shown while RP Engine is running.
+4. Test the Oak Chair and Velvet Sofa shift-right-click seats, the crystal lamp light, animations, furniture drops and chunk reloads on staging.
+5. Geyser/Bedrock model rendering needs separate live validation.
+
+## 9. Rollback
 
 1. Stop the server.
 2. Restore the previous Core JAR and matching data/config backup.

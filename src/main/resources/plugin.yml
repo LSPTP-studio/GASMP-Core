@@ -1,5 +1,5 @@
 name: GASMP-Core
-version: '0.7.0'
+version: '0.8.0'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
@@ -40,6 +40,11 @@ commands:
     description: View and manage GASMP Shards.
     usage: /shards <balance|give|take|set>
     aliases: [shard, gshards]
+  shardshop:
+    description: Opens the separate GASMP Shards storefront.
+    usage: /shardshop
+    aliases: [sshop, shardstore]
+    permission: gasmpcore.shards.shop
   shop:
     description: Opens the GASMP Coins shop.
     usage: /shop
@@ -59,7 +64,7 @@ commands:
     aliases: [auctionhouse, auction]
     permission: gasmpcore.auction
   casino:
-    description: GASMP virtual-Coins arcade. Disabled by default.
+    description: GASMP virtual-Coins arcade.
     usage: /casino <menu|game> <bet> [choice]
     permission: gasmpcore.casino.play
   battlepass:
@@ -124,6 +129,9 @@ permissions:
     default: false
   gasmpcore.shards.balance:
     description: Allows viewing your own Shards balance.
+    default: true
+  gasmpcore.shards.shop:
+    description: Allows browsing and using the Shards storefront.
     default: true
   gasmpcore.shards.admin:
     description: Allows managing Shards balances.

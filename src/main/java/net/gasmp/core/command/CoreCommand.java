@@ -38,7 +38,9 @@ public final class CoreCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args[0].equalsIgnoreCase("reload")) {
-            if (!sender.hasPermission("gasmpcore.admin")) {
+            boolean configAdmin = sender instanceof Player player
+                    && plugin.isConfigAdmin(player.getName());
+            if (!sender.hasPermission("gasmpcore.admin") && !configAdmin) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission.");
                 return true;
             }

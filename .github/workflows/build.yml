@@ -47,6 +47,34 @@ jobs:
           gradle --version
           java --version
 
+      - name: Validate YAML and Blockbench model files
+        shell: bash
+        run: |
+          ruby -e 'require "yaml"; ARGV.each { |file| YAML.load_file(file, aliases: true); puts "YAML OK: #{file}" }' \
+            src/main/resources/*.yml \
+            integrations/rp-engine/content/gasmp_furniture/*.yml \
+            integrations/rp-engine/content/gasmp_furniture/items/*.yml
+          python3 - <<'PY'
+          import base64
+          import json
+          from pathlib import Path
+          models = sorted(Path("integrations/rp-engine/content/gasmp_furniture/assets/models").glob("*.bbmodel"))
+          if len(models) != 6:
+              raise SystemExit(f"Expected 6 furniture Blockbench models, found {len(models)}")
+          for path in models:
+              with path.open(encoding="utf-8") as handle:
+                  model = json.load(handle)
+              if not model.get("elements") or not model.get("groups"):
+                  raise SystemExit(f"Model is missing geometry or groups: {path}")
+              for texture in model.get("textures", []):
+                  source = texture.get("source", "")
+                  if source.startswith("data:image/png;base64,"):
+                      png = base64.b64decode(source.split(",", 1)[1], validate=True)
+                      if not png.startswith(bytes.fromhex("89504e470d0a1a0a")):
+                          raise SystemExit(f"Invalid embedded PNG in {path}")
+              print(f"Blockbench JSON and textures OK: {path}")
+          PY
+
       - name: Build plugin
         run: gradle --no-daemon clean build
 
@@ -66,5 +94,13 @@ jobs:
         with:
           name: GASMP-Core-${{ github.sha }}
           path: build/libs/*.jar
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload RP Engine furniture pack
+        uses: actions/upload-artifact@v4
+        with:
+          name: GASMP-RPEngine-Furniture
+          path: integrations/rp-engine/content/gasmp_furniture/
           if-no-files-found: error
           retention-days: 14
