@@ -177,8 +177,12 @@ public final class RankService {
 
     private Access accessFor(User user) {
         Set<String> groups = groupNames(user);
+        String configuredRole = plugin.configAdminRole(user.getUsername());
+        if (configuredRole.equals("owner")) groups.add(ownerGroup);
+        else if (configuredRole.equals("dev")) groups.add(developerGroup);
+
         boolean owner = groups.contains(ownerGroup);
-        boolean authorized = adminGroups.stream().anyMatch(groups::contains);
+        boolean authorized = adminGroups.stream().anyMatch(groups::contains) || !configuredRole.isEmpty();
         return new Access(authorized, owner, Set.copyOf(groups));
     }
 
