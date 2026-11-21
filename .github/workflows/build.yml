@@ -70,7 +70,7 @@ jobs:
                   source = texture.get("source", "")
                   if source.startswith("data:image/png;base64,"):
                       png = base64.b64decode(source.split(",", 1)[1], validate=True)
-                      if not png.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+                      if not png.startswith(bytes.fromhex("89504e470d0a1a0a")):
                           raise SystemExit(f"Invalid embedded PNG in {path}")
               print(f"Blockbench JSON and textures OK: {path}")
           PY
