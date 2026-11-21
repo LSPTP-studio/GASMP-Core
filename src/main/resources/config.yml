@@ -3,6 +3,14 @@
 general:
   debug: false
   brand: "&d&lGASMP"
+
+# Named accounts allowed to access GASMP configuration and rank administration.
+# Names are matched case-insensitively; this does not grant unrelated LuckPerms permissions.
+config-admins:
+  owners:
+    - carltzy3k
+  developers:
+    - thommacide
 storage:
   type: sqlite
   sqlite-file: data.db
