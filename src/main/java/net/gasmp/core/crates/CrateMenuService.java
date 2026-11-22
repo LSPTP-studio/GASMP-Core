@@ -148,7 +148,7 @@ public final class CrateMenuService implements Listener, CommandExecutor {
             case "legendary" -> "&6";
             default -> "&7";
         };
-        ItemStack icon = createItemsAdderItem(reward.itemId());
+        ItemStack icon = createRPEngineItem(reward.itemId());
         if (icon == null) icon = new ItemStack(Material.PAPER);
 
         ItemMeta meta = icon.getItemMeta();
@@ -158,27 +158,50 @@ public final class CrateMenuService implements Listener, CommandExecutor {
                     color("&7Reward type: &fWearable cosmetic"),
                     color("&7Rarity: " + rarityColor + title(rarity)),
                     String.format(Locale.US, color("&7Drop chance: &a%.2f%%"), chance),
-                    color("&8ItemsAdder: " + reward.itemId())));
+                    color("&8Cosmetic ID: " + reward.itemId())));
             icon.setItemMeta(meta);
         }
         return icon;
     }
 
-    private ItemStack createItemsAdderItem(String namespacedId) {
-        Plugin itemsAdder = Bukkit.getPluginManager().getPlugin("ItemsAdder");
-        if (itemsAdder == null || !itemsAdder.isEnabled()) return null;
+    /** Resolves a custom item through RP Engine's public items() API without a compile-time dependency. */
+    private ItemStack createRPEngineItem(String namespacedId, int 1) {
+        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        if (engine == null || !engine.isEnabled()) return null;
         try {
-            ClassLoader loader = itemsAdder.getClass().getClassLoader();
-            Class<?> customStackClass = Class.forName(
-                    "dev.lone.itemsadder.api.CustomStack", true, loader);
-            Object customStack = customStackClass.getMethod("getInstance", String.class)
-                    .invoke(null, namespacedId);
-            if (customStack == null) return null;
-            Object stack = customStackClass.getMethod("getItemStack").invoke(customStack);
-            return stack instanceof ItemStack item ? item.clone() : null;
+            ClassLoader loader = engine.getClass().getClassLoader();
+            Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
+            Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, namespacedId);
+            if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) return null;
+            Object contentId = optional.get();
+            Object items = engine.getClass().getMethod("items").invoke(engine);
+            Object created = null;
+            for (java.lang.reflect.Method method : items.getClass().getMethods()) {
+                if (!method.getName().equals("create")) continue;
+                Class<?>[] types = method.getParameterTypes();
+                if (types.length == 2 && types[0].equals(contentIdClass) && types[1] == int.class) {
+                    created = method.invoke(items, contentId, 1);
+                    break;
+                }
+                if (types.length == 1 && types[0].equals(contentIdClass)) {
+                    created = method.invoke(items, contentId);
+                    break;
+                }
+            }
+            ItemStack stack = null;
+            if (created instanceof Optional<?> resultOptional && resultOptional.isPresent()) {
+                Object value = resultOptional.get();
+                if (value instanceof ItemStack itemStack) stack = itemStack;
+            } else if (created instanceof ItemStack itemStack) {
+                stack = itemStack;
+            }
+            if (stack == null || 1 < 1) return null;
+            ItemStack result = stack.clone();
+            if (1 > result.getMaxStackSize()) return null;
+            result.setAmount(1);
+            return result;
         } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().fine("ItemsAdder cosmetic " + namespacedId
-                    + " unavailable in crate catalogue: " + ex.getMessage());
+            plugin.getLogger().fine("RP Engine item " + namespacedId + " is unavailable: " + ex.getMessage());
             return null;
         }
     }
