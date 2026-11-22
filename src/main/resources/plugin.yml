@@ -74,9 +74,6 @@ commands:
   crates:
     description: Restricted crate administration. Crate opening uses ItemsAdder cosmetic keys.
     usage: /crates <list|set|unset|givekey|reload>
-  gcrateopen:
-    description: Internal console-only command reserved for ItemsAdder crate interactions.
-    usage: /gcrateopen <player> <crate-id>
   team:
     description: GASMP teams and team chat.
     usage: /team <create|invite|accept|leave|kick|disband|info|chat|promote|demote|transfer|description|bank|sethome|home|homes|upgrade|ally>
