@@ -59,21 +59,6 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // ItemsAdder crate furniture triggers this internal console-only command.
-        if (command.getName().equalsIgnoreCase("gcrateopen")) {
-            if (!(sender instanceof ConsoleCommandSender)) {
-                sender.sendMessage("This is an internal crate interaction command.");
-                return true;
-            }
-            if (args.length != 2) return true;
-            Player target = Bukkit.getPlayerExact(args[0]);
-            String crateId = args[1].toLowerCase(Locale.ROOT);
-            if (target != null && config.getConfigurationSection("crates." + crateId) != null) {
-                openCrate(target, crateId);
-            }
-            return true;
-        }
-
         if (!(sender instanceof Player player)) { sender.sendMessage("Run this command in-game."); return true; }
         // /crates stays Owner/Developer only, even if OP has wildcard permissions.
         if (!staff.isOwnerOrDev(player)) {
@@ -549,7 +534,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private void help(Player player) {
         player.sendMessage(color("&6&lGASMP CRATES &8- &cDeveloper/Owner only"));
         player.sendMessage(color("&e/crates list &7- list configured crate types"));
-        player.sendMessage(color("&e/crates givekey <player> <id> [amount] &7- give the matching key"));
+        player.sendMessage(color("&e/crates givekey <player> <id> [amount] &7- give the matching ItemsAdder key"));
         player.sendMessage(color("&e/crates set <id> &7- register a vanilla chest/barrel fallback"));
         player.sendMessage(color("&e/crates unset <id> &7- remove a vanilla fallback location"));
         player.sendMessage(color("&e/crates reload &7- reload crate definitions"));
