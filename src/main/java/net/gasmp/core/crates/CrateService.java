@@ -351,7 +351,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         for (int i = 0; i < inventory.getSize(); i++) {
             if (i < 9 || i >= 18 || i % 9 == 0 || i % 9 == 8) inventory.setItem(i, filler.clone());
         }
-        inventory.setItem(13, named(Material.CHEST, "&d&lOPENING...", "&7Your reward is being rolled."));
+        inventory.setItem(13, named(Material.CHEST, displayName(crateId), "&7Opening... your reward is being rolled."));
         player.openInventory(inventory);
 
         Material[] reel = {Material.AMETHYST_SHARD, Material.DIAMOND, Material.EMERALD,
@@ -485,7 +485,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 ItemStack rewardItem = new ItemStack(material, (int) amount);
                 Map<Integer, ItemStack> left = player.getInventory().addItem(rewardItem);
                 left.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
-                player.sendMessage(color("&6&lCRATE REWARD &8» &f" + amount + "x " + material.name()));
+                player.sendMessage(color(displayName(crateId) + " &8» &f" + amount + "x " + material.name()));
                 opening.remove(player.getUniqueId());
             }
             case "coins" -> {
@@ -499,7 +499,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                         paid = Double.isFinite(after) && Math.abs((after - before) - amount) <= 0.005d;
                     }
                     if (!paid) { refundKey(player, crateId, "Economy provider rejected reward."); return; }
-                    player.sendMessage(color("&6&lCRATE REWARD &8» &6+" + amount + " Coins"));
+                    player.sendMessage(color(displayName(crateId) + " &8» &6+" + amount + " Coins"));
                     opening.remove(player.getUniqueId());
                 } catch (RuntimeException providerError) {
                     plugin.getLogger().severe("Crate Coins reward provider error for " + player.getUniqueId()
@@ -513,7 +513,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                     "CRATE", amount, PlayerDataStore.ShardChange.GIVE, crateId + " crate reward")
                     .whenComplete((balance, error) -> Bukkit.getScheduler().runTask(plugin, () -> {
                         if (error != null) refundKey(player, crateId, "Shards database error.");
-                        else { player.sendMessage(color("&d&lCRATE REWARD &8» &d+" + amount + " Shards")); opening.remove(player.getUniqueId()); }
+                        else { player.sendMessage(color(displayName(crateId) + " &8» &d+" + amount + " Shards")); opening.remove(player.getUniqueId()); }
                     }));
             default -> refundKey(player, crateId, "Unknown crate reward type.");
         }
