@@ -10,6 +10,17 @@ common_crate_display:
     scale: 1.0
     solid: true
     surface: floor
+    animations:
+      idle:
+        mode: loop
+        speed: 0.75
+        priority: 1
+        blend: 0.12
+      open:
+        mode: once
+        speed: 0.9
+        priority: 10
+        blend: 0.15
   actions:
     interact:
       - cooldown: 2
