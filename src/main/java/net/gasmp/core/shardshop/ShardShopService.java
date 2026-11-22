@@ -493,13 +493,30 @@ public final class ShardShopService implements Listener, CommandExecutor {
     }
 
     private ItemStack productIcon(Product product) {
+        ItemStack icon = null;
+        if (product.rewards().size() == 1) {
+            Reward reward = product.rewards().getFirst();
+            if (reward.customContentId() != null) {
+                // Show the actual custom model in the catalogue when RP Engine is available.
+                icon = createEngineItem(reward.customContentId(), 1);
+            }
+        }
+        if (icon == null) icon = new ItemStack(product.icon());
+
         List<String> lore = new ArrayList<>();
         product.lore().forEach(line -> lore.add(color(line)));
         lore.add(color("&8"));
         lore.add(color("&7Category: &f" + categoryLabel(product.category())));
         lore.add(color("&7Price: &d" + product.price() + " ✦ Shards"));
         lore.add(color("&aClick to review purchase"));
-        return item(product.icon(), product.name(), lore.toArray(String[]::new));
+
+        ItemMeta meta = icon.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(color(product.name()));
+            meta.setLore(lore);
+            icon.setItemMeta(meta);
+        }
+        return icon;
     }
 
     private Inventory create(Holder holder, int size, String rawTitle) {
