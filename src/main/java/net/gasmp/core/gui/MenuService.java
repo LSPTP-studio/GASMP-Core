@@ -101,6 +101,10 @@ public final class MenuService implements Listener {
         set(inventory, 25, Material.WRITABLE_BOOK, "&d&lStatistics",
                 "&7Kills, deaths and playtime", "&eClick to open");
         holder.navigate(25, MenuPage.STATISTICS);
+        set(inventory, 31, Material.NETHER_STAR, "&d&lRanks",
+                "&7Browse Staff, Creator, Supporter and Prestige ranks",
+                "&7Rank groups and prefixes are managed by LuckPerms", "&eClick to browse");
+        holder.command(31, "ranks");
         set(inventory, 49, Material.BARRIER, "&c&lClose", "&7Close this menu");
     }
 
