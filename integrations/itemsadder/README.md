@@ -14,3 +14,18 @@ Prefix image names include `:gasmp_owner:`, `:gasmp_admin:`, `:gasmp_dev:`, `:ga
 GASMP Core keeps plain text LuckPerms prefixes by default. That is intentional so TAB names stay readable without a custom font pack. The image assets are available for GUI decoration and optional later prefix styling.
 
 The original `rank_bundle` namespace/config and its textures are preserved. Keep these assets inside the license terms under which they were obtained; do not redistribute the asset pack as a standalone product.
+
+
+## GASMP cosmetic crate keys
+
+The additional contents/gasmp_crates/configs/keys.yml file defines the four physical crate keys used by GASMP Core:
+- gasmp_crates:common_key
+- gasmp_crates:rare_key
+- gasmp_crates:epic_key
+- gasmp_crates:legendary_key
+
+Copy contents/gasmp_crates/ into plugins/ItemsAdder/contents/, then run /iareload and /iazip.
+
+The full wearable cosmetic collection (30 Hat Parade hats and six Artillex hats, including models and textures) is supplied in the separate GASMP ItemsAdder Test Pack archive. Both collections use behaviours.hat: true. The Artillex six-hat definitions are adapted to the 26.2 graphics.model profile.
+
+GASMP's crate loot is cosmetic-only. Players purchase the matching key in /shardshop, inspect drop chances with /crate, and open registered chest/barrel locations. Register locations as Owner/Developer with /crates set common, /crates set rare, /crates set epic, and /crates set legendary.
