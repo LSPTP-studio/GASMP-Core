@@ -144,12 +144,19 @@ public final class ShardShopService implements Listener, CommandExecutor {
                 continue;
             }
 
+            String configuredCrateKey = entry.getString("crate-key");
+            String crateKeyId = normalizeCrateKeyId(configuredCrateKey);
+            if (configuredCrateKey != null && crateKeyId == null) valid = false;
+            if (!valid) {
+                plugin.getLogger().warning("Ignoring invalid Shard Shop product: " + rawKey);
+                continue;
+            }
+
             String key = rawKey.toLowerCase(Locale.ROOT);
             String category = normalizeCategory(entry.getString("category", "decor"));
             products.put(key, new Product(key, category, icon, price,
                     entry.getString("name", "&f" + rawKey),
-                    List.copyOf(entry.getStringList("lore")), List.copyOf(rewards),
-                    normalizeCrateKeyId(entry.getString("crate-key"))));
+                    List.copyOf(entry.getStringList("lore")), List.copyOf(rewards), crateKeyId));
         }
         plugin.getLogger().info("Loaded " + products.size() + " Shard Shop products.");
     }
@@ -491,6 +498,7 @@ public final class ShardShopService implements Listener, CommandExecutor {
             case "lighting" -> Material.LANTERN;
             case "building" -> Material.BRICKS;
             case "utility" -> Material.CHEST;
+            case "crate_keys" -> Material.TRIPWIRE_HOOK;
             default -> Material.COMPASS;
         };
     }
