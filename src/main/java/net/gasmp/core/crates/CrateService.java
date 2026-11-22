@@ -270,10 +270,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
         // Animate first. The key remains in the player's hand until the final frame, so
         // closing the inventory or disconnecting safely cancels the opening without loss.
-        animateOpening(player, id, chosen);
+        animateOpening(player, id, chosen, rewards);
     }
 
-    private void animateOpening(Player player, String crateId, ConfigurationSection reward) {
+    private void animateOpening(Player player, String crateId, ConfigurationSection reward, List<ConfigurationSection> rewardPool) {
         RarityStyle rarity = rarityStyle(reward);
         CrateAnimationHolder holder = new CrateAnimationHolder(crateId);
         Inventory inventory = Bukkit.createInventory(holder, 27,
@@ -288,9 +288,20 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 "&7The " + rarity.label() + " reward is being rolled."));
         player.openInventory(inventory);
 
-        Material[] reel = {Material.AMETHYST_SHARD, Material.DIAMOND, Material.EMERALD,
-                Material.GOLD_INGOT, Material.NETHERITE_INGOT, Material.EXPERIENCE_BOTTLE,
-                Material.PRISMARINE_CRYSTALS, Material.BLAZE_POWDER};
+        // Cache real ItemsAdder hat icons for the reel; crate animation never displays currency or gear.
+        List<ItemStack> reelItems = new ArrayList<>();
+        for (ConfigurationSection entry : rewardPool) {
+            ItemStack hat = createItemsAdderItem(entry.getString("item", ""), 1);
+            if (hat == null) continue;
+            ItemMeta hatMeta = hat.getItemMeta();
+            if (hatMeta != null) {
+                hatMeta.setDisplayName(color("&d" + entry.getString("display-name", entry.getString("item", "Cosmetic"))));
+                hat.setItemMeta(hatMeta);
+            }
+            reelItems.add(hat);
+        }
+        if (reelItems.isEmpty()) reelItems.add(named(Material.PAPER, "&eCOSMETIC"));
+
         final int[] ticks = {0};
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             if (!player.isOnline() || player.getOpenInventory().getTopInventory().getHolder() != holder) {
@@ -305,9 +316,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             int spinInterval = Math.max(2, 7 - (ticks[0] / 12));
             if (ticks[0] % spinInterval == 0) {
                 for (int slot : new int[]{11, 13, 15}) {
-                    Material material = reel[ThreadLocalRandom.current().nextInt(reel.length)];
-                    inventory.setItem(slot, named(material,
-                            rarity.color().toString() + ChatColor.BOLD.toString() + material.name().replace('_', ' ')));
+                    ItemStack preview = reelItems.get(ThreadLocalRandom.current().nextInt(reelItems.size()));
+                    inventory.setItem(slot, preview.clone());
                 }
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.45f,
                         Math.min(1.8f, 0.65f + (ticks[0] / 55.0f)));
@@ -400,19 +410,6 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
         item.setItemMeta(meta);
         return item;
-    }
-
-    private ItemStack rewardPreview(ConfigurationSection reward) {
-        String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
-        Material material = switch (type) {
-            case "coins" -> Material.GOLD_INGOT;
-            case "shards" -> Material.AMETHYST_SHARD;
-            default -> Material.matchMaterial(reward.getString("material", "DIAMOND"));
-        };
-        if (material == null || !material.isItem() || material.isAir()) material = Material.CHEST;
-        long amount = reward.getLong("amount", 1);
-        return named(material, "&6&lREWARD REVEALED", "&7Type: &f" + type.toUpperCase(Locale.ROOT),
-                "&7Amount: &e" + amount, "&8GASMP CRATES");
     }
 
     @EventHandler
