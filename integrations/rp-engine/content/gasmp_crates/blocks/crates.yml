@@ -1,0 +1,63 @@
+common_crate_block:
+  base: note_block
+  model: common_crate
+  hardness: 4.0
+  drop: gasmp_crates:common_crate_block
+  name: "&f&lCOMMON CRATE"
+  lore:
+    - "&7Protected GASMP cosmetic crate."
+    - "&8Right-click to open with a matching key."
+  sound: minecraft:block.chest.open
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} common"
+
+rare_crate_block:
+  base: note_block
+  model: rare_crate
+  hardness: 4.0
+  drop: gasmp_crates:rare_crate_block
+  name: "&b&lRARE CRATE"
+  lore:
+    - "&7Protected GASMP cosmetic crate."
+    - "&8Right-click to open with a matching key."
+  sound: minecraft:block.chest.open
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} rare"
+
+epic_crate_block:
+  base: note_block
+  model: epic_crate
+  hardness: 4.0
+  drop: gasmp_crates:epic_crate_block
+  name: "&d&lEPIC CRATE"
+  lore:
+    - "&7Protected GASMP cosmetic crate."
+    - "&8Right-click to open with a matching key."
+  sound: minecraft:block.chest.open
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} epic"
+
+legendary_crate_block:
+  base: note_block
+  model: legendary_crate
+  hardness: 4.0
+  drop: gasmp_crates:legendary_crate_block
+  name: "&6&lLEGENDARY CRATE"
+  lore:
+    - "&7Protected GASMP cosmetic crate."
+    - "&8Right-click to open with a matching key."
+  sound: minecraft:block.chest.open
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} legendary"
