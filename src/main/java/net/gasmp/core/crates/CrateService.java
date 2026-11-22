@@ -123,7 +123,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
         Map<Integer, ItemStack> left = target.getInventory().addItem(custom);
         left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
-        actor.sendMessage(color("&aGave " + amount + " custom " + id + " crate item(s) to " + target.getName() + "."));
+        actor.sendMessage(color("&aGave " + amount + " &f" + displayName(id) + " &acustom physical block item(s) to " + target.getName() + "."));
     }
 
     private void setLocation(Player player, String[] args) {
@@ -167,7 +167,32 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (crates == null || crates.getKeys(false).isEmpty()) { player.sendMessage(color("&7No crates configured.")); return; }
         for (String id : crates.getKeys(false)) {
             boolean placed = config.getConfigurationSection("locations." + id) != null;
-            player.sendMessage(color("&e" + id + " &8- " + (placed ? "&aPlaced" : "&cNot placed")));
+            String physical = isRpEngineContentAvailable(id) ? "&aCustom block ready" : "&eVanilla block fallback";
+            player.sendMessage(color(displayName(id) + " &8- " + physical
+                    + (placed ? " &8| &aLocation registered" : "")));
+        }
+    }
+
+    private String displayName(String id) {
+        ConfigurationSection crate = config.getConfigurationSection("crates." + id);
+        String configured = crate == null ? null : crate.getString("display-name");
+        if (configured == null || configured.isBlank()) {
+            return "&d&l" + id.replace('_', ' ').toUpperCase(Locale.ROOT);
+        }
+        return configured;
+    }
+
+    private boolean isRpEngineContentAvailable(String id) {
+        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        if (engine == null || !engine.isEnabled()) return false;
+        try {
+            ClassLoader loader = engine.getClass().getClassLoader();
+            Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
+            Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null,
+                    "gasmp_crates:" + id + "_crate_block");
+            return parsed instanceof Optional<?> optional && optional.isPresent();
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            return false;
         }
     }
 
@@ -288,7 +313,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         ItemStack keyItem = keyInMainHand ? mainHand : player.getInventory().getItemInOffHand();
         if (!isKey(keyItem, id)) {
             opening.remove(player.getUniqueId());
-            player.sendMessage(color("&cYou need a &f" + id + " &ccrate key."));
+            player.sendMessage(color("&cYou need a key for " + displayName(id) + "&c."));
             return;
         }
 
@@ -329,7 +354,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     private void animateOpening(Player player, String crateId, ConfigurationSection reward) {
         CrateAnimationHolder holder = new CrateAnimationHolder(crateId);
-        Inventory inventory = Bukkit.createInventory(holder, 27, color("&8GASMP &7• &d" + crateId.toUpperCase(Locale.ROOT) + " CRATE"));
+        Inventory inventory = Bukkit.createInventory(holder, 27, color("&8GASMP &7• ") + color(displayName(crateId)));
         holder.inventory(inventory);
         ItemStack filler = named(Material.PURPLE_STAINED_GLASS_PANE, " ");
         for (int i = 0; i < inventory.getSize(); i++) {
@@ -515,8 +540,13 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(color("&d&l" + id.toUpperCase(Locale.ROOT) + " CRATE KEY"));
-            meta.setLore(List.of(color("&7Use at the matching GASMP crate."), color("&8GASMP key")));
+            ConfigurationSection crate = config.getConfigurationSection("crates." + id);
+            String keyName = crate == null ? null : crate.getString("key-name");
+            if (keyName == null || keyName.isBlank()) keyName = "&d&l" + id.toUpperCase(Locale.ROOT) + " KEY";
+            String keyLore = crate == null ? "&7Use at the matching GASMP crate." :
+                    crate.getString("key-lore", "&7Unlocks the " + id + " crate.");
+            meta.setDisplayName(color(keyName));
+            meta.setLore(List.of(color(keyLore), color("&8GASMP • CRATE KEY")));
             meta.getPersistentDataContainer().set(crateKey, PersistentDataType.STRING, id);
             item.setItemMeta(meta);
         }
@@ -576,7 +606,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private void help(Player player) {
         player.sendMessage(color("&6&lGASMP CRATES &8- &cDeveloper/Owner only"));
         player.sendMessage(color("&e/crates list &7- list configured crates"));
-        player.sendMessage(color("&e/crates set <id> &7- set target chest/barrel"));
+        player.sendMessage(color("&e/crates giveblock <player> <id> [amount] &7- give a placeable RP Engine crate block"));
+        player.sendMessage(color("&e/crates set <id> &7- register a vanilla chest/barrel location"));
         player.sendMessage(color("&e/crates unset <id> &7- remove location"));
         player.sendMessage(color("&e/crates givekey <player> <id> [amount]"));
         player.sendMessage(color("&e/crates giveblock <player> <id> [amount] &7- custom protected block item"));
