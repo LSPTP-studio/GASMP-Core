@@ -1,18 +1,19 @@
 vote_key:
   material: TRIPWIRE_HOOK
-  name: "&a&lVOTE CRATE KEY"
+  name: "&a&lVANGUARD KEY"
   lore:
-    - "&7Opens the Vote Crate."
-    - "&8GASMP • KEY ITEM"
+    - "&7Unlocks a Vanguard Supply Cache."
+    - "&8GASMP • CRATE KEY"
   texture: item/vote_key
   glow: true
   stack: 64
+
 legendary_key:
   material: TRIPWIRE_HOOK
-  name: "&5&lLEGENDARY CRATE KEY"
+  name: "&5&lABYSSAL KEY"
   lore:
-    - "&7Opens the Legendary Crate."
-    - "&8GASMP • KEY ITEM"
+    - "&7Unlocks an Abyssal Relic Vault."
+    - "&8GASMP • CRATE KEY"
   texture: item/legendary_key
   glow: true
   stack: 64
