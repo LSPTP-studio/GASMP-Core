@@ -1,6 +1,11 @@
-# /crates management is Owner/Developer only. Players open configured blocks using physical keys.
+# /crates management is Owner/Developer only. Players open physical crates using matching keys.
+# "display-name", "key-name", "key-lore" and "icon" are used by the GASMP catalogue and keys.
 crates:
   vote:
+    display-name: "&a&lVANGUARD SUPPLY CACHE"
+    key-name: "&a&lVANGUARD KEY"
+    key-lore: "&7Unlocks the Vanguard Supply Cache."
+    icon: LIME_SHULKER_BOX
     rewards:
       shards_small:
         type: shards
@@ -15,7 +20,12 @@ crates:
         material: DIAMOND
         amount: 2
         weight: 15
+
   legendary:
+    display-name: "&5&lABYSSAL RELIC VAULT"
+    key-name: "&5&lABYSSAL KEY"
+    key-lore: "&7Unlocks the Abyssal Relic Vault."
+    icon: DRAGON_EGG
     rewards:
       shards_big:
         type: shards
@@ -30,4 +40,5 @@ crates:
         material: NETHERITE_INGOT
         amount: 1
         weight: 25
+
 locations: {}
