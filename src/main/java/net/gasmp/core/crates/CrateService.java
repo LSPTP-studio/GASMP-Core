@@ -167,7 +167,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (crates == null || crates.getKeys(false).isEmpty()) { player.sendMessage(color("&7No crates configured.")); return; }
         for (String id : crates.getKeys(false)) {
             boolean placed = config.getConfigurationSection("locations." + id) != null;
-            String physical = isRpEngineContentAvailable(id) ? "&aCustom block ready" : "&eVanilla block fallback";
+            String physical = isRpEngineEnabled() ? "&aRP Engine custom blocks enabled" : "&eUse a vanilla chest/barrel with /crates set";
             player.sendMessage(color(displayName(id) + " &8- " + physical
                     + (placed ? " &8| &aLocation registered" : "")));
         }
@@ -182,18 +182,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return configured;
     }
 
-    private boolean isRpEngineContentAvailable(String id) {
+    private boolean isRpEngineEnabled() {
         Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled()) return false;
-        try {
-            ClassLoader loader = engine.getClass().getClassLoader();
-            Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
-            Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null,
-                    "gasmp_crates:" + id + "_crate_block");
-            return parsed instanceof Optional<?> optional && optional.isPresent();
-        } catch (ReflectiveOperationException | RuntimeException ex) {
-            return false;
-        }
+        return engine != null && engine.isEnabled();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -605,13 +596,12 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private void save() { try { config.save(new File(plugin.getDataFolder(), "crates.yml")); } catch (Exception ex) { plugin.getLogger().severe("Could not save crates.yml: " + ex.getMessage()); } }
     private void help(Player player) {
         player.sendMessage(color("&6&lGASMP CRATES &8- &cDeveloper/Owner only"));
-        player.sendMessage(color("&e/crates list &7- list configured crates"));
-        player.sendMessage(color("&e/crates giveblock <player> <id> [amount] &7- give a placeable RP Engine crate block"));
-        player.sendMessage(color("&e/crates set <id> &7- register a vanilla chest/barrel location"));
-        player.sendMessage(color("&e/crates unset <id> &7- remove location"));
-        player.sendMessage(color("&e/crates givekey <player> <id> [amount]"));
-        player.sendMessage(color("&e/crates giveblock <player> <id> [amount] &7- custom protected block item"));
-        player.sendMessage(color("&e/crates givemodel <player> <id> [amount] &7- animated placed model"));
+        player.sendMessage(color("&e/crates list &7- list configured crate types"));
+        player.sendMessage(color("&e/crates giveblock <player> <id> [amount] &7- give a physical custom block"));
+        player.sendMessage(color("&e/crates givemodel <player> <id> [amount] &7- give an animated placeable display"));
+        player.sendMessage(color("&e/crates givekey <player> <id> [amount] &7- give the matching key"));
+        player.sendMessage(color("&e/crates set <id> &7- register a vanilla chest/barrel fallback"));
+        player.sendMessage(color("&e/crates unset <id> &7- remove a vanilla fallback location"));
         player.sendMessage(color("&e/crates reload &7- reload crate definitions"));
     }
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
