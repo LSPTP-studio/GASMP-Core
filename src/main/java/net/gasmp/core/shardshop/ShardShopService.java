@@ -6,6 +6,7 @@ import net.gasmp.core.gui.MenuPage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -38,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ShardShopService implements Listener, CommandExecutor {
     private record Reward(Material material, int amount, String customContentId) { }
     private record Product(String key, String category, Material icon, long price,
-                           String name, List<String> lore, List<Reward> rewards) { }
+                           String name, List<String> lore, List<Reward> rewards, String crateKeyId) { }
 
     private enum Stage { LIST, CONFIRM }
 
@@ -73,12 +75,14 @@ public final class ShardShopService implements Listener, CommandExecutor {
     }
 
     private final GASMPCore plugin;
+    private final NamespacedKey crateKey;
     private final Map<String, Product> products = new LinkedHashMap<>();
     private final Set<UUID> purchasing = ConcurrentHashMap.newKeySet();
     private YamlConfiguration config;
 
     public ShardShopService(GASMPCore plugin) {
         this.plugin = plugin;
+        this.crateKey = new NamespacedKey(plugin, "crate_key");
         reload();
     }
 
@@ -144,7 +148,8 @@ public final class ShardShopService implements Listener, CommandExecutor {
             String category = normalizeCategory(entry.getString("category", "decor"));
             products.put(key, new Product(key, category, icon, price,
                     entry.getString("name", "&f" + rawKey),
-                    List.copyOf(entry.getStringList("lore")), List.copyOf(rewards)));
+                    List.copyOf(entry.getStringList("lore")), List.copyOf(rewards),
+                    normalizeCrateKeyId(entry.getString("crate-key"))));
         }
         plugin.getLogger().info("Loaded " + products.size() + " Shard Shop products.");
     }
@@ -403,7 +408,21 @@ public final class ShardShopService implements Listener, CommandExecutor {
                 rewards[i] = new ItemStack(reward.material(), reward.amount());
             }
         }
+
+        // Purchased crate keys must carry the exact persistent tag checked by CrateService.
+        if (product.crateKeyId() != null) {
+            if (rewards.length != 1 || rewards[0] == null || !rewards[0].hasItemMeta()) return null;
+            ItemMeta meta = rewards[0].getItemMeta();
+            meta.getPersistentDataContainer().set(crateKey, PersistentDataType.STRING, product.crateKeyId());
+            rewards[0].setItemMeta(meta);
+        }
         return rewards;
+    }
+
+    private String normalizeCrateKeyId(String value) {
+        if (value == null || value.isBlank()) return null;
+        String normalized = value.trim().toLowerCase(Locale.ROOT);
+        return normalized.matches("[a-z0-9_-]+") ? normalized : null;
     }
 
     /** Creates a real RP Engine content item. This API call is main-thread-only. */
