@@ -4,7 +4,7 @@ settings:
   title: "&d&lGASMP &8• &5Shard Shop"
 items:
   vanguard_crate_key:
-    category: keys
+    category: crate_keys
     icon: TRIPWIRE_HOOK
     name: "&a&lVANGUARD CRATE KEY"
     price: 120
