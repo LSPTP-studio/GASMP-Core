@@ -7,7 +7,7 @@
 
 ## Important release status
 
-This is a **source release candidate**, not a verified production JAR. The workspace used to prepare it has Java 21 and does not have Gradle or cached Paper/Vault/LuckPerms dependencies. Static/source and database checks are possible here, but Paper 26.2 compilation and live server integration tests remain outstanding. Build it with JDK 25 and Gradle on a network-enabled development machine before installing it on GASMP.
+This is a **test release candidate**. GitHub Actions builds the plugin with Java 25 / Gradle 9.9.2 and uploads a test JAR artifact. The artifact build does not replace live Paper 26.2, ItemsAdder resource-pack, Java client or Bedrock client testing.
 
 ## Dependencies
 
@@ -22,8 +22,9 @@ This is a **source release candidate**, not a verified production JAR. The works
 ### Optional integrations
 - TAB — reads LuckPerms primary group and `%luckperms-prefix%`
 - PlaceholderAPI — placeholders in compatible displays
-- Geyser + Floodgate — Bedrock cross-play; RP Engine can build/deliver a Bedrock pack when Geyser-Spigot is running on the same server
-- RP Engine — recommended free/open-source resource-pack, custom-item, custom-block and animated placed-model option; ItemsAdder/Nexo remain optional alternatives
+- ItemsAdder — required for GASMP's wearable cosmetic rewards and crate keys; use a build explicitly compatible with your exact Paper/Minecraft 26.2 build
+- Geyser + Floodgate — Bedrock cross-play; confirm ItemsAdder resource-pack delivery and cosmetic rendering on Bedrock clients separately
+- Nexo — optional alternative custom-content plugin; GASMP's current cosmetic crate integration specifically uses ItemsAdder
 - OpenInv, Lib's Disguises, HeadDatabase/HeadDB, Skript, ImageFrame and Typewriter — restricted third-party staff/build tools, not bundled into GASMP Core
 
 **Economy compatibility note:** Coins features support any plugin that exposes a Vault `Economy` provider. A proprietary economy API without Vault support needs a separate adapter and is not automatically compatible.
@@ -49,7 +50,7 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 | Bounties | Vault-funded placements, kill claims, top list and refund/reconciliation paths | Economy provider failure can require staff reconciliation |
 | Auction house | Text-command list/sell/buy/cancel/mine, expiry, persistent item mailbox, payment reconciliation and Owner review queue | Not yet a polished searchable GUI; inventory-to-mailbox delivery still needs live crash stress tests |
 | Battle Pass | Season XP, ore/mob XP events, level rewards and claim records | Basic progression/reward implementation, not full mission/season GUI |
-| Crates | Configurable weighted rewards, physical key checks, location persistence, protected custom blocks, RP Engine keys and animated placed Vote/Legendary crate models | RP Engine content must be installed/reloaded; custom block variant is static, use the placed model for the lid animation; reward preview UI still needs work |
+| Crates | Four weighted cosmetic crates (Common, Rare, Epic, Legendary), physical ItemsAdder key checks, location persistence and protected chest/barrel locations | Every valid reward is a wearable ItemsAdder cosmetic; register each crate location with `/crates set <id>`. Custom animated crate blocks are not yet wired. |
 | Teams | Leader/Co-Leader/Officer/Member roles, team bank, capacity upgrades, descriptions, named homes/list, alliances, invite expiry, team chat and membership management | Requires a Vault provider for Coins bank/upgrades; team missions, contribution tracking, friendly-fire/war and custom GUI still need work |
 | Casino | Casino selector GUI, wager selection, game-themed animated spin panels, server-side results, transaction audit, odds/help | Enabled for virtual Coins by default when Vault Economy is available; Blackjack, Poker and Tic-Tac-Toe remain simplified quick-match simulations |
 | Chat games | Scheduled/manual chat rounds and configured rewards | Text-based formats, not a large custom GUI game suite |
@@ -64,7 +65,7 @@ The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 an
 
 - Casino uses virtual in-server Coins only (`modules.casino: true`, `casino.yml settings.enabled: true`); it has no real-money deposits or cash-out. It requires a functioning Vault Economy provider and should be tested on staging before production.
 - Shards cannot go negative. Player-to-player transfers, real-money purchases and cash-outs are disabled.
-- `/crates` management is Owner/Developer-only; players open configured crate blocks with physical keys.
+- `/crates` management is Owner/Developer-only; players open configured chest/barrel locations with matching ItemsAdder cosmetic keys purchased using Shards.
 - OpenInv is restricted to Builder/Developer/Owner policy as configured for your server, but the default permission mapping is read-only and does not grant inventory-edit nodes.
 - Lib's Disguises and Skript management are Developer/Owner-only; HeadDatabase is Builder/Developer/Owner; vanish is staff-group-only.
 - Never grant the Developer group access to Owner/Admin/Manager/Dev rank assignment. The rank GUI implementation is a Phase 2 area for further review and polish.
@@ -119,18 +120,18 @@ The three rank-art bundles supplied by the server owner are preserved in `assets
 ## 0.7.0 remaining-system additions
 - Expanded Teams service and full command guide, including named homes and `/team homes`.
 - Transactionally limited team homes and symmetric alliance creation.
-- Original 64×64 Vote and Legendary pixel-art crate atlases, Blockbench 5 models, separate animated lid bones, key icons and display icons.
-- RP Engine content definitions for custom static crate blocks, animated placed crate displays, physical keys and guarded console interaction.
+- Four rarity-tier cosmetic crates backed by the supplied wearable hat collections.
+- ItemsAdder cosmetic item definitions and matching physical crate key items.
 - Casino GUI menu layout fix and game-specific visual spin panels for the configured game set.
 - Casino payout calibration updates and honest descriptions for simplified quick-match simulations.
 - Staging-server launch plan, dependency notes and GitHub Actions Java 25 build workflow.
 
-The GitHub Actions workflow is included at `.github/workflows/build.yml`. It runs static release validation and builds with Java 25 / Gradle 9.9.2, then uploads the JAR artifact. Follow `docs/GITHUB-ACTIONS.md` to publish this source to your GitHub repository and download the artifact. This source project has not been compiled here; live Paper 26.2 / Geyser / RP Engine testing remains necessary.
+The GitHub Actions workflow is included at `.github/workflows/build.yml`. It validates source files, builds with Java 25 / Gradle 9.9.2, verifies the JAR and uploads the test artifact. Live Paper 26.2 / ItemsAdder / Java / Bedrock testing remains necessary.
 
 
 ## Menu and Shard Shop update
 
-The player menu is organized into Shard Shop, Arcade, Adventure, Decorations, Profile and Statistics. Utility menu entries execute their corresponding player commands rather than displaying placeholder notices. The Shard Shop is a separate, paginated catalogue with category filters and a confirmation screen. Its initial furniture and decor kits contain vanilla blocks/items and do not require a custom resource pack; custom Blockbench furniture models are added separately through the RP Engine content pack.
+The player menu is organized into Shard Shop, Arcade, Adventure, Decorations, Profile and Statistics. Utility menu entries execute their corresponding player commands rather than displaying placeholder notices. The Shard Shop is a separate, paginated catalogue with category filters and a confirmation screen. Its current furniture and decor kits contain vanilla blocks/items. The old RP Engine sofa integration has been retired; ItemsAdder is now used for wearable cosmetics and crate keys.
 
 The casino entry in the player menu opens the existing animated arcade GUI. Casino bets and payouts use only the configured Vault Economy provider's in-server Coins. The casino requires the two enabled configuration flags shown above and a working provider; it does not support real-money deposits, purchases or cash-outs.
 
