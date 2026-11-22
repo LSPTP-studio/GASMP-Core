@@ -1,4 +1,4 @@
-# Shard Shop. Prices are whole Shards; contents are vanilla items and blocks.
+# Shard Shop. Prices are whole Shards; products can deliver vanilla contents and RP Engine custom-items.
 settings:
   enabled: true
   title: "&d&lGASMP &8• &5Shard Shop"
