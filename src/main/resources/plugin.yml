@@ -21,7 +21,6 @@ softdepend:
   - LibsDisguises
   - HeadDatabase
   - HeadDB
-  - RPEngine
 commands:
   gasmp:
     description: Opens the GASMP player menu.
@@ -73,10 +72,10 @@ commands:
     description: Opens the GASMP crate catalogue and reward previews.
     usage: /crate
   crates:
-    description: Restricted crate administration. Crate opening uses physical keys.
+    description: Restricted crate administration. Crate opening uses ItemsAdder cosmetic keys.
     usage: /crates <list|set|unset|givekey|reload>
   gcrateopen:
-    description: Internal console-only command triggered by RP Engine crate content.
+    description: Internal console-only command reserved for ItemsAdder crate interactions.
     usage: /gcrateopen <player> <crate-id>
   team:
     description: GASMP teams and team chat.
