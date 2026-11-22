@@ -1,0 +1,71 @@
+common_crate_display:
+  material: PAPER
+  name: "&f&lCOMMON CRATE DISPLAY"
+  lore:
+    - "&7Place this animated crate model."
+    - "&8Right-click to open with a matching key."
+  model: common_crate
+  place:
+    facing: cardinal
+    scale: 1.0
+    solid: true
+    surface: floor
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} common"
+
+rare_crate_display:
+  material: PAPER
+  name: "&b&lRARE CRATE DISPLAY"
+  lore:
+    - "&7Place this animated crate model."
+    - "&8Right-click to open with a matching key."
+  model: rare_crate
+  place:
+    facing: cardinal
+    scale: 1.0
+    solid: true
+    surface: floor
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} rare"
+
+epic_crate_display:
+  material: PAPER
+  name: "&d&lEPIC CRATE DISPLAY"
+  lore:
+    - "&7Place this animated crate model."
+    - "&8Right-click to open with a matching key."
+  model: epic_crate
+  place:
+    facing: cardinal
+    scale: 1.0
+    solid: true
+    surface: floor
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} epic"
+
+legendary_crate_display:
+  material: PAPER
+  name: "&6&lLEGENDARY CRATE DISPLAY"
+  lore:
+    - "&7Place this animated crate model."
+    - "&8Right-click to open with a matching key."
+  model: legendary_crate
+  place:
+    facing: cardinal
+    scale: 1.0
+    solid: true
+    surface: floor
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} legendary"
