@@ -1,50 +1,285 @@
-# /crates management is Owner/Developer only. Players open physical crates using matching keys.
-# "display-name", "key-name", "key-lore" and "icon" are used by the GASMP catalogue and keys.
+# GASMP cosmetic crates. Every reward is a wearable ItemsAdder hat; no Coins, Shards or vanilla gear.
+# Keys are ItemsAdder items and are sold in the Shard Shop.
 crates:
-  vote:
-    display-name: "&a&lVANGUARD SUPPLY CACHE"
-    key-name: "&a&lVANGUARD KEY"
-    key-lore: "&7Unlocks the Vanguard Supply Cache."
-    icon: LIME_SHULKER_BOX
+  common:
+    display-name: "&f&lCOMMON COSMETIC CRATE"
+    key-name: "&f&lCOMMON COSMETIC KEY"
+    key-lore: "&7Unlocks the common cosmetic crate."
+    key-item: "gasmp_crates:common_key"
+    icon: CHEST
     rewards:
-      shards_small:
-        type: shards
-        amount: 25
-        weight: 50
+      chicken_hat:
+        type: cosmetic
+        item: "ax_free_hats_pack:chicken_hat"
+        display-name: "Chicken Hat"
+        amount: 1
+        weight: 10
         rarity: common
-      coins_small:
-        type: coins
-        amount: 250
-        weight: 35
+      pot_hat:
+        type: cosmetic
+        item: "ax_free_hats_pack:pot_hat"
+        display-name: "Pot Hat"
+        amount: 1
+        weight: 10
+        rarity: common
+      rubber_duck:
+        type: cosmetic
+        item: "hatparade:rubber_duck"
+        display-name: "Rubber Duck"
+        amount: 1
+        weight: 9
+        rarity: common
+      chef:
+        type: cosmetic
+        item: "hatparade:chef"
+        display-name: "Chef Hat"
+        amount: 1
+        weight: 9
+        rarity: common
+      miner:
+        type: cosmetic
+        item: "hatparade:miner"
+        display-name: "Miner Helmet"
+        amount: 1
+        weight: 9
+        rarity: common
+      street_cap:
+        type: cosmetic
+        item: "hatparade:street_cap"
+        display-name: "Street Cap"
+        amount: 1
+        weight: 9
+        rarity: common
+      cozy_pom:
+        type: cosmetic
+        item: "hatparade:cozy_pom"
+        display-name: "Cozy Pom Beanie"
+        amount: 1
+        weight: 9
+        rarity: common
+      dusty_cowboy:
+        type: cosmetic
+        item: "hatparade:dusty_cowboy"
+        display-name: "Dusty Cowboy"
+        amount: 1
+        weight: 8
+        rarity: common
+      fiesta:
+        type: cosmetic
+        item: "hatparade:fiesta"
+        display-name: "Fiesta Sombrero"
+        amount: 1
+        weight: 8
+        rarity: common
+      straw_garden:
+        type: cosmetic
+        item: "hatparade:straw_garden"
+        display-name: "Garden Straw Hat"
+        amount: 1
+        weight: 8
+        rarity: common
+      sushi:
+        type: cosmetic
+        item: "hatparade:sushi"
+        display-name: "Salmon Sushi"
+        amount: 1
+        weight: 6
+        rarity: common
+      parcel:
+        type: cosmetic
+        item: "hatparade:parcel"
+        display-name: "Parcel Hat"
+        amount: 1
+        weight: 5
+        rarity: common
+  rare:
+    display-name: "&b&lRARE COSMETIC CRATE"
+    key-name: "&b&lRARE COSMETIC KEY"
+    key-lore: "&7Unlocks the rare cosmetic crate."
+    key-item: "gasmp_crates:rare_key"
+    icon: ENDER_CHEST
+    rewards:
+      frog_bucket:
+        type: cosmetic
+        item: "hatparade:frog_bucket"
+        display-name: "Frog Bucket Hat"
+        amount: 1
+        weight: 10
         rarity: rare
-      diamond:
-        type: item
-        material: DIAMOND
-        amount: 2
-        weight: 15
+      fox_ears:
+        type: cosmetic
+        item: "hatparade:fox_ears"
+        display-name: "Fox Cap"
+        amount: 1
+        weight: 10
+        rarity: rare
+      bunny_beanie:
+        type: cosmetic
+        item: "hatparade:bunny_beanie"
+        display-name: "Bunny Beanie"
+        amount: 1
+        weight: 10
+        rarity: rare
+      panda_cap:
+        type: cosmetic
+        item: "hatparade:panda_cap"
+        display-name: "Panda Cap"
+        amount: 1
+        weight: 10
+        rarity: rare
+      bumblebee:
+        type: cosmetic
+        item: "hatparade:bumblebee"
+        display-name: "Bumblebee Hat"
+        amount: 1
+        weight: 10
+        rarity: rare
+      corsair:
+        type: cosmetic
+        item: "hatparade:corsair"
+        display-name: "Corsair"
+        amount: 1
+        weight: 9
+        rarity: rare
+      sea_captain:
+        type: cosmetic
+        item: "hatparade:sea_captain"
+        display-name: "Sea Captain"
+        amount: 1
+        weight: 9
+        rarity: rare
+      diving_helmet:
+        type: cosmetic
+        item: "ax_free_hats_pack:diving_helmet"
+        display-name: "Diving Helmet"
+        amount: 1
+        weight: 8
+        rarity: rare
+      flight_hat:
+        type: cosmetic
+        item: "ax_free_hats_pack:flight_hat"
+        display-name: "Flight Hat"
+        amount: 1
+        weight: 8
+        rarity: rare
+      military_helmet:
+        type: cosmetic
+        item: "ax_free_hats_pack:military_helmet"
+        display-name: "Military Helmet"
+        amount: 1
+        weight: 8
+        rarity: rare
+  epic:
+    display-name: "&d&lEPIC COSMETIC CRATE"
+    key-name: "&d&lEPIC COSMETIC KEY"
+    key-lore: "&7Unlocks the epic cosmetic crate."
+    key-item: "gasmp_crates:epic_key"
+    icon: SHULKER_BOX
+    rewards:
+      trailblazer:
+        type: cosmetic
+        item: "hatparade:trailblazer"
+        display-name: "Trailblazer"
+        amount: 1
+        weight: 10
         rarity: epic
-
+      midnight_wizard:
+        type: cosmetic
+        item: "hatparade:midnight_wizard"
+        display-name: "Midnight Wizard"
+        amount: 1
+        weight: 10
+        rarity: epic
+      axolotl_hood:
+        type: cosmetic
+        item: "hatparade:axolotl_hood"
+        display-name: "Axolotl Hood"
+        amount: 1
+        weight: 10
+        rarity: epic
+      toadstool:
+        type: cosmetic
+        item: "hatparade:toadstool"
+        display-name: "Toadstool"
+        amount: 1
+        weight: 10
+        rarity: epic
+      royal_crown:
+        type: cosmetic
+        item: "hatparade:royal_crown"
+        display-name: "Royal Crown"
+        amount: 1
+        weight: 10
+        rarity: epic
+      steam_topper:
+        type: cosmetic
+        item: "hatparade:steam_topper"
+        display-name: "Steampunk Top Hat"
+        amount: 1
+        weight: 10
+        rarity: epic
+      jellyfish:
+        type: cosmetic
+        item: "hatparade:jellyfish"
+        display-name: "Jellyfish Hat"
+        amount: 1
+        weight: 10
+        rarity: epic
+      bloom_crown:
+        type: cosmetic
+        item: "hatparade:bloom_crown"
+        display-name: "Flower Crown"
+        amount: 1
+        weight: 10
+        rarity: epic
   legendary:
-    display-name: "&5&lABYSSAL RELIC VAULT"
-    key-name: "&5&lABYSSAL KEY"
-    key-lore: "&7Unlocks the Abyssal Relic Vault."
+    display-name: "&6&lLEGENDARY COSMETIC CRATE"
+    key-name: "&6&lLEGENDARY COSMETIC KEY"
+    key-lore: "&7Unlocks the legendary cosmetic crate."
+    key-item: "gasmp_crates:legendary_key"
     icon: DRAGON_EGG
     rewards:
-      shards_big:
-        type: shards
-        amount: 250
-        weight: 40
-        rarity: rare
-      coins_big:
-        type: coins
-        amount: 2500
-        weight: 35
-        rarity: epic
-      netherite:
-        type: item
-        material: NETHERITE_INGOT
+      frost_diadem:
+        type: cosmetic
+        item: "hatparade:frost_diadem"
+        display-name: "Frost Diadem"
         amount: 1
-        weight: 25
+        weight: 10
+        rarity: legendary
+      little_dragon:
+        type: cosmetic
+        item: "hatparade:little_dragon"
+        display-name: "Little Dragon"
+        amount: 1
+        weight: 10
+        rarity: legendary
+      ufo:
+        type: cosmetic
+        item: "hatparade:ufo"
+        display-name: "UFO Hat"
+        amount: 1
+        weight: 10
+        rarity: legendary
+      retro_tv:
+        type: cosmetic
+        item: "hatparade:retro_tv"
+        display-name: "Retro TV Hat"
+        amount: 1
+        weight: 10
+        rarity: legendary
+      aviator:
+        type: cosmetic
+        item: "hatparade:aviator"
+        display-name: "Aviator Cap"
+        amount: 1
+        weight: 10
+        rarity: legendary
+      motorcycle_hat:
+        type: cosmetic
+        item: "ax_free_hats_pack:motorcycle_hat"
+        display-name: "Motorcycle Helmet"
+        amount: 1
+        weight: 10
         rarity: legendary
 
 locations: {}
