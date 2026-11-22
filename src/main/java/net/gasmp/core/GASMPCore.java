@@ -12,6 +12,7 @@ import net.gasmp.core.command.RtpCommand;
 import net.gasmp.core.command.ShardCommand;
 import net.gasmp.core.combat.CombatService;
 import net.gasmp.core.crates.CrateService;
+import net.gasmp.core.crates.CrateMenuService;
 import net.gasmp.core.data.PlayerDataStore;
 import net.gasmp.core.data.PlayerProfileListener;
 import net.gasmp.core.economy.VaultEconomyBridge;
@@ -103,6 +104,8 @@ public final class GASMPCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(casinoService, this);
         crateService = new CrateService(this, staffAccess);
         getServer().getPluginManager().registerEvents(crateService, this);
+        CrateMenuService crateMenuService = new CrateMenuService(this);
+        getServer().getPluginManager().registerEvents(crateMenuService, this);
         teamService = new TeamService(this);
 
         maintenanceService = new MaintenanceService(this, staffAccess);
@@ -133,6 +136,7 @@ public final class GASMPCore extends JavaPlugin {
         bind("casino", casinoService);
         bind("battlepass", battlePassService);
         bind("crates", crateService);
+        bind("crate", crateMenuService);
         bind("gcrateopen", crateService);
         bind("team", teamService);
         bind("gmaintenance", maintenanceService);
