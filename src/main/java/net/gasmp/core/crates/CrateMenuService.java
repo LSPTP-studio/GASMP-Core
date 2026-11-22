@@ -112,7 +112,7 @@ public final class CrateMenuService implements Listener, CommandExecutor {
                 int weight = row.getInt("weight", 0);
                 if (weight <= 0 || row.getString("type") == null || total + weight > Integer.MAX_VALUE) continue;
                 entries.add(new Reward(key, row.getString("type"), row.getString("material", "DIAMOND"),
-                        row.getLong("amount", 1), weight));
+                        row.getLong("amount", 1), weight, row.getString("rarity", "common")));
                 total += weight;
             }
             entries.sort(Comparator.comparingInt(Reward::weight).reversed());
@@ -130,13 +130,21 @@ public final class CrateMenuService implements Listener, CommandExecutor {
 
     private ItemStack rewardItem(Reward reward, double chance) {
         String type = reward.type().toLowerCase(Locale.ROOT);
+        String rarity = reward.rarity().toLowerCase(Locale.ROOT);
+        String rarityColor = switch (rarity) {
+            case "rare" -> "&b";
+            case "epic" -> "&d";
+            case "legendary" -> "&6";
+            default -> "&7";
+        };
         Material material = switch (type) {
             case "coins" -> Material.GOLD_INGOT;
             case "shards" -> Material.AMETHYST_SHARD;
             default -> Material.matchMaterial(reward.material());
         };
         if (material == null || !material.isItem() || material.isAir()) material = Material.CHEST;
-        return item(material, "&e&l" + reward.key().replace('_', ' ').toUpperCase(Locale.ROOT),
+        return item(material, rarityColor + "&l" + reward.key().replace('_', ' ').toUpperCase(Locale.ROOT),
+                "&7Rarity: " + rarityColor + title(rarity),
                 "&7Reward type: &f" + type.toUpperCase(Locale.ROOT),
                 "&7Amount: &f" + reward.amount(),
                 String.format(Locale.US, "&7Drop chance: &a%.2f%%", chance),
@@ -212,9 +220,14 @@ public final class CrateMenuService implements Listener, CommandExecutor {
         return stack;
     }
 
+    private String title(String value) {
+        String normalized = value.toLowerCase(Locale.ROOT);
+        return normalized.isEmpty() ? normalized : Character.toUpperCase(normalized.charAt(0)) + normalized.substring(1);
+    }
+
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
 
-    private record Reward(String key, String type, String material, long amount, int weight) { }
+    private record Reward(String key, String type, String material, long amount, int weight, String rarity) { }
 
     private static final class Holder implements InventoryHolder {
         private final String crateId;
