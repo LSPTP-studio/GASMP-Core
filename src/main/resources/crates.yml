@@ -274,9 +274,9 @@ crates:
         amount: 1
         weight: 10
         rarity: legendary
-      motorcycle_hat:
+      motorcycle_helmet:
         type: cosmetic
-        item: "ax_free_hats_pack:motorcycle_hat"
+        item: "ax_free_hats_pack:motorcycle_helmet"
         display-name: "Motorcycle Helmet"
         amount: 1
         weight: 10
