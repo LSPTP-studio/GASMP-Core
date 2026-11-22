@@ -18,6 +18,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -112,9 +113,13 @@ public final class CrateMenuService implements Listener, CommandExecutor {
                 ConfigurationSection row = rewards.getConfigurationSection(key);
                 if (row == null) continue;
                 int weight = row.getInt("weight", 0);
-                if (weight <= 0 || row.getString("type") == null || total + weight > Integer.MAX_VALUE) continue;
-                entries.add(new Reward(key, row.getString("type"), row.getString("material", "DIAMOND"),
-                        row.getLong("amount", 1), weight, row.getString("rarity", "common")));
+                String itemId = row.getString("item", "");
+                String type = row.getString("type", "").toLowerCase(Locale.ROOT);
+                if (weight <= 0 || !type.equals("cosmetic")
+                        || !itemId.matches("[a-z0-9._-]+:[a-z0-9._/-]+")
+                        || total + weight > Integer.MAX_VALUE) continue;
+                entries.add(new Reward(key, itemId, row.getString("display-name", key),
+                        weight, row.getString("rarity", "common")));
                 total += weight;
             }
             entries.sort(Comparator.comparingInt(Reward::weight).reversed());
@@ -131,7 +136,6 @@ public final class CrateMenuService implements Listener, CommandExecutor {
     }
 
     private ItemStack rewardItem(Reward reward, double chance) {
-        String type = reward.type().toLowerCase(Locale.ROOT);
         String rarity = reward.rarity().toLowerCase(Locale.ROOT);
         String rarityColor = switch (rarity) {
             case "rare" -> "&b";
@@ -139,18 +143,39 @@ public final class CrateMenuService implements Listener, CommandExecutor {
             case "legendary" -> "&6";
             default -> "&7";
         };
-        Material material = switch (type) {
-            case "coins" -> Material.GOLD_INGOT;
-            case "shards" -> Material.AMETHYST_SHARD;
-            default -> Material.matchMaterial(reward.material());
-        };
-        if (material == null || !material.isItem() || material.isAir()) material = Material.CHEST;
-        return item(material, rarityColor + "&l" + reward.key().replace('_', ' ').toUpperCase(Locale.ROOT),
-                "&7Rarity: " + rarityColor + title(rarity),
-                "&7Reward type: &f" + type.toUpperCase(Locale.ROOT),
-                "&7Amount: &f" + reward.amount(),
-                String.format(Locale.US, "&7Drop chance: &a%.2f%%", chance),
-                "&8Weight: " + reward.weight());
+        ItemStack icon = createItemsAdderItem(reward.itemId());
+        if (icon == null) icon = new ItemStack(Material.PAPER);
+
+        ItemMeta meta = icon.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(color(rarityColor + "&l" + reward.displayName()));
+            meta.setLore(List.of(
+                    color("&7Reward type: &fWearable cosmetic"),
+                    color("&7Rarity: " + rarityColor + title(rarity)),
+                    String.format(Locale.US, color("&7Drop chance: &a%.2f%%"), chance),
+                    color("&8ItemsAdder: " + reward.itemId())));
+            icon.setItemMeta(meta);
+        }
+        return icon;
+    }
+
+    private ItemStack createItemsAdderItem(String namespacedId) {
+        Plugin itemsAdder = Bukkit.getPluginManager().getPlugin("ItemsAdder");
+        if (itemsAdder == null || !itemsAdder.isEnabled()) return null;
+        try {
+            ClassLoader loader = itemsAdder.getClass().getClassLoader();
+            Class<?> customStackClass = Class.forName(
+                    "dev.lone.itemsadder.api.CustomStack", true, loader);
+            Object customStack = customStackClass.getMethod("getInstance", String.class)
+                    .invoke(null, namespacedId);
+            if (customStack == null) return null;
+            Object stack = customStackClass.getMethod("getItemStack").invoke(customStack);
+            return stack instanceof ItemStack item ? item.clone() : null;
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            plugin.getLogger().fine("ItemsAdder cosmetic " + namespacedId
+                    + " unavailable in crate catalogue: " + ex.getMessage());
+            return null;
+        }
     }
 
     private YamlConfiguration load() {
@@ -229,7 +254,7 @@ public final class CrateMenuService implements Listener, CommandExecutor {
 
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
 
-    private record Reward(String key, String type, String material, long amount, int weight, String rarity) { }
+    private record Reward(String key, String itemId, String displayName, int weight, String rarity) { }
 
     private static final class Holder implements InventoryHolder {
         private final String crateId;
