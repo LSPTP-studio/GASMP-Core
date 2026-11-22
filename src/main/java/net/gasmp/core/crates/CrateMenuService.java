@@ -67,10 +67,11 @@ public final class CrateMenuService implements Listener, CommandExecutor {
                 ConfigurationSection crate = crates.getConfigurationSection(id);
                 int rewardCount = crate == null || crate.getConfigurationSection("rewards") == null
                         ? 0 : crate.getConfigurationSection("rewards").getKeys(false).size();
-                inv.setItem(CRATE_SLOTS[i], item(iconFor(id), "&6&l" + id.toUpperCase(Locale.ROOT) + " CRATE",
+                String displayName = crate == null ? fallbackName(id) : crate.getString("display-name", fallbackName(id));
+                inv.setItem(CRATE_SLOTS[i], item(iconFor(id, crate), displayName,
                         "&7Rewards: &f" + rewardCount,
-                        "&7Open with a matching crate key",
-                        "&eClick to view rewards"));
+                        "&7Requires its matching physical key",
+                        "&eClick to inspect rewards"));
                 holder.slotToCrate.put(CRATE_SLOTS[i], id);
             }
             if (ids.size() > CRATE_SLOTS.length) {
@@ -89,13 +90,15 @@ public final class CrateMenuService implements Listener, CommandExecutor {
         if (crate == null) { player.sendMessage(color("&cThat crate is no longer configured.")); openCrates(player); return; }
         ConfigurationSection rewards = crate.getConfigurationSection("rewards");
         Holder holder = new Holder(crateId);
-        Inventory inv = Bukkit.createInventory(holder, SIZE, color("&8GASMP &8» &6" + crateId.toUpperCase(Locale.ROOT)));
+        String displayName = crate.getString("display-name", fallbackName(crateId));
+        Inventory inv = Bukkit.createInventory(holder, SIZE, color("&8GASMP &8» ") + color(displayName));
         holder.inventory = inv;
         frame(inv, Material.ORANGE_STAINED_GLASS_PANE);
-        inv.setItem(4, item(Material.ENDER_CHEST, "&6&l" + crateId.toUpperCase(Locale.ROOT) + " CRATE",
+        inv.setItem(4, item(iconFor(crateId, crate), displayName,
                 "&7Reward pool: &f" + (rewards == null ? 0 : rewards.getKeys(false).size()),
+                "&7A physical crate block is placed in the world.",
                 "&7Each opening selects one weighted reward.",
-                "&8Percentages below are derived from reward weights."));
+                "&8Percentages below are derived from valid reward weights."));
         if (rewards == null || rewards.getKeys(false).isEmpty()) {
             inv.setItem(22, item(Material.BARRIER, "&cNo rewards configured"));
         } else {
@@ -105,8 +108,8 @@ public final class CrateMenuService implements Listener, CommandExecutor {
                 ConfigurationSection row = rewards.getConfigurationSection(key);
                 if (row == null) continue;
                 int weight = row.getInt("weight", 0);
-                if (weight <= 0) continue;
-                entries.add(new Reward(key, row.getString("type", "item"), row.getString("material", "DIAMOND"),
+                if (weight <= 0 || row.getString("type") == null || total + weight > Integer.MAX_VALUE) continue;
+                entries.add(new Reward(key, row.getString("type"), row.getString("material", "DIAMOND"),
                         row.getLong("amount", 1), weight));
                 total += weight;
             }
@@ -143,12 +146,21 @@ public final class CrateMenuService implements Listener, CommandExecutor {
         return YamlConfiguration.loadConfiguration(file);
     }
 
-    private Material iconFor(String id) {
+    private Material iconFor(String id, ConfigurationSection crate) {
+        String configured = crate == null ? null : crate.getString("icon");
+        if (configured != null) {
+            Material material = Material.matchMaterial(configured);
+            if (material != null && material.isItem() && !material.isAir()) return material;
+        }
         String key = id.toLowerCase(Locale.ROOT);
         if (key.contains("legend")) return Material.DRAGON_EGG;
         if (key.contains("vote")) return Material.TRIPWIRE_HOOK;
         if (key.contains("season")) return Material.NETHER_STAR;
         return Material.CHEST;
+    }
+
+    private String fallbackName(String id) {
+        return "&d&l" + id.replace('_', ' ').toUpperCase(Locale.ROOT) + " CRATE";
     }
 
     @EventHandler
