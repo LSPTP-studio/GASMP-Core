@@ -54,6 +54,7 @@ public final class CrateMenuService implements Listener, CommandExecutor {
         inv.setItem(4, item(Material.CHEST, "&6&lGASMP CRATE CATALOGUE",
                 "&7Browse available crates and inspect their rewards.",
                 "&7Opening still requires the matching physical key.",
+                "&7Buy crate keys with Shards in the Shard Shop.",
                 "&8Odds are calculated from configured reward weights."));
         if (crates == null || crates.getKeys(false).isEmpty()) {
             inv.setItem(22, item(Material.BARRIER, "&cNo crates configured",
@@ -98,6 +99,7 @@ public final class CrateMenuService implements Listener, CommandExecutor {
         inv.setItem(4, item(iconFor(crateId, crate), displayName,
                 "&7Reward pool: &f" + (rewards == null ? 0 : rewards.getKeys(false).size()),
                 "&7Required key: " + keyName,
+                "&7Buy the matching key with Shards in the Shard Shop.",
                 "&7Find the physical crate block in the world.",
                 "&7Each opening selects one weighted reward.",
                 "&8Percentages below are derived from valid reward weights."));
