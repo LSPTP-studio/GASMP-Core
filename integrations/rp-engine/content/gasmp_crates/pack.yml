@@ -1,0 +1,5 @@
+name: GASMP Crates
+description: Four animated GASMP crate tiers, custom keys and display models.
+author: GASMP
+version: 2.0.0
+enabled: true
