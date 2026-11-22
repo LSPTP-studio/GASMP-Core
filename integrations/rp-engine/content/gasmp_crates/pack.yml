@@ -1,5 +1,5 @@
 name: GASMP Crates
-description: Original GASMP crate keys, animated placed models and custom crate blocks.
+description: Original GASMP physical crate blocks, animated models and matching keys.
 author: GASMP
-version: 1.0.0
+version: 1.1.0
 enabled: true
