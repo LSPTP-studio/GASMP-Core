@@ -94,9 +94,11 @@ public final class CrateMenuService implements Listener, CommandExecutor {
         Inventory inv = Bukkit.createInventory(holder, SIZE, color("&8GASMP &8» ") + color(displayName));
         holder.inventory = inv;
         frame(inv, Material.ORANGE_STAINED_GLASS_PANE);
+        String keyName = crate.getString("key-name", "&d&l" + crateId.toUpperCase(Locale.ROOT) + " KEY");
         inv.setItem(4, item(iconFor(crateId, crate), displayName,
                 "&7Reward pool: &f" + (rewards == null ? 0 : rewards.getKeys(false).size()),
-                "&7A physical crate block is placed in the world.",
+                "&7Required key: " + keyName,
+                "&7Find the physical crate block in the world.",
                 "&7Each opening selects one weighted reward.",
                 "&8Percentages below are derived from valid reward weights."));
         if (rewards == null || rewards.getKeys(false).isEmpty()) {
