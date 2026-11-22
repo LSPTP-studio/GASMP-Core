@@ -1,9 +1,10 @@
 vote_crate_display:
   material: PAPER
-  name: "&a&lVOTE CRATE DISPLAY"
+  name: "&a&lVANGUARD SUPPLY CACHE DISPLAY"
   lore:
-    - "&7Place this animated crate model."
-    - "&8Right-click to open with a Vote Key."
+    - "&7Place this animated physical crate model."
+    - "&8Interact with the placed block to open it."
+    - "&8Requires a Vanguard Key."
   texture: item/vote_crate_display
   model: vote_crate
   place:
@@ -22,12 +23,14 @@ vote_crate_display:
       - cooldown: 2
       - cancel
       - console: "gcrateopen {player} vote"
+
 legendary_crate_display:
   material: PAPER
-  name: "&5&lLEGENDARY CRATE DISPLAY"
+  name: "&5&lABYSSAL RELIC VAULT DISPLAY"
   lore:
-    - "&7Place this animated crate model."
-    - "&8Right-click to open with a Legendary Key."
+    - "&7Place this animated physical crate model."
+    - "&8Interact with the placed block to open it."
+    - "&8Requires an Abyssal Key."
   texture: item/legendary_crate_display
   model: legendary_crate
   place:
