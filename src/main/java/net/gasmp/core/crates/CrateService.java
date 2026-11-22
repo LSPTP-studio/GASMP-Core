@@ -7,6 +7,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.command.*;
@@ -344,14 +345,18 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private void animateOpening(Player player, String crateId, ConfigurationSection reward) {
+        RarityStyle rarity = rarityStyle(reward);
         CrateAnimationHolder holder = new CrateAnimationHolder(crateId);
-        Inventory inventory = Bukkit.createInventory(holder, 27, color("&8GASMP &7• ") + color(displayName(crateId)));
+        Inventory inventory = Bukkit.createInventory(holder, 27,
+                color("&8GASMP &7• ") + color(displayName(crateId)));
         holder.inventory(inventory);
-        ItemStack filler = named(Material.PURPLE_STAINED_GLASS_PANE, " ");
+        ItemStack filler = named(rarity.pane(), " ");
         for (int i = 0; i < inventory.getSize(); i++) {
             if (i < 9 || i >= 18 || i % 9 == 0 || i % 9 == 8) inventory.setItem(i, filler.clone());
         }
-        inventory.setItem(13, named(Material.CHEST, displayName(crateId), "&7Opening... your reward is being rolled."));
+        inventory.setItem(13, named(Material.CHEST,
+                rarity.color() + ChatColor.BOLD + "OPENING...",
+                "&7The " + rarity.label() + " reward is being rolled."));
         player.openInventory(inventory);
 
         Material[] reel = {Material.AMETHYST_SHARD, Material.DIAMOND, Material.EMERALD,
@@ -365,25 +370,41 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 opening.remove(player.getUniqueId());
                 return;
             }
+
             ticks[0]++;
-            for (int slot : new int[]{11, 13, 15}) {
-                Material material = reel[ThreadLocalRandom.current().nextInt(reel.length)];
-                inventory.setItem(slot, named(material, "&e&l" + material.name().replace('_', ' ')));
+            // The reel slows down toward the reveal. Higher rarity has a longer, more dramatic spin.
+            int spinInterval = Math.max(2, 7 - (ticks[0] / 12));
+            if (ticks[0] % spinInterval == 0) {
+                for (int slot : new int[]{11, 13, 15}) {
+                    Material material = reel[ThreadLocalRandom.current().nextInt(reel.length)];
+                    inventory.setItem(slot, named(material,
+                            rarity.color() + ChatColor.BOLD + material.name().replace('_', ' ')));
+                }
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.45f,
+                        Math.min(1.8f, 0.65f + (ticks[0] / 55.0f)));
             }
-            if (ticks[0] % 5 == 0) player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.55f,
-                    0.7f + (ticks[0] / 60.0f));
-            if (ticks[0] >= 50) {
+
+            if (ticks[0] >= rarity.durationTicks()) {
                 BukkitTask current = animationTasks.remove(player.getUniqueId());
                 if (current != null) current.cancel();
-                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.0f);
-                inventory.setItem(13, rewardPreview(reward));
+
+                inventory.setItem(13, rewardPreview(reward, rarity));
+                player.playSound(player.getLocation(), rarity.revealSound(), 1.0f, rarity.pitch());
+                player.sendTitle(color("&8CRATE OPENED"),
+                        rarity.color() + ChatColor.BOLD + rarity.label().toUpperCase(Locale.ROOT) + " REWARD",
+                        5, 35, 10);
+                player.getWorld().spawnParticle(rarity.particle(),
+                        player.getLocation().add(0, 1.0, 0), rarity.particleCount(),
+                        0.55, 0.7, 0.55, rarity.particleSpeed());
+
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     if (!player.isOnline() || player.getOpenInventory().getTopInventory().getHolder() != holder) {
                         opening.remove(player.getUniqueId());
                         return;
                     }
                     boolean mainHand = isKey(player.getInventory().getItemInMainHand(), crateId);
-                    ItemStack keyItem = mainHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+                    ItemStack keyItem = mainHand ? player.getInventory().getItemInMainHand()
+                            : player.getInventory().getItemInOffHand();
                     if (!isKey(keyItem, crateId)) {
                         opening.remove(player.getUniqueId());
                         player.sendMessage(color("&cYour crate key is no longer in your hand. No reward was issued."));
@@ -393,11 +414,44 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                     consumeKey(player, mainHand, keyItem);
                     player.closeInventory();
                     deliver(player, reward, crateId);
-                }, 12L);
+                }, 18L);
             }
         }, 0L, 1L);
         animationTasks.put(player.getUniqueId(), task);
     }
+
+    private RarityStyle rarityStyle(ConfigurationSection reward) {
+        String rarity = reward.getString("rarity", "common").toLowerCase(Locale.ROOT);
+        return switch (rarity) {
+            case "rare" -> new RarityStyle("Rare", ChatColor.AQUA, Material.LIGHT_BLUE_STAINED_GLASS_PANE,
+                    Sound.BLOCK_AMETHYST_BLOCK_CHIME, Particle.CRIT, 52, 1.15f, 26, 0.08f);
+            case "epic" -> new RarityStyle("Epic", ChatColor.LIGHT_PURPLE, Material.PURPLE_STAINED_GLASS_PANE,
+                    Sound.ENTITY_PLAYER_LEVELUP, Particle.END_ROD, 66, 1.2f, 42, 0.025f);
+            case "legendary" -> new RarityStyle("Legendary", ChatColor.GOLD, Material.YELLOW_STAINED_GLASS_PANE,
+                    Sound.UI_TOAST_CHALLENGE_COMPLETE, Particle.TOTEM_OF_UNDYING, 82, 1.0f, 64, 0.18f);
+            default -> new RarityStyle("Common", ChatColor.GRAY, Material.GRAY_STAINED_GLASS_PANE,
+                    Sound.BLOCK_NOTE_BLOCK_PLING, Particle.HAPPY_VILLAGER, 40, 1.0f, 14, 0.02f);
+        };
+    }
+
+    private ItemStack rewardPreview(ConfigurationSection reward, RarityStyle rarity) {
+        String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
+        Material material = switch (type) {
+            case "coins" -> Material.GOLD_INGOT;
+            case "shards" -> Material.AMETHYST_SHARD;
+            default -> Material.matchMaterial(reward.getString("material", "DIAMOND"));
+        };
+        if (material == null || !material.isItem() || material.isAir()) material = Material.CHEST;
+        long amount = reward.getLong("amount", 1);
+        return named(material, rarity.color() + ChatColor.BOLD + rarity.label().toUpperCase(Locale.ROOT) + " REWARD",
+                "&7Type: &f" + type.toUpperCase(Locale.ROOT),
+                "&7Amount: &e" + amount,
+                "&8GASMP CRATES");
+    }
+
+    private record RarityStyle(String label, ChatColor color, Material pane, Sound revealSound,
+                               Particle particle, int durationTicks, float pitch,
+                               int particleCount, float particleSpeed) { }
 
     private ItemStack named(Material material, String name, String... lore) {
         ItemStack item = new ItemStack(material);
