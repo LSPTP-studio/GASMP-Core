@@ -3,6 +3,30 @@ settings:
   enabled: true
   title: "&d&lGASMP &8• &5Shard Shop"
 items:
+  vanguard_crate_key:
+    category: keys
+    icon: TRIPWIRE_HOOK
+    name: "&a&lVANGUARD CRATE KEY"
+    price: 120
+    crate-key: vote
+    lore:
+      - "&7Opens the Vanguard Supply Cache."
+      - "&8A physical key; hold it while opening the crate."
+      - "&7Purchased with Shards."
+    custom-items:
+      - "gasmp_crates:vote_key:1"
+  abyssal_crate_key:
+    category: keys
+    icon: TRIPWIRE_HOOK
+    name: "&5&lABYSSAL CRATE KEY"
+    price: 250
+    crate-key: legendary
+    lore:
+      - "&7Opens the Abyssal Relic Vault."
+      - "&8A physical key; hold it while opening the crate."
+      - "&7Purchased with Shards."
+    custom-items:
+      - "gasmp_crates:legendary_key:1"
   gasmp_modern_sofa:
     category: furniture
     icon: CYAN_BED
