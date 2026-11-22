@@ -20,6 +20,7 @@ import net.gasmp.core.hologram.HologramService;
 import net.gasmp.core.maintenance.MaintenanceService;
 import net.gasmp.core.moderation.ModerationService;
 import net.gasmp.core.rank.RankAdminMenu;
+import net.gasmp.core.rank.RankMenuService;
 import net.gasmp.core.rank.RankService;
 import net.gasmp.core.rtp.RtpService;
 import net.gasmp.core.shardshop.ShardShopService;
@@ -148,6 +149,9 @@ public final class GASMPCore extends JavaPlugin {
         bind("gperf", new PerformanceCommand());
 
         rankService = new RankService(this);
+        RankMenuService playerRankMenu = new RankMenuService(this);
+        getServer().getPluginManager().registerEvents(playerRankMenu, this);
+        bind("ranks", playerRankMenu);
         RankAdminMenu rankMenu = new RankAdminMenu(this, rankService);
         getServer().getPluginManager().registerEvents(rankMenu, this);
         bind("gasmpadmin", rankMenu);
