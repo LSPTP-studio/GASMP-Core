@@ -1,4 +1,4 @@
-# Shard Shop. Prices are whole Shards; products can deliver vanilla contents and RP Engine custom-items.
+# GASMP Shard Shop. Prices are whole Shards; custom crate keys are ItemsAdder items.
 settings:
   enabled: true
   title: "&d&lGASMP &8• &5Shard Shop"
