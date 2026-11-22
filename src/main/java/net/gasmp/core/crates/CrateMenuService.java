@@ -149,7 +149,7 @@ public final class CrateMenuService implements Listener, CommandExecutor {
             case "legendary" -> "&6";
             default -> "&7";
         };
-        ItemStack icon = createRPEngineItem(reward.itemId());
+        ItemStack icon = createRPEngineItem(reward.itemId(), 1);
         if (icon == null) icon = new ItemStack(Material.PAPER);
 
         ItemMeta meta = icon.getItemMeta();
@@ -166,7 +166,7 @@ public final class CrateMenuService implements Listener, CommandExecutor {
     }
 
     /** Resolves a custom item through RP Engine's public items() API without a compile-time dependency. */
-    private ItemStack createRPEngineItem(String namespacedId, int 1) {
+    private ItemStack createRPEngineItem(String namespacedId, int amount) {
         Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
         if (engine == null || !engine.isEnabled()) return null;
         try {
@@ -181,7 +181,7 @@ public final class CrateMenuService implements Listener, CommandExecutor {
                 if (!method.getName().equals("create")) continue;
                 Class<?>[] types = method.getParameterTypes();
                 if (types.length == 2 && types[0].equals(contentIdClass) && types[1] == int.class) {
-                    created = method.invoke(items, contentId, 1);
+                    created = method.invoke(items, contentId, amount);
                     break;
                 }
                 if (types.length == 1 && types[0].equals(contentIdClass)) {
@@ -196,10 +196,10 @@ public final class CrateMenuService implements Listener, CommandExecutor {
             } else if (created instanceof ItemStack itemStack) {
                 stack = itemStack;
             }
-            if (stack == null || 1 < 1) return null;
+            if (stack == null || amount < 1) return null;
             ItemStack result = stack.clone();
-            if (1 > result.getMaxStackSize()) return null;
-            result.setAmount(1);
+            if (amount > result.getMaxStackSize()) return null;
+            result.setAmount(amount);
             return result;
         } catch (ReflectiveOperationException | RuntimeException ex) {
             plugin.getLogger().fine("RP Engine item " + namespacedId + " is unavailable: " + ex.getMessage());
