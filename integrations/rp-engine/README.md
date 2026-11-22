@@ -22,16 +22,40 @@ This is an original, editable crate-content starter pack for **RP Engine**, a fr
 
 RP Engine command names and folder casing can change between releases. Use the exact folder/commands in the installed version's documentation; do not rename the `gasmp_crates` content namespace.
 
-## GASMP crate commands
+## GASMP physical crates
 
-Developer/Owner only:
+The pack currently includes two named, placeable crate types:
 
-- `/crates list`
-- `/crates givekey <player> <crate-id> [amount]`
-- `/crates giveblock <player> <crate-id> [amount]`
-- `/crates givemodel <player> <crate-id> [amount]`
+| Crate | Internal ID | Matching key |
+|---|---|---|
+| **Vanguard Supply Cache** | `vote` | Vanguard Key |
+| **Abyssal Relic Vault** | `legendary` | Abyssal Key |
 
-Physical custom-block interactions call `/gcrateopen <player> <crate-id>` through console. This internal command rejects player senders and is not intended for direct player use.
+Each type has a custom block definition, a Blockbench model, an animated display-item variant, and its own key item. The internal IDs stay stable so existing reward tables and stored locations are not broken.
+
+### Install and place
+
+1. Install the compatible RP Engine release and copy `content/gasmp_crates/` into its content directory.
+2. Run `/rp reload` and check the console for missing models, textures, or content IDs.
+3. As an Owner/Developer, give yourself the block and key:
+   - `/crates giveblock <player> vote`
+   - `/crates givekey <player> vote`
+   - `/crates giveblock <player> legendary`
+   - `/crates givekey <player> legendary`
+4. Place the physical custom block in the world. Right-click it while holding the matching key.
+5. Use `/crates givemodel <player> <crate-id>` for the animated floor-display variant instead of the solid custom block.
+
+Developer/Owner commands:
+
+- `/crates list` — show crate names and whether RP Engine is enabled.
+- `/crates givekey <player> <crate-id> [amount]` — issue the matching key.
+- `/crates giveblock <player> <crate-id> [amount]` — issue the solid custom block.
+- `/crates givemodel <player> <crate-id> [amount]` — issue the animated placeable display item.
+- `/crates set <crate-id>` — register a vanilla chest/barrel fallback.
+- `/crates unset <crate-id>` — remove the fallback location.
+- `/crates reload` — reload reward and display-name configuration.
+
+Physical custom-block interactions call `/gcrateopen <player> <crate-id>` through console. The internal command rejects player senders. GASMP Core then checks the matching key, rolls the configured weighted reward, runs the opening animation, and only consumes the key when the opening completes.
 
 ## Java/Bedrock behavior
 
