@@ -425,12 +425,22 @@ public final class ShardShopService implements Listener, CommandExecutor {
                     created = method.invoke(items, optional.get(), amount);
                     break;
                 }
+                if (types.length == 1 && types[0].equals(contentIdClass)) {
+                    created = method.invoke(items, optional.get());
+                    break;
+                }
             }
+            ItemStack result = null;
             if (created instanceof java.util.Optional<?> stackOptional && stackOptional.isPresent()
                     && stackOptional.get() instanceof ItemStack stack) {
-                return stack.clone();
+                result = stack.clone();
+            } else if (created instanceof ItemStack stack) {
+                result = stack.clone();
             }
-            if (created instanceof ItemStack stack) return stack.clone();
+            if (result != null && result.getAmount() != amount) {
+                result.setAmount(Math.min(amount, result.getMaxStackSize()));
+            }
+            return result;
         } catch (ReflectiveOperationException | RuntimeException ex) {
             plugin.getLogger().fine("RP Engine item " + contentIdText + " is unavailable: " + ex.getMessage());
         }
