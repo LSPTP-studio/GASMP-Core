@@ -2,7 +2,7 @@ gasmp_modern_sofa:
   material: PAPER
   name: "&b&lGASMP MODERN SOFA"
   lore:
-    - "&7A three-seat modern sofa."
+    - "&7A modern sofa with a centered functional seat."
     - "&8Walnut • teal velvet • brass"
     - "&7Right-click to press the cushions."
     - "&7Sneak + right-click to sit."
