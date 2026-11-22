@@ -16,7 +16,7 @@ items:
     custom-items:
       - "gasmp_crates:vote_key:1"
   abyssal_crate_key:
-    category: keys
+    category: crate_keys
     icon: TRIPWIRE_HOOK
     name: "&5&lABYSSAL CRATE KEY"
     price: 250
