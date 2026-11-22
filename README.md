@@ -22,7 +22,7 @@ This is a **test release candidate**. GitHub Actions builds the plugin with Java
 ### Optional integrations
 - TAB — reads LuckPerms primary group and `%luckperms-prefix%`
 - PlaceholderAPI — placeholders in compatible displays
-- ItemsAdder — required for GASMP's wearable cosmetic rewards and crate keys; use a build explicitly compatible with your exact Paper/Minecraft 26.2 build
+- ItemsAdder — required only for GASMP's wearable cosmetic crates and crate keys; the rest of Core can run without it. Use a build explicitly compatible with your exact Paper/Minecraft 26.2 build
 - Geyser + Floodgate — Bedrock cross-play; confirm ItemsAdder resource-pack delivery and cosmetic rendering on Bedrock clients separately
 - Nexo — optional alternative custom-content plugin; GASMP's current cosmetic crate integration specifically uses ItemsAdder
 - OpenInv, Lib's Disguises, HeadDatabase/HeadDB, Skript, ImageFrame and Typewriter — restricted third-party staff/build tools, not bundled into GASMP Core
