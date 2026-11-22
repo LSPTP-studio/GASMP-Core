@@ -3,6 +3,19 @@ settings:
   enabled: true
   title: "&d&lGASMP &8• &5Shard Shop"
 items:
+  gasmp_modern_sofa:
+    category: furniture
+    icon: CYAN_BED
+    name: "&b&lGASMP MODERN SOFA"
+    price: 180
+    lore:
+      - "&7An original placeable Blockbench furniture model."
+      - "&8Walnut frame • teal velvet • brass detail"
+      - "&7Right-click to play the cushion animation."
+      - "&7Sneak + right-click to sit."
+      - "&8Requires the RP Engine furniture content pack."
+    custom-items:
+      - "gasmp_furniture:gasmp_modern_sofa:1"
   starter_furniture:
     category: furniture
     icon: ARMOR_STAND
