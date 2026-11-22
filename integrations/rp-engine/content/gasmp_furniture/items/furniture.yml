@@ -4,7 +4,9 @@ gasmp_modern_sofa:
   lore:
     - "&7A three-seat modern sofa."
     - "&8Walnut • teal velvet • brass"
-    - "&7Place on a solid floor."
+    - "&7Right-click to press the cushions."
+    - "&7Sneak + right-click to sit."
+    - "&8GASMP Furniture • Shard Shop"
   texture: item/gasmp_modern_sofa
   model: gasmp_modern_sofa
   place:
@@ -12,6 +14,7 @@ gasmp_modern_sofa:
     scale: 1.0
     solid: true
     surface: floor
+    seat: 0.42
     animations:
       sit_press:
         mode: once
