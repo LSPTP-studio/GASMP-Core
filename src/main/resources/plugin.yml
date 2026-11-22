@@ -40,6 +40,9 @@ commands:
     description: View and manage GASMP Shards.
     usage: /shards <balance|give|take|set>
     aliases: [shard, gshards]
+  ranks:
+    description: Opens the GASMP rank catalogue.
+    usage: /ranks
   shardshop:
     description: Opens the GASMP Shard Shop.
     usage: /shardshop
