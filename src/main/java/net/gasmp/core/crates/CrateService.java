@@ -59,6 +59,18 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        // RP Engine dispatches this internal route through console when a custom crate is clicked.
+        if (command.getName().equalsIgnoreCase("gcrateopen")) {
+            if (!(sender instanceof ConsoleCommandSender)) {
+                sender.sendMessage("This is an internal crate interaction command.");
+                return true;
+            }
+            if (args.length != 2) return true;
+            Player target = Bukkit.getPlayerExact(args[0]);
+            String crateId = args[1].toLowerCase(Locale.ROOT);
+            if (target != null && config.getConfigurationSection("crates." + crateId) != null) openCrate(target, crateId);
+            return true;
+        }
         if (!(sender instanceof Player player)) { sender.sendMessage("Run this command in-game."); return true; }
         // /crates stays Owner/Developer only, even if OP has wildcard permissions.
         if (!staff.isOwnerOrDev(player)) {
@@ -71,10 +83,42 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             case "set" -> setLocation(player, args);
             case "unset" -> unsetLocation(player, args);
             case "givekey" -> giveKey(player, args);
+            case "giveblock" -> giveCustomCrateItem(player, args, "_crate_block");
+            case "givemodel" -> giveCustomCrateItem(player, args, "_crate_display");
             case "list" -> list(player);
             default -> help(player);
         }
         return true;
+    }
+
+    private void giveCustomCrateItem(Player actor, String[] args, String suffix) {
+        String subcommand = suffix.equals("_crate_block") ? "giveblock" : "givemodel";
+        if (args.length < 3 || args.length > 4) {
+            actor.sendMessage(color("&e/crates " + subcommand + " <online-player> <crate-id> [amount]"));
+            return;
+        }
+        Player target = Bukkit.getPlayerExact(args[1]);
+        String id = args[2].toLowerCase(Locale.ROOT);
+        if (target == null || config.getConfigurationSection("crates." + id) == null) {
+            actor.sendMessage(color("&cOnline player or crate ID not found."));
+            return;
+        }
+        int amount = 1;
+        if (args.length == 4) try { amount = Integer.parseInt(args[3]); } catch (NumberFormatException ex) { amount = 0; }
+        if (amount < 1 || amount > 64) {
+            actor.sendMessage(color("&cAmount must be between 1 and 64."));
+            return;
+        }
+        String contentId = "gasmp_crates:" + id + suffix;
+        ItemStack custom = createRPEngineItem(contentId, amount);
+        if (custom == null) {
+            actor.sendMessage(color("&cRP Engine is not installed or content ID " + contentId
+                    + " is unavailable. Load the GASMP RP Engine content pack first."));
+            return;
+        }
+        Map<Integer, ItemStack> left = target.getInventory().addItem(custom);
+        left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
+        actor.sendMessage(color("&aGave " + amount + " custom " + id + " crate item(s) to " + target.getName() + "."));
     }
 
     private void setLocation(Player player, String[] args) {
@@ -169,28 +213,44 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private boolean isProtectedCrate(Block block) {
-        return isConfiguredCrate(block);
+        return isConfiguredCrate(block) || isRpEngineCrateBlock(block);
+    }
+
+    private boolean isRpEngineCrateBlock(Block block) {
+        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        if (engine == null || !engine.isEnabled()) return false;
+        try {
+            Object blocks = engine.getClass().getMethod("blocks").invoke(engine);
+            Object result = blocks.getClass().getMethod("idAt", Block.class).invoke(blocks, block);
+            if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
+            String id = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
+            return id.startsWith("gasmp_crates:") && id.endsWith("_crate_block");
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            plugin.getLogger().fine("RP Engine custom-block lookup unavailable: " + ex.getMessage());
+            return false;
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onCrateBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
-        if (!isConfiguredCrate(block)) return;
-
-        // Only Owner/Developer can remove a registered crate location.
+        boolean configuredLocation = isConfiguredCrate(block);
+        boolean customBlock = isRpEngineCrateBlock(block);
+        if (!configuredLocation && !customBlock) return;
+        // Only Owner/Developer can remove a protected crate. RP Engine handles custom-block drops.
         if (staff.isOwnerOrDev(event.getPlayer())) {
-            ConfigurationSection locations = config.getConfigurationSection("locations");
-            if (locations != null) {
-                for (String id : new ArrayList<>(locations.getKeys(false))) {
-                    ConfigurationSection location = locations.getConfigurationSection(id);
-                    if (location != null
-                            && location.getString("world", "").equals(block.getWorld().getName())
-                            && location.getInt("x") == block.getX() && location.getInt("y") == block.getY()
-                            && location.getInt("z") == block.getZ()) {
-                        config.set("locations." + id, null);
+            if (configuredLocation) {
+                ConfigurationSection locations = config.getConfigurationSection("locations");
+                if (locations != null) {
+                    for (String id : new ArrayList<>(locations.getKeys(false))) {
+                        ConfigurationSection location = locations.getConfigurationSection(id);
+                        if (location != null
+                                && location.getString("world", "").equals(block.getWorld().getName())
+                                && location.getInt("x") == block.getX() && location.getInt("y") == block.getY()
+                                && location.getInt("z") == block.getZ()) config.set("locations." + id, null);
                     }
+                    save();
                 }
-                save();
             }
             return;
         }
@@ -288,10 +348,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 "&7The " + rarity.label() + " reward is being rolled."));
         player.openInventory(inventory);
 
-        // Cache real ItemsAdder hat icons for the reel; crate animation never displays currency or gear.
+        // Cache real RP Engine hat icons for the reel; crate animation never displays currency or gear.
         List<ItemStack> reelItems = new ArrayList<>();
         for (ConfigurationSection entry : rewardPool) {
-            ItemStack hat = createItemsAdderItem(entry.getString("item", ""), 1);
+            ItemStack hat = createRPEngineItem(entry.getString("item", ""), 1);
             if (hat == null) continue;
             ItemMeta hatMeta = hat.getItemMeta();
             if (hatMeta != null) {
@@ -376,11 +436,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private ItemStack rewardPreview(ConfigurationSection reward, RarityStyle rarity) {
         String itemId = reward.getString("item", "");
         String display = reward.getString("display-name", itemId);
-        ItemStack cosmetic = createItemsAdderItem(itemId, 1);
+        ItemStack cosmetic = createRPEngineItem(itemId, 1);
         if (cosmetic == null) {
             return named(Material.BARRIER,
                     rarity.color().toString() + ChatColor.BOLD + "COSMETIC UNAVAILABLE",
-                    "&cItemsAdder item is not loaded: " + itemId,
+                    "&cRP Engine item is not loaded: " + itemId,
                     "&7Your key will be returned.");
         }
         ItemMeta meta = cosmetic.getItemMeta();
@@ -389,7 +449,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             meta.setLore(List.of(
                     color("&7Wearable cosmetic"),
                     color("&7Crate tier: " + rarity.color() + rarity.label()),
-                    color("&8ItemsAdder: " + itemId)));
+                    color("&8RP Engine: " + itemId)));
             cosmetic.setItemMeta(meta);
         }
         return cosmetic;
@@ -459,9 +519,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             return;
         }
 
-        ItemStack cosmetic = createItemsAdderItem(itemId, 1);
+        ItemStack cosmetic = createRPEngineItem(itemId, 1);
         if (cosmetic == null) {
-            refundKey(player, crateId, "ItemsAdder cosmetic is not loaded. Install/reload the GASMP cosmetic content pack.");
+            refundKey(player, crateId, "RP Engine cosmetic is not loaded. Install/reload the GASMP cosmetic content pack.");
             return;
         }
 
@@ -482,7 +542,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         ConfigurationSection crate = config.getConfigurationSection("crates." + id);
         String keyItemId = crate == null ? "gasmp_crates:" + id + "_key"
                 : crate.getString("key-item", "gasmp_crates:" + id + "_key");
-        ItemStack item = createItemsAdderItem(keyItemId, amount);
+        ItemStack item = createRPEngineItem(keyItemId, amount);
         if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -498,26 +558,44 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return item;
     }
 
-    /** Creates a registered ItemsAdder item through its public CustomStack API. */
-    private ItemStack createItemsAdderItem(String namespacedId, int amount) {
-        Plugin itemsAdder = Bukkit.getPluginManager().getPlugin("ItemsAdder");
-        if (itemsAdder == null || !itemsAdder.isEnabled()) return null;
+    /** Resolves a custom item through RP Engine's public items() API without a compile-time dependency. */
+    private ItemStack createRPEngineItem(String namespacedId, int amount) {
+        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        if (engine == null || !engine.isEnabled()) return null;
         try {
-            ClassLoader loader = itemsAdder.getClass().getClassLoader();
-            Class<?> customStackClass = Class.forName(
-                    "dev.lone.itemsadder.api.CustomStack", true, loader);
-            Object customStack = customStackClass.getMethod("getInstance", String.class)
-                    .invoke(null, namespacedId);
-            if (customStack == null) return null;
-            Object created = customStackClass.getMethod("getItemStack").invoke(customStack);
-            if (!(created instanceof ItemStack stack)) return null;
+            ClassLoader loader = engine.getClass().getClassLoader();
+            Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
+            Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, namespacedId);
+            if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) return null;
+            Object contentId = optional.get();
+            Object items = engine.getClass().getMethod("items").invoke(engine);
+            Object created = null;
+            for (java.lang.reflect.Method method : items.getClass().getMethods()) {
+                if (!method.getName().equals("create")) continue;
+                Class<?>[] types = method.getParameterTypes();
+                if (types.length == 2 && types[0].equals(contentIdClass) && types[1] == int.class) {
+                    created = method.invoke(items, contentId, amount);
+                    break;
+                }
+                if (types.length == 1 && types[0].equals(contentIdClass)) {
+                    created = method.invoke(items, contentId);
+                    break;
+                }
+            }
+            ItemStack stack = null;
+            if (created instanceof Optional<?> resultOptional && resultOptional.isPresent()) {
+                Object value = resultOptional.get();
+                if (value instanceof ItemStack itemStack) stack = itemStack;
+            } else if (created instanceof ItemStack itemStack) {
+                stack = itemStack;
+            }
+            if (stack == null || amount < 1) return null;
             ItemStack result = stack.clone();
-            if (amount < 1 || amount > result.getMaxStackSize()) return null;
+            if (amount > result.getMaxStackSize()) return null;
             result.setAmount(amount);
             return result;
         } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().fine("ItemsAdder item " + namespacedId
-                    + " is unavailable: " + ex.getMessage());
+            plugin.getLogger().fine("RP Engine item " + namespacedId + " is unavailable: " + ex.getMessage());
             return null;
         }
     }
@@ -531,14 +609,16 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private void help(Player player) {
         player.sendMessage(color("&6&lGASMP CRATES &8- &cDeveloper/Owner only"));
         player.sendMessage(color("&e/crates list &7- list configured crate types"));
-        player.sendMessage(color("&e/crates givekey <player> <id> [amount] &7- give the matching ItemsAdder key"));
+        player.sendMessage(color("&e/crates givekey <player> <id> [amount] &7- give the matching RP Engine key"));
+        player.sendMessage(color("&e/crates giveblock <player> <id> [amount] &7- give custom crate block"));
+        player.sendMessage(color("&e/crates givemodel <player> <id> [amount] &7- give animated crate display"));
         player.sendMessage(color("&e/crates set <id> &7- register a vanilla chest/barrel fallback"));
         player.sendMessage(color("&e/crates unset <id> &7- remove a vanilla fallback location"));
         player.sendMessage(color("&e/crates reload &7- reload crate definitions"));
     }
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 1) return List.of("list", "set", "unset", "givekey", "reload");
+        if (args.length == 1) return List.of("list", "set", "unset", "givekey", "giveblock", "givemodel", "reload");
         return List.of();
     }
 }
