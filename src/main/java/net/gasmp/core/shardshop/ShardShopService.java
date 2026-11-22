@@ -281,7 +281,7 @@ public final class ShardShopService implements Listener, CommandExecutor {
         ItemStack[] rewardItems = makeRewards(product);
         if (rewardItems == null) {
             purchasing.remove(playerId);
-            player.sendMessage(color("&cThis custom item is unavailable. Make sure ItemsAdder has loaded the GASMP furniture pack."));
+            player.sendMessage(color("&cThis custom item is unavailable. Make sure RP Engine has loaded the GASMP content pack."));
             return;
         }
         if (!hasSpace(player, rewardItems)) {
@@ -409,7 +409,7 @@ public final class ShardShopService implements Listener, CommandExecutor {
         for (int i = 0; i < rewards.length; i++) {
             Reward reward = product.rewards().get(i);
             if (reward.customContentId() != null) {
-                rewards[i] = createItemsAdderItem(reward.customContentId(), reward.amount());
+                rewards[i] = createRPEngineItem(reward.customContentId(), reward.amount());
                 if (rewards[i] == null) return null;
             } else {
                 rewards[i] = new ItemStack(reward.material(), reward.amount());
@@ -432,26 +432,44 @@ public final class ShardShopService implements Listener, CommandExecutor {
         return normalized.matches("[a-z0-9_-]+") ? normalized : null;
     }
 
-    /** Resolves a namespaced ItemsAdder item without a hard compile-time dependency. */
-    private ItemStack createItemsAdderItem(String contentIdText, int amount) {
-        Plugin itemsAdder = Bukkit.getPluginManager().getPlugin("ItemsAdder");
-        if (itemsAdder == null || !itemsAdder.isEnabled()) return null;
+    /** Resolves a custom item through RP Engine's public items() API without a compile-time dependency. */
+    private ItemStack createRPEngineItem(String contentIdText, int amount) {
+        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        if (engine == null || !engine.isEnabled()) return null;
         try {
-            ClassLoader loader = itemsAdder.getClass().getClassLoader();
-            Class<?> customStackClass = Class.forName(
-                    "dev.lone.itemsadder.api.CustomStack", true, loader);
-            Object customStack = customStackClass.getMethod("getInstance", String.class)
-                    .invoke(null, contentIdText);
-            if (customStack == null) return null;
-            Object created = customStackClass.getMethod("getItemStack").invoke(customStack);
-            if (!(created instanceof ItemStack stack)) return null;
+            ClassLoader loader = engine.getClass().getClassLoader();
+            Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
+            Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
+            if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) return null;
+            Object contentId = optional.get();
+            Object items = engine.getClass().getMethod("items").invoke(engine);
+            Object created = null;
+            for (java.lang.reflect.Method method : items.getClass().getMethods()) {
+                if (!method.getName().equals("create")) continue;
+                Class<?>[] types = method.getParameterTypes();
+                if (types.length == 2 && types[0].equals(contentIdClass) && types[1] == int.class) {
+                    created = method.invoke(items, contentId, amount);
+                    break;
+                }
+                if (types.length == 1 && types[0].equals(contentIdClass)) {
+                    created = method.invoke(items, contentId);
+                    break;
+                }
+            }
+            ItemStack stack = null;
+            if (created instanceof Optional<?> resultOptional && resultOptional.isPresent()) {
+                Object value = resultOptional.get();
+                if (value instanceof ItemStack itemStack) stack = itemStack;
+            } else if (created instanceof ItemStack itemStack) {
+                stack = itemStack;
+            }
+            if (stack == null || amount < 1) return null;
             ItemStack result = stack.clone();
-            if (amount < 1 || amount > result.getMaxStackSize()) return null;
+            if (amount > result.getMaxStackSize()) return null;
             result.setAmount(amount);
             return result;
         } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().fine("ItemsAdder item " + contentIdText
-                    + " is unavailable: " + ex.getMessage());
+            plugin.getLogger().fine("RP Engine item " + contentIdText + " is unavailable: " + ex.getMessage());
             return null;
         }
     }
@@ -507,8 +525,8 @@ public final class ShardShopService implements Listener, CommandExecutor {
         if (product.rewards().size() == 1) {
             Reward reward = product.rewards().getFirst();
             if (reward.customContentId() != null) {
-                // Show the actual custom model in the catalogue when ItemsAdder is available.
-                icon = createItemsAdderItem(reward.customContentId(), 1);
+                // Show the actual custom model in the catalogue when RP Engine is available.
+                icon = createRPEngineItem(reward.customContentId(), 1);
             }
         }
         if (icon == null) icon = new ItemStack(product.icon());
