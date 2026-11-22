@@ -1,9 +1,7 @@
 package net.gasmp.core.crates;
 
 import net.gasmp.core.GASMPCore;
-import net.gasmp.core.data.PlayerDataStore;
 import net.gasmp.core.staff.StaffAccess;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,7 +9,6 @@ import org.bukkit.Particle;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,7 +22,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -62,7 +58,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // RP Engine executes the custom-block action as console. Player/command-block invocations are rejected.
+        // ItemsAdder crate furniture triggers this internal console-only command.
         if (command.getName().equalsIgnoreCase("gcrateopen")) {
             if (!(sender instanceof ConsoleCommandSender)) {
                 sender.sendMessage("This is an internal crate interaction command.");
@@ -89,42 +85,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             case "set" -> setLocation(player, args);
             case "unset" -> unsetLocation(player, args);
             case "givekey" -> giveKey(player, args);
-            case "giveblock" -> giveCustomCrateItem(player, args, "_crate_block");
-            case "givemodel" -> giveCustomCrateItem(player, args, "_crate_display");
             case "list" -> list(player);
             default -> help(player);
         }
         return true;
-    }
-
-    private void giveCustomCrateItem(Player actor, String[] args, String suffix) {
-        if (args.length < 3 || args.length > 4) {
-            actor.sendMessage(color("&e/crates " + (suffix.equals("_crate_block") ? "giveblock" : "givemodel")
-                    + " <online-player> <crate-id> [amount]"));
-            return;
-        }
-        Player target = Bukkit.getPlayerExact(args[1]);
-        String id = args[2].toLowerCase(Locale.ROOT);
-        if (target == null || config.getConfigurationSection("crates." + id) == null) {
-            actor.sendMessage(color("&cOnline player or crate ID not found."));
-            return;
-        }
-        int amount = 1;
-        if (args.length == 4) {
-            try { amount = Integer.parseInt(args[3]); } catch (NumberFormatException ex) { amount = 0; }
-        }
-        if (amount < 1 || amount > 64) {
-            actor.sendMessage(color("&cAmount must be between 1 and 64."));
-            return;
-        }
-        ItemStack custom = createEngineItem("gasmp_crates:" + id + suffix, amount);
-        if (custom == null) {
-            actor.sendMessage(color("&cRP Engine is not installed or the custom content ID is not loaded. Use /rp reload first."));
-            return;
-        }
-        Map<Integer, ItemStack> left = target.getInventory().addItem(custom);
-        left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
-        actor.sendMessage(color("&aGave " + amount + " &f" + displayName(id) + " &acustom physical block item(s) to " + target.getName() + "."));
     }
 
     private void setLocation(Player player, String[] args) {
@@ -168,7 +132,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (crates == null || crates.getKeys(false).isEmpty()) { player.sendMessage(color("&7No crates configured.")); return; }
         for (String id : crates.getKeys(false)) {
             boolean placed = config.getConfigurationSection("locations." + id) != null;
-            String physical = isRpEngineEnabled() ? "&aRP Engine custom blocks enabled" : "&eUse a vanilla chest/barrel with /crates set";
+            String physical = "&eUse a chest, trapped chest or barrel registered with /crates set";
             player.sendMessage(color(displayName(id) + " &8- " + physical
                     + (placed ? " &8| &aLocation registered" : "")));
         }
@@ -181,11 +145,6 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             return "&d&l" + id.replace('_', ' ').toUpperCase(Locale.ROOT);
         }
         return configured;
-    }
-
-    private boolean isRpEngineEnabled() {
-        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        return engine != null && engine.isEnabled();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -224,48 +183,28 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private boolean isProtectedCrate(Block block) {
-        return isConfiguredCrate(block) || isRpEngineCrateBlock(block);
-    }
-
-    /** Uses only RP Engine's documented public API, accessed reflectively so it remains optional. */
-    private boolean isRpEngineCrateBlock(Block block) {
-        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled()) return false;
-        try {
-            Object blocks = engine.getClass().getMethod("blocks").invoke(engine);
-            Object result = blocks.getClass().getMethod("idAt", Block.class).invoke(blocks, block);
-            if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
-            String id = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
-            return id.startsWith("gasmp_crates:") && id.endsWith("_crate_block");
-        } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().fine("RP Engine custom-block lookup unavailable: " + ex.getMessage());
-            return false;
-        }
+        return isConfiguredCrate(block);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onCrateBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
-        boolean configuredLocation = isConfiguredCrate(block);
-        boolean customBlock = isRpEngineCrateBlock(block);
-        if (!configuredLocation && !customBlock) return;
+        if (!isConfiguredCrate(block)) return;
 
-        // Only Owner/Developer can remove a protected crate. RP Engine then handles the custom block drop.
+        // Only Owner/Developer can remove a registered crate location.
         if (staff.isOwnerOrDev(event.getPlayer())) {
-            if (configuredLocation) {
-                ConfigurationSection locations = config.getConfigurationSection("locations");
-                if (locations != null) {
-                    for (String id : new ArrayList<>(locations.getKeys(false))) {
-                        ConfigurationSection location = locations.getConfigurationSection(id);
-                        if (location != null
-                                && location.getString("world", "").equals(block.getWorld().getName())
-                                && location.getInt("x") == block.getX() && location.getInt("y") == block.getY()
-                                && location.getInt("z") == block.getZ()) {
-                            config.set("locations." + id, null);
-                        }
+            ConfigurationSection locations = config.getConfigurationSection("locations");
+            if (locations != null) {
+                for (String id : new ArrayList<>(locations.getKeys(false))) {
+                    ConfigurationSection location = locations.getConfigurationSection(id);
+                    if (location != null
+                            && location.getString("world", "").equals(block.getWorld().getName())
+                            && location.getInt("x") == block.getX() && location.getInt("y") == block.getY()
+                            && location.getInt("z") == block.getZ()) {
+                        config.set("locations." + id, null);
                     }
-                    save();
                 }
+                save();
             }
             return;
         }
@@ -316,7 +255,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             ConfigurationSection reward = rewardSection.getConfigurationSection(key);
             if (reward == null) continue;
             int weight = reward.getInt("weight", 0);
-            if (weight > 0 && reward.getString("type") != null && totalWeight + weight <= Integer.MAX_VALUE) {
+            String type = reward.getString("type", "").toLowerCase(Locale.ROOT);
+            String cosmeticId = reward.getString("item", "");
+            if (weight > 0 && type.equals("cosmetic")
+                    && cosmeticId.matches("[a-z0-9._-]+:[a-z0-9._/-]+")
+                    && totalWeight + weight <= Integer.MAX_VALUE) {
                 rewards.add(reward);
                 totalWeight += weight;
             }
@@ -435,18 +378,25 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private ItemStack rewardPreview(ConfigurationSection reward, RarityStyle rarity) {
-        String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
-        Material material = switch (type) {
-            case "coins" -> Material.GOLD_INGOT;
-            case "shards" -> Material.AMETHYST_SHARD;
-            default -> Material.matchMaterial(reward.getString("material", "DIAMOND"));
-        };
-        if (material == null || !material.isItem() || material.isAir()) material = Material.CHEST;
-        long amount = reward.getLong("amount", 1);
-        return named(material, rarity.color().toString() + ChatColor.BOLD.toString() + rarity.label().toUpperCase(Locale.ROOT) + " REWARD",
-                "&7Type: &f" + type.toUpperCase(Locale.ROOT),
-                "&7Amount: &e" + amount,
-                "&8GASMP CRATES");
+        String itemId = reward.getString("item", "");
+        String display = reward.getString("display-name", itemId);
+        ItemStack cosmetic = createItemsAdderItem(itemId, 1);
+        if (cosmetic == null) {
+            return named(Material.BARRIER,
+                    rarity.color().toString() + ChatColor.BOLD + "COSMETIC UNAVAILABLE",
+                    "&cItemsAdder item is not loaded: " + itemId,
+                    "&7Your key will be returned.");
+        }
+        ItemMeta meta = cosmetic.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(color(rarity.color().toString() + ChatColor.BOLD + display));
+            meta.setLore(List.of(
+                    color("&7Wearable cosmetic"),
+                    color("&7Crate tier: " + rarity.color() + rarity.label()),
+                    color("&8ItemsAdder: " + itemId)));
+            cosmetic.setItemMeta(meta);
+        }
+        return cosmetic;
     }
 
     private record RarityStyle(String label, ChatColor color, Material pane, Sound revealSound,
@@ -518,59 +468,24 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private void deliver(Player player, ConfigurationSection reward, String crateId) {
-        String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
-        long amount = reward.getLong("amount", 1);
-        if (amount < 1L || amount > 1_000_000_000L) {
-            refundKey(player, crateId, "Configured reward amount must be between 1 and 1,000,000,000.");
-            plugin.getLogger().warning("Invalid amount " + amount + " in crate " + crateId);
+        String itemId = reward.getString("item", "");
+        String display = reward.getString("display-name", itemId);
+        if (!itemId.matches("[a-z0-9._-]+:[a-z0-9._/-]+")) {
+            refundKey(player, crateId, "Configured cosmetic ID is invalid.");
+            plugin.getLogger().warning("Invalid cosmetic ID in crate " + crateId + ": " + itemId);
             return;
         }
-        switch (type) {
-            case "item" -> {
-                Material material = Material.matchMaterial(reward.getString("material", "DIAMOND"));
-                if (material == null || !material.isItem() || material.isAir()) {
-                    refundKey(player, crateId, "Crate reward item is invalid; contact staff."); return;
-                }
-                if (amount < 1 || amount > 64) {
-                    refundKey(player, crateId, "Configured item reward amount must be between 1 and 64.");
-                    plugin.getLogger().warning("Invalid item reward amount " + amount + " in crate " + crateId);
-                    return;
-                }
-                ItemStack rewardItem = new ItemStack(material, (int) amount);
-                Map<Integer, ItemStack> left = player.getInventory().addItem(rewardItem);
-                left.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
-                player.sendMessage(color(displayName(crateId) + " &8» &f" + amount + "x " + material.name()));
-                opening.remove(player.getUniqueId());
-            }
-            case "coins" -> {
-                if (!plugin.getEconomyBridge().isAvailable()) { refundKey(player, crateId, "Coins economy unavailable."); return; }
-                try {
-                    double before = plugin.getEconomyBridge().getBalance(player);
-                    EconomyResponse response = plugin.getEconomyBridge().deposit(player, amount);
-                    boolean paid = response != null && response.transactionSuccess();
-                    if (!paid) {
-                        double after = plugin.getEconomyBridge().getBalance(player);
-                        paid = Double.isFinite(after) && Math.abs((after - before) - amount) <= 0.005d;
-                    }
-                    if (!paid) { refundKey(player, crateId, "Economy provider rejected reward."); return; }
-                    player.sendMessage(color(displayName(crateId) + " &8» &6+" + amount + " Coins"));
-                    opening.remove(player.getUniqueId());
-                } catch (RuntimeException providerError) {
-                    plugin.getLogger().severe("Crate Coins reward provider error for " + player.getUniqueId()
-                            + " in crate " + crateId + ": " + providerError.getMessage());
-                    // Do not refund a key when provider state is unknowable; that could duplicate a paid reward.
-                    player.sendMessage(color("&cReward payment needs staff reconciliation. Keep this message and contact staff."));
-                    opening.remove(player.getUniqueId());
-                }
-            }
-            case "shards" -> plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), null,
-                    "CRATE", amount, PlayerDataStore.ShardChange.GIVE, crateId + " crate reward")
-                    .whenComplete((balance, error) -> Bukkit.getScheduler().runTask(plugin, () -> {
-                        if (error != null) refundKey(player, crateId, "Shards database error.");
-                        else { player.sendMessage(color(displayName(crateId) + " &8» &d+" + amount + " Shards")); opening.remove(player.getUniqueId()); }
-                    }));
-            default -> refundKey(player, crateId, "Unknown crate reward type.");
+
+        ItemStack cosmetic = createItemsAdderItem(itemId, 1);
+        if (cosmetic == null) {
+            refundKey(player, crateId, "ItemsAdder cosmetic is not loaded. Install/reload the GASMP cosmetic content pack.");
+            return;
         }
+
+        Map<Integer, ItemStack> leftovers = player.getInventory().addItem(cosmetic);
+        leftovers.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
+        player.sendMessage(color(displayName(crateId) + " &8» &fUnlocked wearable cosmetic: &d" + display));
+        opening.remove(player.getUniqueId());
     }
 
     private void refundKey(Player player, String id, String reason) {
@@ -581,11 +496,13 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private ItemStack createKey(String id, int amount) {
-        ItemStack item = createEngineItem("gasmp_crates:" + id + "_key", amount);
+        ConfigurationSection crate = config.getConfigurationSection("crates." + id);
+        String keyItemId = crate == null ? "gasmp_crates:" + id + "_key"
+                : crate.getString("key-item", "gasmp_crates:" + id + "_key");
+        ItemStack item = createItemsAdderItem(keyItemId, amount);
         if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            ConfigurationSection crate = config.getConfigurationSection("crates." + id);
             String keyName = crate == null ? null : crate.getString("key-name");
             if (keyName == null || keyName.isBlank()) keyName = "&d&l" + id.toUpperCase(Locale.ROOT) + " KEY";
             String keyLore = crate == null ? "&7Use at the matching GASMP crate." :
@@ -598,48 +515,28 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return item;
     }
 
-    /** RP Engine create() is main-thread-only. Falls back to vanilla items if it is absent. */
-    private ItemStack createEngineItem(String contentIdText, int amount) {
-        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled()) return null;
+    /** Creates a registered ItemsAdder item through its public CustomStack API. */
+    private ItemStack createItemsAdderItem(String namespacedId, int amount) {
+        Plugin itemsAdder = Bukkit.getPluginManager().getPlugin("ItemsAdder");
+        if (itemsAdder == null || !itemsAdder.isEnabled()) return null;
         try {
-            ClassLoader loader = engine.getClass().getClassLoader();
-            Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
-            Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
-            if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) return null;
-            Object contentId = optional.get();
-            Object items = engine.getClass().getMethod("items").invoke(engine);
-
-            Object created = null;
-            for (java.lang.reflect.Method method : items.getClass().getMethods()) {
-                if (!method.getName().equals("create")) continue;
-                Class<?>[] types = method.getParameterTypes();
-                if (types.length == 2 && types[0].equals(contentIdClass) && types[1] == int.class) {
-                    created = method.invoke(items, contentId, amount);
-                    break;
-                }
-                if (types.length == 1 && types[0].equals(contentIdClass)) {
-                    created = method.invoke(items, contentId);
-                    break;
-                }
-            }
-            if (created instanceof Optional<?> stackOptional && stackOptional.isPresent()) {
-                Object value = stackOptional.get();
-                if (value instanceof ItemStack stack) {
-                    ItemStack result = stack.clone();
-                    if (result.getAmount() != amount) result.setAmount(Math.min(amount, result.getMaxStackSize()));
-                    return result;
-                }
-            }
-            if (created instanceof ItemStack stack) {
-                ItemStack result = stack.clone();
-                if (result.getAmount() != amount) result.setAmount(Math.min(amount, result.getMaxStackSize()));
-                return result;
-            }
+            ClassLoader loader = itemsAdder.getClass().getClassLoader();
+            Class<?> customStackClass = Class.forName(
+                    "dev.lone.itemsadder.api.CustomStack", true, loader);
+            Object customStack = customStackClass.getMethod("getInstance", String.class)
+                    .invoke(null, namespacedId);
+            if (customStack == null) return null;
+            Object created = customStackClass.getMethod("getItemStack").invoke(customStack);
+            if (!(created instanceof ItemStack stack)) return null;
+            ItemStack result = stack.clone();
+            if (amount < 1 || amount > result.getMaxStackSize()) return null;
+            result.setAmount(amount);
+            return result;
         } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().fine("RP Engine item " + contentIdText + " not available: " + ex.getMessage());
+            plugin.getLogger().fine("ItemsAdder item " + namespacedId
+                    + " is unavailable: " + ex.getMessage());
+            return null;
         }
-        return null;
     }
 
     private boolean isKey(ItemStack item, String id) {
@@ -651,8 +548,6 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private void help(Player player) {
         player.sendMessage(color("&6&lGASMP CRATES &8- &cDeveloper/Owner only"));
         player.sendMessage(color("&e/crates list &7- list configured crate types"));
-        player.sendMessage(color("&e/crates giveblock <player> <id> [amount] &7- give a physical custom block"));
-        player.sendMessage(color("&e/crates givemodel <player> <id> [amount] &7- give an animated placeable display"));
         player.sendMessage(color("&e/crates givekey <player> <id> [amount] &7- give the matching key"));
         player.sendMessage(color("&e/crates set <id> &7- register a vanilla chest/barrel fallback"));
         player.sendMessage(color("&e/crates unset <id> &7- remove a vanilla fallback location"));
