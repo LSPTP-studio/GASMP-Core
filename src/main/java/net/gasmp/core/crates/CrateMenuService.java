@@ -31,6 +31,11 @@ import java.util.HashMap;
 public final class CrateMenuService implements Listener, CommandExecutor {
     private static final int SIZE = 54;
     private static final int[] CRATE_SLOTS = {20, 22, 24, 29, 31, 33};
+    private static final int[] DETAIL_SLOTS = {
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34
+    };
     private final GASMPCore plugin;
 
     public CrateMenuService(GASMPCore plugin) { this.plugin = plugin; }
@@ -124,10 +129,10 @@ public final class CrateMenuService implements Listener, CommandExecutor {
             }
             entries.sort(Comparator.comparingInt(Reward::weight).reversed());
             holder.totalWeight = total;
-            for (int i = 0; i < Math.min(entries.size(), CRATE_SLOTS.length); i++) {
+            for (int i = 0; i < Math.min(entries.size(), DETAIL_SLOTS.length); i++) {
                 Reward reward = entries.get(i);
                 double chance = total <= 0 ? 0 : reward.weight() * 100.0 / total;
-                inv.setItem(CRATE_SLOTS[i], rewardItem(reward, chance));
+                inv.setItem(DETAIL_SLOTS[i], rewardItem(reward, chance));
             }
         }
         inv.setItem(45, item(Material.ARROW, "&fBack to crates", "&7Return to the catalogue"));
