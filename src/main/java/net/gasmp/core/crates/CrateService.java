@@ -9,6 +9,7 @@ import org.bukkit.Particle;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.command.*;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -555,7 +556,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 1) return List.of("list", "set", "unset", "givekey", "giveblock", "givemodel", "reload");
+        if (args.length == 1) return List.of("list", "set", "unset", "givekey", "reload");
         return List.of();
     }
 }
