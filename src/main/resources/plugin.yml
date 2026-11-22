@@ -69,6 +69,9 @@ commands:
     description: View Battle Pass progress and claim rewards.
     usage: /battlepass [claim <level>]
     aliases: [bp]
+  crate:
+    description: Opens the GASMP crate catalogue and reward previews.
+    usage: /crate
   crates:
     description: Restricted crate administration. Crate opening uses physical keys.
     usage: /crates <list|set|unset|givekey|reload>
