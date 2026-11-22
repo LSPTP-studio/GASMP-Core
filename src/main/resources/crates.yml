@@ -11,15 +11,18 @@ crates:
         type: shards
         amount: 25
         weight: 50
+        rarity: common
       coins_small:
         type: coins
         amount: 250
         weight: 35
+        rarity: rare
       diamond:
         type: item
         material: DIAMOND
         amount: 2
         weight: 15
+        rarity: epic
 
   legendary:
     display-name: "&5&lABYSSAL RELIC VAULT"
@@ -31,14 +34,17 @@ crates:
         type: shards
         amount: 250
         weight: 40
+        rarity: rare
       coins_big:
         type: coins
         amount: 2500
         weight: 35
+        rarity: epic
       netherite:
         type: item
         material: NETHERITE_INGOT
         amount: 1
         weight: 25
+        rarity: legendary
 
 locations: {}
