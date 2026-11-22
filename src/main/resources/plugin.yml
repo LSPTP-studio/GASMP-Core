@@ -14,7 +14,7 @@ softdepend:
   - floodgate
   - TAB
   - Nexo
-  - ItemsAdder
+  - RPEngine
   - ImageFrame
   - Typewriter
   - OpenInv
@@ -72,8 +72,11 @@ commands:
     description: Opens the GASMP crate catalogue and reward previews.
     usage: /crate
   crates:
-    description: Restricted crate administration. Crate opening uses ItemsAdder cosmetic keys.
-    usage: /crates <list|set|unset|givekey|reload>
+    description: Restricted crate administration for RP Engine crate blocks, displays and keys.
+    usage: /crates <list|set|unset|givekey|giveblock|givemodel|reload>
+  gcrateopen:
+    description: Internal RP Engine crate interaction route.
+    usage: /gcrateopen <player> <crate-id>
   team:
     description: GASMP teams and team chat.
     usage: /team <create|invite|accept|leave|kick|disband|info|chat|promote|demote|transfer|description|bank|sethome|home|homes|upgrade|ally>
