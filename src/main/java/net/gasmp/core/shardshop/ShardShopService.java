@@ -21,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /** Shards-only shop with category browsing, purchase previews and server-side debits. */
 public final class ShardShopService implements Listener, CommandExecutor {
-    private record Reward(Material material, int amount) { }
+    private record Reward(Material material, int amount, String customContentId) { }
     private record Product(String key, String category, Material icon, long price,
                            String name, List<String> lore, List<Reward> rewards) { }
 
@@ -114,7 +115,24 @@ public final class ShardShopService implements Listener, CommandExecutor {
                     valid = false;
                     break;
                 }
-                rewards.add(new Reward(material, amount));
+                rewards.add(new Reward(material, amount, null));
+            }
+
+            for (String specification : entry.getStringList("custom-items")) {
+                int amountSeparator = specification.lastIndexOf(':');
+                if (amountSeparator <= 0 || amountSeparator == specification.length() - 1) {
+                    valid = false;
+                    break;
+                }
+                String contentId = specification.substring(0, amountSeparator).trim();
+                int amount;
+                try { amount = Integer.parseInt(specification.substring(amountSeparator + 1).trim()); }
+                catch (NumberFormatException exception) { amount = -1; }
+                if (!contentId.matches("[a-z0-9._-]+:[a-z0-9._/-]+") || amount < 1 || amount > 64) {
+                    valid = false;
+                    break;
+                }
+                rewards.add(new Reward(null, amount, contentId));
             }
 
             if (!valid || rewards.isEmpty()) {
@@ -196,7 +214,9 @@ public final class ShardShopService implements Listener, CommandExecutor {
             lore.add(color("&8"));
             lore.add(color("&7Bundle contents:"));
             for (Reward reward : product.rewards()) {
-                lore.add(color("&8• &f" + reward.amount() + "x " + pretty(reward.material())));
+                String rewardName = reward.material() != null
+                        ? pretty(reward.material()) : prettyContentId(reward.customContentId());
+                lore.add(color("&8• &f" + reward.amount() + "x " + rewardName));
             }
             lore.add(color("&8"));
             lore.add(color("&7Total: &d" + product.price() + " ✦ Shards"));
@@ -246,7 +266,13 @@ public final class ShardShopService implements Listener, CommandExecutor {
             player.sendMessage(color("&cThat product is no longer available."));
             return;
         }
-        if (!hasSpace(player, product)) {
+        ItemStack[] rewardItems = makeRewards(product);
+        if (rewardItems == null) {
+            purchasing.remove(playerId);
+            player.sendMessage(color("&cThis custom item is unavailable. Make sure RP Engine has loaded the GASMP furniture pack."));
+            return;
+        }
+        if (!hasSpace(player, rewardItems)) {
             purchasing.remove(playerId);
             player.sendMessage(color("&cMake enough inventory space before purchasing this bundle."));
             return;
@@ -259,7 +285,7 @@ public final class ShardShopService implements Listener, CommandExecutor {
                 "Shard Shop purchase: " + product.key()).whenComplete((balance, error) -> {
             try {
                 Bukkit.getScheduler().runTask(plugin, () ->
-                        completePurchase(player, playerId, playerName, product, error));
+                        completePurchase(player, playerId, playerName, product, rewardItems, error));
             } catch (RuntimeException schedulingError) {
                 // A successful debit must not be silently stranded if shutdown prevents
                 // the inventory-delivery task from being scheduled.
@@ -277,7 +303,7 @@ public final class ShardShopService implements Listener, CommandExecutor {
     }
 
     private void completePurchase(Player player, UUID playerId, String playerName,
-                                  Product product, Throwable debitError) {
+                                  Product product, ItemStack[] rewardItems, Throwable debitError) {
         boolean delivered = false;
         try {
             if (debitError != null) {
@@ -288,7 +314,7 @@ public final class ShardShopService implements Listener, CommandExecutor {
                 refund(playerId, playerName, product, "Player disconnected before bundle delivery.");
                 return;
             }
-            if (!hasSpace(player, product)) {
+            if (!hasSpace(player, rewardItems)) {
                 refund(playerId, playerName, product, "Inventory became full before delivery.");
                 player.sendMessage(color("&cYour inventory changed during checkout. Shards were refunded."));
                 return;
@@ -296,7 +322,7 @@ public final class ShardShopService implements Listener, CommandExecutor {
 
             ItemStack[] before = cloneContents(player.getInventory().getStorageContents());
             try {
-                Map<Integer, ItemStack> leftovers = player.getInventory().addItem(makeRewards(product));
+                Map<Integer, ItemStack> leftovers = player.getInventory().addItem(rewardItems);
                 if (!leftovers.isEmpty()) {
                     player.getInventory().setStorageContents(before);
                     refund(playerId, playerName, product, "Inventory rejected one or more bundle items.");
@@ -339,9 +365,10 @@ public final class ShardShopService implements Listener, CommandExecutor {
         });
     }
 
-    private boolean hasSpace(Player player, Product product) {
+    private boolean hasSpace(Player player, ItemStack[] rewardItems) {
         ItemStack[] simulated = cloneContents(player.getInventory().getStorageContents());
-        for (ItemStack reward : makeRewards(product)) {
+        for (ItemStack reward : rewardItems) {
+            if (reward == null || reward.getType().isAir()) return false;
             int remaining = reward.getAmount();
             for (int i = 0; i < simulated.length && remaining > 0; i++) {
                 ItemStack current = simulated[i];
@@ -369,9 +396,52 @@ public final class ShardShopService implements Listener, CommandExecutor {
         ItemStack[] rewards = new ItemStack[product.rewards().size()];
         for (int i = 0; i < rewards.length; i++) {
             Reward reward = product.rewards().get(i);
-            rewards[i] = new ItemStack(reward.material(), reward.amount());
+            if (reward.customContentId() != null) {
+                rewards[i] = createEngineItem(reward.customContentId(), reward.amount());
+                if (rewards[i] == null) return null;
+            } else {
+                rewards[i] = new ItemStack(reward.material(), reward.amount());
+            }
         }
         return rewards;
+    }
+
+    /** Creates a real RP Engine content item. This API call is main-thread-only. */
+    private ItemStack createEngineItem(String contentIdText, int amount) {
+        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        if (engine == null || !engine.isEnabled()) return null;
+        try {
+            ClassLoader loader = engine.getClass().getClassLoader();
+            Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
+            Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
+            if (!(parsed instanceof java.util.Optional<?> optional) || optional.isEmpty()) return null;
+
+            Object items = engine.getClass().getMethod("items").invoke(engine);
+            Object created = null;
+            for (java.lang.reflect.Method method : items.getClass().getMethods()) {
+                if (!method.getName().equals("create")) continue;
+                Class<?>[] types = method.getParameterTypes();
+                if (types.length == 2 && types[0].equals(contentIdClass) && types[1] == int.class) {
+                    created = method.invoke(items, optional.get(), amount);
+                    break;
+                }
+            }
+            if (created instanceof java.util.Optional<?> stackOptional && stackOptional.isPresent()
+                    && stackOptional.get() instanceof ItemStack stack) {
+                return stack.clone();
+            }
+            if (created instanceof ItemStack stack) return stack.clone();
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            plugin.getLogger().fine("RP Engine item " + contentIdText + " is unavailable: " + ex.getMessage());
+        }
+        return null;
+    }
+
+    private String prettyContentId(String contentId) {
+        if (contentId == null || contentId.isBlank()) return "Custom Item";
+        int separator = contentId.indexOf(':');
+        String path = separator >= 0 ? contentId.substring(separator + 1) : contentId;
+        return categoryLabel(path.replace('_', ' ').replace('-', ' '));
     }
 
     private ItemStack[] cloneContents(ItemStack[] source) {
