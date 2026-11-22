@@ -1,0 +1,39 @@
+common_key:
+  material: TRIPWIRE_HOOK
+  name: "&f&lCOMMON CRATE KEY"
+  lore:
+    - "&7Opens the Common Cosmetic Crate."
+    - "&8GASMP • KEY ITEM"
+  model: common_key
+  glow: true
+  stack: 64
+
+rare_key:
+  material: TRIPWIRE_HOOK
+  name: "&b&lRARE CRATE KEY"
+  lore:
+    - "&7Opens the Rare Cosmetic Crate."
+    - "&8GASMP • KEY ITEM"
+  model: rare_key
+  glow: true
+  stack: 64
+
+epic_key:
+  material: TRIPWIRE_HOOK
+  name: "&d&lEPIC CRATE KEY"
+  lore:
+    - "&7Opens the Epic Cosmetic Crate."
+    - "&8GASMP • KEY ITEM"
+  model: epic_key
+  glow: true
+  stack: 64
+
+legendary_key:
+  material: TRIPWIRE_HOOK
+  name: "&6&lLEGENDARY CRATE KEY"
+  lore:
+    - "&7Opens the Legendary Cosmetic Crate."
+    - "&8GASMP • KEY ITEM"
+  model: legendary_key
+  glow: true
+  stack: 64
