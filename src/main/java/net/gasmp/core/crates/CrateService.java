@@ -355,7 +355,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             if (i < 9 || i >= 18 || i % 9 == 0 || i % 9 == 8) inventory.setItem(i, filler.clone());
         }
         inventory.setItem(13, named(Material.CHEST,
-                rarity.color() + ChatColor.BOLD + "OPENING...",
+                rarity.color().toString() + ChatColor.BOLD.toString() + "OPENING...",
                 "&7The " + rarity.label() + " reward is being rolled."));
         player.openInventory(inventory);
 
@@ -378,7 +378,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 for (int slot : new int[]{11, 13, 15}) {
                     Material material = reel[ThreadLocalRandom.current().nextInt(reel.length)];
                     inventory.setItem(slot, named(material,
-                            rarity.color() + ChatColor.BOLD + material.name().replace('_', ' ')));
+                            rarity.color().toString() + ChatColor.BOLD.toString() + material.name().replace('_', ' ')));
                 }
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.45f,
                         Math.min(1.8f, 0.65f + (ticks[0] / 55.0f)));
@@ -391,7 +391,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 inventory.setItem(13, rewardPreview(reward, rarity));
                 player.playSound(player.getLocation(), rarity.revealSound(), 1.0f, rarity.pitch());
                 player.sendTitle(color("&8CRATE OPENED"),
-                        rarity.color() + ChatColor.BOLD + rarity.label().toUpperCase(Locale.ROOT) + " REWARD",
+                        rarity.color().toString() + ChatColor.BOLD.toString() + rarity.label().toUpperCase(Locale.ROOT) + " REWARD",
                         5, 35, 10);
                 player.getWorld().spawnParticle(rarity.particle(),
                         player.getLocation().add(0, 1.0, 0), rarity.particleCount(),
@@ -443,7 +443,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         };
         if (material == null || !material.isItem() || material.isAir()) material = Material.CHEST;
         long amount = reward.getLong("amount", 1);
-        return named(material, rarity.color() + ChatColor.BOLD + rarity.label().toUpperCase(Locale.ROOT) + " REWARD",
+        return named(material, rarity.color().toString() + ChatColor.BOLD.toString() + rarity.label().toUpperCase(Locale.ROOT) + " REWARD",
                 "&7Type: &f" + type.toUpperCase(Locale.ROOT),
                 "&7Amount: &e" + amount,
                 "&8GASMP CRATES");
