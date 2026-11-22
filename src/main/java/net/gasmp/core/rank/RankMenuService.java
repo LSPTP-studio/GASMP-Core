@@ -3,6 +3,9 @@ package net.gasmp.core.rank;
 import net.gasmp.core.GASMPCore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 /** Read-only player-facing rank catalogue backed directly by ranks.yml/LuckPerms definitions. */
-public final class RankMenuService implements Listener {
+public final class RankMenuService implements Listener, CommandExecutor {
     private static final int SIZE = 54;
     private static final int[] CARD_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25};
     private static final String[] TRACKS = {"staff", "creator", "supporter", "prestige"};
@@ -28,6 +31,16 @@ public final class RankMenuService implements Listener {
     public RankMenuService(GASMPCore plugin) { this.plugin = plugin; }
 
     public void open(Player player) { open(player, "supporter"); }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("This menu can only be opened in-game.");
+            return true;
+        }
+        open(player);
+        return true;
+    }
 
     private void open(Player player, String track) {
         String selected = List.of(TRACKS).contains(track) ? track : "supporter";
