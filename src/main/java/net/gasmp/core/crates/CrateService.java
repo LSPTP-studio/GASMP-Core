@@ -350,8 +350,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
         if (engine == null || !engine.isEnabled()) return null;
         try {
-            Object blocks = engine.getClass().getMethod("blocks").invoke(engine);
-            Object result = blocks.getClass().getMethod("idAt", Block.class).invoke(blocks, block);
+            java.lang.reflect.Method accessor = engine.getClass().getMethod("blocks");
+            Object blocks = accessor.invoke(engine);
+            Object result = accessor.getReturnType().getMethod("idAt", Block.class).invoke(blocks, block);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return null;
             String raw = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
             String prefix = raw.startsWith("gasmp_chests:") ? "gasmp_chests:" : "gasmp_crates:";
@@ -370,8 +371,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
         if (engine == null || !engine.isEnabled() || entity == null) return null;
         try {
-            Object models = engine.getClass().getMethod("models").invoke(engine);
-            Object result = models.getClass().getMethod("at", Entity.class).invoke(models, entity);
+            java.lang.reflect.Method accessor = engine.getClass().getMethod("models");
+            Object models = accessor.invoke(engine);
+            Object result = accessor.getReturnType().getMethod("at", Entity.class).invoke(models, entity);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return null;
             Object placement = optional.get();
             String raw = String.valueOf(placement.getClass().getMethod("modelId").invoke(placement)).toLowerCase(Locale.ROOT);
@@ -1045,29 +1047,23 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
             Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
             if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) return null;
-            Object contentId = optional.get();
-            Object items = engine.getClass().getMethod("items").invoke(engine);
+            java.lang.reflect.Method accessor = engine.getClass().getMethod("items");
+            Object items = accessor.invoke(engine);
+            Class<?> itemsApi = accessor.getReturnType();
 
-            Object created = null;
-            for (java.lang.reflect.Method method : items.getClass().getMethods()) {
-                if (!method.getName().equals("create")) continue;
-                Class<?>[] types = method.getParameterTypes();
-                if (types.length == 2 && types[0].equals(contentIdClass) && types[1] == int.class) {
-                    created = method.invoke(items, contentId, amount);
-                    break;
-                }
-                if (types.length == 1 && types[0].equals(contentIdClass)) {
-                    created = method.invoke(items, contentId);
-                    break;
-                }
+            Object created;
+            try {
+                created = itemsApi.getMethod("create", contentIdClass, int.class)
+                        .invoke(items, optional.get(), amount);
+            } catch (NoSuchMethodException olderApi) {
+                created = itemsApi.getMethod("create", contentIdClass).invoke(items, optional.get());
             }
-            if (created instanceof Optional<?> stackOptional && stackOptional.isPresent()) {
-                Object value = stackOptional.get();
-                if (value instanceof ItemStack stack) {
-                    ItemStack result = stack.clone();
-                    if (result.getAmount() != amount) result.setAmount(Math.min(amount, result.getMaxStackSize()));
-                    return result;
-                }
+
+            if (created instanceof Optional<?> stackOptional && stackOptional.isPresent()
+                    && stackOptional.get() instanceof ItemStack stack) {
+                ItemStack result = stack.clone();
+                if (result.getAmount() != amount) result.setAmount(Math.min(amount, result.getMaxStackSize()));
+                return result;
             }
             if (created instanceof ItemStack stack) {
                 ItemStack result = stack.clone();
@@ -1075,7 +1071,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 return result;
             }
         } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().fine("RP Engine item " + contentIdText + " not available: " + ex.getMessage());
+            plugin.getLogger().warning("RP Engine could not create '" + contentIdText + "': " + ex.getMessage());
         }
         return null;
     }
@@ -1100,8 +1096,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
         if (engine == null || !engine.isEnabled()) return false;
         try {
-            Object items = engine.getClass().getMethod("items").invoke(engine);
-            Object result = items.getClass().getMethod("idOf", ItemStack.class).invoke(items, item);
+            java.lang.reflect.Method accessor = engine.getClass().getMethod("items");
+            Object items = accessor.invoke(engine);
+            Object result = accessor.getReturnType().getMethod("idOf", ItemStack.class).invoke(items, item);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
             String actual = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
             String expected = chestPackTier(canonical)
