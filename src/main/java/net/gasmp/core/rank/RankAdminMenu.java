@@ -249,11 +249,49 @@ public final class RankAdminMenu implements Listener, CommandExecutor, TabComple
     private void rankReveal(Player target, RankDefinition rank) {
         target.sendMessage(color("&d&lGASMP &8» &fYour rank is now " + rank.prefix() + "&f."));
         if (!plugin.getConfig().getBoolean("rank-admin.play-rank-up-cinematic", true)) return;
-        target.playSound(target.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.0f);
-        target.getWorld().spawnParticle(Particle.HAPPY_VILLAGER,
-                target.getLocation().add(0, 1, 0), 24, 0.55, 0.65, 0.55, 0.02);
-        target.sendTitle(color("&6&lRANK UNLOCKED"),
-                color(rank.prefix() + rank.displayName()), 10, 60, 20);
+
+        target.playSound(target.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.9f, 0.85f);
+        target.sendTitle(color("&d&lGASMP RANK UP"),
+                color("&7A new rank has been unlocked"), 0, 32, 8);
+
+        // A short staged reveal: rotating end-rod rings, totem bursts, and a final
+        // level-up cue. Every task checks online status before touching the player.
+        for (int beat = 0; beat < 7; beat++) {
+            final int stage = beat;
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (!target.isOnline()) return;
+                org.bukkit.Location center = target.getLocation().clone().add(0, 0.15, 0);
+                org.bukkit.World world = target.getWorld();
+                int points = 28;
+                double radius = 0.55 + (stage * 0.08);
+                for (int i = 0; i < points; i++) {
+                    double angle = (Math.PI * 2.0 * i / points) + (stage * 0.34);
+                    double y = 0.25 + ((i % 4) * 0.18);
+                    org.bukkit.Location particle = center.clone().add(
+                            Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+                    world.spawnParticle(Particle.END_ROD, particle, 1, 0, 0, 0, 0);
+                }
+                world.spawnParticle(Particle.TOTEM_OF_UNDYING,
+                        center.clone().add(0, 1.05, 0), 10 + (stage * 2),
+                        0.42, 0.75, 0.42, 0.08);
+
+                if (stage == 2) {
+                    target.playSound(center, Sound.BLOCK_BEACON_ACTIVATE, 0.8f, 1.15f);
+                    target.sendTitle(color("&6&lRANK UNLOCKED"),
+                            color(rank.prefix() + rank.displayName()), 0, 40, 8);
+                } else if (stage == 4) {
+                    world.spawnParticle(Particle.HAPPY_VILLAGER,
+                            center.clone().add(0, 1.1, 0), 42, 0.75, 0.9, 0.75, 0.12);
+                    target.playSound(center, Sound.ENTITY_PLAYER_LEVELUP, 0.9f, 1.1f);
+                } else if (stage == 6) {
+                    world.spawnParticle(Particle.TOTEM_OF_UNDYING,
+                            center.clone().add(0, 1.0, 0), 64, 0.65, 1.0, 0.65, 0.18);
+                    target.sendTitle(color("&a&l" + rank.displayName()),
+                            color("&fCongratulations on your new GASMP rank!"), 3, 45, 12);
+                    target.playSound(center, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.2f);
+                }
+            }, stage * 6L);
+        }
     }
 
     @EventHandler
