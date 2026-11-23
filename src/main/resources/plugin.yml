@@ -15,6 +15,7 @@ softdepend:
   - TAB
   - Nexo
   - ItemsAdder
+  - Oraxen
   - ImageFrame
   - Typewriter
   - OpenInv
@@ -45,8 +46,8 @@ commands:
     usage: /shards <balance|give|take|set>
     aliases: [shard, gshards]
   shop:
-    description: Opens the GASMP Shard Shop.
-    usage: /shop
+    description: Opens the GASMP shop selector or a specific currency shop.
+    usage: /shop [coins|shards]
   rtp:
     description: Teleports you to a safe random location.
     usage: /rtp
