@@ -255,25 +255,15 @@ public final class DecorationShopService implements Listener {
             Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
             Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
             if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) return null;
-            Object items = engine.getClass().getMethod("items").invoke(engine);
-            Object created = null;
-            for (java.lang.reflect.Method method : items.getClass().getMethods()) {
-                if (!method.getName().equals("create")) continue;
-                Class<?>[] types = method.getParameterTypes();
-                if (types.length == 2 && types[0].equals(contentIdClass) && types[1] == int.class) {
-                    created = method.invoke(items, optional.get(), 1);
-                    break;
-                }
-                if (types.length == 1 && types[0].equals(contentIdClass)) {
-                    created = method.invoke(items, optional.get());
-                    break;
-                }
-            }
+            java.lang.reflect.Method accessor = engine.getClass().getMethod("items");
+            Object items = accessor.invoke(engine);
+            Class<?> itemsApi = accessor.getReturnType();
+            Object created = itemsApi.getMethod("create", contentIdClass).invoke(items, optional.get());
             if (created instanceof Optional<?> result && result.isPresent()
                     && result.get() instanceof ItemStack stack) return stack.clone();
             if (created instanceof ItemStack stack) return stack.clone();
         } catch (ReflectiveOperationException | RuntimeException error) {
-            plugin.getLogger().fine("Could not create decoration " + contentIdText + ": " + error.getMessage());
+            plugin.getLogger().warning("RP Engine could not create decoration '" + contentIdText + "': " + error.getMessage());
         }
         return null;
     }
