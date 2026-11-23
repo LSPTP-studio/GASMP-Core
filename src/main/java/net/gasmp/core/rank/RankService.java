@@ -151,6 +151,7 @@ public final class RankService {
                 group.data().clear(node -> node instanceof PermissionNode
                         && (wanted.contains(node.getKey().toLowerCase(Locale.ROOT))
                         || managedPermissions.contains(node.getKey().toLowerCase(Locale.ROOT))
+                        || node.getKey().toLowerCase(Locale.ROOT).startsWith("rpengine.tag.gasmp_ranks.")
                         || node.getKey().startsWith("OpenInv."))
                         && node.getContexts().isEmpty() && !node.hasExpiry());
                 for (String permission : wanted) group.data().add(PermissionNode.builder(permission).build());
