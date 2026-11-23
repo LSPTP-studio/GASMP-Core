@@ -63,8 +63,48 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     public void reload() {
         File file = new File(plugin.getDataFolder(), "crates.yml");
-        if (!file.exists()) plugin.saveResource("crates.yml", false);
+        if (!file.exists()) {
+            plugin.saveResource("crates.yml", false);
+        } else {
+            migrateEquipmentCrates(file);
+        }
         config = YamlConfiguration.loadConfiguration(file);
+    }
+
+    /**
+     * Upgrade old Common/Rare/Epic/Legendary cosmetic reward tables to the
+     * requested Normal/Iron, Medium/Diamond and Premium/Netherite tables.
+     * A backup is retained, and legacy placed chest coordinates are preserved.
+     */
+    private void migrateEquipmentCrates(File file) {
+        YamlConfiguration previous = YamlConfiguration.loadConfiguration(file);
+        if (previous.getConfigurationSection("crates.normal") != null
+                && previous.getConfigurationSection("crates.medium") != null
+                && previous.getConfigurationSection("crates.premium") != null) {
+            return;
+        }
+        try {
+            File backup = new File(plugin.getDataFolder(), "crates-legacy-backup.yml");
+            if (!backup.exists()) {
+                java.nio.file.Files.copy(file.toPath(), backup.toPath());
+            }
+            plugin.saveResource("crates.yml", true);
+            YamlConfiguration upgraded = YamlConfiguration.loadConfiguration(file);
+            ConfigurationSection locations = previous.getConfigurationSection("locations");
+            if (locations != null) {
+                for (String id : locations.getKeys(false)) {
+                    ConfigurationSection location = locations.getConfigurationSection(id);
+                    if (location == null) continue;
+                    for (String key : location.getKeys(false)) {
+                        upgraded.set("locations." + id + "." + key, location.get(key));
+                    }
+                }
+            }
+            upgraded.save(file);
+            plugin.getLogger().info("Migrated legacy crate rewards to Normal/Iron, Medium/Diamond and Premium/Netherite. Backup: crates-legacy-backup.yml");
+        } catch (Exception error) {
+            plugin.getLogger().severe("Could not migrate old crate rewards; the original crates.yml was kept where possible: " + error.getMessage());
+        }
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
