@@ -420,7 +420,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         ItemStack keyItem = keyInMainHand ? mainHand : player.getInventory().getItemInOffHand();
         if (!isKey(keyItem, id)) {
             opening.remove(player.getUniqueId());
-            player.sendMessage(color("&cYou need a &f" + id + " &ccrate key."));
+            player.sendMessage(color("&cYou need a &f" + id.toUpperCase(Locale.ROOT) + " &ccosmetic crate key."));
             return;
         }
 
@@ -925,6 +925,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     /** Player-facing Shards shop purchase; no other normal-player key source is provided by GASMP-Core. */
     public void buyKey(Player player, String id) {
+        id = canonicalCrateId(id);
         if (!plugin.getConfig().getBoolean("modules.crates", true) || !plugin.getConfig().getBoolean("key-shop.enabled", true)) {
             player.sendMessage(color("&cThe crate-key shop is currently unavailable."));
             return;
@@ -1027,9 +1028,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(color("&d&l" + id.toUpperCase(Locale.ROOT) + " CRATE KEY"));
+            meta.setDisplayName(color("&d&l" + canonical.toUpperCase(Locale.ROOT) + " COSMETIC KEY"));
             meta.setLore(List.of(color("&7Use at the matching GASMP crate."), color("&8GASMP key")));
-            meta.getPersistentDataContainer().set(crateKey, PersistentDataType.STRING, id);
+            meta.getPersistentDataContainer().set(crateKey, PersistentDataType.STRING, canonical);
             item.setItemMeta(meta);
         }
         return item;
@@ -1123,11 +1124,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private void help(Player player) {
         player.sendMessage(color("&6&lGASMP CRATES &8- &cDeveloper/Owner only"));
         player.sendMessage(color("&e/crates list &7- list configured crates"));
-        player.sendMessage(color("&e/crates set <id> &7- set target chest/barrel"));
+        player.sendMessage(color("&e/crates set <id> &7- legacy vanilla chest/barrel location"));
         player.sendMessage(color("&e/crates unset <id> &7- remove location"));
-        player.sendMessage(color("&eSneak + left-click &7- preview crate loot"));
+        player.sendMessage(color("&eSneak + left-click &7- preview cosmetic loot"));
         player.sendMessage(color("&eMine/punch &7- pick up an already-placed crate"));
-        player.sendMessage(color("&e/crates givekey <player> <id> [amount]"));
+        player.sendMessage(color("&e/crates givekey <player> <normal|medium|premium> [amount]"));
         player.sendMessage(color("&e/crates giveblock <player> <normal|medium|premium> [amount] &7- placeable cosmetic crate block"));
         player.sendMessage(color("&e/crates givemodel <player> <normal|medium|premium> [amount] &7- placeable cosmetic crate display"));
         player.sendMessage(color("&7Example: /crates giveblock " + player.getName() + " normal 1"));
