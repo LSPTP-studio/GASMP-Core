@@ -16,3 +16,30 @@ legendary_key:
   texture: item/legendary_key
   glow: true
   stack: 64
+normal_key:
+  material: TRIPWIRE_HOOK
+  name: "&a&lNORMAL COSMETIC KEY"
+  lore:
+    - "&7Opens the Normal Cosmetic Crate."
+    - "&8GASMP • KEY ITEM"
+  texture: item/vote_key
+  glow: true
+  stack: 64
+medium_key:
+  material: TRIPWIRE_HOOK
+  name: "&b&lMEDIUM COSMETIC KEY"
+  lore:
+    - "&7Opens the Medium Cosmetic Crate."
+    - "&8GASMP • KEY ITEM"
+  texture: item/vote_key
+  glow: true
+  stack: 64
+premium_key:
+  material: TRIPWIRE_HOOK
+  name: "&5&lPREMIUM COSMETIC KEY"
+  lore:
+    - "&7Opens the Premium Cosmetic Crate."
+    - "&8GASMP • KEY ITEM"
+  texture: item/legendary_key
+  glow: true
+  stack: 64
