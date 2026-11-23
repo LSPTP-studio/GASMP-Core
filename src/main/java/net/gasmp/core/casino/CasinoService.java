@@ -161,21 +161,23 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
             return;
         }
         plugin.getEconomyBridge().refresh();
-        if (!plugin.getEconomyBridge().isAvailable()) {
-            player.sendMessage(color("&cThe arcade needs Vault and a Vault-compatible Coins provider."));
-            return;
-        }
         if (spinTasks.containsKey(player.getUniqueId())) {
             player.sendMessage(color("&eYour current arcade animation is still running."));
             return;
         }
+        // Let players browse the styled arcade even before an economy provider is installed.
+        // Bets are blocked at click time and the menu shows the exact missing dependency.
         openMenu(player, 10.0);
     }
 
     private void openMenu(Player player, double selectedBet) {
         CasinoMenuHolder holder = new CasinoMenuHolder(CasinoMenuHolder.Stage.MENU, null, selectedBet);
         Inventory inventory = create(holder, 54, "&8GASMP &7• &6Arcade");
-        set(inventory, 4, Material.SUNFLOWER, "&6&lGASMP ARCADE", "&7Choose a wager, then pick a game.",
+        boolean economyReady = plugin.getEconomyBridge().isAvailable();
+        set(inventory, 4, economyReady ? Material.SUNFLOWER : Material.BARRIER,
+                economyReady ? "&6&lGASMP ARCADE" : "&c&lARCADE LOCKED",
+                economyReady ? "&7Choose a wager, then pick a game."
+                        : "&7Install Vault + a Vault-compatible economy provider.",
                 "&7Virtual Coins only; no real-money deposits or cash-out.");
         double[] bets = {1, 5, 10, 25, 50};
         int[] betSlots = {20, 21, 22, 23, 24};
@@ -445,6 +447,13 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         if (slot == 49 || slot == 35) { player.closeInventory(); return; }
         String action = holder.action(slot);
         if (action == null) return;
+        if (action.startsWith("BET:") || action.startsWith("GAME:") || action.startsWith("PLAY:")) {
+            plugin.getEconomyBridge().refresh();
+            if (!plugin.getEconomyBridge().isAvailable()) {
+                player.sendMessage(color("&cArcade wagers are unavailable: install Vault and a Vault-compatible Coins provider, then restart."));
+                return;
+            }
+        }
         if (action.startsWith("BET:")) {
             openMenu(player, Double.parseDouble(action.substring(4)));
         } else if (action.startsWith("GAME:")) {
