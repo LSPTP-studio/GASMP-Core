@@ -6,7 +6,7 @@ settings:
   cooldown-seconds: 5
   real-money: false
   cashout: false
-# The GUI includes game-themed spin animations. Poker and Tic-Tac-Toe are quick-match simulations, not full board games. A wager is a whole number of Shards.
+# The Arcade has animated solo games and 1v1 player challenges. Tic-Tac-Toe duels use a real turn-based board; Poker uses the existing quick-match hand-strength resolver. All stakes and rewards are virtual Shards.
 games:
   roulette: true
   darts: true

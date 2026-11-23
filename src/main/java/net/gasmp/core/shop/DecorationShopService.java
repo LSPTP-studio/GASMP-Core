@@ -248,26 +248,8 @@ public final class DecorationShopService implements Listener {
     }
 
     private ItemStack createEngineItem(String contentIdText) {
-        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled()) return null;
-        try {
-            ClassLoader loader = engine.getClass().getClassLoader();
-            Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
-            Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
-            if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) return null;
-            java.lang.reflect.Method accessor = engine.getClass().getMethod("items");
-            Object items = accessor.invoke(engine);
-            Class<?> itemsApi = accessor.getReturnType();
-            Object created = itemsApi.getMethod("create", contentIdClass).invoke(items, optional.get());
-            if (created instanceof Optional<?> result && result.isPresent()
-                    && result.get() instanceof ItemStack stack) return stack.clone();
-            if (created instanceof ItemStack stack) return stack.clone();
-        } catch (ReflectiveOperationException | RuntimeException error) {
-            plugin.getLogger().warning("RP Engine could not create decoration '" + contentIdText + "': " + error.getMessage());
-        }
-        return null;
+        return plugin.getCrateService().createContentItem(contentIdText, 1);
     }
-
     private Throwable root(Throwable error) {
         Throwable current = error;
         while (current.getCause() != null) current = current.getCause();

@@ -8,7 +8,9 @@ The command descriptor is the definitive list of registered commands. Commands a
 |---|---|
 | `/gasmp` | Opens the current GASMP menu framework. |
 | `/shards [balance]` | View your Shards balance. |
-| `/shop` | Opens the Coins shop. |
+| `/shop` | Opens the Coins/Shards shop selector. |
+| `/shop coins` | Opens the Vault Coins catalogue directly. |
+| `/shop shards` | Opens the Shards cosmetic-key shop directly. |
 | `/rtp` | Requests a safe random teleport. |
 | `/bounty place <player> <amount>` | Place a Coins bounty on an online player. |
 | `/bounty top` | View active bounties. |
@@ -31,7 +33,10 @@ The command descriptor is the definitive list of registered commands. Commands a
 | `/team sethome [name]` / `/team home [name]` / `/team homes` | Named team homes and home listing. |
 | `/team ally <team>` / `/team allyaccept` / `/team unally <team>` / `/team allies` | Symmetric alliances with configurable limits. |
 | `/battlepass` / `/battlepass claim <level>` | View progress and claim milestone rewards. |
-| `/casino menu` / `/casino odds` / `/casino <game> ...` | Animated game-themed spin UI and virtual-Coins games; disabled by default. Poker/Tic-Tac-Toe remain simplified quick-match simulations. |
+| `/casino menu` / `/casino odds` / `/casino <game> ...` | Animated solo Arcade games paid in virtual Shards; all configured games are enabled by GASMP Core. |
+| `/casino challenge <player> <game> <shards>` | Invite an online player to a 1v1 Shards-staked Arcade match. |
+| `/casino accept` / `/casino decline` | Accept or decline an incoming Arcade challenge. |
+| `/casino duel` | Reopen your pending invitation or active duel. |
 
 ## Staff and administration commands
 
@@ -42,7 +47,7 @@ The command descriptor is the definitive list of registered commands. Commands a
 | `/gasmpadmin [online-player]` | Rank panel; restricted to configured Developer/Owner groups. |
 | `/shards give|take|set <player> <amount> [reason]` | Staff Shards balance adjustment. |
 | `/gvanish` | Toggle GASMP staff vanish. |
-| `/crates list|set|unset|givekey|giveblock|givemodel|reload` | Owner/Developer crate management; `/crates givemodel` gives the animated RP Engine display item. Players use physical keys at configured crate blocks. |
+| `/crates list|set|unset|givekey|giveblock|givemodel|reload` | Owner/Developer crate management; Normal, Medium and Premium have matching keys, placeable physical blocks and animated display models. Left-click previews; sneak + left-click picks up. |
 | `/gmaintenance on|off|status|reload` | Maintenance mode control. Console can also operate it. |
 | `/gban`, `/gunban`, `/gmute`, `/gunmute`, `/gwarn`, `/gkick`, `/ghistory` | Moderation and history. |
 | `/gholo create|set|delete|list|reload` | Basic persistent text-display hologram management. |

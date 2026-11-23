@@ -1,5 +1,5 @@
 name: GASMP-Core
-version: '0.7.5'
+version: '0.7.6'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
@@ -15,6 +15,7 @@ softdepend:
   - TAB
   - Nexo
   - ItemsAdder
+  - Oraxen
   - ImageFrame
   - Typewriter
   - OpenInv
@@ -45,8 +46,8 @@ commands:
     usage: /shards <balance|give|take|set>
     aliases: [shard, gshards]
   shop:
-    description: Opens the GASMP Shard Shop.
-    usage: /shop
+    description: Opens the GASMP shop selector or a specific currency shop.
+    usage: /shop [coins|shards]
   rtp:
     description: Teleports you to a safe random location.
     usage: /rtp
@@ -64,7 +65,7 @@ commands:
     permission: gasmpcore.auction
   casino:
     description: GASMP Shards-based arcade.
-    usage: /casino <menu|game> <bet> [choice]
+    usage: /casino <menu|game|challenge|accept|decline|duel|odds> [arguments]
     permission: gasmpcore.casino.play
   battlepass:
     description: View Battle Pass progress and claim rewards.

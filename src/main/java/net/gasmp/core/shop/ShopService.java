@@ -84,9 +84,9 @@ public final class ShopService implements Listener {
         plugin.getLogger().info("Loaded " + entries.size() + " valid Coins shop entries.");
     }
 
+    /** Opens the actual Vault Coins catalogue. */
     public void open(Player player, int page) {
-        // Legacy /shop is now the Shard Shop; GASMP no longer exposes the Coins catalogue.
-        plugin.getMenuService().open(player, net.gasmp.core.gui.MenuPage.KEY_SHOP);
+        open(player, page, "all");
     }
 
     private void open(Player player, int page, String selectedCategory) {

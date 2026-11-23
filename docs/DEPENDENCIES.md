@@ -26,7 +26,7 @@
 - **PlaceholderAPI:** placeholders in supported external displays.
 - **Geyser + Floodgate:** Bedrock cross-play and identity integration.
 - **RP Engine (recommended free alternative):** optional GPL-3.0 custom-item/block/furniture/model/resource-pack framework. It supports Paper/Purpur 26.2 and reads editable Blockbench `.bbmodel` animations. GASMP includes an original Vote/Legendary crate content pack under `integrations/rp-engine/`. See `integrations/rp-engine/README.md`. Bedrock rendering still needs live Geyser validation.
-- **ItemsAdder / Nexo:** optional alternatives if already installed. GASMP Core does not require a paid asset plugin; do not install multiple overlapping resource-pack engines without testing pack delivery and priority.
+- **ItemsAdder / Oraxen / Nexo:** optional custom-item providers. GASMP cosmetic crate rewards resolve uploaded FNAF, Feral Fantasy and Wing Cosmetics item IDs through these providers at runtime. ItemsAdder is the common provider for all three packs; Oraxen can also serve all three, while Nexo supports the included Feral Fantasy items. Install the asset pack files and rebuild/reload the matching resource pack. Do not install multiple overlapping resource-pack engines without testing pack delivery and priority.
 - **OpenInv:** staff inventory-view integration. Core's restriction listener and LuckPerms nodes aim to keep access read-only.
 - **Lib's Disguises, HeadDatabase/HeadDB, Skript, ImageFrame, Typewriter:** optional third-party tools, separately installed and configured.
 
