@@ -12,17 +12,23 @@ import org.bukkit.block.Block;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Interaction;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -62,6 +68,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // RP Engine executes the custom-block action as console. Player/command-block invocations are rejected.
+        if (command.getName().equalsIgnoreCase("keyall")) {
+            return keyAll(sender, args);
+        }
         if (command.getName().equalsIgnoreCase("gcrateopen")) {
             if (!(sender instanceof ConsoleCommandSender)) {
                 sender.sendMessage("This is an internal crate interaction command.");
@@ -171,90 +180,117 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    /** Both custom note-block crates and legacy configured chest locations are handled here. */
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onCrateInteract(PlayerInteractEvent event) {
         if (!plugin.getConfig().getBoolean("modules.crates", true)) return;
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) return;
-        Player player = event.getPlayer();
-        Block block = event.getClickedBlock();
-        ConfigurationSection locations = config.getConfigurationSection("locations");
-        if (locations == null) return;
-        for (String id : locations.getKeys(false)) {
-            ConfigurationSection location = locations.getConfigurationSection(id);
-            if (location == null) continue;
-            if (location.getString("world", "").equals(block.getWorld().getName())
-                    && location.getInt("x") == block.getX() && location.getInt("y") == block.getY()
-                    && location.getInt("z") == block.getZ()) {
-                event.setCancelled(true);
-                openCrate(player, id);
-                return;
-            }
-        }
+        if (event.getHand() != EquipmentSlot.HAND || event.getClickedBlock() == null) return;
+        Action action = event.getAction();
+        if (action != Action.RIGHT_CLICK_BLOCK && action != Action.LEFT_CLICK_BLOCK) return;
+        String id = crateIdAt(event.getClickedBlock());
+        if (id == null) return;
+        event.setCancelled(true);
+        if (action == Action.RIGHT_CLICK_BLOCK) openCrate(event.getPlayer(), id);
+        else openPreview(event.getPlayer(), id);
     }
 
-    private boolean isConfiguredCrate(Block block) {
+    /** Left-clicking a placed Blockbench crate opens the reward preview, never mines it. */
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    public void onCrateModelInteract(PlayerInteractAtEntityEvent event) {
+        if (!plugin.getConfig().getBoolean("modules.crates", true) || event.getHand() != EquipmentSlot.HAND) return;
+        String id = crateIdFromModelEntity(event.getRightClicked());
+        if (id == null) return;
+        event.setCancelled(true);
+        openCrate(event.getPlayer(), id);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    public void onCrateModelPunch(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player player) || !plugin.getConfig().getBoolean("modules.crates", true)) return;
+        String id = crateIdFromModelEntity(event.getEntity());
+        if (id == null) return;
+        event.setCancelled(true);
+        openPreview(player, id);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    public void onCrateBlockDamage(BlockDamageEvent event) {
+        if (crateIdAt(event.getBlock()) != null) event.setCancelled(true);
+    }
+
+    private String configuredCrateAt(Block block) {
         ConfigurationSection locations = config.getConfigurationSection("locations");
-        if (locations == null) return false;
+        if (locations == null) return null;
         for (String id : locations.getKeys(false)) {
             ConfigurationSection location = locations.getConfigurationSection(id);
-            if (location == null) continue;
-            if (location.getString("world", "").equals(block.getWorld().getName())
+            if (location != null
+                    && location.getString("world", "").equals(block.getWorld().getName())
                     && location.getInt("x") == block.getX()
                     && location.getInt("y") == block.getY()
-                    && location.getInt("z") == block.getZ()) return true;
+                    && location.getInt("z") == block.getZ()) return id;
         }
-        return false;
+        return null;
     }
 
-    private boolean isProtectedCrate(Block block) {
-        return isConfiguredCrate(block) || isRpEngineCrateBlock(block);
+    private String crateIdAt(Block block) {
+        String custom = rpCrateBlockAt(block);
+        if (custom != null) return custom;
+        String configured = configuredCrateAt(block);
+        return configured != null && config.getConfigurationSection("crates." + configured) != null ? configured : null;
     }
 
-    /** Uses only RP Engine's documented public API, accessed reflectively so it remains optional. */
-    private boolean isRpEngineCrateBlock(Block block) {
+    private boolean isConfiguredCrate(Block block) { return configuredCrateAt(block) != null; }
+    private boolean isProtectedCrate(Block block) { return crateIdAt(block) != null; }
+    private boolean isRpEngineCrateBlock(Block block) { return rpCrateBlockAt(block) != null; }
+
+    /** Return the tier from gasmp_crates:<tier>_crate_block, or null if it is not a configured GASMP crate. */
+    private String rpCrateBlockAt(Block block) {
         Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled()) return false;
+        if (engine == null || !engine.isEnabled()) return null;
         try {
             Object blocks = engine.getClass().getMethod("blocks").invoke(engine);
             Object result = blocks.getClass().getMethod("idAt", Block.class).invoke(blocks, block);
-            if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
-            String id = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
-            return id.startsWith("gasmp_crates:") && id.endsWith("_crate_block");
+            if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return null;
+            String raw = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
+            String prefix = "gasmp_crates:";
+            String suffix = "_crate_block";
+            if (!raw.startsWith(prefix) || !raw.endsWith(suffix)) return null;
+            String id = raw.substring(prefix.length(), raw.length() - suffix.length());
+            return config.getConfigurationSection("crates." + id) == null ? null : id;
         } catch (ReflectiveOperationException | RuntimeException ex) {
             plugin.getLogger().fine("RP Engine custom-block lookup unavailable: " + ex.getMessage());
-            return false;
+            return null;
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onCrateBreak(BlockBreakEvent event) {
-        Block block = event.getBlock();
-        boolean configuredLocation = isConfiguredCrate(block);
-        boolean customBlock = isRpEngineCrateBlock(block);
-        if (!configuredLocation && !customBlock) return;
-
-        // Only Owner/Developer can remove a protected crate. RP Engine then handles the custom block drop.
-        if (staff.isOwnerOrDev(event.getPlayer())) {
-            if (configuredLocation) {
-                ConfigurationSection locations = config.getConfigurationSection("locations");
-                if (locations != null) {
-                    for (String id : new ArrayList<>(locations.getKeys(false))) {
-                        ConfigurationSection location = locations.getConfigurationSection(id);
-                        if (location != null
-                                && location.getString("world", "").equals(block.getWorld().getName())
-                                && location.getInt("x") == block.getX() && location.getInt("y") == block.getY()
-                                && location.getInt("z") == block.getZ()) {
-                            config.set("locations." + id, null);
-                        }
-                    }
-                    save();
-                }
-            }
-            return;
+    /** Resolve an RP Engine placed model's id without compiling against its optional API. */
+    private String crateIdFromModelEntity(Entity entity) {
+        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        if (engine == null || !engine.isEnabled() || entity == null) return null;
+        try {
+            Object models = engine.getClass().getMethod("models").invoke(engine);
+            Object result = models.getClass().getMethod("at", Entity.class).invoke(models, entity);
+            if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return null;
+            Object placement = optional.get();
+            String raw = String.valueOf(placement.getClass().getMethod("modelId").invoke(placement)).toLowerCase(Locale.ROOT);
+            int colon = raw.indexOf(':');
+            String slug = colon >= 0 ? raw.substring(colon + 1) : raw;
+            if (slug.endsWith("_crate_display")) slug = slug.substring(0, slug.length() - "_crate_display".length());
+            else if (slug.endsWith("_crate")) slug = slug.substring(0, slug.length() - "_crate".length());
+            return config.getConfigurationSection("crates." + slug) == null ? null : slug;
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            plugin.getLogger().fine("RP Engine model lookup unavailable: " + ex.getMessage());
+            return null;
         }
+    }
 
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    public void onCrateBreak(BlockBreakEvent event) {
+        String id = crateIdAt(event.getBlock());
+        if (id == null) return;
         event.setCancelled(true);
-        event.getPlayer().sendMessage(color("&cThis is a protected GASMP crate. Only Developers and the Owner can remove it."));
+        // Left-click is a preview interaction for every rank, including Owner and Developer.
+        // Remove or relocate configured crates with /crates unset, not by mining the display.
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -325,6 +361,63 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         // Animate first. The key remains in the player's hand until the final frame, so
         // closing the inventory or disconnecting safely cancels the opening without loss.
         animateOpening(player, id, chosen);
+    }
+
+    /** Displays the reward table and weighted odds without consuming a key. */
+    private void openPreview(Player player, String crateId) {
+        ConfigurationSection crate = config.getConfigurationSection("crates." + crateId);
+        ConfigurationSection section = crate == null ? null : crate.getConfigurationSection("rewards");
+        if (section == null) {
+            player.sendMessage(color("&cThis crate has no rewards configured."));
+            return;
+        }
+        long totalWeight = 0L;
+        for (String key : section.getKeys(false)) {
+            ConfigurationSection reward = section.getConfigurationSection(key);
+            if (reward != null) totalWeight += Math.max(0, reward.getInt("weight", 0));
+        }
+        if (totalWeight <= 0L) {
+            player.sendMessage(color("&cThis crate has no valid reward odds configured."));
+            return;
+        }
+
+        CrateAnimationHolder holder = new CrateAnimationHolder(crateId);
+        Inventory inventory = Bukkit.createInventory(holder, 27,
+                color("&8GASMP &7• &e" + crateId.toUpperCase(Locale.ROOT) + " REWARDS"));
+        holder.inventory(inventory);
+        ItemStack filler = named(Material.PURPLE_STAINED_GLASS_PANE, " ");
+        for (int slot = 0; slot < 27; slot++) {
+            if (slot < 9 || slot >= 18 || slot % 9 == 0 || slot % 9 == 8) inventory.setItem(slot, filler.clone());
+        }
+
+        int[] slots = {10, 11, 12, 13, 14, 15, 16};
+        int index = 0;
+        for (String key : section.getKeys(false)) {
+            ConfigurationSection reward = section.getConfigurationSection(key);
+            if (reward == null) continue;
+            int weight = Math.max(0, reward.getInt("weight", 0));
+            if (weight <= 0) continue;
+            if (index >= slots.length) break;
+            String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
+            Material material = switch (type) {
+                case "coins" -> Material.GOLD_INGOT;
+                case "shards" -> Material.AMETHYST_SHARD;
+                default -> Material.matchMaterial(reward.getString("material", "DIAMOND"));
+            };
+            if (material == null || !material.isItem() || material.isAir()) material = Material.CHEST;
+            double chance = weight * 100.0d / totalWeight;
+            long amount = reward.getLong("amount", 1L);
+            inventory.setItem(slots[index++], named(material, "&e&l" + key.replace('_', ' ').toUpperCase(Locale.ROOT),
+                    "&7Reward type: &f" + type.toUpperCase(Locale.ROOT),
+                    "&7Amount: &e" + amount,
+                    "&7Chance: &a" + String.format(Locale.ROOT, "%.2f", chance) + "%",
+                    "&8Weighted drop chance"));
+        }
+        inventory.setItem(22, named(Material.BOOK, "&f&lHow to open",
+                "&7Right-click this crate while holding its matching key.",
+                "&7Left-click to inspect these rewards and chances.",
+                "&8Your key is only consumed when the opening finishes."));
+        player.openInventory(inventory);
     }
 
     private void animateOpening(Player player, String crateId, ConfigurationSection reward) {
@@ -510,6 +603,104 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         opening.remove(player.getUniqueId());
     }
 
+    public boolean giveKeyTo(Player target, String id, int amount, boolean message) {
+        if (target == null || config.getConfigurationSection("crates." + id) == null || amount < 1 || amount > 64) return false;
+        ItemStack key = createKey(id, amount);
+        Map<Integer, ItemStack> left = target.getInventory().addItem(key);
+        left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
+        if (message) target.sendMessage(color("&d&lGASMP &8» &fYou received &d" + amount + " " + id.toUpperCase(Locale.ROOT) + " crate key(s)&f."));
+        return true;
+    }
+
+    /** Player-facing Shards shop purchase; no other normal-player key source is provided by GASMP-Core. */
+    public void buyKey(Player player, String id) {
+        if (!plugin.getConfig().getBoolean("modules.crates", true) || !plugin.getConfig().getBoolean("key-shop.enabled", true)) {
+            player.sendMessage(color("&cThe crate-key shop is currently unavailable."));
+            return;
+        }
+        long price = plugin.getConfig().getLong("key-shop.prices." + id, -1L);
+        if (price < 0L || config.getConfigurationSection("crates." + id) == null) {
+            player.sendMessage(color("&cThat crate key is not for sale."));
+            return;
+        }
+        if (price == 0L) {
+            giveKeyTo(player, id, 1, true);
+            return;
+        }
+        plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
+                "KEY_SHOP", price, PlayerDataStore.ShardChange.TAKE, "Purchased " + id + " crate key")
+                .whenComplete((balance, error) -> Bukkit.getScheduler().runTask(plugin, () -> {
+                    if (!player.isOnline()) return;
+                    if (error != null) {
+                        Throwable cause = error.getCause() == null ? error : error.getCause();
+                        player.sendMessage(color("&cKey purchase failed: " + cause.getMessage()));
+                        return;
+                    }
+                    if (!giveKeyTo(player, id, 1, false)) {
+                        plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
+                                "KEY_SHOP_REFUND", price, PlayerDataStore.ShardChange.GIVE,
+                                "Refund: could not create " + id + " crate key");
+                        player.sendMessage(color("&cThe key could not be created. Your Shards are being refunded."));
+                        return;
+                    }
+                    player.sendMessage(color("&aPurchased a &f" + id.toUpperCase(Locale.ROOT) + " Key &afor &d" + price + " Shards&a. Balance: &d" + balance + " ✦"));
+                }));
+    }
+
+    private boolean keyAll(CommandSender sender, String[] args) {
+        if (!(sender instanceof ConsoleCommandSender) && (!(sender instanceof Player player) || !staff.isOwnerOrDev(player))) {
+            sender.sendMessage(color("&cOnly the Owner and Developers can use /keyall."));
+            return true;
+        }
+        if (args.length < 2) {
+            sender.sendMessage(color("&e/keyall <crate-id|all> <amount> [world:<world>] [silent]"));
+            return true;
+        }
+        String requested = args[0].toLowerCase(Locale.ROOT);
+        List<String> ids = new ArrayList<>();
+        if (requested.equals("all")) {
+            ConfigurationSection crates = config.getConfigurationSection("crates");
+            if (crates != null) ids.addAll(crates.getKeys(false));
+        } else if (config.getConfigurationSection("crates." + requested) != null) ids.add(requested);
+        if (ids.isEmpty()) {
+            sender.sendMessage(color("&cUnknown crate id. Use /crates list."));
+            return true;
+        }
+        int amount;
+        try { amount = Integer.parseInt(args[1]); }
+        catch (NumberFormatException ex) { amount = 0; }
+        if (amount < 1 || amount > 64) {
+            sender.sendMessage(color("&cAmount must be between 1 and 64."));
+            return true;
+        }
+        String worldFilter = null;
+        boolean silent = false;
+        for (int i = 2; i < args.length; i++) {
+            String option = args[i];
+            if (option.equalsIgnoreCase("silent")) silent = true;
+            else if (option.equalsIgnoreCase("online")) { /* online is the default */ }
+            else if (option.toLowerCase(Locale.ROOT).startsWith("world:")) {
+                worldFilter = option.substring("world:".length());
+                if (worldFilter.isBlank() || !worldFilter.matches("[A-Za-z0-9_+.-]+")) {
+                    sender.sendMessage(color("&cInvalid world filter. Use world:<world-name>."));
+                    return true;
+                }
+            } else {
+                sender.sendMessage(color("&cUnknown option: " + option + " &7Options: world:<world>, silent"));
+                return true;
+            }
+        }
+        int recipients = 0;
+        for (Player target : Bukkit.getOnlinePlayers()) {
+            if (worldFilter != null && !target.getWorld().getName().equalsIgnoreCase(worldFilter)) continue;
+            for (String id : ids) giveKeyTo(target, id, amount, false);
+            recipients++;
+        }
+        if (!silent) Bukkit.broadcastMessage(color("&d&lGASMP &8» &f" + amount + " key(s) for " + String.join(", ", ids) + " were distributed to &d" + recipients + " &fplayer(s)."));
+        sender.sendMessage(color("&aDistributed " + amount + " key(s) for " + String.join(", ", ids) + " to " + recipients + " online player(s)."));
+        return true;
+    }
+
     private ItemStack createKey(String id, int amount) {
         ItemStack item = createEngineItem("gasmp_crates:" + id + "_key", amount);
         if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
@@ -569,7 +760,20 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     private boolean isKey(ItemStack item, String id) {
         if (item == null || item.getType().isAir() || !item.hasItemMeta()) return false;
-        return id.equals(item.getItemMeta().getPersistentDataContainer().get(crateKey, PersistentDataType.STRING));
+        String tagged = item.getItemMeta().getPersistentDataContainer().get(crateKey, PersistentDataType.STRING);
+        if (id.equals(tagged)) return true;
+        // Also accept a genuine RP Engine key handed out through /rp give or another RP Engine shop.
+        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        if (engine == null || !engine.isEnabled()) return false;
+        try {
+            Object items = engine.getClass().getMethod("items").invoke(engine);
+            Object result = items.getClass().getMethod("idOf", ItemStack.class).invoke(items, item);
+            if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
+            return ("gasmp_crates:" + id + "_key").equalsIgnoreCase(String.valueOf(optional.get()));
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            plugin.getLogger().fine("RP Engine key identity lookup unavailable: " + ex.getMessage());
+            return false;
+        }
     }
 
     private void save() { try { config.save(new File(plugin.getDataFolder(), "crates.yml")); } catch (Exception ex) { plugin.getLogger().severe("Could not save crates.yml: " + ex.getMessage()); } }
@@ -582,9 +786,22 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         player.sendMessage(color("&e/crates giveblock <player> <id> [amount] &7- custom protected block item"));
         player.sendMessage(color("&e/crates givemodel <player> <id> [amount] &7- animated placed model"));
         player.sendMessage(color("&e/crates reload &7- reload crate definitions"));
+        player.sendMessage(color("&e/keyall <crate-id|all> <amount> [world:<world>] [silent] &7- distribute keys"));
     }
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (command.getName().equalsIgnoreCase("keyall")) {
+            if (args.length == 1) {
+                List<String> values = new ArrayList<>();
+                values.add("all");
+                ConfigurationSection crates = config.getConfigurationSection("crates");
+                if (crates != null) values.addAll(crates.getKeys(false));
+                return values.stream().filter(v -> v.toLowerCase(Locale.ROOT).startsWith(args[0].toLowerCase(Locale.ROOT))).toList();
+            }
+            if (args.length == 3) return List.of("online", "silent", "world:");
+            if (args.length == 4) return List.of("silent");
+            return List.of();
+        }
         if (args.length == 1) return List.of("list", "set", "unset", "givekey", "giveblock", "givemodel", "reload");
         return List.of();
     }
