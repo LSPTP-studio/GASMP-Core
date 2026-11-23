@@ -459,85 +459,136 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         animateOpening(player, id, chosen);
     }
 
-    /** Displays the reward table and weighted odds without consuming a key. */
+    /** Displays every cosmetic reward and its exact weighted chance, with paging. */
     private void openPreview(Player player, String crateId) {
+        openPreview(player, crateId, 0);
+    }
+
+    private void openPreview(Player player, String crateId, int requestedPage) {
         ConfigurationSection crate = config.getConfigurationSection("crates." + crateId);
         ConfigurationSection section = crate == null ? null : crate.getConfigurationSection("rewards");
         if (section == null) {
             player.sendMessage(color("&cThis crate has no rewards configured."));
             return;
         }
+
+        List<String> rewardIds = new ArrayList<>();
         long totalWeight = 0L;
         for (String key : section.getKeys(false)) {
             ConfigurationSection reward = section.getConfigurationSection(key);
-            if (reward != null) totalWeight += Math.max(0, reward.getInt("weight", 0));
+            if (reward == null) continue;
+            int weight = reward.getInt("weight", 0);
+            if (weight <= 0) continue;
+            rewardIds.add(key);
+            totalWeight += weight;
         }
-        if (totalWeight <= 0L) {
-            player.sendMessage(color("&cThis crate has no valid reward odds configured."));
+        if (rewardIds.isEmpty() || totalWeight <= 0L) {
+            player.sendMessage(color("&cThis crate has no valid cosmetic rewards configured."));
             return;
         }
 
-        CrateAnimationHolder holder = new CrateAnimationHolder(crateId);
+        int pageSize = 28;
+        int pages = Math.max(1, (rewardIds.size() + pageSize - 1) / pageSize);
+        int page = Math.max(0, Math.min(requestedPage, pages - 1));
+        CrateAnimationHolder holder = new CrateAnimationHolder(crateId, page);
         Inventory inventory = Bukkit.createInventory(holder, 54,
-                ScreenUi.title("crate_details", "&8GASMP &7• &e" + crateId.toUpperCase(Locale.ROOT) + " LOOT"));
+                ScreenUi.title("crate_details", "&8GASMP &7• &d" + crateId.toUpperCase(Locale.ROOT) + " COSMETICS"));
         holder.inventory(inventory);
-        ItemStack filler = named(Material.PURPLE_STAINED_GLASS_PANE, " ");
+
+        ItemStack[] frame = {
+                named(Material.PURPLE_STAINED_GLASS_PANE, " "),
+                named(Material.MAGENTA_STAINED_GLASS_PANE, " ")
+        };
         for (int slot = 0; slot < 54; slot++) {
             int row = slot / 9;
             int column = slot % 9;
-            if (row == 0 || row == 5 || column == 0 || column == 8) inventory.setItem(slot, filler.clone());
+            if (row == 0 || row == 5 || column == 0 || column == 8) {
+                inventory.setItem(slot, frame[(row + column) & 1].clone());
+            }
         }
 
-        int[] slots = {20, 21, 22, 23, 24, 25, 26};
-        int index = 0;
-        for (String key : section.getKeys(false)) {
-            ConfigurationSection reward = section.getConfigurationSection(key);
-            if (reward == null) continue;
-            int weight = Math.max(0, reward.getInt("weight", 0));
-            if (weight <= 0 || index >= slots.length) continue;
+        int[] slots = {
+                10, 11, 12, 13, 14, 15, 16,
+                19, 20, 21, 22, 23, 24, 25,
+                28, 29, 30, 31, 32, 33, 34,
+                37, 38, 39, 40, 41, 42, 43
+        };
+        int start = page * pageSize;
+        int end = Math.min(rewardIds.size(), start + pageSize);
+        for (int index = start; index < end; index++) {
+            String rewardId = rewardIds.get(index);
+            ConfigurationSection reward = section.getConfigurationSection(rewardId);
+            int weight = reward.getInt("weight", 0);
             ItemStack icon = rewardIcon(reward);
             ItemMeta meta = icon.getItemMeta();
             if (meta != null) {
-                String display = reward.getString("display", key.replace('_', ' ').toUpperCase(Locale.ROOT));
-                meta.setDisplayName(color("&e&l" + display));
+                String name = reward.getString("display", rewardId.replace('_', ' ').toUpperCase(Locale.ROOT));
+                meta.setDisplayName(color("&f&l" + name));
                 List<String> lore = new ArrayList<>();
-                String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
-                lore.add(color(type.equals("key") ? "&dCrate key jackpot"
-                        : type.equals("cosmetic") ? "&dCosmetic collectible" : "&7Reward"));
+                String type = reward.getString("type", "cosmetic").toLowerCase(Locale.ROOT);
+                lore.add(color(type.equals("key") ? "&dCrate key jackpot" : "&7Cosmetic collectible"));
                 lore.add(color("&7Chance: &a" + String.format(Locale.ROOT, "%.2f", weight * 100.0d / totalWeight) + "%"));
-                if (type.equals("item")) {
-                    ConfigurationSection enchants = reward.getConfigurationSection("enchantments");
-                    if (enchants != null) lore.add(color("&bEnchantments: &f" + String.join(", ", enchants.getKeys(false))));
-                }
+                lore.add(color("&8" + reward.getString("content", "GASMP cosmetic")));
                 meta.setLore(lore);
                 icon.setItemMeta(meta);
             }
-            inventory.setItem(slots[index++], icon);
+            inventory.setItem(slots[index - start], icon);
         }
-        inventory.setItem(31, named(Material.BOOK, "&f&lHOW TO OPEN",
-                "&7Right-click while holding the matching key.",
-                "&7Sneak + left-click to inspect cosmetics and odds.",
-                "&8Keys are consumed only after the opening animation."));
+
+        if (page > 0) inventory.setItem(45, named(Material.ARROW, "&f&lPrevious page"));
+        inventory.setItem(49, named(Material.BOOK, "&d&l" + crateId.toUpperCase(Locale.ROOT) + " COSMETICS",
+                "&7" + rewardIds.size() + " collectible rewards",
+                "&7Page &f" + (page + 1) + "&7 / &f" + pages,
+                "&8Right-click with its matching key to open."));
+        if (page + 1 < pages) inventory.setItem(53, named(Material.ARROW, "&f&lNext page"));
         player.openInventory(inventory);
     }
 
     private void animateOpening(Player player, String crateId, ConfigurationSection reward) {
         CrateAnimationHolder holder = new CrateAnimationHolder(crateId);
-        Inventory inventory = Bukkit.createInventory(holder, 54, ScreenUi.title("crates", "&8GASMP &7• &d" + crateId.toUpperCase(Locale.ROOT) + " CRATE"));
+        Inventory inventory = Bukkit.createInventory(holder, 54,
+                ScreenUi.title("crates", "&8GASMP &7• &d" + crateId.toUpperCase(Locale.ROOT) + " CRATE"));
         holder.inventory(inventory);
-        ItemStack filler = named(Material.PURPLE_STAINED_GLASS_PANE, " ");
-        for (int i = 0; i < inventory.getSize(); i++) {
-            int row = i / 9;
-            int column = i % 9;
-            if (row == 0 || row == 5 || column == 0 || column == 8) inventory.setItem(i, filler.clone());
-        }
-        inventory.setItem(22, named(Material.CHEST, "&d&lOPENING...", "&7Your reward is being rolled."));
-        player.openInventory(inventory);
 
-        Material[] reel = {Material.AMETHYST_SHARD, Material.DIAMOND, Material.EMERALD,
-                Material.GOLD_INGOT, Material.NETHERITE_INGOT, Material.EXPERIENCE_BOTTLE,
-                Material.PRISMARINE_CRYSTALS, Material.BLAZE_POWDER};
+        Material[] borderMaterials = {
+                Material.PURPLE_STAINED_GLASS_PANE,
+                Material.MAGENTA_STAINED_GLASS_PANE,
+                Material.CYAN_STAINED_GLASS_PANE,
+                Material.AMETHYST_BLOCK
+        };
+        int[] borderSlots = {
+                0,1,2,3,4,5,6,7,8, 9,17, 18,26, 27,35, 36,44,
+                45,46,47,48,49,50,51,52,53
+        };
+        for (int i = 0; i < borderSlots.length; i++) {
+            inventory.setItem(borderSlots[i], named(borderMaterials[i % borderMaterials.length], " "));
+        }
+        inventory.setItem(4, named(Material.FIREWORK_STAR,
+                "&d&lGASMP COSMETIC VAULT",
+                "&7A collectible is waiting inside..."));
+        inventory.setItem(22, named(Material.SHULKER_BOX, "&d&lUNSEALING...",
+                "&7The crate is searching for a reward."));
+        inventory.setItem(31, named(Material.ENCHANTED_BOOK,
+                "&5&lGOOD LUCK",
+                "&7Watch the reel. The key is only consumed at the reveal."));
+        player.openInventory(inventory);
+        player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 0.8f, 0.8f);
+        player.playSound(player.getLocation(), Sound.BLOCK_BEACON_AMBIENT, 0.45f, 1.4f);
+
+        ConfigurationSection crate = config.getConfigurationSection("crates." + crateId + ".rewards");
+        List<ItemStack> reelItems = new ArrayList<>();
+        if (crate != null) {
+            for (String key : crate.getKeys(false)) {
+                ConfigurationSection candidate = crate.getConfigurationSection(key);
+                if (candidate == null || candidate.getInt("weight", 0) <= 0) continue;
+                ItemStack icon = rewardIcon(candidate);
+                if (icon != null && !icon.getType().isAir()) reelItems.add(icon);
+            }
+        }
+        if (reelItems.isEmpty()) reelItems.add(new ItemStack(Material.PAPER));
+
         final int[] ticks = {0};
+        final int maxTicks = 82;
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             if (!player.isOnline() || player.getOpenInventory().getTopInventory().getHolder() != holder) {
                 BukkitTask current = animationTasks.remove(player.getUniqueId());
@@ -545,25 +596,74 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 opening.remove(player.getUniqueId());
                 return;
             }
-            ticks[0]++;
-            for (int slot : new int[]{21, 22, 23}) {
-                Material material = reel[ThreadLocalRandom.current().nextInt(reel.length)];
-                inventory.setItem(slot, named(material, "&e&l" + material.name().replace('_', ' ')));
+
+            int tick = ++ticks[0];
+            int borderOffset = (tick / 3) % borderMaterials.length;
+            for (int i = 0; i < borderSlots.length; i++) {
+                if ((i + tick) % 3 == 0) {
+                    inventory.setItem(borderSlots[i], named(
+                            borderMaterials[(i + borderOffset) % borderMaterials.length], " "));
+                }
             }
-            if (ticks[0] % 5 == 0) player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.55f,
-                    0.7f + (ticks[0] / 60.0f));
-            if (ticks[0] >= 50) {
+
+            // Three custom-model items roll together, then slow down in staggered steps.
+            int interval = tick < 48 ? 1 : tick < 62 ? 2 : tick < 72 ? 4 : 8;
+            if (tick <= 76 && tick % interval == 0) {
+                inventory.setItem(20, reelItems.get(ThreadLocalRandom.current().nextInt(reelItems.size())).clone());
+                inventory.setItem(22, reelItems.get(ThreadLocalRandom.current().nextInt(reelItems.size())).clone());
+                inventory.setItem(24, reelItems.get(ThreadLocalRandom.current().nextInt(reelItems.size())).clone());
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT,
+                        0.35f, Math.min(2.0f, 0.65f + tick / 55.0f));
+            }
+
+            if (tick == 34) {
+                player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.65f, 1.1f);
+                player.sendTitle(color("&d&lGASMP VAULT"), color("&7The seals are breaking..."), 0, 22, 4);
+            } else if (tick == 58) {
+                player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 0.8f, 1.0f);
+                player.sendTitle(color("&5&lALMOST THERE"), color("&dOne final roll..."), 0, 24, 4);
+            }
+
+            if (tick >= maxTicks) {
                 BukkitTask current = animationTasks.remove(player.getUniqueId());
                 if (current != null) current.cancel();
-                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.0f);
-                inventory.setItem(22, rewardPreview(reward));
+
+                ItemStack revealed = rewardPreview(reward);
+                inventory.setItem(20, named(Material.PURPLE_STAINED_GLASS_PANE, " "));
+                inventory.setItem(22, revealed);
+                inventory.setItem(24, named(Material.MAGENTA_STAINED_GLASS_PANE, " "));
+                inventory.setItem(31, named(Material.FIREWORK_STAR,
+                        "&d&lCOSMETIC REVEALED",
+                        "&7" + reward.getString("display", "Mystery cosmetic"),
+                        "&8Delivering to your inventory..."));
+
+                org.bukkit.Location center = player.getLocation().clone().add(0, 1.0, 0);
+                org.bukkit.World world = player.getWorld();
+                for (int i = 0; i < 64; i++) {
+                    double angle = (Math.PI * 2.0 * i) / 64.0;
+                    double radius = 0.65 + (i % 4) * 0.12;
+                    org.bukkit.Location point = center.clone().add(
+                            Math.cos(angle) * radius,
+                            0.15 + (i % 8) * 0.12,
+                            Math.sin(angle) * radius);
+                    world.spawnParticle(org.bukkit.Particle.END_ROD, point, 1, 0, 0, 0, 0);
+                }
+                world.spawnParticle(org.bukkit.Particle.TOTEM_OF_UNDYING, center, 48, 0.65, 0.9, 0.65, 0.12);
+                world.spawnParticle(org.bukkit.Particle.FIREWORK, center, 36, 0.55, 0.75, 0.55, 0.08);
+                world.spawnParticle(org.bukkit.Particle.WITCH, center, 28, 0.55, 0.8, 0.55, 0.04);
+                player.playSound(center, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 0.85f);
+                player.playSound(center, Sound.ENTITY_PLAYER_LEVELUP, 0.8f, 1.35f);
+                player.sendTitle(color("&d&lCOSMETIC UNLOCKED"),
+                        color("&f" + reward.getString("display", "Mystery cosmetic")), 3, 48, 12);
+
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     if (!player.isOnline() || player.getOpenInventory().getTopInventory().getHolder() != holder) {
                         opening.remove(player.getUniqueId());
                         return;
                     }
                     boolean mainHand = isKey(player.getInventory().getItemInMainHand(), crateId);
-                    ItemStack keyItem = mainHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+                    ItemStack keyItem = mainHand ? player.getInventory().getItemInMainHand()
+                            : player.getInventory().getItemInOffHand();
                     if (!isKey(keyItem, crateId)) {
                         opening.remove(player.getUniqueId());
                         player.sendMessage(color("&cYour crate key is no longer in your hand. No reward was issued."));
@@ -573,7 +673,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                     consumeKey(player, mainHand, keyItem);
                     player.closeInventory();
                     deliver(player, reward, crateId);
-                }, 12L);
+                }, 24L);
             }
         }, 0L, 1L);
         animationTasks.put(player.getUniqueId(), task);
@@ -669,7 +769,17 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     @EventHandler
     public void onCrateAnimationClick(InventoryClickEvent event) {
-        if (event.getView().getTopInventory().getHolder() instanceof CrateAnimationHolder) event.setCancelled(true);
+        if (!(event.getView().getTopInventory().getHolder() instanceof CrateAnimationHolder holder)) return;
+        event.setCancelled(true);
+        if (!holder.isPreview() || !(event.getWhoClicked() instanceof Player player)) return;
+        ConfigurationSection rewards = config.getConfigurationSection("crates." + holder.crateId() + ".rewards");
+        int count = rewards == null ? 0 : rewards.getKeys(false).size();
+        int pages = Math.max(1, (count + 27) / 28);
+        if (event.getRawSlot() == 45 && holder.page() > 0) {
+            openPreview(player, holder.crateId(), holder.page() - 1);
+        } else if (event.getRawSlot() == 53 && holder.page() + 1 < pages) {
+            openPreview(player, holder.crateId(), holder.page() + 1);
+        }
     }
 
     @EventHandler
