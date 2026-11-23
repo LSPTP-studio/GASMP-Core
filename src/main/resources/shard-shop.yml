@@ -67,6 +67,17 @@ items:
       - "LANTERN:2"
       - "ARMOR_STAND:1"
       - "FLOWER_POT:2"
+  modern_sofa:
+    category: furniture
+    icon: LIGHT_BLUE_BED
+    name: "&b&lGASMP Modern Sofa"
+    price: 180
+    lore:
+      - "&7A placeable 3D sofa with a sit animation."
+      - "&8GASMP Furniture Collection."
+      - "&7Purchased with Shards."
+    custom-items:
+      - "gasmp_furniture:modern_sofa:1"
   modern_furniture:
     category: furniture
     icon: QUARTZ_STAIRS
