@@ -1,5 +1,5 @@
 # RP Engine animated rank badges. LuckPerms groups receive rpengine.tag.gasmp_ranks.<id>.
-owner:
+gasmp_owner:
   priority: 1000
   tag:
     text: OWNER
@@ -8,7 +8,7 @@ owner:
     shape: pill
     icon: crown
     animation: glint
-admin:
+gasmp_admin:
   priority: 950
   tag:
     text: ADMIN
@@ -17,7 +17,7 @@ admin:
     shape: pill
     icon: shield
     animation: pulse
-manager:
+gasmp_manager:
   priority: 900
   tag:
     text: MANAGER
@@ -26,7 +26,7 @@ manager:
     shape: pill
     icon: star
     animation: glint
-dev:
+gasmp_dev:
   priority: 850
   tag:
     text: DEV
@@ -35,7 +35,7 @@ dev:
     shape: pill
     icon: hammer
     animation: glint
-builder:
+gasmp_builder:
   priority: 800
   tag:
     text: BUILDER
@@ -44,7 +44,7 @@ builder:
     shape: pill
     icon: hammer
     animation: pulse
-mod:
+gasmp_mod:
   priority: 750
   tag:
     text: MOD
@@ -53,7 +53,7 @@ mod:
     shape: pill
     icon: shield
     animation: glint
-helper:
+gasmp_helper:
   priority: 700
   tag:
     text: HELPER
@@ -62,7 +62,7 @@ helper:
     shape: pill
     icon: heart
     animation: twinkle
-youtuber:
+gasmp_youtuber:
   priority: 650
   tag:
     text: YOUTUBER
@@ -71,7 +71,7 @@ youtuber:
     shape: pill
     icon: play
     animation: glint
-tiktoker:
+gasmp_tiktoker:
   priority: 640
   tag:
     text: TIKTOKER
@@ -80,7 +80,7 @@ tiktoker:
     shape: pill
     icon: music
     animation: rainbow
-streamer:
+gasmp_streamer:
   priority: 630
   tag:
     text: STREAMER
@@ -89,7 +89,7 @@ streamer:
     shape: pill
     icon: broadcast
     animation: pulse
-famous:
+gasmp_famous:
   priority: 620
   tag:
     text: FAMOUS
@@ -98,7 +98,7 @@ famous:
     shape: pill
     icon: star
     animation: twinkle
-booster:
+gasmp_booster:
   priority: 550
   tag:
     text: BOOSTER
@@ -107,7 +107,7 @@ booster:
     shape: pill
     icon: lightning
     animation: glint
-mvpplus:
+gasmp_mvpplus:
   priority: 540
   tag:
     text: MVP+
@@ -116,7 +116,7 @@ mvpplus:
     shape: pill
     icon: gem
     animation: glint
-mvp:
+gasmp_mvp:
   priority: 530
   tag:
     text: MVP
@@ -125,7 +125,7 @@ mvp:
     shape: pill
     icon: star
     animation: pulse
-vipplus:
+gasmp_vipplus:
   priority: 520
   tag:
     text: VIP+
@@ -134,7 +134,7 @@ vipplus:
     shape: pill
     icon: crown
     animation: glint
-vip:
+gasmp_vip:
   priority: 510
   tag:
     text: VIP
@@ -143,7 +143,7 @@ vip:
     shape: pill
     icon: crown
     animation: pulse
-user:
+gasmp_user:
   priority: 500
   tag:
     text: USER
@@ -152,7 +152,7 @@ user:
     shape: round
     icon: player
     animation: none
-legendary:
+gasmp_legendary:
   priority: 450
   tag:
     text: LEGENDARY
@@ -161,7 +161,7 @@ legendary:
     shape: pill
     icon: crown
     animation: rainbow
-heroic:
+gasmp_heroic:
   priority: 440
   tag:
     text: HEROIC
@@ -170,7 +170,7 @@ heroic:
     shape: pill
     icon: flame
     animation: glint
-epic:
+gasmp_epic:
   priority: 430
   tag:
     text: EPIC
@@ -179,7 +179,7 @@ epic:
     shape: pill
     icon: star
     animation: twinkle
-rare:
+gasmp_rare:
   priority: 420
   tag:
     text: RARE
@@ -188,7 +188,7 @@ rare:
     shape: pill
     icon: diamond
     animation: pulse
-uncommon:
+gasmp_uncommon:
   priority: 410
   tag:
     text: UNCOMMON
@@ -197,7 +197,7 @@ uncommon:
     shape: pill
     icon: emerald
     animation: twinkle
-common:
+gasmp_common:
   priority: 400
   tag:
     text: COMMON
