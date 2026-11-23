@@ -25,6 +25,7 @@ import net.gasmp.core.rank.RankAdminMenu;
 import net.gasmp.core.rank.RankService;
 import net.gasmp.core.rtp.RtpService;
 import net.gasmp.core.shop.ShopService;
+import net.gasmp.core.shop.DecorationShopService;
 import net.gasmp.core.skills.ToolSkillsService;
 import net.gasmp.core.staff.CommandRestrictionService;
 import net.gasmp.core.staff.StaffAccess;
@@ -43,6 +44,7 @@ public final class GASMPCore extends JavaPlugin {
     private RankService rankService;
     private VaultEconomyBridge economyBridge;
     private ShopService shopService;
+    private DecorationShopService decorationShopService;
     private CombatService combatService;
     private RtpService rtpService;
     private AuctionService auctionService;
@@ -62,7 +64,8 @@ public final class GASMPCore extends JavaPlugin {
         migrateUserSettings();
         for (String resource : new String[]{
                 "ranks.yml", "shop.yml", "rtp.yml", "casino.yml", "battlepass.yml",
-                "crates.yml", "chat-games.yml", "maintenance.yml", "holograms.yml"
+                "crates.yml", "cosmetics-crate.yml", "decoration-shop.yml",
+                "chat-games.yml", "maintenance.yml", "holograms.yml"
         }) saveIfMissing(resource);
 
         dataStore = new PlayerDataStore(new File(getDataFolder(), getConfig().getString("storage.sqlite-file", "data.db")));
@@ -106,6 +109,8 @@ public final class GASMPCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(casinoService, this);
         crateService = new CrateService(this, staffAccess);
         getServer().getPluginManager().registerEvents(crateService, this);
+        decorationShopService = new DecorationShopService(this);
+        getServer().getPluginManager().registerEvents(decorationShopService, this);
         keyRewardBridge = new KeyRewardBridge(this, crateService);
         keyRewardBridge.start();
         teamService = new TeamService(this);
@@ -212,6 +217,7 @@ public final class GASMPCore extends JavaPlugin {
     public RankService getRankService() { return rankService; }
     public VaultEconomyBridge getEconomyBridge() { return economyBridge; }
     public ShopService getShopService() { return shopService; }
+    public DecorationShopService getDecorationShopService() { return decorationShopService; }
     public CrateService getCrateService() { return crateService; }
     public CombatService getCombatService() { return combatService; }
     public RtpService getRtpService() { return rtpService; }
@@ -228,6 +234,7 @@ public final class GASMPCore extends JavaPlugin {
         if (casinoService != null) casinoService.reload();
         if (battlePassService != null) battlePassService.reload();
         if (crateService != null) crateService.reload();
+        if (decorationShopService != null) decorationShopService.reload();
         if (maintenanceService != null) maintenanceService.reload();
         if (hologramService != null) hologramService.reload();
         if (chatGameService != null) { chatGameService.reload(); chatGameService.startScheduler(); }
