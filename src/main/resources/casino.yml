@@ -1,4 +1,4 @@
-# GASMP arcade enabled by default. Uses virtual in-server Coins via Vault only.
+# GASMP Arcade enabled by default. Uses virtual Shards from the GASMP player ledger.
 settings:
   enabled: true
   minimum-bet: 1
