@@ -59,6 +59,7 @@ public final class GASMPCore extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        migrateUserSettings();
         for (String resource : new String[]{
                 "ranks.yml", "shop.yml", "rtp.yml", "casino.yml", "battlepass.yml",
                 "crates.yml", "chat-games.yml", "maintenance.yml", "holograms.yml"
@@ -168,6 +169,23 @@ public final class GASMPCore extends JavaPlugin {
 
     private boolean BukkitCompatibleVault() {
         return economyBridge != null && economyBridge.isAvailable();
+    }
+
+    private void migrateUserSettings() {
+        // GASMP now uses Shards for the Shard Shop and Arcade. Keep existing
+        // server config files, but add the tier prices and enable the requested arcade.
+        getConfig().set("modules.casino", true);
+        getConfig().set("key-shop.enabled", true);
+        getConfig().addDefault("key-shop.prices.normal", 100L);
+        getConfig().addDefault("key-shop.prices.medium", 300L);
+        getConfig().addDefault("key-shop.prices.premium", 800L);
+        if (!getConfig().contains("key-shop.prices.normal")) getConfig().set("key-shop.prices.normal", 100L);
+        if (!getConfig().contains("key-shop.prices.medium")) getConfig().set("key-shop.prices.medium", 300L);
+        if (!getConfig().contains("key-shop.prices.premium")) getConfig().set("key-shop.prices.premium", 800L);
+        getConfig().set("game-worlds.paintball-command", "mv teleport paintball");
+        getConfig().set("game-worlds.gokarts-command", "kart arena generate 1");
+        getConfig().set("game-worlds.skatepark-command", "mv teleport skatepark");
+        saveConfig();
     }
 
     private void saveIfMissing(String name) {
