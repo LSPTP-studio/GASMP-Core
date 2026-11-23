@@ -243,7 +243,7 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         if (spinTasks.containsKey(player.getUniqueId())) return;
         CasinoMenuHolder holder = new CasinoMenuHolder(CasinoMenuHolder.Stage.SPIN, game, bet);
         Inventory inventory = create(holder, 27, ScreenUi.title("casino_spin", "&8GASMP &7• &6Spinning..."));
-        set(inventory, 4, Material.CLOCK, "&6&lGOOD LUCK", "&7Wager: &e" + money(bet) + " Coins");
+        set(inventory, 4, Material.CLOCK, "&6&lGOOD LUCK", "&7Wager: &e" + money(bet) + " Shards");
         player.openInventory(inventory);
         spinTicks.put(player.getUniqueId(), 0);
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
@@ -262,7 +262,7 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
                 cancelSpin(player.getUniqueId());
                 player.closeInventory();
                 // Resolve the server-side result only after the cosmetic spin has finished.
-                onCommand(player, null, "casino", new String[]{game, Double.toString(bet), choice});
+                onCommand(player, null, "casino", new String[]{game, Long.toString(Math.round(bet)), choice});
             }
         }, 0L, 1L);
         spinTasks.put(player.getUniqueId(), task);
@@ -572,7 +572,7 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         player.sendMessage(color("&e/casino tictactoe <bet> &7- simplified quick-match simulation, not a board game"));
         player.sendMessage(color("&e/casino poker <bet> &7- simplified hand-strength quick match, not full poker"));
         player.sendMessage(color("&e/casino odds &7- view selected payout rules"));
-        player.sendMessage(color("&cVirtual Coins only. No real-money gambling, deposits or cash-out."));
+        player.sendMessage(color("&dShards are virtual server currency. No real-money deposits or cash-out."));
     }
 
     private void requireChoice(String choice, List<String> allowed, String message) {
