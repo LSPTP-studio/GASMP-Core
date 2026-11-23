@@ -345,7 +345,7 @@ public final class RankAdminMenu implements Listener, CommandExecutor, TabComple
             Class<?> api = Class.forName("me.clip.placeholderapi.PlaceholderAPI");
             Method method = api.getMethod("setPlaceholders", OfflinePlayer.class, String.class);
             String parsed = (String) method.invoke(null, player, ranks.imagePlaceholder(rank));
-            if (parsed != null && !parsed.contains("%img_")) return parsed + " ";
+            if (parsed != null && !parsed.contains("%rpengine_icon_")) return parsed + " ";
         } catch (ReflectiveOperationException ignored) {
             // Plain rank label and vanilla item icon remain the safe fallback.
         }
