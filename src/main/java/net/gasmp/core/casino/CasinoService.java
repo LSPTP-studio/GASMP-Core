@@ -1,6 +1,7 @@
 package net.gasmp.core.casino;
 
 import net.gasmp.core.GASMPCore;
+import net.gasmp.core.gui.ScreenUi;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
