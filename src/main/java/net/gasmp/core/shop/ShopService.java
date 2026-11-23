@@ -85,7 +85,8 @@ public final class ShopService implements Listener {
     }
 
     public void open(Player player, int page) {
-        open(player, page, "all");
+        // Legacy /shop is now the Shard Shop; GASMP no longer exposes the Coins catalogue.
+        plugin.getMenuService().open(player, net.gasmp.core.gui.MenuPage.KEY_SHOP);
     }
 
     private void open(Player player, int page, String selectedCategory) {
