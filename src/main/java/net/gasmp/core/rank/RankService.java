@@ -114,6 +114,13 @@ public final class RankService {
         grant(groupPermissions, "mod", "gasmpcore.staff.vanish");
         grant(groupPermissions, "helper", "gasmpcore.staff.vanish");
 
+        // RP Engine rank tags are animated resource-pack icons. Each LuckPerms rank group
+        // receives only the tag permission matching its configured GASMP rank.
+        for (RankDefinition rank : byKey.values()) {
+            grant(groupPermissions, rank.group(),
+                    "rpengine.tag.gasmp_ranks." + rank.imageKey().toLowerCase(Locale.ROOT));
+        }
+
         Map<String, RankDefinition> groupsToCreate = new LinkedHashMap<>();
         for (RankDefinition rank : byKey.values()) groupsToCreate.put(rank.group(), rank);
         for (String name : groupPermissions.keySet()) groupsToCreate.putIfAbsent(name, null);
@@ -256,7 +263,9 @@ public final class RankService {
 
     public List<RankDefinition> getRanks() { return List.copyOf(byKey.values()); }
     public RankDefinition getRank(String key) { return byKey.get(key.toLowerCase(Locale.ROOT)); }
-    public String imagePlaceholder(RankDefinition rank) { return "%img_" + rank.imageKey() + "%"; }
+    public String imagePlaceholder(RankDefinition rank) {
+        return "%rpengine_icon_gasmp_ranks:" + rank.imageKey().toLowerCase(Locale.ROOT) + "%";
+    }
     public CompletableFuture<Void> readyFuture() { return ready; }
     public boolean isReady() { return luckPerms != null && ready.isDone() && !ready.isCompletedExceptionally(); }
 

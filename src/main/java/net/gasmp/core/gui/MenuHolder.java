@@ -11,6 +11,7 @@ public final class MenuHolder implements InventoryHolder {
     private final MenuPage page;
     private final Map<Integer, MenuPage> navigation = new HashMap<>();
     private final Map<Integer, String> notices = new HashMap<>();
+    private final Map<Integer, String> commands = new HashMap<>();
     private Inventory inventory;
 
     public MenuHolder(MenuPage page) {
@@ -31,6 +32,14 @@ public final class MenuHolder implements InventoryHolder {
 
     public void notice(int slot, String message) {
         notices.put(slot, message);
+    }
+
+    public void command(int slot, String command) {
+        commands.put(slot, command);
+    }
+
+    public String commandAt(int slot) {
+        return commands.get(slot);
     }
 
     public MenuPage navigationAt(int slot) {

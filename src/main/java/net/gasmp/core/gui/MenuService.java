@@ -37,8 +37,12 @@ public final class MenuService implements Listener {
     }
 
     public void open(Player player, MenuPage page) {
-        if (page == MenuPage.SHOP) {
-            plugin.getShopService().open(player, 0);
+        if (page == MenuPage.SHARD_SHOP) {
+            plugin.getShardShopService().open(player, 0);
+            return;
+        }
+        if (page == MenuPage.CASINO) {
+            plugin.getCasinoService().openGui(player);
             return;
         }
         if (!plugin.getConfig().getBoolean("menus.enabled", true)) {
@@ -53,11 +57,12 @@ public final class MenuService implements Listener {
 
         switch (page) {
             case MAIN -> buildMain(holder, inventory);
-            case SHOP -> buildShop(holder, inventory);
             case STATISTICS -> buildStatistics(holder, inventory, player);
             case DECORATIONS -> buildDecorations(holder, inventory);
             case MUSIC -> buildMusic(holder, inventory);
             case SHARDS -> buildShards(holder, inventory);
+            case SHARD_SHOP -> { }
+            case UTILITY -> buildUtility(holder, inventory);
             case CASINO -> buildCasino(holder, inventory);
             case PROFILE -> buildProfile(holder, inventory, player);
             case SETTINGS -> buildSettings(holder, inventory);
@@ -74,42 +79,56 @@ public final class MenuService implements Listener {
     }
 
     private void buildMain(MenuHolder holder, Inventory inventory) {
-        set(inventory, 10, Material.EMERALD, "&b&lShop", "&7Browse the GASMP storefront", "&eClick to open");
-        holder.navigate(10, MenuPage.SHOP);
-
-        set(inventory, 12, Material.WRITABLE_BOOK, "&d&lStatistics", "&7View your server statistics", "&eClick to open");
-        holder.navigate(12, MenuPage.STATISTICS);
-
-        set(inventory, 14, Material.ARMOR_STAND, "&9&lDecorations", "&7Browse cosmetic decorations", "&eClick to open");
-        holder.navigate(14, MenuPage.DECORATIONS);
-
-        set(inventory, 16, Material.MUSIC_DISC_13, "&5&lMusic", "&7Open the GASMP music player", "&eClick to open");
-        holder.navigate(16, MenuPage.MUSIC);
-        set(inventory, 20, Material.ENDER_PEARL, "&b&lRandom Teleport", "&7Find a safe wilderness location", "&eClick to use /rtp");
-        holder.notice(20, "&bUse /rtp to find a safe wilderness location.");
-        set(inventory, 24, Material.TARGET, "&6&lBounties", "&7Place and claim player bounties", "&eUse /bounty");
-        holder.notice(24, "&6Use /bounty place <player> <amount> or /bounty top.");
-
-        set(inventory, 28, Material.AMETHYST_SHARD, "&d&lShards", "&7Your secondary GASMP currency", "&eClick to open");
-        holder.navigate(28, MenuPage.SHARDS);
-
-        set(inventory, 30, Material.FIREWORK_ROCKET, "&6&lCasino", "&7Arcade-style mini-games", "&eClick to view games");
-        holder.navigate(30, MenuPage.CASINO);
-
-        set(inventory, 32, Material.PLAYER_HEAD, "&a&lProfile", "&7Your player overview", "&eClick to open");
-        holder.navigate(32, MenuPage.PROFILE);
-
-        set(inventory, 34, Material.COMPARATOR, "&f&lSettings", "&7Personal menu preferences", "&eClick to open");
-        holder.navigate(34, MenuPage.SETTINGS);
-
+        set(inventory, 4, Material.NETHER_STAR, "&d&lGASMP NETWORK",
+                "&7Survival  &8•  &dShards  &8•  &6Arcade",
+                "&8Your server, your progression.");
+        set(inventory, 11, Material.AMETHYST_CLUSTER, "&d&lShard Shop",
+                "&7Furniture, decor and exclusive rewards",
+                "&7Browse the GASMP rewards catalogue", "&eClick to open");
+        holder.navigate(11, MenuPage.SHARD_SHOP);
+        set(inventory, 13, Material.FIREWORK_ROCKET, "&6&lArcade",
+                "&7Animated GASMP mini-games", "&eClick to open");
+        holder.navigate(13, MenuPage.CASINO);
+        set(inventory, 15, Material.COMPASS, "&b&lAdventure",
+                "&7Teleport, teams, bounties and auctions", "&eClick to open");
+        holder.navigate(15, MenuPage.UTILITY);
+        set(inventory, 21, Material.ARMOR_STAND, "&9&lDecorations",
+                "&7Furniture kits and building decor", "&eClick to browse");
+        holder.navigate(21, MenuPage.DECORATIONS);
+        set(inventory, 23, Material.PLAYER_HEAD, "&a&lProfile",
+                "&7Your player overview and Shards wallet", "&eClick to open");
+        holder.navigate(23, MenuPage.PROFILE);
+        set(inventory, 25, Material.WRITABLE_BOOK, "&d&lStatistics",
+                "&7Kills, deaths and playtime", "&eClick to open");
+        holder.navigate(25, MenuPage.STATISTICS);
+        set(inventory, 33, Material.CHEST, "&6&lCrate Catalogue",
+                "&7Browse crate rewards and drop chances",
+                "&7Opening requires a matching physical key", "&eClick to browse");
+        holder.command(33, "crate");
+        set(inventory, 31, Material.NETHER_STAR, "&d&lRanks",
+                "&7Browse Staff, Creator, Supporter and Prestige ranks",
+                "&7Rank groups and prefixes are managed by LuckPerms", "&eClick to browse");
+        holder.command(31, "ranks");
         set(inventory, 49, Material.BARRIER, "&c&lClose", "&7Close this menu");
     }
 
-    private void buildShop(MenuHolder holder, Inventory inventory) {
-        // The SHOP page is redirected to ShopService.open() before this builder is reached.
-        // Keep a safe fallback in case a future refactor changes that routing.
-        set(inventory, 22, Material.GOLD_INGOT, "&e&lCoins Shop", "&7The live Vault-backed catalogue is loading.");
-        holder.notice(22, "&eUse /shop to open the live GASMP Coins catalogue.");
+    
+    private void buildUtility(MenuHolder holder, Inventory inventory) {
+        set(inventory, 11, Material.ENDER_PEARL, "&b&lRandom Teleport",
+                "&7Search for a safe wilderness location", "&eClick to run /rtp");
+        holder.command(11, "rtp");
+        set(inventory, 13, Material.TARGET, "&6&lBounties",
+                "&7Place a bounty or view the leaderboard", "&eClick to run /bounty");
+        holder.command(13, "bounty");
+        set(inventory, 15, Material.SHIELD, "&a&lTeams",
+                "&7Create a team, invite players and manage homes", "&eClick to run /team");
+        holder.command(15, "team");
+        set(inventory, 21, Material.CHEST, "&e&lAuction House",
+                "&7List, buy and collect player items", "&eClick to run /ah");
+        holder.command(21, "ah");
+        set(inventory, 23, Material.ENCHANTED_BOOK, "&d&lBattle Pass",
+                "&7View season progress and claim rewards", "&eClick to run /battlepass");
+        holder.command(23, "battlepass");
     }
 
     private void buildStatistics(MenuHolder holder, Inventory inventory, Player player) {
@@ -127,13 +146,18 @@ public final class MenuService implements Listener {
     }
 
     private void buildDecorations(MenuHolder holder, Inventory inventory) {
-        set(inventory, 11, Material.FLOWER_POT, "&9&lFurniture", "&7Decorative furniture and props");
-        set(inventory, 13, Material.PAINTING, "&9&lWall Decor", "&7Frames, paintings and displays");
-        set(inventory, 15, Material.ARMOR_STAND, "&9&lDisplay Items", "&7Cosmetic display items");
-        set(inventory, 31, Material.CHEST, "&b&lComing soon", "&7Nexo / ItemsAdder adapter will be optional.", "&7Vanilla fallback remains available.");
-        for (int slot : new int[]{11, 13, 15, 31}) {
-            holder.notice(slot, "&eDecorations and cosmetics are not connected yet.");
-        }
+        set(inventory, 13, Material.ARMOR_STAND, "&9&lFurniture Kits",
+                "&7Starter, modern and garden build bundles",
+                "&7Purchase with Shards", "&eClick to browse");
+        holder.navigate(13, MenuPage.SHARD_SHOP);
+        set(inventory, 22, Material.PAINTING, "&b&lWall Decor",
+                "&7Frames, paintings and display pieces",
+                "&7Browse the themed kits in the Shard Shop");
+        holder.navigate(22, MenuPage.SHARD_SHOP);
+        set(inventory, 31, Material.BOOK, "&f&lAbout Furniture",
+                "&7Starter kits use vanilla building pieces.",
+                "&7Animated custom furniture needs RP Engine assets.");
+        holder.notice(31, "&7Vanilla kits work without a resource-pack plugin; animated custom models are a separate asset pack.");
     }
 
     private void buildMusic(MenuHolder holder, Inventory inventory) {
@@ -147,9 +171,15 @@ public final class MenuService implements Listener {
     }
 
     private void buildShards(MenuHolder holder, Inventory inventory) {
-        set(inventory, 22, Material.AMETHYST_SHARD, "&d&lGASMP Shards", "&7Loading your balance...");
-        set(inventory, 31, Material.BOOK, "&f&lWhat are Shards?", "&7A secondary GASMP currency.", "&7Cosmetics, decorations, music and rewards.");
-        holder.notice(31, "&7Shards are separate from your Coins balance.");
+        set(inventory, 22, Material.AMETHYST_SHARD, "&d&lSHARD WALLET", "&7Loading your balance...");
+        set(inventory, 15, Material.AMETHYST_CLUSTER, "&d&lOpen Shard Shop",
+                "&7Browse furniture, decor and rewards", "&eClick to open");
+        holder.navigate(15, MenuPage.SHARD_SHOP);
+        set(inventory, 31, Material.BOOK, "&f&lAbout Shards",
+                "&7GASMP's progression and reward currency.",
+                "&7Earn Shards through server activities.",
+                "&7Spend them on furniture and cosmetics.");
+        holder.notice(31, "&dShards are GASMP's reward currency, separate from Vault Coins.");
     }
 
     private void refreshShards(Player player, MenuHolder holder) {
@@ -185,6 +215,7 @@ public final class MenuService implements Listener {
     private void buildProfile(MenuHolder holder, Inventory inventory, Player player) {
         set(inventory, 22, Material.PLAYER_HEAD, "&a&l" + player.getName(), "&7Your GASMP profile", "&7Kills: &f" + player.getStatistic(Statistic.PLAYER_KILLS), "&7Deaths: &f" + player.getStatistic(Statistic.DEATHS));
         set(inventory, 31, Material.AMETHYST_SHARD, "&d&lShards Wallet", "&7Loading your saved balance...");
+        holder.navigate(31, MenuPage.SHARDS);
     }
 
     private void refreshProfile(Player player, MenuHolder holder) {
@@ -236,6 +267,13 @@ public final class MenuService implements Listener {
             return;
         }
 
+        String command = holder.commandAt(slot);
+        if (command != null) {
+            player.closeInventory();
+            player.performCommand(command);
+            return;
+        }
+
         String notice = holder.noticeAt(slot);
         if (notice != null) {
             player.sendMessage(color("&d[GASMP] " + notice));
@@ -250,21 +288,30 @@ public final class MenuService implements Listener {
     }
 
     private void fillFrame(Inventory inventory, MenuPage page) {
-        Material frame = switch (page) {
-            case MAIN, STATISTICS, PROFILE -> Material.MAGENTA_STAINED_GLASS_PANE;
-            case SHOP, DECORATIONS -> Material.BLUE_STAINED_GLASS_PANE;
-            case MUSIC -> Material.PURPLE_STAINED_GLASS_PANE;
-            case SHARDS -> Material.PURPLE_STAINED_GLASS_PANE;
+        Material accent = switch (page) {
+            case MAIN, PROFILE, STATISTICS -> Material.MAGENTA_STAINED_GLASS_PANE;
+            case DECORATIONS -> Material.BLUE_STAINED_GLASS_PANE;
+            case MUSIC, SHARDS -> Material.PURPLE_STAINED_GLASS_PANE;
+            case SHARD_SHOP -> Material.PURPLE_STAINED_GLASS_PANE;
+            case UTILITY -> Material.CYAN_STAINED_GLASS_PANE;
             case CASINO -> Material.ORANGE_STAINED_GLASS_PANE;
             case SETTINGS -> Material.BLACK_STAINED_GLASS_PANE;
         };
-        ItemStack filler = item(frame, " ");
-        for (int slot = 0; slot < MENU_SIZE; slot++) {
-            int row = slot / 9;
-            int column = slot % 9;
-            if (row == 0 || row == 5 || column == 0 || column == 8) {
-                inventory.setItem(slot, filler.clone());
+        Material secondary = page == MenuPage.MAIN || page == MenuPage.PROFILE
+                ? Material.PURPLE_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE;
+        ItemStack dark = item(Material.BLACK_STAINED_GLASS_PANE, " ");
+        for (int column = 0; column < 9; column++) {
+            if (column == 0 || column == 8) {
+                inventory.setItem(column, dark.clone());
+                inventory.setItem(45 + column, dark.clone());
+            } else {
+                inventory.setItem(column, item(column % 2 == 0 ? accent : secondary, " "));
+                inventory.setItem(45 + column, item(column % 2 == 0 ? secondary : accent, " "));
             }
+        }
+        for (int row = 1; row < 5; row++) {
+            inventory.setItem(row * 9, dark.clone());
+            inventory.setItem(row * 9 + 8, dark.clone());
         }
     }
 
@@ -293,11 +340,12 @@ public final class MenuService implements Listener {
         String custom = plugin.getConfig().getString("menus.main-menu-title", "&d&lGASMP &8• &5Menu");
         return switch (page) {
             case MAIN -> color(custom);
-            case SHOP -> color("&9&lGASMP &8• &1Shop");
             case STATISTICS -> color("&d&lGASMP &8• &5Statistics");
             case DECORATIONS -> color("&9&lGASMP &8• &3Decorations");
             case MUSIC -> color("&5&lGASMP &8• &dMusic Player");
-            case SHARDS -> color("&d&lGASMP &8• &5Shards");
+            case SHARDS -> color("&d&lGASMP &8• &5Shard Wallet");
+            case SHARD_SHOP -> color("&d&lGASMP &8• &5Shard Shop");
+            case UTILITY -> color("&b&lGASMP &8• &3Adventure");
             case CASINO -> color("&6&lGASMP &8• &eCasino");
             case PROFILE -> color("&a&lGASMP &8• &2Profile");
             case SETTINGS -> color("&f&lGASMP &8• &7Settings");

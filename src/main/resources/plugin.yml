@@ -14,14 +14,13 @@ softdepend:
   - floodgate
   - TAB
   - Nexo
-  - ItemsAdder
+  - RPEngine
   - ImageFrame
   - Typewriter
   - OpenInv
   - LibsDisguises
   - HeadDatabase
   - HeadDB
-  - RPEngine
 commands:
   gasmp:
     description: Opens the GASMP player menu.
@@ -40,9 +39,12 @@ commands:
     description: View and manage GASMP Shards.
     usage: /shards <balance|give|take|set>
     aliases: [shard, gshards]
-  shop:
-    description: Opens the GASMP Coins shop.
-    usage: /shop
+  ranks:
+    description: Opens the GASMP rank catalogue.
+    usage: /ranks
+  shardshop:
+    description: Opens the GASMP Shard Shop.
+    usage: /shardshop
   rtp:
     description: Teleports you to a safe random location.
     usage: /rtp
@@ -59,18 +61,21 @@ commands:
     aliases: [auctionhouse, auction]
     permission: gasmpcore.auction
   casino:
-    description: GASMP virtual-Coins arcade. Disabled by default.
+    description: GASMP virtual-Coins arcade. Requires a Vault Economy provider.
     usage: /casino <menu|game> <bet> [choice]
     permission: gasmpcore.casino.play
   battlepass:
     description: View Battle Pass progress and claim rewards.
     usage: /battlepass [claim <level>]
     aliases: [bp]
+  crate:
+    description: Opens the GASMP crate catalogue and reward previews.
+    usage: /crate
   crates:
-    description: Restricted crate administration. Crate opening uses physical keys.
-    usage: /crates <list|set|unset|givekey|reload>
+    description: Restricted crate administration for RP Engine crate blocks, displays and keys.
+    usage: /crates <list|set|unset|givekey|giveblock|givemodel|reload>
   gcrateopen:
-    description: Internal console-only command triggered by RP Engine crate content.
+    description: Internal RP Engine crate interaction route.
     usage: /gcrateopen <player> <crate-id>
   team:
     description: GASMP teams and team chat.
@@ -128,9 +133,6 @@ permissions:
   gasmpcore.shards.admin:
     description: Allows managing Shards balances.
     default: op
-  gasmpcore.shop.admin:
-    description: Reserved for future shop administration.
-    default: false
   gasmpcore.combat.bypass:
     description: Bypasses GASMP combat tagging and logout punishment.
     default: false

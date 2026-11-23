@@ -21,7 +21,7 @@
 
 ## Optional server plugins
 
-- **Economy:** a plugin which registers Vault `Economy` (e.g. EssentialsX Economy). Without a provider, Shards still work but Coins shop, bounties and casino remain unavailable.
+- **Economy:** a plugin which registers Vault `Economy` (e.g. EssentialsX Economy). Without a provider, the Shard Shop still works, while Vault-backed bounties, casino and team-bank features remain unavailable.
 - **TAB:** displays LuckPerms prefix and primary group; see `integrations/tab/README.md`.
 - **PlaceholderAPI:** placeholders in supported external displays.
 - **Geyser + Floodgate:** Bedrock cross-play and identity integration.

@@ -1,17 +1,21 @@
-vote_crate_display:
+common_crate_display:
   material: PAPER
-  name: "&a&lVOTE CRATE DISPLAY"
+  name: "&f&lCOMMON CRATE DISPLAY"
   lore:
     - "&7Place this animated crate model."
-    - "&8Right-click to open with a Vote Key."
-  texture: item/vote_crate_display
-  model: vote_crate
+    - "&8Right-click to open with a matching key."
+  model: common_crate
   place:
     facing: cardinal
     scale: 1.0
     solid: true
     surface: floor
     animations:
+      idle:
+        mode: loop
+        speed: 0.75
+        priority: 1
+        blend: 0.12
       open:
         mode: once
         speed: 0.9
@@ -21,14 +25,72 @@ vote_crate_display:
     interact:
       - cooldown: 2
       - cancel
-      - console: "gcrateopen {player} vote"
-legendary_crate_display:
+      - console: "gcrateopen {player} common"
+
+rare_crate_display:
   material: PAPER
-  name: "&5&lLEGENDARY CRATE DISPLAY"
+  name: "&b&lRARE CRATE DISPLAY"
   lore:
     - "&7Place this animated crate model."
-    - "&8Right-click to open with a Legendary Key."
-  texture: item/legendary_crate_display
+    - "&8Right-click to open with a matching key."
+  model: rare_crate
+  place:
+    facing: cardinal
+    scale: 1.0
+    solid: true
+    surface: floor
+    animations:
+      animation.common_crate.idle:
+        mode: loop
+        speed: 0.75
+        priority: 1
+        blend: 0.12
+      animation.common_crate.open:
+        mode: once
+        speed: 0.9
+        priority: 10
+        blend: 0.15
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} rare"
+
+epic_crate_display:
+  material: PAPER
+  name: "&d&lEPIC CRATE DISPLAY"
+  lore:
+    - "&7Place this animated crate model."
+    - "&8Right-click to open with a matching key."
+  model: epic_crate
+  place:
+    facing: cardinal
+    scale: 1.0
+    solid: true
+    surface: floor
+    animations:
+      animation.common_crate.idle:
+        mode: loop
+        speed: 0.75
+        priority: 1
+        blend: 0.12
+      animation.common_crate.open:
+        mode: once
+        speed: 0.9
+        priority: 10
+        blend: 0.15
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} epic"
+
+legendary_crate_display:
+  material: PAPER
+  name: "&6&lLEGENDARY CRATE DISPLAY"
+  lore:
+    - "&7Place this animated crate model."
+    - "&8Right-click to open with a matching key."
   model: legendary_crate
   place:
     facing: cardinal
@@ -36,11 +98,16 @@ legendary_crate_display:
     solid: true
     surface: floor
     animations:
-      open:
+      animation.common_crate.idle:
+        mode: loop
+        speed: 0.75
+        priority: 1
+        blend: 0.12
+      animation.common_crate.open:
         mode: once
-        speed: 0.82
+        speed: 0.9
         priority: 10
-        blend: 0.18
+        blend: 0.15
   actions:
     interact:
       - cooldown: 2

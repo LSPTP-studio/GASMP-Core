@@ -1,18 +1,39 @@
-vote_key:
+common_key:
   material: TRIPWIRE_HOOK
-  name: "&a&lVOTE CRATE KEY"
+  name: "&f&lCOMMON CRATE KEY"
   lore:
-    - "&7Opens the Vote Crate."
+    - "&7Opens the Common Cosmetic Crate."
     - "&8GASMP • KEY ITEM"
-  texture: item/vote_key
+  model: common_key
   glow: true
   stack: 64
+
+rare_key:
+  material: TRIPWIRE_HOOK
+  name: "&b&lRARE CRATE KEY"
+  lore:
+    - "&7Opens the Rare Cosmetic Crate."
+    - "&8GASMP • KEY ITEM"
+  model: rare_key
+  glow: true
+  stack: 64
+
+epic_key:
+  material: TRIPWIRE_HOOK
+  name: "&d&lEPIC CRATE KEY"
+  lore:
+    - "&7Opens the Epic Cosmetic Crate."
+    - "&8GASMP • KEY ITEM"
+  model: epic_key
+  glow: true
+  stack: 64
+
 legendary_key:
   material: TRIPWIRE_HOOK
-  name: "&5&lLEGENDARY CRATE KEY"
+  name: "&6&lLEGENDARY CRATE KEY"
   lore:
-    - "&7Opens the Legendary Crate."
+    - "&7Opens the Legendary Cosmetic Crate."
     - "&8GASMP • KEY ITEM"
-  texture: item/legendary_key
+  model: legendary_key
   glow: true
   stack: 64

@@ -1,0 +1,149 @@
+# GASMP Shard Shop. Prices are whole Shards; custom crate keys are RP Engine items.
+settings:
+  enabled: true
+  title: "&d&lGASMP &8• &5Shard Shop"
+items:
+  common_crate_key:
+    category: crate_keys
+    icon: TRIPWIRE_HOOK
+    name: "&f&lCOMMON CRATE KEY"
+    price: 80
+    crate-key: common
+    lore:
+      - "&7Opens the Common Cosmetic Crate."
+      - "&8Contains wearable cosmetics only."
+      - "&7Purchased with Shards."
+    custom-items:
+      - "gasmp_crates:common_key:1"
+  rare_crate_key:
+    category: crate_keys
+    icon: TRIPWIRE_HOOK
+    name: "&b&lRARE CRATE KEY"
+    price: 140
+    crate-key: rare
+    lore:
+      - "&7Opens the Rare Cosmetic Crate."
+      - "&8Contains wearable cosmetics only."
+      - "&7Purchased with Shards."
+    custom-items:
+      - "gasmp_crates:rare_key:1"
+  epic_crate_key:
+    category: crate_keys
+    icon: TRIPWIRE_HOOK
+    name: "&d&lEPIC CRATE KEY"
+    price: 230
+    crate-key: epic
+    lore:
+      - "&7Opens the Epic Cosmetic Crate."
+      - "&8Contains wearable cosmetics only."
+      - "&7Purchased with Shards."
+    custom-items:
+      - "gasmp_crates:epic_key:1"
+  legendary_crate_key:
+    category: crate_keys
+    icon: TRIPWIRE_HOOK
+    name: "&6&lLEGENDARY CRATE KEY"
+    price: 360
+    crate-key: legendary
+    lore:
+      - "&7Opens the Legendary Cosmetic Crate."
+      - "&8Contains wearable cosmetics only."
+      - "&7Purchased with Shards."
+    custom-items:
+      - "gasmp_crates:legendary_key:1"
+  starter_furniture:
+    category: furniture
+    icon: ARMOR_STAND
+    name: "&a&lStarter Furniture Kit"
+    price: 75
+    lore:
+      - "&7A starter pack for building a cozy room."
+      - "&8Vanilla blocks and decor pieces."
+    contents:
+      - "OAK_STAIRS:8"
+      - "OAK_TRAPDOOR:8"
+      - "OAK_SLAB:8"
+      - "OAK_FENCE:4"
+      - "LANTERN:2"
+      - "ARMOR_STAND:1"
+      - "FLOWER_POT:2"
+  modern_furniture:
+    category: furniture
+    icon: QUARTZ_STAIRS
+    name: "&b&lModern Furniture Kit"
+    price: 130
+    lore:
+      - "&7Clean quartz pieces for modern interiors."
+      - "&8Includes lighting and display parts."
+    contents:
+      - "QUARTZ_STAIRS:8"
+      - "QUARTZ_SLAB:8"
+      - "SMOOTH_QUARTZ:16"
+      - "GLASS_PANE:8"
+      - "END_ROD:2"
+      - "LANTERN:2"
+      - "ITEM_FRAME:2"
+  garden_decor:
+    category: garden
+    icon: FLOWER_POT
+    name: "&2&lGarden Decor Kit"
+    price: 65
+    lore:
+      - "&7A small set for gardens and outdoor builds."
+    contents:
+      - "FLOWER_POT:4"
+      - "MOSS_BLOCK:8"
+      - "AZALEA:4"
+      - "LANTERN:2"
+      - "OAK_LEAVES:8"
+      - "OAK_HANGING_SIGN:2"
+  display_kit:
+    category: decor
+    icon: GLOW_ITEM_FRAME
+    name: "&e&lDisplay Kit"
+    price: 85
+    lore:
+      - "&7Showcase trophies, tools and collectibles."
+    contents:
+      - "ARMOR_STAND:2"
+      - "ITEM_FRAME:4"
+      - "GLOW_ITEM_FRAME:2"
+      - "PAINTING:2"
+      - "CHAIN:4"
+      - "END_ROD:4"
+  warm_lighting:
+    category: lighting
+    icon: LANTERN
+    name: "&6&lWarm Lighting Kit"
+    price: 55
+    lore:
+      - "&7Lanterns and candles for cozy builds."
+    contents:
+      - "LANTERN:6"
+      - "SOUL_LANTERN:2"
+      - "CANDLE:4"
+      - "CHAIN:4"
+  builder_bundle:
+    category: building
+    icon: BRICKS
+    name: "&c&lBuilder Bundle"
+    price: 45
+    lore:
+      - "&7Useful decorative blocks for small builds."
+    contents:
+      - "BRICKS:16"
+      - "GLASS:16"
+      - "FLOWER_POT:2"
+      - "PAINTING:1"
+  utility_bundle:
+    category: utility
+    icon: CHEST
+    name: "&b&lUtility Bundle"
+    price: 60
+    lore:
+      - "&7A compact set of useful building utilities."
+    contents:
+      - "ITEM_FRAME:2"
+      - "SCAFFOLDING:16"
+      - "LEAD:2"
+      - "NAME_TAG:1"

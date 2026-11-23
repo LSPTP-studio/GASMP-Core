@@ -10,9 +10,9 @@ import net.gasmp.core.command.LeaderboardCommand;
 import net.gasmp.core.command.PerformanceCommand;
 import net.gasmp.core.command.RtpCommand;
 import net.gasmp.core.command.ShardCommand;
-import net.gasmp.core.command.ShopCommand;
 import net.gasmp.core.combat.CombatService;
 import net.gasmp.core.crates.CrateService;
+import net.gasmp.core.crates.CrateMenuService;
 import net.gasmp.core.data.PlayerDataStore;
 import net.gasmp.core.data.PlayerProfileListener;
 import net.gasmp.core.economy.VaultEconomyBridge;
@@ -21,18 +21,25 @@ import net.gasmp.core.hologram.HologramService;
 import net.gasmp.core.maintenance.MaintenanceService;
 import net.gasmp.core.moderation.ModerationService;
 import net.gasmp.core.rank.RankAdminMenu;
+import net.gasmp.core.rank.RankMenuService;
 import net.gasmp.core.rank.RankService;
 import net.gasmp.core.rtp.RtpService;
-import net.gasmp.core.shop.ShopService;
+import net.gasmp.core.shardshop.ShardShopService;
 import net.gasmp.core.skills.ToolSkillsService;
 import net.gasmp.core.staff.CommandRestrictionService;
 import net.gasmp.core.staff.StaffAccess;
 import net.gasmp.core.staff.VanishService;
 import net.gasmp.core.team.TeamService;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.concurrent.CompletionException;
 
@@ -41,7 +48,7 @@ public final class GASMPCore extends JavaPlugin {
     private PlayerDataStore dataStore;
     private RankService rankService;
     private VaultEconomyBridge economyBridge;
-    private ShopService shopService;
+    private ShardShopService shardShopService;
     private CombatService combatService;
     private RtpService rtpService;
     private AuctionService auctionService;
@@ -56,10 +63,11 @@ public final class GASMPCore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
+        saveIfMissing("config.yml");
+        reloadConfig();
         for (String resource : new String[]{
-                "ranks.yml", "shop.yml", "rtp.yml", "casino.yml", "battlepass.yml",
-                "crates.yml", "chat-games.yml", "maintenance.yml", "holograms.yml"
+                "ranks.yml", "rtp.yml", "casino.yml", "battlepass.yml",
+                "crates.yml", "chat-games.yml", "maintenance.yml", "holograms.yml", "shard-shop.yml"
         }) saveIfMissing(resource);
 
         dataStore = new PlayerDataStore(new File(getDataFolder(), getConfig().getString("storage.sqlite-file", "data.db")));
@@ -82,8 +90,8 @@ public final class GASMPCore extends JavaPlugin {
         // LuckPerms is a soft dependency and is normally loaded before this plugin.
         StaffAccess staffAccess = new StaffAccess();
 
-        shopService = new ShopService(this);
-        getServer().getPluginManager().registerEvents(shopService, this);
+        shardShopService = new ShardShopService(this);
+        getServer().getPluginManager().registerEvents(shardShopService, this);
         combatService = new CombatService(this);
         getServer().getPluginManager().registerEvents(combatService, this);
         rtpService = new RtpService(this, combatService);
@@ -103,6 +111,8 @@ public final class GASMPCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(casinoService, this);
         crateService = new CrateService(this, staffAccess);
         getServer().getPluginManager().registerEvents(crateService, this);
+        CrateMenuService crateMenuService = new CrateMenuService(this);
+        getServer().getPluginManager().registerEvents(crateMenuService, this);
         teamService = new TeamService(this);
 
         maintenanceService = new MaintenanceService(this, staffAccess);
@@ -125,7 +135,7 @@ public final class GASMPCore extends JavaPlugin {
         bind("gasmp", coreCommand);
         bind("gasmpcore", coreCommand);
         bind("shards", new ShardCommand(this));
-        bind("shop", new ShopCommand(this));
+        bind("shardshop", shardShopService);
         bind("rtp", new RtpCommand(this));
         bind("bounty", bountyService);
         bind("gvanish", vanishService);
@@ -134,6 +144,7 @@ public final class GASMPCore extends JavaPlugin {
         bind("battlepass", battlePassService);
         bind("crates", crateService);
         bind("gcrateopen", crateService);
+        bind("crate", crateMenuService);
         bind("team", teamService);
         bind("gmaintenance", maintenanceService);
         bind("gban", moderationService);
@@ -149,6 +160,9 @@ public final class GASMPCore extends JavaPlugin {
         bind("gperf", new PerformanceCommand());
 
         rankService = new RankService(this);
+        RankMenuService playerRankMenu = new RankMenuService(this);
+        getServer().getPluginManager().registerEvents(playerRankMenu, this);
+        bind("ranks", playerRankMenu);
         RankAdminMenu rankMenu = new RankAdminMenu(this, rankService);
         getServer().getPluginManager().registerEvents(rankMenu, this);
         bind("gasmpadmin", rankMenu);
@@ -157,7 +171,7 @@ public final class GASMPCore extends JavaPlugin {
         if (getConfig().getBoolean("modules.chat-games", true)) chatGameService.startScheduler();
 
         getLogger().info("GASMP Core v" + getPluginMeta().getVersion() + " enabled.");
-        getLogger().info("Phase 1 active: profiles, Shards, Vault shop, RTP, combat logging, bounties, auction house, battle pass, crates, teams, moderation, maintenance, holograms, tool skills, chat games, casino (disabled by default), leaderboards, performance snapshot and staff utilities.");
+        getLogger().info("Phase 1 active: profiles, Shards, Vault economy integrations, RTP, combat logging, bounties, auction house, battle pass, crates, teams, moderation, maintenance, holograms, tool skills, chat games, casino (disabled by default), leaderboards, performance snapshot and staff utilities.");
         if (!BukkitCompatibleVault()) getLogger().warning("Vault economy unavailable; Coins features are disabled until a provider registers Economy.class.");
     }
 
@@ -165,8 +179,51 @@ public final class GASMPCore extends JavaPlugin {
         return economyBridge != null && economyBridge.isAvailable();
     }
 
+    /**
+     * Installs a missing bundled config, or adds newly introduced defaults to an existing file.
+     * Values already present on the server always win, so upgrades do not reset owner settings.
+     */
     private void saveIfMissing(String name) {
-        if (!new File(getDataFolder(), name).exists()) saveResource(name, false);
+        File file = new File(getDataFolder(), name);
+        if (!file.exists()) {
+            saveResource(name, false);
+            return;
+        }
+
+        try (InputStream resource = getResource(name)) {
+            if (resource == null) return;
+            YamlConfiguration current = YamlConfiguration.loadConfiguration(file);
+            YamlConfiguration defaults = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(resource, StandardCharsets.UTF_8));
+            int added = mergeMissingDefaults(current, defaults);
+            if (added > 0) {
+                current.save(file);
+                getLogger().info("Migrated " + name + ": added " + added
+                        + " missing default value(s); existing settings were preserved.");
+            }
+        } catch (IOException exception) {
+            getLogger().severe("Could not migrate " + name + ": " + exception.getMessage());
+        }
+    }
+
+    private int mergeMissingDefaults(ConfigurationSection current, ConfigurationSection defaults) {
+        int added = 0;
+        for (String key : defaults.getKeys(false)) {
+            ConfigurationSection defaultSection = defaults.getConfigurationSection(key);
+            if (defaultSection != null) {
+                ConfigurationSection currentSection = current.getConfigurationSection(key);
+                if (currentSection == null) {
+                    // Do not replace an existing scalar with a section; leave malformed owner data visible.
+                    if (current.contains(key)) continue;
+                    currentSection = current.createSection(key);
+                }
+                added += mergeMissingDefaults(currentSection, defaultSection);
+            } else if (!current.contains(key)) {
+                current.set(key, defaults.get(key));
+                added++;
+            }
+        }
+        return added;
     }
 
     private void bind(String name, org.bukkit.command.CommandExecutor executor) {
@@ -187,13 +244,14 @@ public final class GASMPCore extends JavaPlugin {
     public PlayerDataStore getDataStore() { return dataStore; }
     public RankService getRankService() { return rankService; }
     public VaultEconomyBridge getEconomyBridge() { return economyBridge; }
-    public ShopService getShopService() { return shopService; }
+    public ShardShopService getShardShopService() { return shardShopService; }
+    public CasinoService getCasinoService() { return casinoService; }
     public CombatService getCombatService() { return combatService; }
     public RtpService getRtpService() { return rtpService; }
 
     public void reloadCore() {
         reloadConfig();
-        if (shopService != null) shopService.reload();
+        if (shardShopService != null) shardShopService.reload();
         if (rankService != null) {
             rankService.loadConfiguration();
             rankService.initialize();

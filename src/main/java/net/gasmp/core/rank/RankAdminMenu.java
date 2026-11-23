@@ -249,11 +249,55 @@ public final class RankAdminMenu implements Listener, CommandExecutor, TabComple
     private void rankReveal(Player target, RankDefinition rank) {
         target.sendMessage(color("&d&lGASMP &8» &fYour rank is now " + rank.prefix() + "&f."));
         if (!plugin.getConfig().getBoolean("rank-admin.play-rank-up-cinematic", true)) return;
-        target.playSound(target.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.0f);
-        target.getWorld().spawnParticle(Particle.HAPPY_VILLAGER,
-                target.getLocation().add(0, 1, 0), 24, 0.55, 0.65, 0.55, 0.02);
-        target.sendTitle(color("&6&lRANK UNLOCKED"),
-                color(rank.prefix() + rank.displayName()), 10, 60, 20);
+
+        ChatColor accent = switch (rank.track().toLowerCase(Locale.ROOT)) {
+            case "staff" -> ChatColor.LIGHT_PURPLE;
+            case "creator" -> ChatColor.AQUA;
+            case "prestige" -> ChatColor.GOLD;
+            default -> ChatColor.GREEN;
+        };
+        target.sendTitle(color("&d&lPROMOTION CONFIRMED"),
+                accent + "LuckPerms rank successfully saved", 5, 35, 10);
+        target.playSound(target.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 0.85f, 1.15f);
+
+        final int[] frame = {0};
+        final org.bukkit.scheduler.BukkitTask[] cinematic = new org.bukkit.scheduler.BukkitTask[1];
+        cinematic[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            if (!target.isOnline()) {
+                cinematic[0].cancel();
+                return;
+            }
+
+            double progress = frame[0] / 20.0;
+            double radius = 0.45 + (progress * 0.65);
+            double height = 0.25 + (progress * 1.05);
+            org.bukkit.Location center = target.getLocation().add(0, 0.15, 0);
+            Particle orbitParticle = rank.track().equalsIgnoreCase("prestige")
+                    ? Particle.TOTEM_OF_UNDYING : Particle.END_ROD;
+
+            for (int point = 0; point < 18; point++) {
+                double angle = (Math.PI * 2.0 * point / 18.0) + (frame[0] * 0.22);
+                org.bukkit.Location particleLocation = center.clone().add(
+                        Math.cos(angle) * radius,
+                        height + Math.sin(angle * 2.0) * 0.18,
+                        Math.sin(angle) * radius);
+                target.getWorld().spawnParticle(orbitParticle, particleLocation, 1, 0, 0, 0, 0);
+            }
+
+            if (frame[0] == 7) {
+                target.playSound(target.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.9f, 1.0f);
+            }
+            if (frame[0] >= 20) {
+                cinematic[0].cancel();
+                target.getWorld().spawnParticle(Particle.FIREWORK,
+                        target.getLocation().add(0, 1.0, 0), 42, 0.65, 0.9, 0.65, 0.12);
+                target.playSound(target.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
+                target.sendTitle(color("&6&lRANK UNLOCKED"),
+                        color(rank.prefix() + rank.displayName()), 5, 65, 20);
+                target.sendMessage(color("&7Your new rank has been saved through LuckPerms."));
+            }
+            frame[0]++;
+        }, 0L, 2L);
     }
 
     @EventHandler

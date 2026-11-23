@@ -1,47 +1,34 @@
-# GASMP custom crate content — RP Engine
+# GASMP RP Engine integration
 
-This is an original, editable crate-content starter pack for **RP Engine**, a free/open-source resource-pack and custom-model engine. It contains:
+GASMP Core uses RP Engine for all custom items, wearable cosmetics, crate keys, custom crate blocks and placeable crate displays. ItemsAdder is not a runtime dependency.
 
-- `vote_crate` and `legendary_crate` Blockbench 5 models (`.bbmodel`).
-- A lid-open animation for each model.
-- Custom crate block definitions.
-- Animated placed crate-display items.
-- Custom Vote and Legendary key items.
-- Interaction actions that call GASMP Core's console-only `gcrateopen` command.
+## Included content
 
-## Install RP Engine
+- `content/gasmp_crates`: four crate tiers, matching keys and placed displays.
+- `content/hatparade`: imported 30-hat wearable collection.
+- `content/ax_free_hats_pack`: imported six-hat wearable collection.
+- `content/gasmp_ranks` and `content/rank_bundle`: optional imported rank-image/font content.
 
-1. Back up the current server and resource-pack files.
-2. Install a RP Engine release that explicitly supports your Paper 26.2 build.
-3. Restart the server once to generate its content directory.
-4. Copy the `content/gasmp_crates/` folder from this archive into `plugins/RPEngine/content/gasmp_crates/` (keep the namespace and folder names).
-5. Install the matching GASMP Core JAR and ensure its plugin descriptor soft-depends on `RPEngine`.
-6. Run `/rp reload` and review the console for content errors.
-7. Generate/reload the RP Engine resource pack using the commands documented by your installed RP Engine release.
-8. Join with a Java client and a Geyser Bedrock client to confirm assets and fallback behavior.
+The full cosmetic models and textures for the crates and hats are bundled in the GASMP RP Engine Test Pack archive. Copy its `content/` directory into `plugins/RPEngine/`.
 
-RP Engine command names and folder casing can change between releases. Use the exact folder/commands in the installed version's documentation; do not rename the `gasmp_crates` content namespace.
+## Install
 
-## GASMP crate commands
+1. Install a RP Engine version compatible with the server's Paper/Minecraft build.
+2. Back up `plugins/RPEngine/content/` and the server resource pack.
+3. Copy the namespace folders into `plugins/RPEngine/content/`, preserving their names.
+4. Reload RP Engine and regenerate/reload the resource pack using commands supported by the installed release.
+5. Restart GASMP Core or run `/gasmpcore reload`.
+6. Test the full crate flow on a staging server before production.
 
-Developer/Owner only:
+RP Engine can import ItemsAdder-format content folders directly. Cosmetic item IDs remain `hatparade:<item>` and `ax_free_hats_pack:<item>`, so GASMP's existing crate reward IDs stay unchanged. The six Artillex items have been marked with wearable-hat behaviour in the test pack.
+
+## Crate administration
 
 - `/crates list`
-- `/crates givekey <player> <crate-id> [amount]`
-- `/crates giveblock <player> <crate-id> [amount]`
-- `/crates givemodel <player> <crate-id> [amount]`
+- `/crates givekey <player> <tier> [amount]`
+- `/crates giveblock <player> <tier> [amount]`
+- `/crates givemodel <player> <tier> [amount]`
+- `/crates set <tier>` and `/crates unset <tier>` for chest/barrel fallbacks
+- `/crates reload`
 
-Physical custom-block interactions call `/gcrateopen <player> <crate-id>` through console. This internal command rejects player senders and is not intended for direct player use.
-
-## Java/Bedrock behavior
-
-- Java clients use custom blocks and models supported by RP Engine.
-- Geyser's RP Engine bridge can generate/deliver a Bedrock pack for supported assets.
-- Custom blocks on Bedrock may fall back to their underlying vanilla block appearance; the placed model/furniture representation is the preferred path where the RP Engine version supports Bedrock entity-model delivery.
-- Always test on the actual Geyser/Floodgate build and client versions used by GASMP. A resource pack compiling successfully does not guarantee every shader/model behaves identically on Java and Bedrock.
-
-## Model editing
-
-Open the `.bbmodel` files in Blockbench 5.x. Each crate contains a body group and a separate animated lid group. The `open` animation rotates the lid around its hinge pivot. Export/convert through the RP Engine workflow supported by the installed version.
-
-The textures are 64x64 pixel-art atlases with separate UV regions for crate body faces and lid faces. Replace textures in the pack's `assets/textures/block/` and update the inline texture source in the `.bbmodel` if you edit the model texture externally.
+The crate block and placed-display actions invoke the internal console-only `gcrateopen` command. Players cannot invoke that command directly.
