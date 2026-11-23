@@ -60,6 +60,9 @@ public final class CasinoDuelService implements Listener {
         final String game;
         final long bet;
         final Map<UUID, String> choices = new HashMap<>();
+        final char[] ticTacToeBoard = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+        boolean firstTicTacToeTurn = true;
+        int ticTacToeMoves;
         BukkitTask timeout;
         BukkitTask animation;
         boolean resolving;
@@ -280,6 +283,10 @@ public final class CasinoDuelService implements Listener {
 
     private void openMatch(Player player, Duel duel) {
         if (duel.closed || !player.isOnline()) return;
+        if (duel.game.equals("tictactoe")) {
+            openTicTacToe(player, duel);
+            return;
+        }
         CasinoDuelHolder holder = new CasinoDuelHolder(CasinoDuelHolder.Stage.MATCH, duel.id, player.getUniqueId());
         Inventory inventory = create(holder, 27, "&8GASMP • " + duel.game.toUpperCase(Locale.ROOT) + " DUEL");
         UUID opponentId = duel.other(player.getUniqueId());
@@ -312,6 +319,46 @@ public final class CasinoDuelService implements Listener {
                 otherChoice == null ? "&7Opponent has not locked in yet." : "&aOpponent is ready.");
         set(inventory, 26, Material.BARRIER, "&c&lCLOSE", "&7You can reopen this match with /casino duel.");
         player.openInventory(inventory);
+    }
+
+    private void openTicTacToe(Player player, Duel duel) {
+        CasinoDuelHolder holder = new CasinoDuelHolder(CasinoDuelHolder.Stage.MATCH, duel.id, player.getUniqueId());
+        Inventory inventory = create(holder, 54, "&8GASMP • Tic-Tac-Toe Duel");
+        UUID opponentId = duel.other(player.getUniqueId());
+        boolean yourTurn = (duel.firstTicTacToeTurn && player.getUniqueId().equals(duel.first))
+                || (!duel.firstTicTacToeTurn && player.getUniqueId().equals(duel.second));
+        set(inventory, 4, Material.OAK_SIGN, "&6&lTIC-TAC-TOE",
+                "&fYou: " + (player.getUniqueId().equals(duel.first) ? "&cX" : "&bO"),
+                "&fOpponent: &e" + duel.name(opponentId),
+                "&fTurn: " + (yourTurn ? "&aYour move" : "&eOpponent's move"),
+                "&7Three in a row wins the 2-player Shard pot.");
+        int[] cells = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+        for (int index = 0; index < cells.length; index++) {
+            char mark = duel.ticTacToeBoard[index];
+            Material icon = mark == 'X' ? Material.RED_STAINED_GLASS_PANE
+                    : mark == 'O' ? Material.BLUE_STAINED_GLASS_PANE : Material.WHITE_STAINED_GLASS_PANE;
+            String title = mark == 'X' ? "&c&lX" : mark == 'O' ? "&b&lO" : "&f&lEMPTY";
+            set(inventory, cells[index], icon, title,
+                    mark == ' ' && yourTurn ? "&eClick to place your mark." :
+                            mark == ' ' ? "&7Waiting for your turn." : "&8Cell already taken.");
+            if (mark == ' ' && yourTurn) holder.action(cells[index], "CELL:" + index);
+        }
+        set(inventory, 45, Material.REDSTONE, "&e&lX", "&7" + duel.firstName);
+        set(inventory, 53, Material.LAPIS_LAZULI, "&b&lO", "&7" + duel.secondName);
+        player.openInventory(inventory);
+    }
+
+    private char ticTacToeWinner(char[] board) {
+        int[][] lines = {
+                {0, 1, 2}, {3, 4, 5}, {6, 7, 8},
+                {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
+                {0, 4, 8}, {2, 4, 6}
+        };
+        for (int[] line : lines) {
+            char mark = board[line[0]];
+            if (mark != ' ' && mark == board[line[1]] && mark == board[line[2]]) return mark;
+        }
+        return ' ';
     }
 
     private void beginAnimation(Duel duel) {
@@ -582,9 +629,43 @@ public final class CasinoDuelService implements Listener {
             }
             return;
         }
-        if (holder.stage() != CasinoDuelHolder.Stage.MATCH || action == null || !action.startsWith("PICK:")) return;
+        if (holder.stage() != CasinoDuelHolder.Stage.MATCH) return;
         Duel duel = duelById.get(holder.referenceId());
         if (duel == null || duel.closed || duel.resolving || !duelByPlayer.containsKey(player.getUniqueId())) return;
+        if (duel.game.equals("tictactoe")) {
+            if (action == null || !action.startsWith("CELL:")) return;
+            boolean yourTurn = (duel.firstTicTacToeTurn && player.getUniqueId().equals(duel.first))
+                    || (!duel.firstTicTacToeTurn && player.getUniqueId().equals(duel.second));
+            if (!yourTurn) {
+                player.sendMessage(color("&cWait for your opponent to make their move."));
+                return;
+            }
+            int cell;
+            try { cell = Integer.parseInt(action.substring(5)); }
+            catch (NumberFormatException ex) { return; }
+            if (cell < 0 || cell >= duel.ticTacToeBoard.length || duel.ticTacToeBoard[cell] != ' ') return;
+            char mark = player.getUniqueId().equals(duel.first) ? 'X' : 'O';
+            duel.ticTacToeBoard[cell] = mark;
+            duel.ticTacToeMoves++;
+            char winnerMark = ticTacToeWinner(duel.ticTacToeBoard);
+            if (winnerMark != ' ') {
+                UUID winner = winnerMark == 'X' ? duel.first : duel.second;
+                finishDuel(duel, winner.equals(duel.first) ? 1 : -1,
+                        duel.name(winner) + " completed three in a row (" + winnerMark + ").");
+                return;
+            }
+            if (duel.ticTacToeMoves >= 9) {
+                finishDuel(duel, 0, "Tic-Tac-Toe ended in a draw.");
+                return;
+            }
+            duel.firstTicTacToeTurn = !duel.firstTicTacToeTurn;
+            Player first = Bukkit.getPlayer(duel.first);
+            Player second = Bukkit.getPlayer(duel.second);
+            if (first != null) openMatch(first, duel);
+            if (second != null) openMatch(second, duel);
+            return;
+        }
+        if (action == null || !action.startsWith("PICK:")) return;
         if (duel.choices.containsKey(player.getUniqueId())) return;
         duel.choices.put(player.getUniqueId(), action.substring(5));
         Player first = Bukkit.getPlayer(duel.first);
