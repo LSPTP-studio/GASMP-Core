@@ -28,3 +28,48 @@ legendary_crate_block:
       - cooldown: 2
       - cancel
       - console: "gcrateopen {player} legendary"
+normal_crate_block:
+  base: note_block
+  model: vote_crate
+  hardness: 4.0
+  drop: gasmp_crates:normal_crate_block
+  name: "&a&lNORMAL COSMETIC CRATE"
+  lore:
+    - "&7Protected GASMP cosmetic crate."
+    - "&8Left-click to preview; sneak + left-click to pick up."
+  sound: minecraft:block.chest.open
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} normal"
+medium_crate_block:
+  base: note_block
+  model: vote_crate
+  hardness: 4.0
+  drop: gasmp_crates:medium_crate_block
+  name: "&b&lMEDIUM COSMETIC CRATE"
+  lore:
+    - "&7Protected GASMP cosmetic crate."
+    - "&8Left-click to preview; sneak + left-click to pick up."
+  sound: minecraft:block.chest.open
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} medium"
+premium_crate_block:
+  base: note_block
+  model: legendary_crate
+  hardness: 4.0
+  drop: gasmp_crates:premium_crate_block
+  name: "&5&lPREMIUM COSMETIC CRATE"
+  lore:
+    - "&7Protected GASMP cosmetic crate."
+    - "&8Left-click to preview; sneak + left-click to pick up."
+  sound: minecraft:block.chest.open
+  actions:
+    interact:
+      - cooldown: 2
+      - cancel
+      - console: "gcrateopen {player} premium"
