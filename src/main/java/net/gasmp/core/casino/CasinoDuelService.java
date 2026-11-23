@@ -211,8 +211,8 @@ public final class CasinoDuelService implements Listener {
                         target.sendMessage(color("&cThe challenge could not start."));
                         return;
                     }
-                    Player currentTarget = Bukkit.getPlayer(invite.target);
-                    if (currentTarget == null || !currentTarget.isOnline()) {
+                    Player targetForSecondDebit = Bukkit.getPlayer(invite.target);
+                    if (targetForSecondDebit == null || !targetForSecondDebit.isOnline()) {
                         refundStake(invite.challenger, invite.challengerName, invite.bet,
                                 "Refund: duel opponent disconnected before stake reservation.");
                         processingPlayers.remove(invite.challenger);
@@ -230,11 +230,12 @@ public final class CasinoDuelService implements Listener {
                                     processingPlayers.remove(invite.challenger);
                                     processingPlayers.remove(invite.target);
                                     challenger.sendMessage(color("&cYour opponent could not pay the stake. Your Shards are being refunded."));
-                                    currentTarget.sendMessage(color("&cYou do not have enough Shards to accept this duel."));
+                                    Player targetForMessage = Bukkit.getPlayer(invite.target);
+                                    if (targetForMessage != null) targetForMessage.sendMessage(color("&cYou do not have enough Shards to accept this duel."));
                                     return;
                                 }
                                 Player currentChallenger = Bukkit.getPlayer(invite.challenger);
-                                currentTarget = Bukkit.getPlayer(invite.target);
+                                Player currentTarget = Bukkit.getPlayer(invite.target);
                                 if (currentChallenger == null || currentTarget == null
                                         || !currentChallenger.isOnline() || !currentTarget.isOnline()) {
                                     refundStake(invite.challenger, invite.challengerName, invite.bet,
@@ -458,22 +459,21 @@ public final class CasinoDuelService implements Listener {
         inviteByPlayer.remove(invite.target, invite);
     }
 
-    private void reopen(Player player) {
+    private boolean reopen(Player player) {
         Invite invite = inviteByPlayer.get(player.getUniqueId());
         if (invite != null && invite.target.equals(player.getUniqueId())) {
             openInvite(player, invite);
-            return;
+            return true;
         }
         Duel duel = duelByPlayer.get(player.getUniqueId());
         if (duel == null) {
             player.sendMessage(color("&cYou do not have a pending challenge or active duel."));
-            return;
+            return true;
         }
         if (duel.resolving) openAnimation(player, duel);
         else openMatch(player, duel);
+        return true;
     }
-
-    private boolean reopen(Player player, boolean unused) { reopen(player); return true; }
 
     private void notifyDuel(Duel duel, String headline, String detail) {
         for (UUID id : List.of(duel.first, duel.second)) {
