@@ -31,9 +31,15 @@ import net.gasmp.core.staff.StaffAccess;
 import net.gasmp.core.staff.VanishService;
 import net.gasmp.core.team.TeamService;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.concurrent.CompletionException;
 
@@ -57,7 +63,8 @@ public final class GASMPCore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
+        saveIfMissing("config.yml");
+        reloadConfig();
         for (String resource : new String[]{
                 "ranks.yml", "rtp.yml", "casino.yml", "battlepass.yml",
                 "crates.yml", "chat-games.yml", "maintenance.yml", "holograms.yml", "shard-shop.yml"
@@ -172,8 +179,51 @@ public final class GASMPCore extends JavaPlugin {
         return economyBridge != null && economyBridge.isAvailable();
     }
 
+    /**
+     * Installs a missing bundled config, or adds newly introduced defaults to an existing file.
+     * Values already present on the server always win, so upgrades do not reset owner settings.
+     */
     private void saveIfMissing(String name) {
-        if (!new File(getDataFolder(), name).exists()) saveResource(name, false);
+        File file = new File(getDataFolder(), name);
+        if (!file.exists()) {
+            saveResource(name, false);
+            return;
+        }
+
+        try (InputStream resource = getResource(name)) {
+            if (resource == null) return;
+            YamlConfiguration current = YamlConfiguration.loadConfiguration(file);
+            YamlConfiguration defaults = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(resource, StandardCharsets.UTF_8));
+            int added = mergeMissingDefaults(current, defaults);
+            if (added > 0) {
+                current.save(file);
+                getLogger().info("Migrated " + name + ": added " + added
+                        + " missing default value(s); existing settings were preserved.");
+            }
+        } catch (IOException exception) {
+            getLogger().severe("Could not migrate " + name + ": " + exception.getMessage());
+        }
+    }
+
+    private int mergeMissingDefaults(ConfigurationSection current, ConfigurationSection defaults) {
+        int added = 0;
+        for (String key : defaults.getKeys(false)) {
+            ConfigurationSection defaultSection = defaults.getConfigurationSection(key);
+            if (defaultSection != null) {
+                ConfigurationSection currentSection = current.getConfigurationSection(key);
+                if (currentSection == null) {
+                    // Do not replace an existing scalar with a section; leave malformed owner data visible.
+                    if (current.contains(key)) continue;
+                    currentSection = current.createSection(key);
+                }
+                added += mergeMissingDefaults(currentSection, defaultSection);
+            } else if (!current.contains(key)) {
+                current.set(key, defaults.get(key));
+                added++;
+            }
+        }
+        return added;
     }
 
     private void bind(String name, org.bukkit.command.CommandExecutor executor) {
