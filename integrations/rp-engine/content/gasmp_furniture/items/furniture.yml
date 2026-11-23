@@ -1,0 +1,19 @@
+modern_sofa:
+  material: PAPER
+  name: "&b&lGASMP Modern Sofa"
+  lore:
+    - "&7A placeable modern sofa."
+    - "&7Right-click or sneak to sit."
+    - "&8GASMP Furniture Collection."
+  model: gasmp_modern_sofa
+  place:
+    facing: cardinal
+    scale: 1.0
+    solid: true
+    surface: floor
+    seat: 0.45
+    animations:
+      sit_press:
+        mode: once
+        speed: 1.0
+        priority: 10
