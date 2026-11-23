@@ -283,17 +283,18 @@ public final class MenuService implements Listener {
                 case 16 -> "legendary";
                 default -> null;
             };
-            if (crateId != null) plugin.getCrateService().buyKey(player, crateId);
-            return;
+            if (crateId != null) {
+                plugin.getCrateService().buyKey(player, crateId);
+                return;
+            }
         }
         if (holder.getPage() == MenuPage.GAME_WORLDS) {
             switch (slot) {
-                case 20 -> teleportGameWorld(player, "paintball", "Paintball", "/pb join");
-                case 22 -> teleportGameWorld(player, "gokarts", "Go Karts", "/kart join");
-                case 24 -> teleportGameWorld(player, "skatepark", "Skatepark", "/skateboard");
+                case 20 -> { teleportGameWorld(player, "paintball", "Paintball", "/pb join"); return; }
+                case 22 -> { teleportGameWorld(player, "gokarts", "Go Karts", "/kart join"); return; }
+                case 24 -> { teleportGameWorld(player, "skatepark", "Skatepark", "/skateboard"); return; }
                 default -> { }
             }
-            return;
         }
         if (holder.getPage() == MenuPage.MAIN && slot == 49) {
             player.closeInventory();
