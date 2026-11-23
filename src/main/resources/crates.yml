@@ -150,7 +150,7 @@ crates:
         material: NETHERITE_HELMET
         display: "&6Premium Netherite Helmet"
         amount: 1
-        weight: 10
+        weight: 20
         enchantments: { PROTECTION: 6, UNBREAKING: 5, MENDING: 1, RESPIRATION: 4, AQUA_AFFINITY: 1, THORNS: 3 }
       netherite_chestplate:
         type: item
