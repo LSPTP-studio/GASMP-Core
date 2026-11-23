@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -69,7 +71,7 @@ public final class RankMenuService implements Listener, CommandExecutor {
                 .sorted((a, b) -> Integer.compare(b.weight(), a.weight())).toList();
         for (int i = 0; i < Math.min(ranks.size(), CARD_SLOTS.length); i++) {
             RankDefinition rank = ranks.get(i);
-            inv.setItem(CARD_SLOTS[i], item(rank.iconMaterial(), color(rank.prefix()) + color("&l" + rank.displayName()),
+            inv.setItem(CARD_SLOTS[i], item(rank.iconMaterial(), renderImage(player, rank) + color(rank.prefix()) + color("&l" + rank.displayName()),
                     "&8Rank details",
                     "&7Track: &f" + title(rank.track()),
                     "&7LuckPerms group: &d" + rank.group(),
@@ -122,6 +124,19 @@ public final class RankMenuService implements Listener, CommandExecutor {
             stack.setItemMeta(meta);
         }
         return stack;
+    }
+
+    private String renderImage(Player player, RankDefinition rank) {
+        if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) return "";
+        try {
+            Class<?> api = Class.forName("me.clip.placeholderapi.PlaceholderAPI");
+            Method method = api.getMethod("setPlaceholders", OfflinePlayer.class, String.class);
+            String parsed = (String) method.invoke(null, player, plugin.getRankService().imagePlaceholder(rank));
+            if (parsed != null && !parsed.contains("%rpengine_icon_")) return parsed + " ";
+        } catch (ReflectiveOperationException ignored) {
+            // Keep the vanilla material icon when PlaceholderAPI/RP Engine is unavailable.
+        }
+        return "";
     }
 
     private String title(String value) {
