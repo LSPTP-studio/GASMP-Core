@@ -112,7 +112,7 @@ public final class RankService {
         grant(groupPermissions, "manager", "gasmpcore.staff.vanish", "gasmpcore.maintenance.bypass");
         grant(groupPermissions, "admin", "gasmpcore.staff.vanish", "gasmpcore.maintenance.bypass", "gasmpcore.shards.admin", "openinv.inventory.open.other", "openinv.enderchest.open.other", "openinv.search.inventory", "openinv.access.online");
         grant(groupPermissions, "mod", "gasmpcore.staff.vanish");
-                grant(groupPermissions, "helper", "gasmpcore.staff.vanish");
+        grant(groupPermissions, "helper", "gasmpcore.staff.vanish");
 
         // RP Engine rank badges only appear when the matching LuckPerms group
         // has the badge permission. Keep this in sync with fonts/ranks.yml.
@@ -121,7 +121,7 @@ public final class RankService {
                     "rpengine.tag.gasmp_ranks." + definition.imageKey());
         }
 
-        Map<String, RankDefinition> groupsToCreate = new LinkedHashMap<>(); = new LinkedHashMap<>();
+        Map<String, RankDefinition> groupsToCreate = new LinkedHashMap<>();
         for (RankDefinition rank : byKey.values()) groupsToCreate.put(rank.group(), rank);
         for (String name : groupPermissions.keySet()) groupsToCreate.putIfAbsent(name, null);
 
