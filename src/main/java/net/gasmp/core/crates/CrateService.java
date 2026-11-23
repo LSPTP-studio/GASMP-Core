@@ -121,10 +121,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // RP Engine executes the custom-block action as console. Player/command-block invocations are rejected.
-        if (command.getName().equalsIgnoreCase("keyall")) {
-            return keyAll(sender, args);
-        }
+        // RP Engine's custom-block actions run as console.
+        if (command.getName().equalsIgnoreCase("keyall")) return keyAll(sender, args);
         if (command.getName().equalsIgnoreCase("gcrateopen")) {
             if (!(sender instanceof ConsoleCommandSender)) {
                 sender.sendMessage("This is an internal crate interaction command.");
@@ -133,14 +131,28 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             if (args.length != 2) return true;
             Player target = Bukkit.getPlayerExact(args[0]);
             String crateId = canonicalCrateId(args[1]);
-            if (target != null && config.getConfigurationSection("crates." + crateId) != null) {
-                openCrate(target, crateId);
+            if (target != null && config.getConfigurationSection("crates." + crateId) != null) openCrate(target, crateId);
+            return true;
+        }
+
+        // Safe console operations: staff can give custom crates to online players without being in-game.
+        if (sender instanceof ConsoleCommandSender) {
+            if (args.length == 0 || args[0].equalsIgnoreCase("help")) { help(sender); return true; }
+            switch (args[0].toLowerCase(Locale.ROOT)) {
+                case "giveblock" -> giveCustomCrateItem(sender, args, "_crate_block");
+                case "givemodel" -> giveCustomCrateItem(sender, args, "_crate_display");
+                case "givekey" -> giveKey(sender, args);
+                case "reload" -> { reload(); sender.sendMessage("GASMP cosmetic crate configuration reloaded."); }
+                case "list" -> list(sender);
+                default -> help(sender);
             }
             return true;
         }
 
-        if (!(sender instanceof Player player)) { sender.sendMessage("Run this command in-game."); return true; }
-        // /crates stays Owner/Developer only, even if OP has wildcard permissions.
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("This command is for players or the server console.");
+            return true;
+        }
         if (!staff.isOwnerOrDev(player)
                 && !player.hasPermission("gasmpcore.crates.manage")
                 && !player.isOp()) {
@@ -149,7 +161,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) { help(player); return true; }
         switch (args[0].toLowerCase(Locale.ROOT)) {
-            case "reload" -> { reload(); player.sendMessage(color("&aCrate configuration reloaded.")); }
+            case "reload" -> { reload(); player.sendMessage(color("&aCosmetic crate configuration reloaded.")); }
             case "set" -> setLocation(player, args);
             case "unset" -> unsetLocation(player, args);
             case "givekey" -> giveKey(player, args);
@@ -161,7 +173,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return true;
     }
 
-    private void giveCustomCrateItem(Player actor, String[] args, String suffix) {
+    private void giveCustomCrateItem(CommandSender actor, String[] args, String suffix) {
         if (args.length < 3 || args.length > 4) {
             actor.sendMessage(color("&e/crates " + (suffix.equals("_crate_block") ? "giveblock" : "givemodel")
                     + " <online-player> <normal|medium|premium> [amount]"));
@@ -216,7 +228,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         save(); player.sendMessage(color("&aCrate location removed."));
     }
 
-    private void giveKey(Player player, String[] args) {
+    private void giveKey(CommandSender player, String[] args) {
         if (args.length < 3 || args.length > 4) { player.sendMessage(color("&e/crates givekey <online-player> <crate-id> [amount]")); return; }
         Player target = Bukkit.getPlayerExact(args[1]);
         String id = canonicalCrateId(args[2]);
@@ -230,7 +242,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         player.sendMessage(color("&aGave " + amount + " " + id + " key(s) to " + target.getName() + "."));
     }
 
-    private void list(Player player) {
+    private void list(CommandSender player) {
         ConfigurationSection crates = config.getConfigurationSection("crates");
         player.sendMessage(color("&6&lGASMP CRATES"));
         if (crates == null || crates.getKeys(false).isEmpty()) { player.sendMessage(color("&7No crates configured.")); return; }
@@ -1084,7 +1096,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private void save() { try { config.save(new File(plugin.getDataFolder(), "crates.yml")); } catch (Exception ex) { plugin.getLogger().severe("Could not save crates.yml: " + ex.getMessage()); } }
-    private void help(Player player) {
+    private void help(CommandSender player) {
         player.sendMessage(color("&6&lGASMP CRATES &8- &cDeveloper/Owner only"));
         player.sendMessage(color("&e/crates list &7- list configured crates"));
         player.sendMessage(color("&e/crates set <id> &7- legacy vanilla chest/barrel location"));
@@ -1099,7 +1111,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         player.sendMessage(color("&e/keyall <crate-id|all> <amount> [world:<world>] [silent] &7- distribute keys"));
     }
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
-    @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (command.getName().equalsIgnoreCase("keyall")) {
             if (args.length == 1) {
                 List<String> values = new ArrayList<>();
@@ -1112,7 +1125,22 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             if (args.length == 4) return List.of("silent");
             return List.of();
         }
-        if (args.length == 1) return List.of("list", "set", "unset", "givekey", "giveblock", "givemodel", "reload");
+        if (args.length == 1) return matching(args[0], List.of("help", "list", "reload", "givekey", "giveblock", "givemodel", "set", "unset"));
+        if (args.length == 2 && List.of("givekey", "giveblock", "givemodel").contains(args[0].toLowerCase(Locale.ROOT))) {
+            return Bukkit.getOnlinePlayers().stream().map(Player::getName)
+                    .filter(v -> v.toLowerCase(Locale.ROOT).startsWith(args[1].toLowerCase(Locale.ROOT))).toList();
+        }
+        if (args.length == 3 && List.of("givekey", "giveblock", "givemodel", "set", "unset").contains(args[0].toLowerCase(Locale.ROOT))) {
+            return matching(args[2], List.of("normal", "medium", "premium", "common", "rare", "epic", "legendary"));
+        }
+        if (args.length == 4 && List.of("givekey", "giveblock", "givemodel").contains(args[0].toLowerCase(Locale.ROOT))) {
+            return matching(args[3], List.of("1", "2", "4", "8", "16", "32", "64"));
+        }
         return List.of();
+    }
+
+    private List<String> matching(String prefix, List<String> values) {
+        String lower = prefix.toLowerCase(Locale.ROOT);
+        return values.stream().filter(value -> value.toLowerCase(Locale.ROOT).startsWith(lower)).toList();
     }
 }
