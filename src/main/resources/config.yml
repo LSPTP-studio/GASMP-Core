@@ -1,4 +1,4 @@
-# GASMP Core 0.7.0 — Paper 26.2 / Java 25
+# GASMP Core 0.7.1 — Paper 26.2 / Java 25
 # Phase 1 gameplay systems. Rank and visual menu design are refined in Phase 2.
 general:
   debug: false
@@ -23,7 +23,7 @@ modules:
   maintenance: true
   chat-games: true
   leaderboards: true
-  casino: false
+  casino: true
   bounties: true
 menus:
   enabled: true
