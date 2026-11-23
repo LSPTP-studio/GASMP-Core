@@ -13,6 +13,7 @@ import net.gasmp.core.command.ShardCommand;
 import net.gasmp.core.command.ShopCommand;
 import net.gasmp.core.combat.CombatService;
 import net.gasmp.core.crates.CrateService;
+import net.gasmp.core.crates.KeyRewardBridge;
 import net.gasmp.core.data.PlayerDataStore;
 import net.gasmp.core.data.PlayerProfileListener;
 import net.gasmp.core.economy.VaultEconomyBridge;
@@ -48,6 +49,7 @@ public final class GASMPCore extends JavaPlugin {
     private BattlePassService battlePassService;
     private CasinoService casinoService;
     private CrateService crateService;
+    private KeyRewardBridge keyRewardBridge;
     private TeamService teamService;
     private MaintenanceService maintenanceService;
     private ModerationService moderationService;
@@ -103,6 +105,8 @@ public final class GASMPCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(casinoService, this);
         crateService = new CrateService(this, staffAccess);
         getServer().getPluginManager().registerEvents(crateService, this);
+        keyRewardBridge = new KeyRewardBridge(this, crateService);
+        keyRewardBridge.start();
         teamService = new TeamService(this);
 
         maintenanceService = new MaintenanceService(this, staffAccess);
@@ -134,6 +138,7 @@ public final class GASMPCore extends JavaPlugin {
         bind("battlepass", battlePassService);
         bind("crates", crateService);
         bind("gcrateopen", crateService);
+        bind("keyall", crateService);
         bind("team", teamService);
         bind("gmaintenance", maintenanceService);
         bind("gban", moderationService);
@@ -178,6 +183,7 @@ public final class GASMPCore extends JavaPlugin {
     @Override
     public void onDisable() {
         if (chatGameService != null) chatGameService.stopAll();
+        if (keyRewardBridge != null) keyRewardBridge.stop();
         if (auctionService != null) auctionService.shutdown();
         if (dataStore != null) dataStore.close();
         getLogger().info("GASMP Core disabled.");
@@ -188,6 +194,7 @@ public final class GASMPCore extends JavaPlugin {
     public RankService getRankService() { return rankService; }
     public VaultEconomyBridge getEconomyBridge() { return economyBridge; }
     public ShopService getShopService() { return shopService; }
+    public CrateService getCrateService() { return crateService; }
     public CombatService getCombatService() { return combatService; }
     public RtpService getRtpService() { return rtpService; }
 
