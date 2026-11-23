@@ -1,5 +1,5 @@
 name: GASMP-Core
-version: '0.7.4'
+version: '0.7.5'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
@@ -72,7 +72,7 @@ commands:
     aliases: [bp]
   crates:
     description: Restricted crate administration. Crate opening uses physical keys.
-    usage: /crates <list|set|unset|givekey|reload>
+    usage: /crates <list|reload|givekey|giveblock|givemodel> <player> <normal|medium|premium> [amount]
   gcrateopen:
     description: Internal console-only command triggered by RP Engine crate content.
     usage: /gcrateopen <player> <crate-id>
