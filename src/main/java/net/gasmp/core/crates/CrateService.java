@@ -67,8 +67,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             }
             if (args.length != 2) return true;
             Player target = Bukkit.getPlayerExact(args[0]);
-            String crateId = args[1].toLowerCase(Locale.ROOT);
-            if (target != null && config.getConfigurationSection("crates." + crateId) != null) openCrate(target, crateId);
+            String crateId = resolveCrateId(args[1]);
+            if (target != null && isCrateId(crateId)) openCrate(target, crateId);
             return true;
         }
         if (!(sender instanceof Player player)) { sender.sendMessage("Run this command in-game."); return true; }
@@ -98,9 +98,14 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             return;
         }
         Player target = Bukkit.getPlayerExact(args[1]);
-        String id = args[2].toLowerCase(Locale.ROOT);
-        if (target == null || config.getConfigurationSection("crates." + id) == null) {
-            actor.sendMessage(color("&cOnline player or crate ID not found."));
+        String id = resolveCrateId(args[2]);
+        if (target == null) {
+            actor.sendMessage(color("&cTarget player &f" + args[1] + " &cis not online. They must be online to receive crate items."));
+            return;
+        }
+        if (!isCrateId(id)) {
+            actor.sendMessage(color("&cUnknown crate tier &f" + args[2] + "&c. Available tiers: &f" + availableCrateIds()));
+            actor.sendMessage(color("&7Use the tier name (common/rare/epic/legendary) or its gasmp_crates item ID."));
             return;
         }
         int amount = 1;
@@ -123,8 +128,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     private void setLocation(Player player, String[] args) {
         if (args.length != 2) { player.sendMessage(color("&e/crates set <crate-id>")); return; }
-        String id = args[1].toLowerCase(Locale.ROOT);
-        if (config.getConfigurationSection("crates." + id) == null) { player.sendMessage(color("&cUnknown crate ID.")); return; }
+        String id = resolveCrateId(args[1]);
+        if (!isCrateId(id)) {
+            player.sendMessage(color("&cUnknown crate tier &f" + args[1] + "&c. Available: &f" + availableCrateIds()));
+            return;
+        }
         Block target = player.getTargetBlockExact(6);
         if (target == null || !(target.getType() == Material.CHEST || target.getType() == Material.TRAPPED_CHEST || target.getType() == Material.BARREL)) {
             player.sendMessage(color("&cLook at a chest, trapped chest or barrel within 6 blocks.")); return;
@@ -138,16 +146,25 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     private void unsetLocation(Player player, String[] args) {
         if (args.length != 2) { player.sendMessage(color("&e/crates unset <crate-id>")); return; }
-        config.set("locations." + args[1].toLowerCase(Locale.ROOT), null);
-        save(); player.sendMessage(color("&aCrate location removed."));
+        String id = resolveCrateId(args[1]);
+        if (!isCrateId(id)) {
+            player.sendMessage(color("&cUnknown crate tier &f" + args[1] + "&c. Available: &f" + availableCrateIds()));
+            return;
+        }
+        config.set("locations." + id, null);
+        save(); player.sendMessage(color("&aCrate location removed for &f" + id + "&a."));
     }
 
     private void giveKey(Player player, String[] args) {
         if (args.length < 3 || args.length > 4) { player.sendMessage(color("&e/crates givekey <online-player> <crate-id> [amount]")); return; }
         Player target = Bukkit.getPlayerExact(args[1]);
-        String id = args[2].toLowerCase(Locale.ROOT);
+        String id = resolveCrateId(args[2]);
         if (target == null) { player.sendMessage(color("&cTarget player must be online.")); return; }
-        if (config.getConfigurationSection("crates." + id) == null) { player.sendMessage(color("&cUnknown crate ID.")); return; }
+        if (!isCrateId(id)) {
+            player.sendMessage(color("&cUnknown crate tier &f" + args[2] + "&c. Available: &f" + availableCrateIds()));
+            player.sendMessage(color("&7Use common, rare, epic or legendary; namespaced key IDs are also accepted."));
+            return;
+        }
         int amount = 1;
         if (args.length == 4) try { amount = Integer.parseInt(args[3]); } catch (NumberFormatException ex) { amount = 0; }
         if (amount < 1 || amount > 64) { player.sendMessage(color("&cAmount must be between 1 and 64.")); return; }
@@ -166,6 +183,31 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             player.sendMessage(color(displayName(id) + " &8- " + physical
                     + (placed ? " &8| &aLocation registered" : "")));
         }
+    }
+
+    private String resolveCrateId(String input) {
+        if (input == null) return "";
+        String id = input.trim().toLowerCase(Locale.ROOT);
+        int namespace = id.indexOf(':');
+        if (namespace >= 0) id = id.substring(namespace + 1);
+        for (String suffix : List.of("_crate_block", "_crate_display", "_crate_key", "_key")) {
+            if (id.endsWith(suffix)) {
+                id = id.substring(0, id.length() - suffix.length());
+                break;
+            }
+        }
+        return id;
+    }
+
+    private boolean isCrateId(String id) {
+        return id != null && !id.isBlank()
+                && config.getConfigurationSection("crates." + id) != null;
+    }
+
+    private String availableCrateIds() {
+        ConfigurationSection crates = config.getConfigurationSection("crates");
+        if (crates == null || crates.getKeys(false).isEmpty()) return "(none; check plugins/GASMP-Core/crates.yml)";
+        return String.join(", ", crates.getKeys(false).stream().sorted(String.CASE_INSENSITIVE_ORDER).toList());
     }
 
     private String displayName(String id) {
@@ -619,6 +661,17 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) return List.of("list", "set", "unset", "givekey", "giveblock", "givemodel", "reload");
+        if (args.length == 2 && Set.of("set", "unset").contains(args[0].toLowerCase(Locale.ROOT))) {
+            return config.getConfigurationSection("crates") == null ? List.of()
+                    : config.getConfigurationSection("crates").getKeys(false).stream().sorted().toList();
+        }
+        if (args.length == 2 && Set.of("givekey", "giveblock", "givemodel").contains(args[0].toLowerCase(Locale.ROOT))) {
+            return Bukkit.getOnlinePlayers().stream().map(Player::getName).sorted(String.CASE_INSENSITIVE_ORDER).toList();
+        }
+        if (args.length == 3 && Set.of("givekey", "giveblock", "givemodel").contains(args[0].toLowerCase(Locale.ROOT))) {
+            return config.getConfigurationSection("crates") == null ? List.of()
+                    : config.getConfigurationSection("crates").getKeys(false).stream().sorted().toList();
+        }
         return List.of();
     }
 }
