@@ -37,10 +37,6 @@ public final class MenuService implements Listener {
     }
 
     public void open(Player player, MenuPage page) {
-        if (page == MenuPage.SHOP) {
-            open(player, MenuPage.KEY_SHOP);
-            return;
-        }
         if (page == MenuPage.DECORATIONS) {
             plugin.getDecorationShopService().openCategories(player);
             return;
