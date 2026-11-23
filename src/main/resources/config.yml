@@ -126,11 +126,9 @@ teams:
 key-shop:
   enabled: true
   prices:
-    common: 100
-    rare: 250
-    epic: 500
-    legendary: 1000
-    vote: 150
+    normal: 100
+    medium: 300
+    premium: 800
 
 # Set these to the exact world names shown by /mv list.
 game-worlds:
