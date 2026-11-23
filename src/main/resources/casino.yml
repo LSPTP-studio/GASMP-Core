@@ -1,12 +1,12 @@
 # GASMP arcade enabled by default. Uses virtual in-server Coins via Vault only.
 settings:
   enabled: true
-  minimum-bet: 1.0
-  maximum-bet: 100.0
+  minimum-bet: 1
+  maximum-bet: 100
   cooldown-seconds: 5
   real-money: false
   cashout: false
-# The GUI includes game-themed spin animations. Poker and Tic-Tac-Toe are quick-match simulations, not full board games.
+# The GUI includes game-themed spin animations. Poker and Tic-Tac-Toe are quick-match simulations, not full board games. A wager is a whole number of Shards.
 games:
   roulette: true
   darts: true
