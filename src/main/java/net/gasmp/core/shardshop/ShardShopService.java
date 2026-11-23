@@ -3,6 +3,7 @@ package net.gasmp.core.shardshop;
 import net.gasmp.core.GASMPCore;
 import net.gasmp.core.data.PlayerDataStore;
 import net.gasmp.core.gui.MenuPage;
+import net.gasmp.core.gui.RpEngineUi;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -549,7 +550,8 @@ public final class ShardShopService implements Listener, CommandExecutor {
     }
 
     private Inventory create(Holder holder, int size, String rawTitle) {
-        Inventory inventory = Bukkit.createInventory(holder, size, color(rawTitle));
+        String screen = size == 54 ? "shard_shop" : "shard_shop_confirm";
+        Inventory inventory = Bukkit.createInventory(holder, size, RpEngineUi.title(screen, rawTitle));
         holder.inventory = inventory;
         ItemStack black = item(Material.BLACK_STAINED_GLASS_PANE, " ");
         Material[] topPalette = {
