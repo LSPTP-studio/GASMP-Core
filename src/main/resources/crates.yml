@@ -1,79 +1,217 @@
-# GASMP Core crate rewards. Keys are sold through the Shards key shop and earned from configured races/games.
-# Staff-only /keyall remains available for events. Normal players cannot mint keys with commands.
+# GASMP equipment crates. Keys are sold in the Shard Shop and awarded by configured minigames.
+# Each opening awards one equipment piece or a very rare key for another crate tier.
 crates:
-  common:
+  normal:
     rewards:
-      shards_small:
-        type: shards
-        amount: 10
-        weight: 50
-      coins_small:
-        type: coins
-        amount: 100
-        weight: 35
-      iron_ingots:
+      iron_helmet:
         type: item
-        material: IRON_INGOT
-        amount: 8
-        weight: 15
-  rare:
-    rewards:
-      shards_medium:
-        type: shards
-        amount: 35
-        weight: 45
-      coins_medium:
-        type: coins
-        amount: 500
-        weight: 35
-      diamond:
-        type: item
-        material: DIAMOND
+        material: IRON_HELMET
+        display: "&fIron Helmet"
         amount: 1
-        weight: 20
-  epic:
-    rewards:
-      shards_large:
-        type: shards
-        amount: 100
-        weight: 40
-      coins_large:
-        type: coins
-        amount: 1500
-        weight: 35
-      diamonds:
+        weight: 12
+        enchantments: { PROTECTION: 3, UNBREAKING: 2, RESPIRATION: 2 }
+      iron_chestplate:
         type: item
-        material: DIAMOND
-        amount: 4
-        weight: 25
-  legendary:
-    rewards:
-      shards_big:
-        type: shards
-        amount: 250
-        weight: 40
-      coins_big:
-        type: coins
-        amount: 2500
-        weight: 35
-      netherite:
-        type: item
-        material: NETHERITE_INGOT
+        material: IRON_CHESTPLATE
+        display: "&fIron Chestplate"
         amount: 1
-        weight: 25
-  vote:
-    rewards:
-      shards_small:
-        type: shards
-        amount: 25
-        weight: 50
-      coins_small:
-        type: coins
-        amount: 250
-        weight: 35
-      diamond:
+        weight: 10
+        enchantments: { PROTECTION: 3, UNBREAKING: 2, THORNS: 1 }
+      iron_leggings:
         type: item
-        material: DIAMOND
-        amount: 2
-        weight: 15
+        material: IRON_LEGGINGS
+        display: "&fIron Leggings"
+        amount: 1
+        weight: 12
+        enchantments: { PROTECTION: 3, UNBREAKING: 2 }
+      iron_boots:
+        type: item
+        material: IRON_BOOTS
+        display: "&fIron Boots"
+        amount: 1
+        weight: 12
+        enchantments: { PROTECTION: 3, UNBREAKING: 2, FEATHER_FALLING: 3, DEPTH_STRIDER: 2 }
+      iron_sword:
+        type: item
+        material: IRON_SWORD
+        display: "&fIron Sword"
+        amount: 1
+        weight: 14
+        enchantments: { SHARPNESS: 4, UNBREAKING: 2, FIRE_ASPECT: 1, LOOTING: 2 }
+      iron_pickaxe:
+        type: item
+        material: IRON_PICKAXE
+        display: "&fIron Pickaxe"
+        amount: 1
+        weight: 12
+        enchantments: { EFFICIENCY: 4, UNBREAKING: 2, FORTUNE: 2 }
+      iron_axe:
+        type: item
+        material: IRON_AXE
+        display: "&fIron Axe"
+        amount: 1
+        weight: 10
+        enchantments: { SHARPNESS: 3, EFFICIENCY: 3, UNBREAKING: 2 }
+      iron_bow:
+        type: item
+        material: BOW
+        display: "&fIron-tier Bow"
+        amount: 1
+        weight: 10
+        enchantments: { POWER: 4, PUNCH: 1, FLAME: 1, UNBREAKING: 2 }
+      medium_key_jackpot:
+        type: key
+        crate: medium
+        display: "&bMedium Key"
+        amount: 1
+        weight: 1
+      premium_key_jackpot:
+        type: key
+        crate: premium
+        display: "&6Premium Key"
+        amount: 1
+        weight: 1
+
+  medium:
+    rewards:
+      diamond_helmet:
+        type: item
+        material: DIAMOND_HELMET
+        display: "&bDiamond Helmet"
+        amount: 1
+        weight: 12
+        enchantments: { PROTECTION: 4, UNBREAKING: 3, RESPIRATION: 3, AQUA_AFFINITY: 1 }
+      diamond_chestplate:
+        type: item
+        material: DIAMOND_CHESTPLATE
+        display: "&bDiamond Chestplate"
+        amount: 1
+        weight: 10
+        enchantments: { PROTECTION: 4, UNBREAKING: 3, THORNS: 2 }
+      diamond_leggings:
+        type: item
+        material: DIAMOND_LEGGINGS
+        display: "&bDiamond Leggings"
+        amount: 1
+        weight: 12
+        enchantments: { PROTECTION: 4, UNBREAKING: 3, SWIFT_SNEAK: 2 }
+      diamond_boots:
+        type: item
+        material: DIAMOND_BOOTS
+        display: "&bDiamond Boots"
+        amount: 1
+        weight: 12
+        enchantments: { PROTECTION: 4, UNBREAKING: 3, FEATHER_FALLING: 4, DEPTH_STRIDER: 3 }
+      diamond_sword:
+        type: item
+        material: DIAMOND_SWORD
+        display: "&bDiamond Sword"
+        amount: 1
+        weight: 14
+        enchantments: { SHARPNESS: 5, UNBREAKING: 3, FIRE_ASPECT: 2, LOOTING: 3 }
+      diamond_pickaxe:
+        type: item
+        material: DIAMOND_PICKAXE
+        display: "&bDiamond Pickaxe"
+        amount: 1
+        weight: 12
+        enchantments: { EFFICIENCY: 5, UNBREAKING: 3, FORTUNE: 3 }
+      diamond_axe:
+        type: item
+        material: DIAMOND_AXE
+        display: "&bDiamond Axe"
+        amount: 1
+        weight: 10
+        enchantments: { SHARPNESS: 5, EFFICIENCY: 5, UNBREAKING: 3 }
+      diamond_bow:
+        type: item
+        material: BOW
+        display: "&bDiamond-tier Bow"
+        amount: 1
+        weight: 10
+        enchantments: { POWER: 5, PUNCH: 2, FLAME: 1, INFINITY: 1, UNBREAKING: 3 }
+      normal_key_jackpot:
+        type: key
+        crate: normal
+        display: "&fNormal Key"
+        amount: 1
+        weight: 1
+      premium_key_jackpot:
+        type: key
+        crate: premium
+        display: "&6Premium Key"
+        amount: 1
+        weight: 1
+
+  premium:
+    rewards:
+      netherite_helmet:
+        type: item
+        material: NETHERITE_HELMET
+        display: "&6Premium Netherite Helmet"
+        amount: 1
+        weight: 10
+        enchantments: { PROTECTION: 6, UNBREAKING: 5, MENDING: 1, RESPIRATION: 4, AQUA_AFFINITY: 1, THORNS: 3 }
+      netherite_chestplate:
+        type: item
+        material: NETHERITE_CHESTPLATE
+        display: "&6Premium Netherite Chestplate"
+        amount: 1
+        weight: 8
+        enchantments: { PROTECTION: 6, UNBREAKING: 5, MENDING: 1, THORNS: 4 }
+      netherite_leggings:
+        type: item
+        material: NETHERITE_LEGGINGS
+        display: "&6Premium Netherite Leggings"
+        amount: 1
+        weight: 10
+        enchantments: { PROTECTION: 6, UNBREAKING: 5, MENDING: 1, SWIFT_SNEAK: 4 }
+      netherite_boots:
+        type: item
+        material: NETHERITE_BOOTS
+        display: "&6Premium Netherite Boots"
+        amount: 1
+        weight: 10
+        enchantments: { PROTECTION: 6, UNBREAKING: 5, MENDING: 1, FEATHER_FALLING: 6, DEPTH_STRIDER: 4, SOUL_SPEED: 4 }
+      netherite_sword:
+        type: item
+        material: NETHERITE_SWORD
+        display: "&6Premium Netherite Sword"
+        amount: 1
+        weight: 12
+        enchantments: { SHARPNESS: 7, UNBREAKING: 5, MENDING: 1, FIRE_ASPECT: 3, LOOTING: 5, SWEEPING_EDGE: 4 }
+      netherite_pickaxe:
+        type: item
+        material: NETHERITE_PICKAXE
+        display: "&6Premium Netherite Pickaxe"
+        amount: 1
+        weight: 12
+        enchantments: { EFFICIENCY: 7, UNBREAKING: 5, MENDING: 1, FORTUNE: 4 }
+      netherite_axe:
+        type: item
+        material: NETHERITE_AXE
+        display: "&6Premium Netherite Axe"
+        amount: 1
+        weight: 10
+        enchantments: { SHARPNESS: 7, EFFICIENCY: 7, UNBREAKING: 5, MENDING: 1 }
+      netherite_bow:
+        type: item
+        material: BOW
+        display: "&6Premium Bow"
+        amount: 1
+        weight: 10
+        enchantments: { POWER: 7, PUNCH: 3, FLAME: 1, INFINITY: 1, UNBREAKING: 5 }
+      normal_key_jackpot:
+        type: key
+        crate: normal
+        display: "&fNormal Key"
+        amount: 1
+        weight: 1
+      medium_key_jackpot:
+        type: key
+        crate: medium
+        display: "&bMedium Key"
+        amount: 1
+        weight: 1
+
 locations: {}
