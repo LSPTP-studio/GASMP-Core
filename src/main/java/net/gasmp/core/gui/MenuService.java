@@ -118,8 +118,8 @@ public final class MenuService implements Listener {
     private void buildShop(MenuHolder holder, Inventory inventory) {
         // The SHOP page is redirected to ShopService.open() before this builder is reached.
         // Keep a safe fallback in case a future refactor changes that routing.
-        set(inventory, 22, Material.GOLD_INGOT, "&e&lCoins Shop", "&7The live Vault-backed catalogue is loading.");
-        holder.notice(22, "&eUse /shop to open the live GASMP Coins catalogue.");
+        set(inventory, 22, Material.AMETHYST_SHARD, "&d&lShard Shop", "&7The main Shop button opens this catalogue.");
+        holder.notice(22, "&eUse the main-menu Shop button to open the Shard Shop.");
     }
 
     private void buildStatistics(MenuHolder holder, Inventory inventory, Player player) {
@@ -352,7 +352,7 @@ public final class MenuService implements Listener {
         String custom = plugin.getConfig().getString("menus.main-menu-title", "&d&lGASMP &8• &5Menu");
         return switch (page) {
             case MAIN -> color(custom);
-            case SHOP -> color("&9&lGASMP &8• &1Shop");
+            case SHOP -> color("&d&lGASMP &8• &5Shard Shop");
             case STATISTICS -> color("&d&lGASMP &8• &5Statistics");
             case DECORATIONS -> color("&9&lGASMP &8• &3Decorations");
             case SHARDS -> color("&d&lGASMP &8• &5Shards");
