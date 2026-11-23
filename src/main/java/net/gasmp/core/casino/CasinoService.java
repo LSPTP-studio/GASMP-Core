@@ -43,15 +43,20 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) { sender.sendMessage("Casino is a player command."); return true; }
+        if (args.length > 0 && args[0].equalsIgnoreCase("help")) { help(player); return true; }
+        if (args.length == 0 || args[0].equalsIgnoreCase("menu")) {
+            openGui(player);
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("odds")) { showOdds(player); return true; }
         if (!plugin.getConfig().getBoolean("modules.casino", false) || !config.getBoolean("settings.enabled", false)) {
-            player.sendMessage(color("&cThe GASMP arcade is currently disabled.")); return true;
+            player.sendMessage(color("&cThe GASMP arcade is currently disabled. Check modules.casino in config.yml and settings.enabled in casino.yml."));
+            return true;
         }
         if (!plugin.getEconomyBridge().isAvailable()) {
-            player.sendMessage(color("&cCoins provider unavailable. Install Vault and a Vault-compatible economy plugin.")); return true;
+            player.sendMessage(color("&cThe arcade needs a Vault Economy provider. Install Vault plus an economy plugin (for example EssentialsX Economy), then restart."));
+            return true;
         }
-        if (args.length == 0 || args[0].equalsIgnoreCase("help")) { help(player); return true; }
-        if (args[0].equalsIgnoreCase("menu")) { openMenu(player, 10.0); return true; }
-        if (args[0].equalsIgnoreCase("odds")) { showOdds(player); return true; }
         if (!spinTasks.isEmpty() && spinTasks.containsKey(player.getUniqueId())) {
             player.sendMessage(color("&cFinish or close your current arcade spin first."));
             return true;
