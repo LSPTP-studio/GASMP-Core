@@ -1,9 +1,9 @@
 name: GASMP-Core
-version: '0.7.3'
+version: '0.7.4'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
-description: GASMP Core gameplay systems, enabled casino, rank cinematics, economy, teams and custom crates.
+description: GASMP Core gameplay systems, enabled casino, rank cinematics, economy, teams and cosmetic crates.
 depend:
   - Vault
   - LuckPerms
