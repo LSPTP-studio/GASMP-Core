@@ -84,8 +84,8 @@ public final class MenuService implements Listener {
     }
 
     private void buildMain(MenuHolder holder, Inventory inventory) {
-        set(inventory, 10, Material.ENDER_CHEST, "&d&lSHOP", "&7Equipment crate keys and rewards", "&eClick to open");
-        holder.navigate(10, MenuPage.KEY_SHOP);
+        set(inventory, 10, Material.ENDER_CHEST, "&d&lSHOP", "&7Browse both GASMP currencies", "&6Coins &8• &dShards", "&eClick to open");
+        holder.navigate(10, MenuPage.SHOP);
 
         set(inventory, 12, Material.WRITABLE_BOOK, "&d&lStatistics", "&7View your server statistics", "&eClick to open");
         holder.navigate(12, MenuPage.STATISTICS);
@@ -116,10 +116,17 @@ public final class MenuService implements Listener {
     }
 
     private void buildShop(MenuHolder holder, Inventory inventory) {
-        // The SHOP page is redirected to ShopService.open() before this builder is reached.
-        // Keep a safe fallback in case a future refactor changes that routing.
-        set(inventory, 22, Material.AMETHYST_SHARD, "&d&lShard Shop", "&7The main Shop button opens this catalogue.");
-        holder.notice(22, "&eUse the main-menu Shop button to open the Shard Shop.");
+        set(inventory, 20, Material.GOLD_INGOT, "&6&lCOINS SHOP",
+                "&7Buy survival supplies and server items",
+                "&7Paid with your Vault Coins balance",
+                "&eClick to browse");
+        set(inventory, 24, Material.AMETHYST_SHARD, "&d&lSHARD SHOP",
+                "&7Buy Normal, Medium and Premium cosmetic keys",
+                "&7Paid with GASMP Shards",
+                "&eClick to browse");
+        set(inventory, 31, Material.BOOK, "&f&lTWO CURRENCIES",
+                "&7Coins are provided by your server economy plugin.",
+                "&7Shards are managed by GASMP Core.");
     }
 
     private void buildStatistics(MenuHolder holder, Inventory inventory, Player player) {
@@ -271,6 +278,16 @@ public final class MenuService implements Listener {
         if (command != null) {
             player.performCommand(command);
             return;
+        }
+        if (holder.getPage() == MenuPage.SHOP) {
+            if (slot == 20) {
+                plugin.getShopService().open(player, 0);
+                return;
+            }
+            if (slot == 24) {
+                open(player, MenuPage.KEY_SHOP);
+                return;
+            }
         }
         if (holder.getPage() == MenuPage.KEY_SHOP) {
             String crateId = switch (slot) {
