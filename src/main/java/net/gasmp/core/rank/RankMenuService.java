@@ -1,6 +1,7 @@
 package net.gasmp.core.rank;
 
 import net.gasmp.core.GASMPCore;
+import net.gasmp.core.gui.RpEngineUi;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -47,7 +48,8 @@ public final class RankMenuService implements Listener, CommandExecutor {
     private void open(Player player, String track) {
         String selected = List.of(TRACKS).contains(track) ? track : "supporter";
         Holder holder = new Holder(selected);
-        Inventory inv = Bukkit.createInventory(holder, SIZE, color("&8GASMP &8» &dRanks &7/ &f" + selected.toUpperCase(Locale.ROOT)));
+        Inventory inv = Bukkit.createInventory(holder, SIZE,
+                RpEngineUi.title("ranks", "&8GASMP &8» &dRanks &7/ &f" + selected.toUpperCase(Locale.ROOT)));
         holder.inventory = inv;
         ItemStack edge = item(Material.BLACK_STAINED_GLASS_PANE, " ");
         for (int row = 0; row < 6; row++) { inv.setItem(row * 9, edge); inv.setItem(row * 9 + 8, edge); }
