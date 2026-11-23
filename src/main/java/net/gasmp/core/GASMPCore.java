@@ -64,7 +64,7 @@ public final class GASMPCore extends JavaPlugin {
         migrateUserSettings();
         for (String resource : new String[]{
                 "ranks.yml", "shop.yml", "rtp.yml", "casino.yml", "battlepass.yml",
-                "crates.yml", "cosmetics-crate.yml", "decoration-shop.yml",
+                "crates.yml", "decoration-shop.yml",
                 "chat-games.yml", "maintenance.yml", "holograms.yml"
         }) saveIfMissing(resource);
 
