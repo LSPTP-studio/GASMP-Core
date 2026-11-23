@@ -1,6 +1,7 @@
 package net.gasmp.core.rank;
 
 import net.gasmp.core.GASMPCore;
+import net.gasmp.core.gui.RpEngineUi;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -308,7 +309,8 @@ public final class RankAdminMenu implements Listener, CommandExecutor, TabComple
     }
 
     private Inventory create(RankAdminHolder holder, int size, String title) {
-        Inventory inv = Bukkit.createInventory(holder, size, color(title));
+        String screen = holder.stage() == RankAdminHolder.Stage.CONFIRM ? "rank_confirm" : "rank_admin";
+        Inventory inv = Bukkit.createInventory(holder, size, RpEngineUi.title(screen, title));
         holder.setInventory(inv);
         ItemStack filler = item(Material.BLACK_STAINED_GLASS_PANE, " ");
         for (int i = 0; i < size; i++) {
