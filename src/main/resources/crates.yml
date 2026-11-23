@@ -1,5 +1,6 @@
-# GASMP cosmetic crates. Every tier gives cosmetic collectibles, never armor/equipment.
-# All weights are relative chances. Each tier has a very rare chance to roll another tier's key.
+# GASMP cosmetic crate pools. All tiers contain cosmetics/furniture, never combat equipment.
+# Each pool includes cross-tier key jackpots and small Shard bonuses.
+# Relative weights decide odds. Higher tiers improve the rare-wing odds.
 crates:
   normal:
     rewards:
@@ -44,85 +45,85 @@ crates:
         content: "gasmp_cosmetics:feral_bear_ears"
         display: "Bear Ears"
         amount: 1
-        weight: 5
+        weight: 7
       feral_bear_tail:
         type: cosmetic
         content: "gasmp_cosmetics:feral_bear_tail"
         display: "Bear Tail"
         amount: 1
-        weight: 4
+        weight: 6
       feral_cat_ears:
         type: cosmetic
         content: "gasmp_cosmetics:feral_cat_ears"
         display: "Cat Ears"
         amount: 1
-        weight: 5
+        weight: 7
       feral_cat_tail:
         type: cosmetic
         content: "gasmp_cosmetics:feral_cat_tail"
         display: "Cat Tail"
         amount: 1
-        weight: 4
+        weight: 6
       feral_fox_ears:
         type: cosmetic
         content: "gasmp_cosmetics:feral_fox_ears"
         display: "Fox Ears"
         amount: 1
-        weight: 5
+        weight: 7
       feral_fox_tail:
         type: cosmetic
         content: "gasmp_cosmetics:feral_fox_tail"
         display: "Fox Tail"
         amount: 1
-        weight: 4
+        weight: 6
       feral_rabbit_ears:
         type: cosmetic
         content: "gasmp_cosmetics:feral_rabbit_ears"
         display: "Rabbit Ears"
         amount: 1
-        weight: 5
+        weight: 7
       feral_rabbit_tail:
         type: cosmetic
         content: "gasmp_cosmetics:feral_rabbit_tail"
         display: "Rabbit Tail"
         amount: 1
-        weight: 4
+        weight: 6
       feral_tiger_ears:
         type: cosmetic
         content: "gasmp_cosmetics:feral_tiger_ears"
         display: "Tiger Ears"
         amount: 1
-        weight: 5
+        weight: 7
       feral_tiger_tail:
         type: cosmetic
         content: "gasmp_cosmetics:feral_tiger_tail"
         display: "Tiger Tail"
         amount: 1
-        weight: 4
+        weight: 6
       feral_wolf_ears:
         type: cosmetic
         content: "gasmp_cosmetics:feral_wolf_ears"
         display: "Wolf Ears"
         amount: 1
-        weight: 5
+        weight: 7
       feral_wolf_tail:
         type: cosmetic
         content: "gasmp_cosmetics:feral_wolf_tail"
         display: "Wolf Tail"
         amount: 1
-        weight: 4
+        weight: 6
       angel_wings:
         type: cosmetic
         content: "gasmp_cosmetics:angel_wings"
         display: "Angel Wings"
         amount: 1
-        weight: 1
+        weight: 2
       astronaut_wings:
         type: cosmetic
         content: "gasmp_cosmetics:astronaut_wings"
         display: "Astronaut Wings"
         amount: 1
-        weight: 1
+        weight: 2
       bluefire_wings:
         type: cosmetic
         content: "gasmp_cosmetics:bluefire_wings"
@@ -134,13 +135,13 @@ crates:
         content: "gasmp_cosmetics:brown_wings"
         display: "Brown Wings"
         amount: 1
-        weight: 1
+        weight: 2
       butterfly_wings:
         type: cosmetic
         content: "gasmp_cosmetics:butterfly_wings"
         display: "Butterfly Wings"
         amount: 1
-        weight: 1
+        weight: 2
       demon_wings:
         type: cosmetic
         content: "gasmp_cosmetics:demon_wings"
@@ -158,7 +159,7 @@ crates:
         content: "gasmp_cosmetics:eagle_wings"
         display: "Eagle Wings"
         amount: 1
-        weight: 1
+        weight: 2
       golden_wings:
         type: cosmetic
         content: "gasmp_cosmetics:golden_wings"
@@ -170,7 +171,7 @@ crates:
         content: "gasmp_cosmetics:ocean_wings"
         display: "Ocean Wings"
         amount: 1
-        weight: 1
+        weight: 2
       phoenix_wings:
         type: cosmetic
         content: "gasmp_cosmetics:phoenix_wings"
@@ -182,32 +183,209 @@ crates:
         content: "gasmp_cosmetics:purple_wings"
         display: "Purple Wings"
         amount: 1
-        weight: 1
+        weight: 2
       backpack:
         type: cosmetic
         content: "gasmp_default_models:backpack"
         display: "Backpack"
         amount: 1
-        weight: 3
+        weight: 4
       top_hat:
         type: cosmetic
         content: "gasmp_default_models:top_hat"
         display: "Top Hat"
         amount: 1
+        weight: 4
+      enchants:
+        type: cosmetic
+        content: "gasmp_default_models:enchants"
+        display: "Enchantment Display"
+        amount: 1
+        weight: 3
+      bed_large:
+        type: cosmetic
+        content: "gasmp_default_models:bed_large"
+        display: "Large Bed"
+        amount: 1
+        weight: 3
+      bed_small:
+        type: cosmetic
+        content: "gasmp_default_models:bed_small"
+        display: "Small Bed"
+        amount: 1
+        weight: 3
+      bench:
+        type: cosmetic
+        content: "gasmp_default_models:bench"
+        display: "Bench"
+        amount: 1
+        weight: 3
+      chandelier:
+        type: cosmetic
+        content: "gasmp_default_models:chandelier"
+        display: "Chandelier"
+        amount: 1
+        weight: 3
+      decorative_plant:
+        type: cosmetic
+        content: "gasmp_default_models:decorative_plant"
+        display: "Decorative Plant"
+        amount: 1
+        weight: 3
+      door_frame:
+        type: cosmetic
+        content: "gasmp_default_models:door_frame"
+        display: "Door Frame"
+        amount: 1
+        weight: 3
+      glass_table:
+        type: cosmetic
+        content: "gasmp_default_models:glass_table"
+        display: "Glass Table"
+        amount: 1
+        weight: 3
+      lamp:
+        type: cosmetic
+        content: "gasmp_default_models:lamp"
+        display: "Lamp"
+        amount: 1
+        weight: 3
+      pizza_box:
+        type: cosmetic
+        content: "gasmp_default_models:pizza_box"
+        display: "Pizza Box"
+        amount: 1
+        weight: 3
+      sofa:
+        type: cosmetic
+        content: "gasmp_default_models:sofa"
+        display: "Small Sofa"
+        amount: 1
+        weight: 3
+      sofa_large:
+        type: cosmetic
+        content: "gasmp_default_models:sofa_large"
+        display: "Large Sofa"
+        amount: 1
+        weight: 3
+      wardrobe:
+        type: cosmetic
+        content: "gasmp_default_models:wardrobe"
+        display: "Wardrobe"
+        amount: 1
+        weight: 3
+      window:
+        type: cosmetic
+        content: "gasmp_default_models:window"
+        display: "Window"
+        amount: 1
+        weight: 3
+      window_curtains:
+        type: cosmetic
+        content: "gasmp_default_models:window_curtains"
+        display: "Window Curtains"
+        amount: 1
+        weight: 3
+      chimney:
+        type: cosmetic
+        content: "gasmp_default_models:chimney"
+        display: "Kitchen Chimney"
+        amount: 1
+        weight: 3
+      fridge:
+        type: cosmetic
+        content: "gasmp_default_models:fridge"
+        display: "Fridge"
+        amount: 1
+        weight: 3
+      kitchen_cabinet:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_cabinet"
+        display: "Kitchen Cabinet"
+        amount: 1
+        weight: 3
+      kitchen_cabinet_1:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_cabinet_1"
+        display: "Open Kitchen Cabinet"
+        amount: 1
+        weight: 3
+      kitchen_cabinet_2:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_cabinet_2"
+        display: "Large Open Kitchen Cabinet"
+        amount: 1
+        weight: 3
+      kitchen_chair:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_chair"
+        display: "Kitchen Chair"
+        amount: 1
+        weight: 3
+      kitchen_sink:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_sink"
+        display: "Kitchen Sink"
+        amount: 1
+        weight: 3
+      kitchen_table:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_table"
+        display: "Kitchen Table"
+        amount: 1
+        weight: 3
+      stove:
+        type: cosmetic
+        content: "gasmp_default_models:stove"
+        display: "Stove"
+        amount: 1
+        weight: 3
+      laptop:
+        type: cosmetic
+        content: "gasmp_default_models:laptop"
+        display: "Laptop"
+        amount: 1
+        weight: 3
+      tv:
+        type: cosmetic
+        content: "gasmp_default_models:tv"
+        display: "Television"
+        amount: 1
+        weight: 3
+      washing_machine:
+        type: cosmetic
+        content: "gasmp_default_models:washing_machine"
+        display: "Washing Machine"
+        amount: 1
+        weight: 3
+      modern_sofa:
+        type: cosmetic
+        content: "gasmp_furniture:modern_sofa"
+        display: "Modern Sofa"
+        amount: 1
         weight: 3
       medium_key_jackpot:
         type: key
         crate: medium
-        display: "Medium Key"
+        display: "Medium Cosmetic Key"
         amount: 1
         weight: 1
       premium_key_jackpot:
         type: key
         crate: premium
-        display: "Premium Key"
+        display: "Premium Cosmetic Key"
         amount: 1
         weight: 1
-
+      normal_shard_bonus:
+        type: shards
+        display: "15 Shards Bonus"
+        amount: 15
+        weight: 4
+      normal_shard_cache:
+        type: shards
+        display: "35 Shards Bonus"
+        amount: 35
+        weight: 1
   medium:
     rewards:
       freddy_plush:
@@ -257,7 +435,7 @@ crates:
         content: "gasmp_cosmetics:feral_bear_tail"
         display: "Bear Tail"
         amount: 1
-        weight: 4
+        weight: 5
       feral_cat_ears:
         type: cosmetic
         content: "gasmp_cosmetics:feral_cat_ears"
@@ -269,7 +447,7 @@ crates:
         content: "gasmp_cosmetics:feral_cat_tail"
         display: "Cat Tail"
         amount: 1
-        weight: 4
+        weight: 5
       feral_fox_ears:
         type: cosmetic
         content: "gasmp_cosmetics:feral_fox_ears"
@@ -281,7 +459,7 @@ crates:
         content: "gasmp_cosmetics:feral_fox_tail"
         display: "Fox Tail"
         amount: 1
-        weight: 4
+        weight: 5
       feral_rabbit_ears:
         type: cosmetic
         content: "gasmp_cosmetics:feral_rabbit_ears"
@@ -293,7 +471,7 @@ crates:
         content: "gasmp_cosmetics:feral_rabbit_tail"
         display: "Rabbit Tail"
         amount: 1
-        weight: 4
+        weight: 5
       feral_tiger_ears:
         type: cosmetic
         content: "gasmp_cosmetics:feral_tiger_ears"
@@ -305,7 +483,7 @@ crates:
         content: "gasmp_cosmetics:feral_tiger_tail"
         display: "Tiger Tail"
         amount: 1
-        weight: 4
+        weight: 5
       feral_wolf_ears:
         type: cosmetic
         content: "gasmp_cosmetics:feral_wolf_ears"
@@ -317,7 +495,7 @@ crates:
         content: "gasmp_cosmetics:feral_wolf_tail"
         display: "Wolf Tail"
         amount: 1
-        weight: 4
+        weight: 5
       angel_wings:
         type: cosmetic
         content: "gasmp_cosmetics:angel_wings"
@@ -402,19 +580,196 @@ crates:
         display: "Top Hat"
         amount: 1
         weight: 4
+      enchants:
+        type: cosmetic
+        content: "gasmp_default_models:enchants"
+        display: "Enchantment Display"
+        amount: 1
+        weight: 3
+      bed_large:
+        type: cosmetic
+        content: "gasmp_default_models:bed_large"
+        display: "Large Bed"
+        amount: 1
+        weight: 3
+      bed_small:
+        type: cosmetic
+        content: "gasmp_default_models:bed_small"
+        display: "Small Bed"
+        amount: 1
+        weight: 3
+      bench:
+        type: cosmetic
+        content: "gasmp_default_models:bench"
+        display: "Bench"
+        amount: 1
+        weight: 3
+      chandelier:
+        type: cosmetic
+        content: "gasmp_default_models:chandelier"
+        display: "Chandelier"
+        amount: 1
+        weight: 3
+      decorative_plant:
+        type: cosmetic
+        content: "gasmp_default_models:decorative_plant"
+        display: "Decorative Plant"
+        amount: 1
+        weight: 3
+      door_frame:
+        type: cosmetic
+        content: "gasmp_default_models:door_frame"
+        display: "Door Frame"
+        amount: 1
+        weight: 3
+      glass_table:
+        type: cosmetic
+        content: "gasmp_default_models:glass_table"
+        display: "Glass Table"
+        amount: 1
+        weight: 3
+      lamp:
+        type: cosmetic
+        content: "gasmp_default_models:lamp"
+        display: "Lamp"
+        amount: 1
+        weight: 3
+      pizza_box:
+        type: cosmetic
+        content: "gasmp_default_models:pizza_box"
+        display: "Pizza Box"
+        amount: 1
+        weight: 3
+      sofa:
+        type: cosmetic
+        content: "gasmp_default_models:sofa"
+        display: "Small Sofa"
+        amount: 1
+        weight: 3
+      sofa_large:
+        type: cosmetic
+        content: "gasmp_default_models:sofa_large"
+        display: "Large Sofa"
+        amount: 1
+        weight: 3
+      wardrobe:
+        type: cosmetic
+        content: "gasmp_default_models:wardrobe"
+        display: "Wardrobe"
+        amount: 1
+        weight: 3
+      window:
+        type: cosmetic
+        content: "gasmp_default_models:window"
+        display: "Window"
+        amount: 1
+        weight: 3
+      window_curtains:
+        type: cosmetic
+        content: "gasmp_default_models:window_curtains"
+        display: "Window Curtains"
+        amount: 1
+        weight: 3
+      chimney:
+        type: cosmetic
+        content: "gasmp_default_models:chimney"
+        display: "Kitchen Chimney"
+        amount: 1
+        weight: 3
+      fridge:
+        type: cosmetic
+        content: "gasmp_default_models:fridge"
+        display: "Fridge"
+        amount: 1
+        weight: 3
+      kitchen_cabinet:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_cabinet"
+        display: "Kitchen Cabinet"
+        amount: 1
+        weight: 3
+      kitchen_cabinet_1:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_cabinet_1"
+        display: "Open Kitchen Cabinet"
+        amount: 1
+        weight: 3
+      kitchen_cabinet_2:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_cabinet_2"
+        display: "Large Open Kitchen Cabinet"
+        amount: 1
+        weight: 3
+      kitchen_chair:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_chair"
+        display: "Kitchen Chair"
+        amount: 1
+        weight: 3
+      kitchen_sink:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_sink"
+        display: "Kitchen Sink"
+        amount: 1
+        weight: 3
+      kitchen_table:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_table"
+        display: "Kitchen Table"
+        amount: 1
+        weight: 3
+      stove:
+        type: cosmetic
+        content: "gasmp_default_models:stove"
+        display: "Stove"
+        amount: 1
+        weight: 3
+      laptop:
+        type: cosmetic
+        content: "gasmp_default_models:laptop"
+        display: "Laptop"
+        amount: 1
+        weight: 3
+      tv:
+        type: cosmetic
+        content: "gasmp_default_models:tv"
+        display: "Television"
+        amount: 1
+        weight: 3
+      washing_machine:
+        type: cosmetic
+        content: "gasmp_default_models:washing_machine"
+        display: "Washing Machine"
+        amount: 1
+        weight: 3
+      modern_sofa:
+        type: cosmetic
+        content: "gasmp_furniture:modern_sofa"
+        display: "Modern Sofa"
+        amount: 1
+        weight: 3
       normal_key_jackpot:
         type: key
         crate: normal
-        display: "Normal Key"
+        display: "Normal Cosmetic Key"
         amount: 1
         weight: 1
       premium_key_jackpot:
         type: key
         crate: premium
-        display: "Premium Key"
+        display: "Premium Cosmetic Key"
         amount: 1
         weight: 1
-
+      medium_shard_bonus:
+        type: shards
+        display: "35 Shards Bonus"
+        amount: 35
+        weight: 4
+      medium_shard_cache:
+        type: shards
+        display: "70 Shards Bonus"
+        amount: 70
+        weight: 1
   premium:
     rewards:
       freddy_plush:
@@ -530,19 +885,19 @@ crates:
         content: "gasmp_cosmetics:angel_wings"
         display: "Angel Wings"
         amount: 1
-        weight: 5
+        weight: 3
       astronaut_wings:
         type: cosmetic
         content: "gasmp_cosmetics:astronaut_wings"
         display: "Astronaut Wings"
         amount: 1
-        weight: 4
+        weight: 3
       bluefire_wings:
         type: cosmetic
         content: "gasmp_cosmetics:bluefire_wings"
         display: "Bluefire Wings"
         amount: 1
-        weight: 4
+        weight: 2
       brown_wings:
         type: cosmetic
         content: "gasmp_cosmetics:brown_wings"
@@ -554,19 +909,19 @@ crates:
         content: "gasmp_cosmetics:butterfly_wings"
         display: "Butterfly Wings"
         amount: 1
-        weight: 4
+        weight: 3
       demon_wings:
         type: cosmetic
         content: "gasmp_cosmetics:demon_wings"
         display: "Demon Wings"
         amount: 1
-        weight: 4
+        weight: 3
       dragon_wings:
         type: cosmetic
         content: "gasmp_cosmetics:dragon_wings"
         display: "Dragon Wings"
         amount: 1
-        weight: 4
+        weight: 2
       eagle_wings:
         type: cosmetic
         content: "gasmp_cosmetics:eagle_wings"
@@ -602,24 +957,202 @@ crates:
         content: "gasmp_default_models:backpack"
         display: "Backpack"
         amount: 1
-        weight: 2
+        weight: 3
       top_hat:
         type: cosmetic
         content: "gasmp_default_models:top_hat"
         display: "Top Hat"
         amount: 1
+        weight: 3
+      enchants:
+        type: cosmetic
+        content: "gasmp_default_models:enchants"
+        display: "Enchantment Display"
+        amount: 1
+        weight: 2
+      bed_large:
+        type: cosmetic
+        content: "gasmp_default_models:bed_large"
+        display: "Large Bed"
+        amount: 1
+        weight: 2
+      bed_small:
+        type: cosmetic
+        content: "gasmp_default_models:bed_small"
+        display: "Small Bed"
+        amount: 1
+        weight: 2
+      bench:
+        type: cosmetic
+        content: "gasmp_default_models:bench"
+        display: "Bench"
+        amount: 1
+        weight: 2
+      chandelier:
+        type: cosmetic
+        content: "gasmp_default_models:chandelier"
+        display: "Chandelier"
+        amount: 1
+        weight: 2
+      decorative_plant:
+        type: cosmetic
+        content: "gasmp_default_models:decorative_plant"
+        display: "Decorative Plant"
+        amount: 1
+        weight: 2
+      door_frame:
+        type: cosmetic
+        content: "gasmp_default_models:door_frame"
+        display: "Door Frame"
+        amount: 1
+        weight: 2
+      glass_table:
+        type: cosmetic
+        content: "gasmp_default_models:glass_table"
+        display: "Glass Table"
+        amount: 1
+        weight: 2
+      lamp:
+        type: cosmetic
+        content: "gasmp_default_models:lamp"
+        display: "Lamp"
+        amount: 1
+        weight: 2
+      pizza_box:
+        type: cosmetic
+        content: "gasmp_default_models:pizza_box"
+        display: "Pizza Box"
+        amount: 1
+        weight: 2
+      sofa:
+        type: cosmetic
+        content: "gasmp_default_models:sofa"
+        display: "Small Sofa"
+        amount: 1
+        weight: 2
+      sofa_large:
+        type: cosmetic
+        content: "gasmp_default_models:sofa_large"
+        display: "Large Sofa"
+        amount: 1
+        weight: 2
+      wardrobe:
+        type: cosmetic
+        content: "gasmp_default_models:wardrobe"
+        display: "Wardrobe"
+        amount: 1
+        weight: 2
+      window:
+        type: cosmetic
+        content: "gasmp_default_models:window"
+        display: "Window"
+        amount: 1
+        weight: 2
+      window_curtains:
+        type: cosmetic
+        content: "gasmp_default_models:window_curtains"
+        display: "Window Curtains"
+        amount: 1
+        weight: 2
+      chimney:
+        type: cosmetic
+        content: "gasmp_default_models:chimney"
+        display: "Kitchen Chimney"
+        amount: 1
+        weight: 2
+      fridge:
+        type: cosmetic
+        content: "gasmp_default_models:fridge"
+        display: "Fridge"
+        amount: 1
+        weight: 2
+      kitchen_cabinet:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_cabinet"
+        display: "Kitchen Cabinet"
+        amount: 1
+        weight: 2
+      kitchen_cabinet_1:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_cabinet_1"
+        display: "Open Kitchen Cabinet"
+        amount: 1
+        weight: 2
+      kitchen_cabinet_2:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_cabinet_2"
+        display: "Large Open Kitchen Cabinet"
+        amount: 1
+        weight: 2
+      kitchen_chair:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_chair"
+        display: "Kitchen Chair"
+        amount: 1
+        weight: 2
+      kitchen_sink:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_sink"
+        display: "Kitchen Sink"
+        amount: 1
+        weight: 2
+      kitchen_table:
+        type: cosmetic
+        content: "gasmp_default_models:kitchen_table"
+        display: "Kitchen Table"
+        amount: 1
+        weight: 2
+      stove:
+        type: cosmetic
+        content: "gasmp_default_models:stove"
+        display: "Stove"
+        amount: 1
+        weight: 2
+      laptop:
+        type: cosmetic
+        content: "gasmp_default_models:laptop"
+        display: "Laptop"
+        amount: 1
+        weight: 2
+      tv:
+        type: cosmetic
+        content: "gasmp_default_models:tv"
+        display: "Television"
+        amount: 1
+        weight: 2
+      washing_machine:
+        type: cosmetic
+        content: "gasmp_default_models:washing_machine"
+        display: "Washing Machine"
+        amount: 1
+        weight: 2
+      modern_sofa:
+        type: cosmetic
+        content: "gasmp_furniture:modern_sofa"
+        display: "Modern Sofa"
+        amount: 1
         weight: 2
       normal_key_jackpot:
         type: key
         crate: normal
-        display: "Normal Key"
+        display: "Normal Cosmetic Key"
         amount: 1
         weight: 1
       medium_key_jackpot:
         type: key
         crate: medium
-        display: "Medium Key"
+        display: "Medium Cosmetic Key"
         amount: 1
+        weight: 1
+      premium_shard_bonus:
+        type: shards
+        display: "75 Shards Bonus"
+        amount: 75
+        weight: 4
+      premium_shard_cache:
+        type: shards
+        display: "150 Shards Bonus"
+        amount: 150
         weight: 1
 
 locations: {}
