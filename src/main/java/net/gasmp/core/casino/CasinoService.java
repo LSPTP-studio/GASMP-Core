@@ -33,8 +33,14 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
     private org.bukkit.configuration.file.YamlConfiguration config;
     private final Map<UUID, BukkitTask> spinTasks = new ConcurrentHashMap<>();
     private final Map<UUID, Integer> spinTicks = new ConcurrentHashMap<>();
+    private final CasinoDuelService duels;
 
-    public CasinoService(GASMPCore plugin) { this.plugin = plugin; reload(); }
+    public CasinoService(GASMPCore plugin) {
+        this.plugin = plugin;
+        reload();
+        this.duels = new CasinoDuelService(plugin, this);
+        Bukkit.getPluginManager().registerEvents(duels, plugin);
+    }
 
     public void reload() {
         File file = new File(plugin.getDataFolder(), "casino.yml");
@@ -42,6 +48,13 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         config = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file);
         // This server's requested Arcade currency is GASMP Shards, not Vault Coins.
         config.set("settings.enabled", true);
+        // Make every shipped game available after a reload, including the two
+        // quick-match entries that older configs may have left switched off.
+        for (String game : List.of("roulette", "darts", "drums", "races", "pyramid", "stairs",
+                "lottery", "crash", "classic", "blackjack", "rps",
+                "tictactoe-quick-match", "poker-quick-match")) {
+            config.set("games." + game, true);
+        }
         if (!config.contains("settings.minimum-bet")) config.set("settings.minimum-bet", 1);
         if (!config.contains("settings.maximum-bet")) config.set("settings.maximum-bet", 100);
         try {
@@ -57,6 +70,10 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
             player.sendMessage(color("&cThe GASMP arcade is currently disabled.")); return true;
         }
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) { help(player); return true; }
+        if (args[0].equalsIgnoreCase("challenge") || args[0].equalsIgnoreCase("accept")
+                || args[0].equalsIgnoreCase("decline") || args[0].equalsIgnoreCase("duel")) {
+            return duels.handle(player, args);
+        }
         if (args[0].equalsIgnoreCase("menu")) { openMenu(player, 10.0); return true; }
         if (args[0].equalsIgnoreCase("odds")) { showOdds(player); return true; }
         if (spinTasks.containsKey(player.getUniqueId())) {
@@ -84,6 +101,10 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         long max = Math.max(min, (long) Math.floor(config.getDouble("settings.maximum-bet", 100.0)));
         if (bet < min || bet > max) {
             player.sendMessage(color("&cWager must be between " + min + " and " + max + " Shards.")); return true;
+        }
+        if (duels.isBusy(player.getUniqueId())) {
+            player.sendMessage(color("&cFinish or leave your multiplayer Arcade challenge first."));
+            return true;
         }
         if (active.contains(player.getUniqueId())) {
             player.sendMessage(color("&cYour previous game is still processing.")); return true;
@@ -154,6 +175,41 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
                     + config.getLong("settings.cooldown-seconds", 5) * 1000L);
             active.remove(player.getUniqueId());
         }));
+    }
+
+    /** Canonical game key shared by solo and multiplayer Arcade modes. */
+    public String canonicalGame(String raw) {
+        return switch (raw.toLowerCase(Locale.ROOT)) {
+            case "slots" -> "drums";
+            case "rockpaperscissors" -> "rps";
+            case "tictactoe-quick-match" -> "tictactoe";
+            case "poker-quick-match" -> "poker";
+            default -> raw.toLowerCase(Locale.ROOT);
+        };
+    }
+
+    public boolean isGameEnabled(String game) {
+        String key = switch (canonicalGame(game)) {
+            case "tictactoe" -> "tictactoe-quick-match";
+            case "poker" -> "poker-quick-match";
+            default -> canonicalGame(game);
+        };
+        return config.getBoolean("games." + key, false);
+    }
+
+    public long minimumBet() {
+        return Math.max(1L, (long) Math.ceil(config.getDouble("settings.minimum-bet", 1.0)));
+    }
+
+    public long maximumBet() {
+        return Math.max(minimumBet(), Math.min(1_000_000L,
+                (long) Math.floor(config.getDouble("settings.maximum-bet", 100.0))));
+    }
+
+    /** Runs the established game resolver at a one-Shard scale for duel scoring. */
+    public double rollDuelScore(String game, String choice) {
+        Result result = play(canonicalGame(game), 1.0, choice);
+        return result == null ? 0.0 : result.grossPayout();
     }
 
     private String rootMessage(Throwable error) {
@@ -561,7 +617,8 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         player.sendMessage(color("&7Darts high/low: 50%, 1.90x gross; bull: 3%, 32.00x gross."));
         player.sendMessage(color("&7RPS win: 1/3 at 1.85x; tie returns the bet (95% theoretical RTP). Poker quick-match: about 49.5%, 1.90x."));
         player.sendMessage(color("&7Pyramid: 1/3 at 2.85x. Crash target: dynamic 96% payout factor. Blackjack is a simplified auto-hit simulation."));
-        player.sendMessage(color("&eThe GUI includes game-themed animations; Poker and Tic-Tac-Toe remain simplified quick-match simulations."));
+        player.sendMessage(color("&eAll listed games are enabled. Poker and Tic-Tac-Toe remain simplified quick-match score modes."));
+        player.sendMessage(color("&eUse /casino challenge <player> <game> <shards> for player-versus-player Arcade duels."));
         player.sendMessage(color("&cNo real-money deposit, purchase or cash-out is supported."));
     }
 
@@ -582,6 +639,9 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         player.sendMessage(color("&e/casino tictactoe <bet> &7- simplified quick-match simulation, not a board game"));
         player.sendMessage(color("&e/casino poker <bet> &7- simplified hand-strength quick match, not full poker"));
         player.sendMessage(color("&e/casino odds &7- view selected payout rules"));
+        player.sendMessage(color("&e/casino challenge <player> <game> <shards> &7- challenge another player"));
+        player.sendMessage(color("&e/casino accept|decline &7- respond to a challenge"));
+        player.sendMessage(color("&e/casino duel &7- reopen your current multiplayer match"));
         player.sendMessage(color("&dShards are virtual server currency. No real-money deposits or cash-out."));
     }
 
@@ -600,7 +660,7 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
 
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 1) return List.of("roulette","darts","drums","races","pyramid","stairs","lottery","crash","classic","blackjack","rps","tictactoe","poker","odds","help");
+        if (args.length == 1) return List.of("roulette","darts","drums","races","pyramid","stairs","lottery","crash","classic","blackjack","rps","tictactoe","poker","challenge","accept","decline","duel","odds","help");
         if (args.length == 3) return switch (args[0].toLowerCase(Locale.ROOT)) {
             case "roulette" -> List.of("red", "black"); case "darts" -> List.of("high", "low", "bull");
             case "races" -> List.of("1", "2", "3", "4", "5"); case "pyramid" -> List.of("1", "2", "3");
