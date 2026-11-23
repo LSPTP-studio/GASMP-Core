@@ -2,7 +2,7 @@ name: GASMP Core Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feature/menu-shard-shop-casino ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
