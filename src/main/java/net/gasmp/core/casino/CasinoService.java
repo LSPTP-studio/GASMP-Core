@@ -1,6 +1,7 @@
 package net.gasmp.core.casino;
 
 import net.gasmp.core.GASMPCore;
+import net.gasmp.core.gui.RpEngineUi;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -402,7 +403,12 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
     }
 
     private Inventory create(CasinoMenuHolder holder, int size, String title) {
-        Inventory inventory = Bukkit.createInventory(holder, size, color(title));
+        String screen = switch (holder.stage()) {
+            case MENU -> "casino";
+            case CHOICES -> "casino_choices";
+            case SPIN -> "casino_spin";
+        };
+        Inventory inventory = Bukkit.createInventory(holder, size, RpEngineUi.title(screen, title));
         holder.inventory(inventory);
         ItemStack filler = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta meta = filler.getItemMeta();
