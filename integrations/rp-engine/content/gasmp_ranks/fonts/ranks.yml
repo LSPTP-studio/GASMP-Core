@@ -1,0 +1,208 @@
+# RP Engine animated rank badges. LuckPerms groups receive rpengine.tag.gasmp_ranks.<id>.
+owner:
+  priority: 1000
+  tag:
+    text: OWNER
+    background: "#c62828"
+    face: gloss
+    shape: pill
+    icon: crown
+    animation: glint
+admin:
+  priority: 950
+  tag:
+    text: ADMIN
+    background: "#2457b8"
+    face: gloss
+    shape: pill
+    icon: shield
+    animation: pulse
+manager:
+  priority: 900
+  tag:
+    text: MANAGER
+    background: "#a62c64"
+    face: gloss
+    shape: pill
+    icon: star
+    animation: glint
+dev:
+  priority: 850
+  tag:
+    text: DEV
+    background: "#238844"
+    face: gloss
+    shape: pill
+    icon: hammer
+    animation: glint
+builder:
+  priority: 800
+  tag:
+    text: BUILDER
+    background: "#218b91"
+    face: gloss
+    shape: pill
+    icon: hammer
+    animation: pulse
+mod:
+  priority: 750
+  tag:
+    text: MOD
+    background: "#167d91"
+    face: gloss
+    shape: pill
+    icon: shield
+    animation: glint
+helper:
+  priority: 700
+  tag:
+    text: HELPER
+    background: "#d18b20"
+    face: gloss
+    shape: pill
+    icon: heart
+    animation: twinkle
+youtuber:
+  priority: 650
+  tag:
+    text: YOUTUBER
+    background: "#c43b35"
+    face: gloss
+    shape: pill
+    icon: play
+    animation: glint
+tiktoker:
+  priority: 640
+  tag:
+    text: TIKTOKER
+    background: "#b42d86"
+    face: gloss
+    shape: pill
+    icon: music
+    animation: rainbow
+streamer:
+  priority: 630
+  tag:
+    text: STREAMER
+    background: "#6e3bb1"
+    face: gloss
+    shape: pill
+    icon: broadcast
+    animation: pulse
+famous:
+  priority: 620
+  tag:
+    text: FAMOUS
+    background: "#2585b9"
+    face: gloss
+    shape: pill
+    icon: star
+    animation: twinkle
+booster:
+  priority: 550
+  tag:
+    text: BOOSTER
+    background: "#a63eb2"
+    face: gloss
+    shape: pill
+    icon: lightning
+    animation: glint
+mvpplus:
+  priority: 540
+  tag:
+    text: MVP+
+    background: "#2788b9"
+    face: gloss
+    shape: pill
+    icon: gem
+    animation: glint
+mvp:
+  priority: 530
+  tag:
+    text: MVP
+    background: "#b58a22"
+    face: gloss
+    shape: pill
+    icon: star
+    animation: pulse
+vipplus:
+  priority: 520
+  tag:
+    text: VIP+
+    background: "#9146b5"
+    face: gloss
+    shape: pill
+    icon: crown
+    animation: glint
+vip:
+  priority: 510
+  tag:
+    text: VIP
+    background: "#3d9b55"
+    face: gloss
+    shape: pill
+    icon: crown
+    animation: pulse
+user:
+  priority: 500
+  tag:
+    text: USER
+    background: "#656d78"
+    face: flat
+    shape: round
+    icon: player
+    animation: none
+legendary:
+  priority: 450
+  tag:
+    text: LEGENDARY
+    background: "#a33dc2"
+    face: gloss
+    shape: pill
+    icon: crown
+    animation: rainbow
+heroic:
+  priority: 440
+  tag:
+    text: HEROIC
+    background: "#ba3b3b"
+    face: gloss
+    shape: pill
+    icon: flame
+    animation: glint
+epic:
+  priority: 430
+  tag:
+    text: EPIC
+    background: "#bd7924"
+    face: gloss
+    shape: pill
+    icon: star
+    animation: twinkle
+rare:
+  priority: 420
+  tag:
+    text: RARE
+    background: "#2d8fb5"
+    face: gloss
+    shape: pill
+    icon: diamond
+    animation: pulse
+uncommon:
+  priority: 410
+  tag:
+    text: UNCOMMON
+    background: "#3c914c"
+    face: gloss
+    shape: pill
+    icon: emerald
+    animation: twinkle
+common:
+  priority: 400
+  tag:
+    text: COMMON
+    background: "#62666d"
+    face: flat
+    shape: round
+    icon: coal
+    animation: none
