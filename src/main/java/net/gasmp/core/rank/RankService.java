@@ -112,9 +112,16 @@ public final class RankService {
         grant(groupPermissions, "manager", "gasmpcore.staff.vanish", "gasmpcore.maintenance.bypass");
         grant(groupPermissions, "admin", "gasmpcore.staff.vanish", "gasmpcore.maintenance.bypass", "gasmpcore.shards.admin", "openinv.inventory.open.other", "openinv.enderchest.open.other", "openinv.search.inventory", "openinv.access.online");
         grant(groupPermissions, "mod", "gasmpcore.staff.vanish");
-        grant(groupPermissions, "helper", "gasmpcore.staff.vanish");
+                grant(groupPermissions, "helper", "gasmpcore.staff.vanish");
 
-        Map<String, RankDefinition> groupsToCreate = new LinkedHashMap<>();
+        // RP Engine rank badges only appear when the matching LuckPerms group
+        // has the badge permission. Keep this in sync with fonts/ranks.yml.
+        for (RankDefinition definition : byKey.values()) {
+            grant(groupPermissions, definition.group(),
+                    "rpengine.tag.gasmp_ranks." + definition.imageKey());
+        }
+
+        Map<String, RankDefinition> groupsToCreate = new LinkedHashMap<>(); = new LinkedHashMap<>();
         for (RankDefinition rank : byKey.values()) groupsToCreate.put(rank.group(), rank);
         for (String name : groupPermissions.keySet()) groupsToCreate.putIfAbsent(name, null);
 
@@ -131,7 +138,7 @@ public final class RankService {
                     group.data().add(PrefixNode.builder(rank.prefix(), prefixPriority).build());
                 }
                 Set<String> wanted = groupPermissions.getOrDefault(groupName, Set.of());
-                Set<String> managedPermissions = Set.of(
+                Set<String> managedPermissions = new HashSet<>(Set.of(
                         "gasmpcore.rankadmin", "gasmpcore.admin", "gasmpcore.staff.vanish",
                         "gasmpcore.maintenance.bypass", "gasmpcore.shards.admin", "gasmpcore.crates.manage",
                         "gasmpcore.casino.admin", "gasmpcore.combat.bypass", "gasmpcore.staff.headdb",
@@ -140,7 +147,10 @@ public final class RankService {
                         "openinv.inventory.open.other", "openinv.inventory.edit.other",
                         "openinv.enderchest.open.other", "openinv.enderchest.edit.other",
                         "openinv.search.inventory", "openinv.access.online", "openinv.access.offline", "skript.admin"
-                );
+                ));
+                for (RankDefinition definition : byKey.values()) {
+                    managedPermissions.add("rpengine.tag.gasmp_ranks." + definition.imageKey());
+                }
                 group.data().clear(node -> node instanceof PermissionNode
                         && (wanted.contains(node.getKey().toLowerCase(Locale.ROOT))
                         || managedPermissions.contains(node.getKey().toLowerCase(Locale.ROOT))
