@@ -5,7 +5,6 @@ public enum MenuPage {
     SHOP,
     STATISTICS,
     DECORATIONS,
-    MUSIC,
     SHARDS,
     KEY_SHOP,
     GAME_WORLDS,
