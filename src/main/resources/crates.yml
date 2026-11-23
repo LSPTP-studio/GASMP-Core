@@ -1,216 +1,624 @@
-# GASMP equipment crates. Keys are sold in the Shard Shop and awarded by configured minigames.
-# Each opening awards one equipment piece or a very rare key for another crate tier.
+# GASMP cosmetic crates. Every tier gives cosmetic collectibles, never armor/equipment.
+# All weights are relative chances. Each tier has a very rare chance to roll another tier's key.
 crates:
   normal:
     rewards:
-      iron_helmet:
-        type: item
-        material: IRON_HELMET
-        display: "&fIron Helmet"
+      freddy_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:freddy_plush"
+        display: "Freddy Plush"
         amount: 1
-        weight: 12
-        enchantments: { PROTECTION: 3, UNBREAKING: 2, RESPIRATION: 2 }
-      iron_chestplate:
-        type: item
-        material: IRON_CHESTPLATE
-        display: "&fIron Chestplate"
+        weight: 8
+      chica_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:chica_plush"
+        display: "Chica Plush"
         amount: 1
-        weight: 10
-        enchantments: { PROTECTION: 3, UNBREAKING: 2, THORNS: 1 }
-      iron_leggings:
-        type: item
-        material: IRON_LEGGINGS
-        display: "&fIron Leggings"
+        weight: 8
+      bonnie_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:bonnie_plush"
+        display: "Bonnie Plush"
         amount: 1
-        weight: 12
-        enchantments: { PROTECTION: 3, UNBREAKING: 2 }
-      iron_boots:
-        type: item
-        material: IRON_BOOTS
-        display: "&fIron Boots"
+        weight: 8
+      foxy_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:foxy_plush"
+        display: "Foxy Plush"
         amount: 1
-        weight: 12
-        enchantments: { PROTECTION: 3, UNBREAKING: 2, FEATHER_FALLING: 3, DEPTH_STRIDER: 2 }
-      iron_sword:
-        type: item
-        material: IRON_SWORD
-        display: "&fIron Sword"
+        weight: 8
+      golden_freddy_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:golden_freddy_plush"
+        display: "Golden Freddy Plush"
         amount: 1
-        weight: 14
-        enchantments: { SHARPNESS: 4, UNBREAKING: 2, FIRE_ASPECT: 1, LOOTING: 2 }
-      iron_pickaxe:
-        type: item
-        material: IRON_PICKAXE
-        display: "&fIron Pickaxe"
+        weight: 8
+      the_puppet_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:the_puppet_plush"
+        display: "The Puppet Plush"
         amount: 1
-        weight: 12
-        enchantments: { EFFICIENCY: 4, UNBREAKING: 2, FORTUNE: 2 }
-      iron_axe:
-        type: item
-        material: IRON_AXE
-        display: "&fIron Axe"
+        weight: 8
+      feral_bear_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_bear_ears"
+        display: "Bear Ears"
         amount: 1
-        weight: 10
-        enchantments: { SHARPNESS: 3, EFFICIENCY: 3, UNBREAKING: 2 }
-      iron_bow:
-        type: item
-        material: BOW
-        display: "&fIron-tier Bow"
+        weight: 5
+      feral_bear_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_bear_tail"
+        display: "Bear Tail"
         amount: 1
-        weight: 10
-        enchantments: { POWER: 4, PUNCH: 1, FLAME: 1, UNBREAKING: 2 }
+        weight: 4
+      feral_cat_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_cat_ears"
+        display: "Cat Ears"
+        amount: 1
+        weight: 5
+      feral_cat_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_cat_tail"
+        display: "Cat Tail"
+        amount: 1
+        weight: 4
+      feral_fox_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_fox_ears"
+        display: "Fox Ears"
+        amount: 1
+        weight: 5
+      feral_fox_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_fox_tail"
+        display: "Fox Tail"
+        amount: 1
+        weight: 4
+      feral_rabbit_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_rabbit_ears"
+        display: "Rabbit Ears"
+        amount: 1
+        weight: 5
+      feral_rabbit_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_rabbit_tail"
+        display: "Rabbit Tail"
+        amount: 1
+        weight: 4
+      feral_tiger_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_tiger_ears"
+        display: "Tiger Ears"
+        amount: 1
+        weight: 5
+      feral_tiger_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_tiger_tail"
+        display: "Tiger Tail"
+        amount: 1
+        weight: 4
+      feral_wolf_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_wolf_ears"
+        display: "Wolf Ears"
+        amount: 1
+        weight: 5
+      feral_wolf_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_wolf_tail"
+        display: "Wolf Tail"
+        amount: 1
+        weight: 4
+      angel_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:angel_wings"
+        display: "Angel Wings"
+        amount: 1
+        weight: 1
+      astronaut_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:astronaut_wings"
+        display: "Astronaut Wings"
+        amount: 1
+        weight: 1
+      bluefire_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:bluefire_wings"
+        display: "Bluefire Wings"
+        amount: 1
+        weight: 1
+      brown_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:brown_wings"
+        display: "Brown Wings"
+        amount: 1
+        weight: 1
+      butterfly_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:butterfly_wings"
+        display: "Butterfly Wings"
+        amount: 1
+        weight: 1
+      demon_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:demon_wings"
+        display: "Demon Wings"
+        amount: 1
+        weight: 1
+      dragon_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:dragon_wings"
+        display: "Dragon Wings"
+        amount: 1
+        weight: 1
+      eagle_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:eagle_wings"
+        display: "Eagle Wings"
+        amount: 1
+        weight: 1
+      golden_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:golden_wings"
+        display: "Golden Wings"
+        amount: 1
+        weight: 1
+      ocean_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:ocean_wings"
+        display: "Ocean Wings"
+        amount: 1
+        weight: 1
+      phoenix_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:phoenix_wings"
+        display: "Phoenix Wings"
+        amount: 1
+        weight: 1
+      purple_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:purple_wings"
+        display: "Purple Wings"
+        amount: 1
+        weight: 1
+      backpack:
+        type: cosmetic
+        content: "gasmp_default_models:backpack"
+        display: "Backpack"
+        amount: 1
+        weight: 3
+      top_hat:
+        type: cosmetic
+        content: "gasmp_default_models:top_hat"
+        display: "Top Hat"
+        amount: 1
+        weight: 3
       medium_key_jackpot:
         type: key
         crate: medium
-        display: "&bMedium Key"
+        display: "Medium Key"
         amount: 1
         weight: 1
       premium_key_jackpot:
         type: key
         crate: premium
-        display: "&6Premium Key"
+        display: "Premium Key"
         amount: 1
         weight: 1
 
   medium:
     rewards:
-      diamond_helmet:
-        type: item
-        material: DIAMOND_HELMET
-        display: "&bDiamond Helmet"
+      freddy_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:freddy_plush"
+        display: "Freddy Plush"
         amount: 1
-        weight: 12
-        enchantments: { PROTECTION: 4, UNBREAKING: 3, RESPIRATION: 3, AQUA_AFFINITY: 1 }
-      diamond_chestplate:
-        type: item
-        material: DIAMOND_CHESTPLATE
-        display: "&bDiamond Chestplate"
+        weight: 5
+      chica_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:chica_plush"
+        display: "Chica Plush"
         amount: 1
-        weight: 10
-        enchantments: { PROTECTION: 4, UNBREAKING: 3, THORNS: 2 }
-      diamond_leggings:
-        type: item
-        material: DIAMOND_LEGGINGS
-        display: "&bDiamond Leggings"
+        weight: 5
+      bonnie_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:bonnie_plush"
+        display: "Bonnie Plush"
         amount: 1
-        weight: 12
-        enchantments: { PROTECTION: 4, UNBREAKING: 3, SWIFT_SNEAK: 2 }
-      diamond_boots:
-        type: item
-        material: DIAMOND_BOOTS
-        display: "&bDiamond Boots"
+        weight: 5
+      foxy_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:foxy_plush"
+        display: "Foxy Plush"
         amount: 1
-        weight: 12
-        enchantments: { PROTECTION: 4, UNBREAKING: 3, FEATHER_FALLING: 4, DEPTH_STRIDER: 3 }
-      diamond_sword:
-        type: item
-        material: DIAMOND_SWORD
-        display: "&bDiamond Sword"
+        weight: 5
+      golden_freddy_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:golden_freddy_plush"
+        display: "Golden Freddy Plush"
         amount: 1
-        weight: 14
-        enchantments: { SHARPNESS: 5, UNBREAKING: 3, FIRE_ASPECT: 2, LOOTING: 3 }
-      diamond_pickaxe:
-        type: item
-        material: DIAMOND_PICKAXE
-        display: "&bDiamond Pickaxe"
+        weight: 5
+      the_puppet_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:the_puppet_plush"
+        display: "The Puppet Plush"
         amount: 1
-        weight: 12
-        enchantments: { EFFICIENCY: 5, UNBREAKING: 3, FORTUNE: 3 }
-      diamond_axe:
-        type: item
-        material: DIAMOND_AXE
-        display: "&bDiamond Axe"
+        weight: 5
+      feral_bear_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_bear_ears"
+        display: "Bear Ears"
         amount: 1
-        weight: 10
-        enchantments: { SHARPNESS: 5, EFFICIENCY: 5, UNBREAKING: 3 }
-      diamond_bow:
-        type: item
-        material: BOW
-        display: "&bDiamond-tier Bow"
+        weight: 5
+      feral_bear_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_bear_tail"
+        display: "Bear Tail"
         amount: 1
-        weight: 10
-        enchantments: { POWER: 5, PUNCH: 2, FLAME: 1, INFINITY: 1, UNBREAKING: 3 }
+        weight: 4
+      feral_cat_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_cat_ears"
+        display: "Cat Ears"
+        amount: 1
+        weight: 5
+      feral_cat_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_cat_tail"
+        display: "Cat Tail"
+        amount: 1
+        weight: 4
+      feral_fox_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_fox_ears"
+        display: "Fox Ears"
+        amount: 1
+        weight: 5
+      feral_fox_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_fox_tail"
+        display: "Fox Tail"
+        amount: 1
+        weight: 4
+      feral_rabbit_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_rabbit_ears"
+        display: "Rabbit Ears"
+        amount: 1
+        weight: 5
+      feral_rabbit_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_rabbit_tail"
+        display: "Rabbit Tail"
+        amount: 1
+        weight: 4
+      feral_tiger_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_tiger_ears"
+        display: "Tiger Ears"
+        amount: 1
+        weight: 5
+      feral_tiger_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_tiger_tail"
+        display: "Tiger Tail"
+        amount: 1
+        weight: 4
+      feral_wolf_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_wolf_ears"
+        display: "Wolf Ears"
+        amount: 1
+        weight: 5
+      feral_wolf_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_wolf_tail"
+        display: "Wolf Tail"
+        amount: 1
+        weight: 4
+      angel_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:angel_wings"
+        display: "Angel Wings"
+        amount: 1
+        weight: 5
+      astronaut_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:astronaut_wings"
+        display: "Astronaut Wings"
+        amount: 1
+        weight: 5
+      bluefire_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:bluefire_wings"
+        display: "Bluefire Wings"
+        amount: 1
+        weight: 3
+      brown_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:brown_wings"
+        display: "Brown Wings"
+        amount: 1
+        weight: 5
+      butterfly_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:butterfly_wings"
+        display: "Butterfly Wings"
+        amount: 1
+        weight: 5
+      demon_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:demon_wings"
+        display: "Demon Wings"
+        amount: 1
+        weight: 3
+      dragon_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:dragon_wings"
+        display: "Dragon Wings"
+        amount: 1
+        weight: 3
+      eagle_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:eagle_wings"
+        display: "Eagle Wings"
+        amount: 1
+        weight: 5
+      golden_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:golden_wings"
+        display: "Golden Wings"
+        amount: 1
+        weight: 3
+      ocean_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:ocean_wings"
+        display: "Ocean Wings"
+        amount: 1
+        weight: 5
+      phoenix_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:phoenix_wings"
+        display: "Phoenix Wings"
+        amount: 1
+        weight: 3
+      purple_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:purple_wings"
+        display: "Purple Wings"
+        amount: 1
+        weight: 5
+      backpack:
+        type: cosmetic
+        content: "gasmp_default_models:backpack"
+        display: "Backpack"
+        amount: 1
+        weight: 4
+      top_hat:
+        type: cosmetic
+        content: "gasmp_default_models:top_hat"
+        display: "Top Hat"
+        amount: 1
+        weight: 4
       normal_key_jackpot:
         type: key
         crate: normal
-        display: "&fNormal Key"
+        display: "Normal Key"
         amount: 1
         weight: 1
       premium_key_jackpot:
         type: key
         crate: premium
-        display: "&6Premium Key"
+        display: "Premium Key"
         amount: 1
         weight: 1
 
   premium:
     rewards:
-      netherite_helmet:
-        type: item
-        material: NETHERITE_HELMET
-        display: "&6Premium Netherite Helmet"
+      freddy_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:freddy_plush"
+        display: "Freddy Plush"
         amount: 1
-        weight: 20
-        enchantments: { PROTECTION: 6, UNBREAKING: 5, MENDING: 1, RESPIRATION: 4, AQUA_AFFINITY: 1, THORNS: 3 }
-      netherite_chestplate:
-        type: item
-        material: NETHERITE_CHESTPLATE
-        display: "&6Premium Netherite Chestplate"
+        weight: 3
+      chica_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:chica_plush"
+        display: "Chica Plush"
         amount: 1
-        weight: 8
-        enchantments: { PROTECTION: 6, UNBREAKING: 5, MENDING: 1, THORNS: 4 }
-      netherite_leggings:
-        type: item
-        material: NETHERITE_LEGGINGS
-        display: "&6Premium Netherite Leggings"
+        weight: 3
+      bonnie_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:bonnie_plush"
+        display: "Bonnie Plush"
         amount: 1
-        weight: 10
-        enchantments: { PROTECTION: 6, UNBREAKING: 5, MENDING: 1, SWIFT_SNEAK: 4 }
-      netherite_boots:
-        type: item
-        material: NETHERITE_BOOTS
-        display: "&6Premium Netherite Boots"
+        weight: 3
+      foxy_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:foxy_plush"
+        display: "Foxy Plush"
         amount: 1
-        weight: 10
-        enchantments: { PROTECTION: 6, UNBREAKING: 5, MENDING: 1, FEATHER_FALLING: 6, DEPTH_STRIDER: 4, SOUL_SPEED: 4 }
-      netherite_sword:
-        type: item
-        material: NETHERITE_SWORD
-        display: "&6Premium Netherite Sword"
+        weight: 3
+      golden_freddy_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:golden_freddy_plush"
+        display: "Golden Freddy Plush"
         amount: 1
-        weight: 12
-        enchantments: { SHARPNESS: 7, UNBREAKING: 5, MENDING: 1, FIRE_ASPECT: 3, LOOTING: 5, SWEEPING_EDGE: 4 }
-      netherite_pickaxe:
-        type: item
-        material: NETHERITE_PICKAXE
-        display: "&6Premium Netherite Pickaxe"
+        weight: 3
+      the_puppet_plush:
+        type: cosmetic
+        content: "gasmp_cosmetics:the_puppet_plush"
+        display: "The Puppet Plush"
         amount: 1
-        weight: 12
-        enchantments: { EFFICIENCY: 7, UNBREAKING: 5, MENDING: 1, FORTUNE: 4 }
-      netherite_axe:
-        type: item
-        material: NETHERITE_AXE
-        display: "&6Premium Netherite Axe"
+        weight: 3
+      feral_bear_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_bear_ears"
+        display: "Bear Ears"
         amount: 1
-        weight: 10
-        enchantments: { SHARPNESS: 7, EFFICIENCY: 7, UNBREAKING: 5, MENDING: 1 }
-      netherite_bow:
-        type: item
-        material: BOW
-        display: "&6Premium Bow"
+        weight: 3
+      feral_bear_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_bear_tail"
+        display: "Bear Tail"
         amount: 1
-        weight: 10
-        enchantments: { POWER: 7, PUNCH: 3, FLAME: 1, INFINITY: 1, UNBREAKING: 5 }
+        weight: 3
+      feral_cat_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_cat_ears"
+        display: "Cat Ears"
+        amount: 1
+        weight: 3
+      feral_cat_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_cat_tail"
+        display: "Cat Tail"
+        amount: 1
+        weight: 3
+      feral_fox_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_fox_ears"
+        display: "Fox Ears"
+        amount: 1
+        weight: 3
+      feral_fox_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_fox_tail"
+        display: "Fox Tail"
+        amount: 1
+        weight: 3
+      feral_rabbit_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_rabbit_ears"
+        display: "Rabbit Ears"
+        amount: 1
+        weight: 3
+      feral_rabbit_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_rabbit_tail"
+        display: "Rabbit Tail"
+        amount: 1
+        weight: 3
+      feral_tiger_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_tiger_ears"
+        display: "Tiger Ears"
+        amount: 1
+        weight: 3
+      feral_tiger_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_tiger_tail"
+        display: "Tiger Tail"
+        amount: 1
+        weight: 3
+      feral_wolf_ears:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_wolf_ears"
+        display: "Wolf Ears"
+        amount: 1
+        weight: 3
+      feral_wolf_tail:
+        type: cosmetic
+        content: "gasmp_cosmetics:feral_wolf_tail"
+        display: "Wolf Tail"
+        amount: 1
+        weight: 3
+      angel_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:angel_wings"
+        display: "Angel Wings"
+        amount: 1
+        weight: 5
+      astronaut_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:astronaut_wings"
+        display: "Astronaut Wings"
+        amount: 1
+        weight: 4
+      bluefire_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:bluefire_wings"
+        display: "Bluefire Wings"
+        amount: 1
+        weight: 4
+      brown_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:brown_wings"
+        display: "Brown Wings"
+        amount: 1
+        weight: 3
+      butterfly_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:butterfly_wings"
+        display: "Butterfly Wings"
+        amount: 1
+        weight: 4
+      demon_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:demon_wings"
+        display: "Demon Wings"
+        amount: 1
+        weight: 4
+      dragon_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:dragon_wings"
+        display: "Dragon Wings"
+        amount: 1
+        weight: 4
+      eagle_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:eagle_wings"
+        display: "Eagle Wings"
+        amount: 1
+        weight: 3
+      golden_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:golden_wings"
+        display: "Golden Wings"
+        amount: 1
+        weight: 1
+      ocean_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:ocean_wings"
+        display: "Ocean Wings"
+        amount: 1
+        weight: 3
+      phoenix_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:phoenix_wings"
+        display: "Phoenix Wings"
+        amount: 1
+        weight: 1
+      purple_wings:
+        type: cosmetic
+        content: "gasmp_cosmetics:purple_wings"
+        display: "Purple Wings"
+        amount: 1
+        weight: 3
+      backpack:
+        type: cosmetic
+        content: "gasmp_default_models:backpack"
+        display: "Backpack"
+        amount: 1
+        weight: 2
+      top_hat:
+        type: cosmetic
+        content: "gasmp_default_models:top_hat"
+        display: "Top Hat"
+        amount: 1
+        weight: 2
       normal_key_jackpot:
         type: key
         crate: normal
-        display: "&fNormal Key"
+        display: "Normal Key"
         amount: 1
         weight: 1
       medium_key_jackpot:
         type: key
         crate: medium
-        display: "&bMedium Key"
+        display: "Medium Key"
         amount: 1
         weight: 1
 
