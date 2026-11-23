@@ -647,8 +647,8 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         player.sendMessage(color("&e/casino classic <bet> <heads|tails>"));
         player.sendMessage(color("&e/casino blackjack <bet>"));
         player.sendMessage(color("&e/casino rps <bet> <rock|paper|scissors>"));
-        player.sendMessage(color("&e/casino tictactoe <bet> &7- simplified quick-match simulation, not a board game"));
-        player.sendMessage(color("&e/casino poker <bet> &7- simplified hand-strength quick match, not full poker"));
+        player.sendMessage(color("&e/casino tictactoe <bet> &7- solo quick-match; 1v1 challenges use a real board"));
+        player.sendMessage(color("&e/casino poker <bet> &7- quick hand-strength mode; duels compare both players"));
         player.sendMessage(color("&e/casino odds &7- view selected payout rules"));
         player.sendMessage(color("&e/casino challenge <player> <game> <shards> &7- challenge another player"));
         player.sendMessage(color("&e/casino accept|decline &7- respond to a challenge"));
