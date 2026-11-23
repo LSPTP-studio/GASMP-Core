@@ -41,6 +41,12 @@ public final class MenuService implements Listener {
             plugin.getShopService().open(player, 0);
             return;
         }
+        // Route the GASMP Casino tile into the real Vault-backed arcade GUI.
+        // The previous page only displayed disabled placeholder buttons.
+        if (page == MenuPage.CASINO) {
+            Bukkit.dispatchCommand(player, "casino menu");
+            return;
+        }
         if (!plugin.getConfig().getBoolean("menus.enabled", true)) {
             player.sendMessage(color("&cGASMP menus are currently disabled."));
             return;
