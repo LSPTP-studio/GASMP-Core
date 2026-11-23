@@ -1,20 +1,51 @@
-# /crates management is Owner/Developer only. Players open configured blocks using physical keys.
+# GASMP Core crate rewards. Keys are sold through the Shards key shop and earned from configured races/games.
+# Staff-only /keyall remains available for events. Normal players cannot mint keys with commands.
 crates:
-  vote:
+  common:
     rewards:
       shards_small:
         type: shards
-        amount: 25
+        amount: 10
         weight: 50
       coins_small:
         type: coins
-        amount: 250
+        amount: 100
+        weight: 35
+      iron_ingots:
+        type: item
+        material: IRON_INGOT
+        amount: 8
+        weight: 15
+  rare:
+    rewards:
+      shards_medium:
+        type: shards
+        amount: 35
+        weight: 45
+      coins_medium:
+        type: coins
+        amount: 500
         weight: 35
       diamond:
         type: item
         material: DIAMOND
-        amount: 2
-        weight: 15
+        amount: 1
+        weight: 20
+  epic:
+    rewards:
+      shards_large:
+        type: shards
+        amount: 100
+        weight: 40
+      coins_large:
+        type: coins
+        amount: 1500
+        weight: 35
+      diamonds:
+        type: item
+        material: DIAMOND
+        amount: 4
+        weight: 25
   legendary:
     rewards:
       shards_big:
@@ -30,4 +61,19 @@ crates:
         material: NETHERITE_INGOT
         amount: 1
         weight: 25
+  vote:
+    rewards:
+      shards_small:
+        type: shards
+        amount: 25
+        weight: 50
+      coins_small:
+        type: coins
+        amount: 250
+        weight: 35
+      diamond:
+        type: item
+        material: DIAMOND
+        amount: 2
+        weight: 15
 locations: {}
