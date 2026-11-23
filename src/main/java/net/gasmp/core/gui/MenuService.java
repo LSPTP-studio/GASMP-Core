@@ -146,22 +146,22 @@ public final class MenuService implements Listener {
 
     private void buildKeyShop(MenuHolder holder, Inventory inventory) {
         String[] ids = {"normal", "medium", "premium"};
-        Material[] icons = {Material.IRON_CHESTPLATE, Material.DIAMOND_CHESTPLATE, Material.NETHERITE_CHESTPLATE};
+        Material[] icons = {Material.SHULKER_BOX, Material.ENDER_CHEST, Material.PURPLE_SHULKER_BOX};
         int[] slots = {11, 13, 15};
         String[] descriptions = {
-                "&7Iron equipment crate",
-                "&7Diamond equipment crate",
-                "&7Highly enchanted netherite loot"
+                "&7Common cosmetic collectibles",
+                "&7Wings, plushies and Feral Fantasy",
+                "&7The rarest cosmetic drop pool"
         };
         for (int i = 0; i < ids.length; i++) {
             long price = plugin.getConfig().getLong("key-shop.prices." + ids[i], -1L);
             String priceText = price < 0 ? "&cNot for sale" : "&d" + price + " ✦";
-            set(inventory, slots[i], icons[i], "&f&l" + ids[i].toUpperCase(java.util.Locale.ROOT) + " KEY",
+            set(inventory, slots[i], icons[i], "&f&l" + ids[i].toUpperCase(java.util.Locale.ROOT) + " COSMETIC KEY",
                     descriptions[i], "&7Price: " + priceText, "&eClick to purchase");
         }
         set(inventory, 22, Material.BOOK, "&f&lKEY DROP SYSTEM",
-                "&7All crates award equipment for their tier.",
-                "&7Other-tier keys are jackpot drops with low odds.",
+                "&7All three crates award cosmetic collectibles.",
+                "&7Higher tiers have better odds for rare cosmetics.",
                 "&8Earn Shards in the GASMP Arcade.");
     }
 
