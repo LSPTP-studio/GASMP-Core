@@ -1,5 +1,5 @@
 name: GASMP-Core
-version: '0.7.1'
+version: '0.7.2'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
@@ -45,7 +45,7 @@ commands:
     usage: /shards <balance|give|take|set>
     aliases: [shard, gshards]
   shop:
-    description: Opens the GASMP Coins shop.
+    description: Opens the GASMP Shard Shop.
     usage: /shop
   rtp:
     description: Teleports you to a safe random location.
@@ -63,7 +63,7 @@ commands:
     aliases: [auctionhouse, auction]
     permission: gasmpcore.auction
   casino:
-    description: GASMP virtual-Coins arcade.
+    description: GASMP Shards-based arcade.
     usage: /casino <menu|game> <bet> [choice]
     permission: gasmpcore.casino.play
   battlepass:
@@ -145,7 +145,7 @@ permissions:
     description: Reserved crate administration permission; code also checks Owner/Developer group.
     default: false
   gasmpcore.casino.play:
-    description: Allows playing the enabled virtual-Coins arcade.
+    description: Allows playing the enabled Shards-based arcade.
     default: true
   gasmpcore.casino.admin:
     description: Allows configuring GASMP casino settings.
