@@ -18,9 +18,10 @@ public final class ScreenUi {
             return ChatColor.translateAlternateColorCodes('&', vanillaTitle);
         }
         try {
-            Object icons = engine.getClass().getMethod("icons").invoke(engine);
+            java.lang.reflect.Method accessor = engine.getClass().getMethod("icons");
+            Object icons = accessor.invoke(engine);
             String token = ":gasmp_ui:" + screenId + ":";
-            Object formatted = invokeFormat(icons, token);
+            Object formatted = invokeFormat(accessor.getReturnType(), icons, token);
             if (!(formatted instanceof String glyph) || glyph.equals(token) || glyph.contains(token)) {
                 return ChatColor.translateAlternateColorCodes('&', vanillaTitle);
             }
@@ -32,13 +33,9 @@ public final class ScreenUi {
         }
     }
 
-    private static Object invokeFormat(Object icons, String text) throws ReflectiveOperationException {
-        for (var method : icons.getClass().getMethods()) {
-            if (method.getName().equals("format") && method.getParameterCount() == 1
-                    && method.getParameterTypes()[0] == String.class) {
-                return method.invoke(icons, text);
-            }
-        }
-        throw new NoSuchMethodException("RP Engine Icons.format(String) is unavailable");
+    private static Object invokeFormat(Class<?> apiType, Object icons, String text)
+            throws ReflectiveOperationException {
+        java.lang.reflect.Method method = apiType.getMethod("format", String.class);
+        return method.invoke(icons, text);
     }
 }
