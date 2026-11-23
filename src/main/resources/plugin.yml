@@ -22,6 +22,9 @@ softdepend:
   - HeadDatabase
   - HeadDB
   - RPEngine
+  - RPEPaintball
+  - RPEGoKarts
+  - Multiverse-Core
 commands:
   gasmp:
     description: Opens the GASMP player menu.
@@ -72,6 +75,9 @@ commands:
   gcrateopen:
     description: Internal console-only command triggered by RP Engine crate content.
     usage: /gcrateopen <player> <crate-id>
+  keyall:
+    description: Distribute matching GASMP crate keys to online players.
+    usage: /keyall <crate-id|all> <amount> [world:<world>] [silent]
   team:
     description: GASMP teams and team chat.
     usage: /team <create|invite|accept|leave|kick|disband|info|chat|promote|demote|transfer|description|bank|sethome|home|homes|upgrade|ally>
