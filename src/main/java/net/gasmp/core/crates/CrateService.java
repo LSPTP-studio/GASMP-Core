@@ -69,39 +69,59 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             migrateEquipmentCrates(file);
         }
         config = YamlConfiguration.loadConfiguration(file);
-        mergeCosmeticsCrate(file);
     }
 
-    private void mergeCosmeticsCrate(File cratesFile) {
-        if (config.getConfigurationSection("crates.cosmetics") != null) return;
-        File defaultsFile = new File(plugin.getDataFolder(), "cosmetics-crate.yml");
-        if (!defaultsFile.exists()) {
-            try { plugin.saveResource("cosmetics-crate.yml", false); }
-            catch (IllegalArgumentException missing) {
-                plugin.getLogger().warning("cosmetics-crate.yml resource is missing; the cosmetic crate is not available.");
-                return;
+    /**
+     * Replace the old Iron/Diamond/Netherite equipment tables with cosmetic tiers.
+     * Preserve legacy placed chest coordinates and keep a complete backup.
+     */
+    private void migrateEquipmentCrates(File file) {
+        YamlConfiguration previous = YamlConfiguration.loadConfiguration(file);
+        boolean alreadyCosmetic = true;
+        for (String tier : List.of("normal", "medium", "premium")) {
+            ConfigurationSection rewards = previous.getConfigurationSection("crates." + tier + ".rewards");
+            if (rewards == null || rewards.getKeys(false).isEmpty()) {
+                alreadyCosmetic = false;
+                break;
             }
-        }
-        YamlConfiguration defaults = YamlConfiguration.loadConfiguration(defaultsFile);
-        ConfigurationSection rewards = defaults.getConfigurationSection("crates.cosmetics.rewards");
-        if (rewards == null) return;
-        for (String rewardId : rewards.getKeys(false)) {
-            ConfigurationSection reward = rewards.getConfigurationSection(rewardId);
-            if (reward == null) continue;
-            for (String key : reward.getKeys(false)) {
-                config.set("crates.cosmetics.rewards." + rewardId + "." + key, reward.get(key));
+            for (String key : rewards.getKeys(false)) {
+                String type = rewards.getString(key + ".type", "").toLowerCase(Locale.ROOT);
+                if (!type.equals("cosmetic") && !type.equals("key")) {
+                    alreadyCosmetic = false;
+                    break;
+                }
             }
+            if (!alreadyCosmetic) break;
         }
+        if (alreadyCosmetic) return;
+
         try {
-            config.save(cratesFile);
-            plugin.getLogger().info("Added the Cosmetics Shulker crate to crates.yml.");
+            File backup = new File(plugin.getDataFolder(), "crates-equipment-backup.yml");
+            if (!backup.exists()) java.nio.file.Files.copy(file.toPath(), backup.toPath());
+            plugin.saveResource("crates.yml", true);
+            YamlConfiguration upgraded = YamlConfiguration.loadConfiguration(file);
+
+            // Keep the user's placed crate coordinates; only their reward pools change.
+            ConfigurationSection locations = previous.getConfigurationSection("locations");
+            if (locations != null) {
+                for (String id : locations.getKeys(false)) {
+                    ConfigurationSection location = locations.getConfigurationSection(id);
+                    if (location == null) continue;
+                    for (String key : location.getKeys(false)) {
+                        upgraded.set("locations." + id + "." + key, location.get(key));
+                    }
+                }
+            }
+            upgraded.save(file);
+            config = upgraded;
+            plugin.getLogger().info("Migrated Normal/Medium/Premium crates to cosmetic loot. Old file backed up as crates-equipment-backup.yml.");
         } catch (Exception error) {
-            plugin.getLogger().warning("Could not save Cosmetics Shulker crate defaults: " + error.getMessage());
+            plugin.getLogger().severe("Could not migrate equipment crates to cosmetics: " + error.getMessage());
         }
     }
 
     /**
-     * Upgrade old Common/Rare/Epic/Legendary cosmetic reward tables to the
+     * Legacy crate ID compatibility to the
      * requested Normal/Iron, Medium/Diamond and Premium/Netherite tables.
      * A backup is retained, and legacy placed chest coordinates are preserved.
      */
@@ -178,11 +198,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private void giveCustomCrateItem(Player actor, String[] args, String suffix) {
         if (args.length < 3 || args.length > 4) {
             actor.sendMessage(color("&e/crates " + (suffix.equals("_crate_block") ? "giveblock" : "givemodel")
-                    + " <online-player> <crate-id> [amount]"));
+                    + " <online-player> <normal|medium|premium> [amount]"));
             return;
         }
         Player target = Bukkit.getPlayerExact(args[1]);
-        String id = args[2].toLowerCase(Locale.ROOT);
+        String id = canonicalCrateId(args[2]);
         if (target == null || config.getConfigurationSection("crates." + id) == null) {
             actor.sendMessage(color("&cOnline player or crate ID not found."));
             return;
@@ -195,14 +215,13 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             actor.sendMessage(color("&cAmount must be between 1 and 64."));
             return;
         }
-        String contentId = cosmeticsCrate(id)
-                ? "gasmp_cosmetics:" + (suffix.equals("_crate_block") ? "cosmetics_crate_block" : "cosmetics_crate_display")
-                : chestPackTier(id)
-                    ? (suffix.equals("_crate_block") ? "gasmp_chests:" + id + "_crate_block" : "gasmp_chests:" + id + "_chest_display")
-                    : "gasmp_crates:" + id + suffix;
+        String contentId = chestPackTier(id)
+                ? (suffix.equals("_crate_block") ? "gasmp_chests:" + id + "_crate_block"
+                    : "gasmp_chests:" + id + "_chest_display")
+                : "gasmp_crates:" + id + suffix;
         ItemStack custom = createEngineItem(contentId, amount);
         if (custom == null) {
-            actor.sendMessage(color("&cRP Engine is not installed or the custom content ID is not loaded. Use /rp reload first."));
+            actor.sendMessage(color("&cCould not create &f" + contentId + "&c. Check that RP Engine loaded the matching block/item definition in /rp info."));
             return;
         }
         Map<Integer, ItemStack> left = target.getInventory().addItem(custom);
@@ -234,7 +253,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private void giveKey(Player player, String[] args) {
         if (args.length < 3 || args.length > 4) { player.sendMessage(color("&e/crates givekey <online-player> <crate-id> [amount]")); return; }
         Player target = Bukkit.getPlayerExact(args[1]);
-        String id = args[2].toLowerCase(Locale.ROOT);
+        String id = canonicalCrateId(args[2]);
         if (target == null) { player.sendMessage(color("&cTarget player must be online.")); return; }
         if (config.getConfigurationSection("crates." + id) == null) { player.sendMessage(color("&cUnknown crate ID.")); return; }
         int amount = 1;
@@ -335,8 +354,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             Object result = blocks.getClass().getMethod("idAt", Block.class).invoke(blocks, block);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return null;
             String raw = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
-            String prefix = raw.startsWith("gasmp_cosmetics:") ? "gasmp_cosmetics:"
-                    : raw.startsWith("gasmp_chests:") ? "gasmp_chests:" : "gasmp_crates:";
+            String prefix = raw.startsWith("gasmp_chests:") ? "gasmp_chests:" : "gasmp_crates:";
             String suffix = "_crate_block";
             if (!raw.startsWith(prefix) || !raw.endsWith(suffix)) return null;
             String id = canonicalCrateId(raw.substring(prefix.length(), raw.length() - suffix.length()));
@@ -485,7 +503,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 List<String> lore = new ArrayList<>();
                 String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
                 lore.add(color(type.equals("key") ? "&dCrate key jackpot"
-                        : type.equals("cosmetic") ? "&dCosmetic collectible" : "&7Equipment reward"));
+                        : type.equals("cosmetic") ? "&dCosmetic collectible" : "&7Reward"));
                 lore.add(color("&7Chance: &a" + String.format(Locale.ROOT, "%.2f", weight * 100.0d / totalWeight) + "%"));
                 if (type.equals("item")) {
                     ConfigurationSection enchants = reward.getConfigurationSection("enchantments");
@@ -498,7 +516,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
         inventory.setItem(31, named(Material.BOOK, "&f&lHOW TO OPEN",
                 "&7Right-click while holding the matching key.",
-                "&7Sneak + left-click to inspect the equipment and odds.",
+                "&7Sneak + left-click to inspect cosmetics and odds.",
                 "&8Keys are consumed only after the opening animation."));
         player.openInventory(inventory);
     }
@@ -584,6 +602,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             ItemStack item = equipmentReward(reward, 1);
             return item == null ? new ItemStack(Material.BARRIER) : item;
         }
+        if (type.equals("cosmetic")) {
+            String contentId = reward.getString("content", "");
+            ItemStack cosmetic = contentId.isBlank() ? null : createEngineItem(contentId, 1);
+            return cosmetic == null ? new ItemStack(Material.BARRIER) : cosmetic;
+        }
         Material material = switch (type) {
             case "shards" -> Material.AMETHYST_SHARD;
             case "coins" -> Material.GOLD_INGOT;
@@ -603,7 +626,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             List<String> lore = new ArrayList<>();
             lore.add(color("&7You won: &f" + ChatColor.stripColor(originalName)));
             lore.add(color(type.equals("key") ? "&dRare crate-key drop"
-                    : type.equals("cosmetic") ? "&dCosmetic collectible" : "&7Equipment loot"));
+                    : type.equals("cosmetic") ? "&dCosmetic collectible" : "&7Reward"));
             if (type.equals("item")) {
                 ConfigurationSection enchants = reward.getConfigurationSection("enchantments");
                 if (enchants != null) lore.add(color("&bEnchantments: &f" + String.join(", ", enchants.getKeys(false))));
@@ -781,6 +804,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     public boolean giveKeyTo(Player target, String id, int amount, boolean message) {
+        id = canonicalCrateId(id);
         if (target == null || config.getConfigurationSection("crates." + id) == null || amount < 1 || amount > 64) return false;
         ItemStack key = createKey(id, amount);
         Map<Integer, ItemStack> left = target.getInventory().addItem(key);
@@ -838,7 +862,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (requested.equals("all")) {
             ConfigurationSection crates = config.getConfigurationSection("crates");
             if (crates != null) ids.addAll(crates.getKeys(false));
-        } else if (config.getConfigurationSection("crates." + requested) != null) ids.add(requested);
+        } else {
+            String canonical = canonicalCrateId(requested);
+            if (config.getConfigurationSection("crates." + canonical) != null) ids.add(canonical);
+        }
         if (ids.isEmpty()) {
             sender.sendMessage(color("&cUnknown crate id. Use /crates list."));
             return true;
@@ -882,13 +909,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return "normal".equalsIgnoreCase(id) || "medium".equalsIgnoreCase(id) || "premium".equalsIgnoreCase(id);
     }
 
-    private boolean cosmeticsCrate(String id) {
-        return "cosmetics".equalsIgnoreCase(id);
-    }
-
     private ItemStack createKey(String id, int amount) {
-        String contentId = cosmeticsCrate(id) ? "gasmp_cosmetics:cosmetics_key"
-                : chestPackTier(id) ? "gasmp_chests:" + id + "_key" : "gasmp_crates:" + id + "_key";
+        String canonical = canonicalCrateId(id);
+        String contentId = chestPackTier(canonical)
+                ? "gasmp_chests:" + canonical + "_key" : "gasmp_crates:" + canonical + "_key";
         ItemStack item = createEngineItem(contentId, amount);
         if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
         ItemMeta meta = item.getItemMeta();
@@ -951,6 +975,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             case "common" -> "normal";
             case "rare" -> "medium";
             case "epic", "legendary" -> "premium";
+            case "cosmetics", "cosmetic" -> "normal";
             default -> rawId.toLowerCase(Locale.ROOT);
         };
     }
@@ -968,8 +993,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             Object result = items.getClass().getMethod("idOf", ItemStack.class).invoke(items, item);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
             String actual = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
-            String expected = cosmeticsCrate(canonical) ? "gasmp_cosmetics:cosmetics_key"
-                    : chestPackTier(canonical) ? "gasmp_chests:" + canonical + "_key" : "gasmp_crates:" + canonical + "_key";
+            String expected = chestPackTier(canonical)
+                    ? "gasmp_chests:" + canonical + "_key" : "gasmp_crates:" + canonical + "_key";
             if (expected.equalsIgnoreCase(actual)) return true;
             // Existing Common/Rare/Epic/Legendary keys remain usable after the tier migration.
             String legacyPrefix = "gasmp_crates:";
@@ -993,8 +1018,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         player.sendMessage(color("&eSneak + left-click &7- preview crate loot"));
         player.sendMessage(color("&eMine/punch &7- pick up an already-placed crate"));
         player.sendMessage(color("&e/crates givekey <player> <id> [amount]"));
-        player.sendMessage(color("&e/crates giveblock <player> <normal|medium|premium> [amount] &7- placeable chest crate"));
-        player.sendMessage(color("&e/crates givemodel <player> <normal|medium|premium> [amount] &7- chest model display"));
+        player.sendMessage(color("&e/crates giveblock <player> <normal|medium|premium> [amount] &7- placeable cosmetic crate block"));
+        player.sendMessage(color("&e/crates givemodel <player> <normal|medium|premium> [amount] &7- placeable cosmetic crate display"));
+        player.sendMessage(color("&7Example: /crates giveblock " + player.getName() + " normal 1"));
         player.sendMessage(color("&e/crates reload &7- reload crate definitions"));
         player.sendMessage(color("&e/keyall <crate-id|all> <amount> [world:<world>] [silent] &7- distribute keys"));
     }
