@@ -69,7 +69,7 @@ gasmp_youtuber:
     background: "#c43b35"
     face: gloss
     shape: pill
-    icon: play
+    icon: chat
     animation: glint
 gasmp_tiktoker:
   priority: 640
@@ -78,7 +78,7 @@ gasmp_tiktoker:
     background: "#b42d86"
     face: gloss
     shape: pill
-    icon: music
+    icon: star
     animation: rainbow
 gasmp_streamer:
   priority: 630
@@ -87,7 +87,7 @@ gasmp_streamer:
     background: "#6e3bb1"
     face: gloss
     shape: pill
-    icon: broadcast
+    icon: chat
     animation: pulse
 gasmp_famous:
   priority: 620
@@ -105,7 +105,7 @@ gasmp_booster:
     background: "#a63eb2"
     face: gloss
     shape: pill
-    icon: lightning
+    icon: star
     animation: glint
 gasmp_mvpplus:
   priority: 540
@@ -114,7 +114,7 @@ gasmp_mvpplus:
     background: "#2788b9"
     face: gloss
     shape: pill
-    icon: gem
+    icon: star
     animation: glint
 gasmp_mvp:
   priority: 530
@@ -150,7 +150,7 @@ gasmp_user:
     background: "#656d78"
     face: flat
     shape: round
-    icon: player
+    icon: chat
     animation: none
 gasmp_legendary:
   priority: 450
@@ -168,7 +168,7 @@ gasmp_heroic:
     background: "#ba3b3b"
     face: gloss
     shape: pill
-    icon: flame
+    icon: star
     animation: glint
 gasmp_epic:
   priority: 430
@@ -186,7 +186,7 @@ gasmp_rare:
     background: "#2d8fb5"
     face: gloss
     shape: pill
-    icon: diamond
+    icon: star
     animation: pulse
 gasmp_uncommon:
   priority: 410
@@ -195,7 +195,7 @@ gasmp_uncommon:
     background: "#3c914c"
     face: gloss
     shape: pill
-    icon: emerald
+    icon: heart
     animation: twinkle
 gasmp_common:
   priority: 400
@@ -204,5 +204,5 @@ gasmp_common:
     background: "#62666d"
     face: flat
     shape: round
-    icon: coal
+    icon: dot-red
     animation: none
