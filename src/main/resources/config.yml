@@ -122,4 +122,33 @@ teams:
   home-set-roles: [LEADER, COLEADER, OFFICER]
   max-homes-per-team: 3
   max-alliances-per-team: 5
-  ally-request-expiry-seconds: 60
+  ally-request-expiry-seconds: 60\n\n# Crate keys: normal players buy these with Shards or earn them from configured minigames.
+key-shop:
+  enabled: true
+  prices:
+    common: 100
+    rare: 250
+    epic: 500
+    legendary: 1000
+    vote: 150
+
+# Set these to the exact world names shown by /mv list.
+game-worlds:
+  paintball: "paintball"
+  gokarts: "gokarts"
+  skatepark: "skatepark"
+
+# Optional rewards paid once when an RP Engine minigame finishes.
+key-rewards:
+  gokarts:
+    enabled: true
+    placements:
+      1: { crate: epic, amount: 1 }
+      2: { crate: rare, amount: 1 }
+      3: { crate: common, amount: 1 }
+  paintball:
+    enabled: true
+    winner:
+      crate: common
+      amount: 1
+
