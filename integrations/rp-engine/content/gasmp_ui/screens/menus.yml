@@ -1,0 +1,54 @@
+main_menu:
+  file: main_menu
+  container: chest_9x6
+statistics:
+  file: statistics
+  container: chest_9x6
+decorations:
+  file: decorations
+  container: chest_9x6
+music:
+  file: music
+  container: chest_9x6
+shards:
+  file: shards
+  container: chest_9x6
+shard_shop:
+  file: shard_shop
+  container: chest_9x6
+shard_shop_confirm:
+  file: shard_shop_confirm
+  container: chest_9x3
+casino:
+  file: casino
+  container: chest_9x6
+casino_choices:
+  file: casino_choices
+  container: chest_9x4
+casino_spin:
+  file: casino_spin
+  container: chest_9x3
+ranks:
+  file: ranks
+  container: chest_9x6
+rank_admin:
+  file: rank_admin
+  container: chest_9x6
+rank_confirm:
+  file: rank_confirm
+  container: chest_9x3
+crates:
+  file: crates
+  container: chest_9x6
+crate_details:
+  file: crate_details
+  container: chest_9x6
+profile:
+  file: profile
+  container: chest_9x6
+adventure:
+  file: adventure
+  container: chest_9x6
+settings:
+  file: settings
+  container: chest_9x6
