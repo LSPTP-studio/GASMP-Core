@@ -69,6 +69,35 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             migrateEquipmentCrates(file);
         }
         config = YamlConfiguration.loadConfiguration(file);
+        mergeCosmeticsCrate(file);
+    }
+
+    private void mergeCosmeticsCrate(File cratesFile) {
+        if (config.getConfigurationSection("crates.cosmetics") != null) return;
+        File defaultsFile = new File(plugin.getDataFolder(), "cosmetics-crate.yml");
+        if (!defaultsFile.exists()) {
+            try { plugin.saveResource("cosmetics-crate.yml", false); }
+            catch (IllegalArgumentException missing) {
+                plugin.getLogger().warning("cosmetics-crate.yml resource is missing; the cosmetic crate is not available.");
+                return;
+            }
+        }
+        YamlConfiguration defaults = YamlConfiguration.loadConfiguration(defaultsFile);
+        ConfigurationSection rewards = defaults.getConfigurationSection("crates.cosmetics.rewards");
+        if (rewards == null) return;
+        for (String rewardId : rewards.getKeys(false)) {
+            ConfigurationSection reward = rewards.getConfigurationSection(rewardId);
+            if (reward == null) continue;
+            for (String key : reward.getKeys(false)) {
+                config.set("crates.cosmetics.rewards." + rewardId + "." + key, reward.get(key));
+            }
+        }
+        try {
+            config.save(cratesFile);
+            plugin.getLogger().info("Added the Cosmetics Shulker crate to crates.yml.");
+        } catch (Exception error) {
+            plugin.getLogger().warning("Could not save Cosmetics Shulker crate defaults: " + error.getMessage());
+        }
     }
 
     /**
@@ -166,9 +195,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             actor.sendMessage(color("&cAmount must be between 1 and 64."));
             return;
         }
-        String contentId = chestPackTier(id)
-                ? (suffix.equals("_crate_block") ? "gasmp_chests:" + id + "_crate_block" : "gasmp_chests:" + id + "_chest_display")
-                : "gasmp_crates:" + id + suffix;
+        String contentId = cosmeticsCrate(id)
+                ? "gasmp_cosmetics:" + (suffix.equals("_crate_block") ? "cosmetics_crate_block" : "cosmetics_crate_display")
+                : chestPackTier(id)
+                    ? (suffix.equals("_crate_block") ? "gasmp_chests:" + id + "_crate_block" : "gasmp_chests:" + id + "_chest_display")
+                    : "gasmp_crates:" + id + suffix;
         ItemStack custom = createEngineItem(contentId, amount);
         if (custom == null) {
             actor.sendMessage(color("&cRP Engine is not installed or the custom content ID is not loaded. Use /rp reload first."));
@@ -304,7 +335,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             Object result = blocks.getClass().getMethod("idAt", Block.class).invoke(blocks, block);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return null;
             String raw = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
-            String prefix = raw.startsWith("gasmp_chests:") ? "gasmp_chests:" : "gasmp_crates:";
+            String prefix = raw.startsWith("gasmp_cosmetics:") ? "gasmp_cosmetics:"
+                    : raw.startsWith("gasmp_chests:") ? "gasmp_chests:" : "gasmp_crates:";
             String suffix = "_crate_block";
             if (!raw.startsWith(prefix) || !raw.endsWith(suffix)) return null;
             String id = canonicalCrateId(raw.substring(prefix.length(), raw.length() - suffix.length()));
@@ -452,7 +484,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 meta.setDisplayName(color("&e&l" + display));
                 List<String> lore = new ArrayList<>();
                 String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
-                lore.add(color(type.equals("key") ? "&dCrate key jackpot" : "&7Equipment reward"));
+                lore.add(color(type.equals("key") ? "&dCrate key jackpot"
+                        : type.equals("cosmetic") ? "&dCosmetic collectible" : "&7Equipment reward"));
                 lore.add(color("&7Chance: &a" + String.format(Locale.ROOT, "%.2f", weight * 100.0d / totalWeight) + "%"));
                 if (type.equals("item")) {
                     ConfigurationSection enchants = reward.getConfigurationSection("enchantments");
@@ -569,7 +602,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             meta.setDisplayName(color("&6&lREWARD REVEALED"));
             List<String> lore = new ArrayList<>();
             lore.add(color("&7You won: &f" + ChatColor.stripColor(originalName)));
-            lore.add(color(type.equals("key") ? "&dRare crate-key drop" : "&7Equipment loot"));
+            lore.add(color(type.equals("key") ? "&dRare crate-key drop"
+                    : type.equals("cosmetic") ? "&dCosmetic collectible" : "&7Equipment loot"));
             if (type.equals("item")) {
                 ConfigurationSection enchants = reward.getConfigurationSection("enchantments");
                 if (enchants != null) lore.add(color("&bEnchantments: &f" + String.join(", ", enchants.getKeys(false))));
@@ -848,8 +882,13 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return "normal".equalsIgnoreCase(id) || "medium".equalsIgnoreCase(id) || "premium".equalsIgnoreCase(id);
     }
 
+    private boolean cosmeticsCrate(String id) {
+        return "cosmetics".equalsIgnoreCase(id);
+    }
+
     private ItemStack createKey(String id, int amount) {
-        String contentId = chestPackTier(id) ? "gasmp_chests:" + id + "_key" : "gasmp_crates:" + id + "_key";
+        String contentId = cosmeticsCrate(id) ? "gasmp_cosmetics:cosmetics_key"
+                : chestPackTier(id) ? "gasmp_chests:" + id + "_key" : "gasmp_crates:" + id + "_key";
         ItemStack item = createEngineItem(contentId, amount);
         if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
         ItemMeta meta = item.getItemMeta();
@@ -929,7 +968,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             Object result = items.getClass().getMethod("idOf", ItemStack.class).invoke(items, item);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
             String actual = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
-            String expected = chestPackTier(canonical) ? "gasmp_chests:" + canonical + "_key" : "gasmp_crates:" + canonical + "_key";
+            String expected = cosmeticsCrate(canonical) ? "gasmp_cosmetics:cosmetics_key"
+                    : chestPackTier(canonical) ? "gasmp_chests:" + canonical + "_key" : "gasmp_crates:" + canonical + "_key";
             if (expected.equalsIgnoreCase(actual)) return true;
             // Existing Common/Rare/Epic/Legendary keys remain usable after the tier migration.
             String legacyPrefix = "gasmp_crates:";
