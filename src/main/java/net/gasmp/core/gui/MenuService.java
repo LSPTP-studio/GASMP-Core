@@ -65,8 +65,6 @@ public final class MenuService implements Listener {
             case MAIN -> buildMain(holder, inventory);
             case SHOP -> buildShop(holder, inventory);
             case STATISTICS -> buildStatistics(holder, inventory, player);
-            case DECORATIONS -> buildDecorations(holder, inventory);
-            case MUSIC -> buildMusic(holder, inventory);
             case SHARDS -> buildShards(holder, inventory);
             case KEY_SHOP -> buildKeyShop(holder, inventory);
             case GAME_WORLDS -> buildGameWorlds(holder, inventory);
