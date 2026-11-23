@@ -4,7 +4,7 @@ common_crate_display:
   lore:
     - "&7Place this animated crate model."
     - "&8Right-click to open with a matching key."
-  model: common_crate
+  geometry: common_crate
   place:
     facing: cardinal
     scale: 1.0
@@ -33,7 +33,7 @@ rare_crate_display:
   lore:
     - "&7Place this animated crate model."
     - "&8Right-click to open with a matching key."
-  model: rare_crate
+  geometry: rare_crate
   place:
     facing: cardinal
     scale: 1.0
@@ -62,7 +62,7 @@ epic_crate_display:
   lore:
     - "&7Place this animated crate model."
     - "&8Right-click to open with a matching key."
-  model: epic_crate
+  geometry: epic_crate
   place:
     facing: cardinal
     scale: 1.0
@@ -91,7 +91,7 @@ legendary_crate_display:
   lore:
     - "&7Place this animated crate model."
     - "&8Right-click to open with a matching key."
-  model: legendary_crate
+  geometry: legendary_crate
   place:
     facing: cardinal
     scale: 1.0
