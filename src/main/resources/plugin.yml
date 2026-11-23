@@ -1,9 +1,9 @@
 name: GASMP-Core
-version: '0.7.0'
+version: '0.7.1'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
-description: GASMP Core gameplay systems, persistence, economy, teams and custom crate content.
+description: GASMP Core gameplay systems, enabled casino, rank cinematics, economy, teams and custom crates.
 depend:
   - Vault
   - LuckPerms
@@ -24,6 +24,7 @@ softdepend:
   - RPEngine
   - RPEPaintball
   - RPEGoKarts
+  - RPESkateboards
   - Multiverse-Core
 commands:
   gasmp:
@@ -62,7 +63,7 @@ commands:
     aliases: [auctionhouse, auction]
     permission: gasmpcore.auction
   casino:
-    description: GASMP virtual-Coins arcade. Disabled by default.
+    description: GASMP virtual-Coins arcade.
     usage: /casino <menu|game> <bet> [choice]
     permission: gasmpcore.casino.play
   battlepass:
