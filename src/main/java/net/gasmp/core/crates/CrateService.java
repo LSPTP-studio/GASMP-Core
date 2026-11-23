@@ -141,8 +141,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
         if (!(sender instanceof Player player)) { sender.sendMessage("Run this command in-game."); return true; }
         // /crates stays Owner/Developer only, even if OP has wildcard permissions.
-        if (!staff.isOwnerOrDev(player)) {
-            player.sendMessage(color("&cOnly Developers and the Owner can use /crates."));
+        if (!staff.isOwnerOrDev(player)
+                && !player.hasPermission("gasmpcore.crates.manage")
+                && !player.isOp()) {
+            player.sendMessage(color("&cOnly the Owner, Developers or players with gasmpcore.crates.manage can use /crates."));
             return true;
         }
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) { help(player); return true; }
