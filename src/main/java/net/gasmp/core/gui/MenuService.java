@@ -338,18 +338,31 @@ public final class MenuService implements Listener {
 
     private String titleFor(MenuPage page) {
         String custom = plugin.getConfig().getString("menus.main-menu-title", "&d&lGASMP &8• &5Menu");
-        return switch (page) {
-            case MAIN -> color(custom);
-            case STATISTICS -> color("&d&lGASMP &8• &5Statistics");
-            case DECORATIONS -> color("&9&lGASMP &8• &3Decorations");
-            case MUSIC -> color("&5&lGASMP &8• &dMusic Player");
-            case SHARDS -> color("&d&lGASMP &8• &5Shard Wallet");
-            case SHARD_SHOP -> color("&d&lGASMP &8• &5Shard Shop");
-            case UTILITY -> color("&b&lGASMP &8• &3Adventure");
-            case CASINO -> color("&6&lGASMP &8• &eCasino");
-            case PROFILE -> color("&a&lGASMP &8• &2Profile");
-            case SETTINGS -> color("&f&lGASMP &8• &7Settings");
+        String screen = switch (page) {
+            case MAIN -> "main_menu";
+            case STATISTICS -> "statistics";
+            case DECORATIONS -> "decorations";
+            case MUSIC -> "music";
+            case SHARDS -> "shards";
+            case SHARD_SHOP -> "shard_shop";
+            case UTILITY -> "adventure";
+            case CASINO -> "casino";
+            case PROFILE -> "profile";
+            case SETTINGS -> "settings";
         };
+        String title = switch (page) {
+            case MAIN -> custom;
+            case STATISTICS -> "&d&lGASMP &8• &5Statistics";
+            case DECORATIONS -> "&9&lGASMP &8• &3Decorations";
+            case MUSIC -> "&5&lGASMP &8• &dMusic Player";
+            case SHARDS -> "&d&lGASMP &8• &5Shard Wallet";
+            case SHARD_SHOP -> "&d&lGASMP &8• &5Shard Shop";
+            case UTILITY -> "&b&lGASMP &8• &3Adventure";
+            case CASINO -> "&6&lGASMP &8• &eCasino";
+            case PROFILE -> "&a&lGASMP &8• &2Profile";
+            case SETTINGS -> "&f&lGASMP &8• &7Settings";
+        };
+        return RpEngineUi.title(screen, title);
     }
 
     private String color(String input) {
