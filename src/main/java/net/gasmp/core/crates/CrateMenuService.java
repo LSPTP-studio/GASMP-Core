@@ -1,6 +1,7 @@
 package net.gasmp.core.crates;
 
 import net.gasmp.core.GASMPCore;
+import net.gasmp.core.gui.RpEngineUi;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -55,7 +56,8 @@ public final class CrateMenuService implements Listener, CommandExecutor {
         YamlConfiguration yaml = load();
         ConfigurationSection crates = yaml.getConfigurationSection("crates");
         Holder holder = new Holder(null);
-        Inventory inv = Bukkit.createInventory(holder, SIZE, color("&8GASMP &8» &6Crate Catalogue"));
+        Inventory inv = Bukkit.createInventory(holder, SIZE,
+                RpEngineUi.title("crates", "&8GASMP &8» &6Crate Catalogue"));
         holder.inventory = inv;
         frame(inv, Material.ORANGE_STAINED_GLASS_PANE);
         inv.setItem(4, item(Material.CHEST, "&6&lGASMP CRATE CATALOGUE",
@@ -99,7 +101,8 @@ public final class CrateMenuService implements Listener, CommandExecutor {
         ConfigurationSection rewards = crate.getConfigurationSection("rewards");
         Holder holder = new Holder(crateId);
         String displayName = crate.getString("display-name", fallbackName(crateId));
-        Inventory inv = Bukkit.createInventory(holder, SIZE, color("&8GASMP &8» ") + color(displayName));
+        Inventory inv = Bukkit.createInventory(holder, SIZE,
+                RpEngineUi.title("crate_details", "&8GASMP &8» " + displayName));
         holder.inventory = inv;
         frame(inv, Material.ORANGE_STAINED_GLASS_PANE);
         String keyName = crate.getString("key-name", "&d&l" + crateId.toUpperCase(Locale.ROOT) + " KEY");
