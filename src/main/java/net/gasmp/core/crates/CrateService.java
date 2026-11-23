@@ -86,7 +86,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             }
             for (String key : rewards.getKeys(false)) {
                 String type = rewards.getString(key + ".type", "").toLowerCase(Locale.ROOT);
-                if (!type.equals("cosmetic") && !type.equals("key")) {
+                if (!type.equals("cosmetic") && !type.equals("key") && !type.equals("shards")) {
                     alreadyCosmetic = false;
                     break;
                 }
@@ -506,7 +506,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 meta.setDisplayName(color("&f&l" + name));
                 List<String> lore = new ArrayList<>();
                 String type = reward.getString("type", "cosmetic").toLowerCase(Locale.ROOT);
-                lore.add(color(type.equals("key") ? "&dCrate key jackpot" : "&7Cosmetic collectible"));
+                lore.add(color(type.equals("key") ? "&dCrate key jackpot"
+                        : type.equals("shards") ? "&dShard bonus" : "&7Cosmetic collectible"));
                 lore.add(color("&7Chance: &a" + String.format(Locale.ROOT, "%.2f", weight * 100.0d / totalWeight) + "%"));
                 lore.add(color("&8" + reward.getString("content", "GASMP cosmetic")));
                 meta.setLore(lore);
@@ -706,6 +707,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             List<String> lore = new ArrayList<>();
             lore.add(color("&7You won: &f" + ChatColor.stripColor(originalName)));
             lore.add(color(type.equals("key") ? "&dRare crate-key drop"
+                    : type.equals("shards") ? "&dShard bonus"
                     : type.equals("cosmetic") ? "&dCosmetic collectible" : "&7Reward"));
             if (type.equals("item")) {
                 ConfigurationSection enchants = reward.getConfigurationSection("enchantments");
