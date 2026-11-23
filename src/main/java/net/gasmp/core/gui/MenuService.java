@@ -38,7 +38,7 @@ public final class MenuService implements Listener {
 
     public void open(Player player, MenuPage page) {
         if (page == MenuPage.SHOP) {
-            plugin.getShopService().open(player, 0);
+            open(player, MenuPage.KEY_SHOP);
             return;
         }
         // Route the GASMP Casino tile into the real Vault-backed arcade GUI.
@@ -53,7 +53,7 @@ public final class MenuService implements Listener {
         }
 
         MenuHolder holder = new MenuHolder(page);
-        Inventory inventory = Bukkit.createInventory(holder, MENU_SIZE, titleFor(page));
+        Inventory inventory = Bukkit.createInventory(holder, MENU_SIZE, ScreenUi.title(screenFor(page), titleFor(page)));
         holder.setInventory(inventory);
         fillFrame(inventory, page);
 
@@ -82,8 +82,8 @@ public final class MenuService implements Listener {
     }
 
     private void buildMain(MenuHolder holder, Inventory inventory) {
-        set(inventory, 10, Material.EMERALD, "&b&lShop", "&7Browse the GASMP storefront", "&eClick to open");
-        holder.navigate(10, MenuPage.SHOP);
+        set(inventory, 10, Material.AMETHYST_SHARD, "&d&lShard Shop", "&7Spend Shards on crate keys and rewards", "&eClick to open");
+        holder.navigate(10, MenuPage.KEY_SHOP);
 
         set(inventory, 12, Material.WRITABLE_BOOK, "&d&lStatistics", "&7View your server statistics", "&eClick to open");
         holder.navigate(12, MenuPage.STATISTICS);
@@ -157,55 +157,61 @@ public final class MenuService implements Listener {
     }
 
     private void buildShards(MenuHolder holder, Inventory inventory) {
-        set(inventory, 22, Material.AMETHYST_SHARD, "&d&lGASMP Shards", "&7Loading your balance...");
-        set(inventory, 31, Material.BOOK, "&f&lWhat are Shards?", "&7A secondary GASMP currency.", "&7Buy crate keys and other rewards.");
-        holder.notice(31, "&7Shards are separate from your Coins balance.");
-        set(inventory, 30, Material.TRIPWIRE_HOOK, "&e&lCrate Key Shop", "&7Buy Common, Rare, Epic and Legendary keys", "&eClick to browse prices");
+        set(inventory, 22, Material.AMETHYST_SHARD, "&d&lGASMP SHARDS", "&7Loading your balance...");
+        set(inventory, 31, Material.BOOK, "&f&lHow Shards work", "&7Earn them from arcade games, chat games", "&7and server activities.", "&7Spend them in the Shard Shop.");
+        set(inventory, 30, Material.ENDER_CHEST, "&d&lOPEN SHARD SHOP", "&7Normal, Medium and Premium crate keys", "&eClick to browse rewards");
         holder.navigate(30, MenuPage.KEY_SHOP);
     }
 
     private void buildKeyShop(MenuHolder holder, Inventory inventory) {
-        String[] ids = {"common", "rare", "epic", "legendary"};
-        Material[] icons = {Material.TRIPWIRE_HOOK, Material.IRON_INGOT, Material.AMETHYST_SHARD, Material.NETHER_STAR};
-        int[] slots = {10, 12, 14, 16};
+        String[] ids = {"normal", "medium", "premium"};
+        Material[] icons = {Material.IRON_CHESTPLATE, Material.DIAMOND_CHESTPLATE, Material.NETHERITE_CHESTPLATE};
+        int[] slots = {11, 13, 15};
+        String[] descriptions = {
+                "&7Iron equipment crate",
+                "&7Diamond equipment crate",
+                "&7Highly enchanted netherite loot"
+        };
         for (int i = 0; i < ids.length; i++) {
             long price = plugin.getConfig().getLong("key-shop.prices." + ids[i], -1L);
-            String priceText = price < 0 ? "&cNot for sale" : "&d" + price + " Shards";
+            String priceText = price < 0 ? "&cNot for sale" : "&d" + price + " ✦";
             set(inventory, slots[i], icons[i], "&f&l" + ids[i].toUpperCase(java.util.Locale.ROOT) + " KEY",
-                    "&7One matching crate key", "&7Price: " + priceText, "&eClick to purchase");
+                    descriptions[i], "&7Price: " + priceText, "&eClick to purchase");
         }
-        set(inventory, 22, Material.BOOK, "&f&lHow to get keys", "&7Purchase with Shards, or earn them", "&7from races and minigame victories.");
+        set(inventory, 22, Material.BOOK, "&f&lKEY DROP SYSTEM",
+                "&7All crates award equipment for their tier.",
+                "&7Other-tier keys are jackpot drops with low odds.",
+                "&8Earn Shards in the GASMP Arcade.");
     }
 
     private void buildGameWorlds(MenuHolder holder, Inventory inventory) {
-        gameWorldItem(inventory, 20, "paintball", Material.SNOWBALL, "Paintball Arena", "Join a team with /pb join");
-        gameWorldItem(inventory, 22, "gokarts", Material.MINECART, "Go-Kart Racing", "Join a race with /kart join");
-        gameWorldItem(inventory, 24, "skatepark", Material.SLIME_BLOCK, "Skatepark", "Get a board with /skateboard");
+        gameWorldItem(holder, inventory, 20, Material.SNOWBALL, "Paintball Arena",
+                "Teleport to the Paintball arena", "mv teleport paintball");
+        gameWorldItem(holder, inventory, 22, Material.MINECART, "Go-Kart Arena",
+                "Generate arena 1 and enter its course", "kart arena generate 1");
+        gameWorldItem(holder, inventory, 24, Material.SLIME_BLOCK, "Skatepark",
+                "Teleport to the Skatepark", "mv teleport skatepark");
     }
 
-    private void gameWorldItem(Inventory inventory, int slot, String key, Material icon, String title, String hint) {
-        String world = plugin.getConfig().getString("game-worlds." + key, "");
-        set(inventory, slot, icon, "&b&l" + title, "&7World: &f" + (world == null || world.isBlank() ? "Not configured" : world),
-                "&7" + hint, "&eClick to teleport");
+    private void gameWorldItem(MenuHolder holder, Inventory inventory, int slot, Material icon,
+                               String title, String hint, String command) {
+        set(inventory, slot, icon, "&b&l" + title, "&7" + hint, "&eClick to run /" + command);
+        holder.command(slot, command);
     }
 
-    private void teleportGameWorld(Player player, String key, String label, String nextCommand) {
-        String world = plugin.getConfig().getString("game-worlds." + key, "");
-        if (world == null || world.isBlank() || !world.matches("[A-Za-z0-9_.+-]+")) {
-            player.sendMessage(color("&cThe " + label + " world is not configured. Ask staff to set game-worlds." + key + " in config.yml."));
-            return;
-        }
-        if (Bukkit.getPluginManager().getPlugin("Multiverse-Core") == null
-                || !Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
-            player.sendMessage(color("&cMultiverse-Core is not installed or enabled."));
-            return;
-        }
-        if (Bukkit.getWorld(world) == null) {
-            player.sendMessage(color("&cWorld &f" + world + "&c is not loaded. Check /mv list and your config."));
-            return;
-        }
-        boolean dispatched = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp " + player.getName() + " " + world);
-        if (dispatched) player.sendMessage(color("&aTeleporting to " + label + ". &7Next: " + nextCommand));
+    private String screenFor(MenuPage page) {
+        return switch (page) {
+            case MAIN -> "main_menu";
+            case SHOP, KEY_SHOP -> "shard_shop";
+            case STATISTICS -> "statistics";
+            case DECORATIONS -> "decorations";
+            case MUSIC -> "music";
+            case SHARDS -> "shards";
+            case GAME_WORLDS -> "adventure";
+            case CASINO -> "casino";
+            case PROFILE -> "profile";
+            case SETTINGS -> "settings";
+        };
     }
 
     private void refreshShards(Player player, MenuHolder holder) {
@@ -281,25 +287,21 @@ public final class MenuService implements Listener {
         }
 
         int slot = event.getRawSlot();
+        String command = holder.commandAt(slot);
+        if (command != null) {
+            player.performCommand(command);
+            return;
+        }
         if (holder.getPage() == MenuPage.KEY_SHOP) {
             String crateId = switch (slot) {
-                case 10 -> "common";
-                case 12 -> "rare";
-                case 14 -> "epic";
-                case 16 -> "legendary";
+                case 11 -> "normal";
+                case 13 -> "medium";
+                case 15 -> "premium";
                 default -> null;
             };
             if (crateId != null) {
                 plugin.getCrateService().buyKey(player, crateId);
                 return;
-            }
-        }
-        if (holder.getPage() == MenuPage.GAME_WORLDS) {
-            switch (slot) {
-                case 20 -> { teleportGameWorld(player, "paintball", "Paintball", "/pb join"); return; }
-                case 22 -> { teleportGameWorld(player, "gokarts", "Go Karts", "/kart join"); return; }
-                case 24 -> { teleportGameWorld(player, "skatepark", "Skatepark", "/skateboard"); return; }
-                default -> { }
             }
         }
         if (holder.getPage() == MenuPage.MAIN && slot == 49) {
@@ -376,7 +378,7 @@ public final class MenuService implements Listener {
             case DECORATIONS -> color("&9&lGASMP &8• &3Decorations");
             case MUSIC -> color("&5&lGASMP &8• &dMusic Player");
             case SHARDS -> color("&d&lGASMP &8• &5Shards");
-            case KEY_SHOP -> color("&d&lGASMP &8• &5Crate Keys");
+            case KEY_SHOP -> color("&d&lGASMP &8• &5Shard Shop");
             case GAME_WORLDS -> color("&b&lGASMP &8• &3Game Worlds");
             case CASINO -> color("&6&lGASMP &8• &eCasino");
             case PROFILE -> color("&a&lGASMP &8• &2Profile");
