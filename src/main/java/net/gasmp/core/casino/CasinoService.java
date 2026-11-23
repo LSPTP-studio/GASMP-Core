@@ -250,6 +250,11 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
             set(inventory, slot, icon, "&6" + game[1], "&7Selected wager: &e" + money(selectedBet), "&aClick to continue.");
             holder.action(slot, "GAME:" + game[0]);
         }
+        set(inventory, 47, Material.PLAYER_HEAD, "&b&lMULTIPLAYER DUELS",
+                "&7Challenge another online player",
+                "&7Both players stake the same Shards",
+                "&e/casino challenge <player> <game> <shards>");
+        holder.action(47, "DUEL_HELP");
         set(inventory, 49, Material.BARRIER, "&cClose");
         player.openInventory(inventory);
     }
@@ -501,6 +506,12 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
             openChoices(player, game, holder.bet());
         } else if (action.equals("BACK")) {
             openMenu(player, holder.bet());
+        } else if (action.equals("DUEL_HELP")) {
+            player.closeInventory();
+            player.sendMessage(color("&b&lMULTIPLAYER ARCADE"));
+            player.sendMessage(color("&e/casino challenge <player> <game> <shards>"));
+            player.sendMessage(color("&e/casino accept &7or &e/casino decline"));
+            player.sendMessage(color("&e/casino duel &7reopens your current match"));
         } else if (action.startsWith("PLAY:")) {
             String choice = action.substring(5);
             player.closeInventory();
