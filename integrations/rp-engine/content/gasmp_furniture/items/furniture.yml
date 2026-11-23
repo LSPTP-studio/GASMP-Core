@@ -5,7 +5,7 @@ modern_sofa:
     - "&7A placeable modern sofa."
     - "&7Right-click or sneak to sit."
     - "&8GASMP Furniture Collection."
-  model: gasmp_modern_sofa
+  geometry: gasmp_modern_sofa
   place:
     facing: cardinal
     scale: 1.0
