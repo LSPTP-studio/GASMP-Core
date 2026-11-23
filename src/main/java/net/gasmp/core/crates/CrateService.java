@@ -119,7 +119,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             }
             if (args.length != 2) return true;
             Player target = Bukkit.getPlayerExact(args[0]);
-            String crateId = args[1].toLowerCase(Locale.ROOT);
+            String crateId = canonicalCrateId(args[1]);
             if (target != null && config.getConfigurationSection("crates." + crateId) != null) {
                 openCrate(target, crateId);
             }
@@ -287,7 +287,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         String custom = rpCrateBlockAt(block);
         if (custom != null) return custom;
         String configured = configuredCrateAt(block);
-        return configured != null && config.getConfigurationSection("crates." + configured) != null ? configured : null;
+        String canonical = configured == null ? null : canonicalCrateId(configured);
+        return canonical != null && config.getConfigurationSection("crates." + canonical) != null ? canonical : null;
     }
 
     private boolean isConfiguredCrate(Block block) { return configuredCrateAt(block) != null; }
@@ -306,7 +307,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             String prefix = raw.startsWith("gasmp_chests:") ? "gasmp_chests:" : "gasmp_crates:";
             String suffix = "_crate_block";
             if (!raw.startsWith(prefix) || !raw.endsWith(suffix)) return null;
-            String id = raw.substring(prefix.length(), raw.length() - suffix.length());
+            String id = canonicalCrateId(raw.substring(prefix.length(), raw.length() - suffix.length()));
             return config.getConfigurationSection("crates." + id) == null ? null : id;
         } catch (ReflectiveOperationException | RuntimeException ex) {
             plugin.getLogger().fine("RP Engine custom-block lookup unavailable: " + ex.getMessage());
@@ -330,6 +331,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             else if (slug.endsWith("_chest")) slug = slug.substring(0, slug.length() - "_chest".length());
             else if (slug.endsWith("_crate_display")) slug = slug.substring(0, slug.length() - "_crate_display".length());
             else if (slug.endsWith("_crate")) slug = slug.substring(0, slug.length() - "_crate".length());
+            slug = canonicalCrateId(slug);
             return config.getConfigurationSection("crates." + slug) == null ? null : slug;
         } catch (ReflectiveOperationException | RuntimeException ex) {
             plugin.getLogger().fine("RP Engine model lookup unavailable: " + ex.getMessage());
@@ -904,10 +906,21 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return null;
     }
 
+    private String canonicalCrateId(String rawId) {
+        if (rawId == null) return "";
+        return switch (rawId.toLowerCase(Locale.ROOT)) {
+            case "common" -> "normal";
+            case "rare" -> "medium";
+            case "epic", "legendary" -> "premium";
+            default -> rawId.toLowerCase(Locale.ROOT);
+        };
+    }
+
     private boolean isKey(ItemStack item, String id) {
         if (item == null || item.getType().isAir() || !item.hasItemMeta()) return false;
+        String canonical = canonicalCrateId(id);
         String tagged = item.getItemMeta().getPersistentDataContainer().get(crateKey, PersistentDataType.STRING);
-        if (id.equals(tagged)) return true;
+        if (canonical.equals(canonicalCrateId(tagged))) return true;
         // Also accept a genuine RP Engine key handed out through /rp give or another RP Engine shop.
         Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
         if (engine == null || !engine.isEnabled()) return false;
@@ -915,9 +928,16 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             Object items = engine.getClass().getMethod("items").invoke(engine);
             Object result = items.getClass().getMethod("idOf", ItemStack.class).invoke(items, item);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
-            String actual = String.valueOf(optional.get());
-            String expected = chestPackTier(id) ? "gasmp_chests:" + id + "_key" : "gasmp_crates:" + id + "_key";
-            return expected.equalsIgnoreCase(actual);
+            String actual = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
+            String expected = chestPackTier(canonical) ? "gasmp_chests:" + canonical + "_key" : "gasmp_crates:" + canonical + "_key";
+            if (expected.equalsIgnoreCase(actual)) return true;
+            // Existing Common/Rare/Epic/Legendary keys remain usable after the tier migration.
+            String legacyPrefix = "gasmp_crates:";
+            if (actual.startsWith(legacyPrefix) && actual.endsWith("_key")) {
+                String legacyTier = actual.substring(legacyPrefix.length(), actual.length() - "_key".length());
+                return canonical.equals(canonicalCrateId(legacyTier));
+            }
+            return false;
         } catch (ReflectiveOperationException | RuntimeException ex) {
             plugin.getLogger().fine("RP Engine key identity lookup unavailable: " + ex.getMessage());
             return false;
