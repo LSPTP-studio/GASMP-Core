@@ -893,22 +893,22 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     /** Player-facing Shards shop purchase; no other normal-player key source is provided by GASMP-Core. */
     public void buyKey(Player player, String id) {
-        id = canonicalCrateId(id);
+        final String crateId = canonicalCrateId(id);
         if (!plugin.getConfig().getBoolean("modules.crates", true) || !plugin.getConfig().getBoolean("key-shop.enabled", true)) {
             player.sendMessage(color("&cThe crate-key shop is currently unavailable."));
             return;
         }
         long price = plugin.getConfig().getLong("key-shop.prices." + id, -1L);
-        if (price < 0L || config.getConfigurationSection("crates." + id) == null) {
+        if (price < 0L || config.getConfigurationSection("crates." + crateId) == null) {
             player.sendMessage(color("&cThat crate key is not for sale."));
             return;
         }
         if (price == 0L) {
-            giveKeyTo(player, id, 1, true);
+            giveKeyTo(player, crateId, 1, true);
             return;
         }
         plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
-                "KEY_SHOP", price, PlayerDataStore.ShardChange.TAKE, "Purchased " + id + " crate key")
+                "KEY_SHOP", price, PlayerDataStore.ShardChange.TAKE, "Purchased " + crateId + " crate key")
                 .whenComplete((balance, error) -> Bukkit.getScheduler().runTask(plugin, () -> {
                     if (!player.isOnline()) return;
                     if (error != null) {
@@ -916,14 +916,14 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                         player.sendMessage(color("&cKey purchase failed: " + cause.getMessage()));
                         return;
                     }
-                    if (!giveKeyTo(player, id, 1, false)) {
+                    if (!giveKeyTo(player, crateId, 1, false)) {
                         plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
                                 "KEY_SHOP_REFUND", price, PlayerDataStore.ShardChange.GIVE,
-                                "Refund: could not create " + id + " crate key");
+                                "Refund: could not create " + crateId + " crate key");
                         player.sendMessage(color("&cThe key could not be created. Your Shards are being refunded."));
                         return;
                     }
-                    player.sendMessage(color("&aPurchased a &f" + id.toUpperCase(Locale.ROOT) + " Key &afor &d" + price + " Shards&a. Balance: &d" + balance + " ✦"));
+                    player.sendMessage(color("&aPurchased a &f" + crateId.toUpperCase(Locale.ROOT) + " Key &afor &d" + price + " Shards&a. Balance: &d" + balance + " ✦"));
                 }));
     }
 
