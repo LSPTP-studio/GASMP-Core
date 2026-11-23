@@ -189,12 +189,23 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (action != Action.RIGHT_CLICK_BLOCK && action != Action.LEFT_CLICK_BLOCK) return;
         String id = crateIdAt(event.getClickedBlock());
         if (id == null) return;
-        event.setCancelled(true);
-        if (action == Action.RIGHT_CLICK_BLOCK) openCrate(event.getPlayer(), id);
-        else openPreview(event.getPlayer(), id);
+
+        if (action == Action.RIGHT_CLICK_BLOCK) {
+            event.setCancelled(true);
+            openCrate(event.getPlayer(), id);
+            return;
+        }
+
+        // Normal left-click is deliberately allowed through to RP Engine so a
+        // placed crate block can be mined and drops its matching crate item.
+        // Sneak + left-click is the non-destructive reward-preview gesture.
+        if (event.getPlayer().isSneaking()) {
+            event.setCancelled(true);
+            openPreview(event.getPlayer(), id);
+        }
     }
 
-    /** Left-clicking a placed Blockbench crate opens the reward preview, never mines it. */
+    /** Right-clicking a display crate opens it. */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onCrateModelInteract(PlayerInteractEntityEvent event) {
         if (!plugin.getConfig().getBoolean("modules.crates", true) || event.getHand() != EquipmentSlot.HAND) return;
@@ -204,18 +215,14 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         openCrate(event.getPlayer(), id);
     }
 
+    /** Sneak-punch previews; an ordinary punch is left to RP Engine to pick up the display model. */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onCrateModelPunch(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player player) || !plugin.getConfig().getBoolean("modules.crates", true)) return;
         String id = crateIdFromModelEntity(event.getEntity());
-        if (id == null) return;
+        if (id == null || !player.isSneaking()) return;
         event.setCancelled(true);
         openPreview(player, id);
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
-    public void onCrateBlockDamage(BlockDamageEvent event) {
-        if (crateIdAt(event.getBlock()) != null) event.setCancelled(true);
     }
 
     private String configuredCrateAt(Block block) {
@@ -282,15 +289,6 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             plugin.getLogger().fine("RP Engine model lookup unavailable: " + ex.getMessage());
             return null;
         }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
-    public void onCrateBreak(BlockBreakEvent event) {
-        String id = crateIdAt(event.getBlock());
-        if (id == null) return;
-        event.setCancelled(true);
-        // Left-click is a preview interaction for every rank, including Owner and Developer.
-        // Remove or relocate configured crates with /crates unset, not by mining the display.
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -364,6 +362,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     /** Displays the reward table and weighted odds without consuming a key. */
+    /** Displays the reward table and weighted odds without consuming a key. */
     private void openPreview(Player player, String crateId) {
         ConfigurationSection crate = config.getConfigurationSection("crates." + crateId);
         ConfigurationSection section = crate == null ? null : crate.getConfigurationSection("rewards");
@@ -383,7 +382,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
         CrateAnimationHolder holder = new CrateAnimationHolder(crateId);
         Inventory inventory = Bukkit.createInventory(holder, 27,
-                color("&8GASMP &7• &e" + crateId.toUpperCase(Locale.ROOT) + " REWARDS"));
+                color("&8GASMP &7• &e" + crateId.toUpperCase(Locale.ROOT) + " COSMETICS"));
         holder.inventory(inventory);
         ItemStack filler = named(Material.PURPLE_STAINED_GLASS_PANE, " ");
         for (int slot = 0; slot < 27; slot++) {
@@ -396,26 +395,27 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             ConfigurationSection reward = section.getConfigurationSection(key);
             if (reward == null) continue;
             int weight = Math.max(0, reward.getInt("weight", 0));
-            if (weight <= 0) continue;
-            if (index >= slots.length) break;
-            String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
-            Material material = switch (type) {
-                case "coins" -> Material.GOLD_INGOT;
-                case "shards" -> Material.AMETHYST_SHARD;
-                default -> Material.matchMaterial(reward.getString("material", "DIAMOND"));
-            };
-            if (material == null || !material.isItem() || material.isAir()) material = Material.CHEST;
-            double chance = weight * 100.0d / totalWeight;
-            long amount = reward.getLong("amount", 1L);
-            inventory.setItem(slots[index++], named(material, "&e&l" + key.replace('_', ' ').toUpperCase(Locale.ROOT),
-                    "&7Reward type: &f" + type.toUpperCase(Locale.ROOT),
-                    "&7Amount: &e" + amount,
-                    "&7Chance: &a" + String.format(Locale.ROOT, "%.2f", chance) + "%",
-                    "&8Weighted drop chance"));
+            if (weight <= 0 || index >= slots.length) continue;
+
+            ItemStack icon = rewardIcon(reward);
+            ItemMeta meta = icon.getItemMeta();
+            if (meta != null) {
+                String display = reward.getString("display", key.replace('_', ' ').toUpperCase(Locale.ROOT));
+                meta.setDisplayName(color("&e&l" + display));
+                List<String> lore = new ArrayList<>();
+                lore.add(color("&7Reward type: &dCOSMETIC"));
+                lore.add(color("&7Chance: &a" + String.format(Locale.ROOT, "%.2f", weight * 100.0d / totalWeight) + "%"));
+                String contentId = reward.getString("content", "");
+                if (!contentId.isBlank()) lore.add(color("&8" + contentId));
+                if (icon.getType() == Material.BARRIER) lore.add(color("&cCosmetic content was not found. Check /rp items."));
+                meta.setLore(lore);
+                icon.setItemMeta(meta);
+            }
+            inventory.setItem(slots[index++], icon);
         }
         inventory.setItem(22, named(Material.BOOK, "&f&lHow to open",
                 "&7Right-click this crate while holding its matching key.",
-                "&7Left-click to inspect these rewards and chances.",
+                "&7Sneak + left-click to inspect cosmetic rewards.",
                 "&8Your key is only consumed when the opening finishes."));
         player.openInventory(inventory);
     }
@@ -489,17 +489,38 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return item;
     }
 
-    private ItemStack rewardPreview(ConfigurationSection reward) {
+    private ItemStack rewardIcon(ConfigurationSection reward) {
         String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
+        if (type.equals("cosmetic")) {
+            String contentId = reward.getString("content", "");
+            ItemStack custom = contentId.isBlank() ? null : createEngineItem(contentId, 1);
+            return custom == null ? new ItemStack(Material.BARRIER) : custom;
+        }
         Material material = switch (type) {
             case "coins" -> Material.GOLD_INGOT;
             case "shards" -> Material.AMETHYST_SHARD;
             default -> Material.matchMaterial(reward.getString("material", "DIAMOND"));
         };
         if (material == null || !material.isItem() || material.isAir()) material = Material.CHEST;
-        long amount = reward.getLong("amount", 1);
-        return named(material, "&6&lREWARD REVEALED", "&7Type: &f" + type.toUpperCase(Locale.ROOT),
-                "&7Amount: &e" + amount, "&8GASMP CRATES");
+        return new ItemStack(material);
+    }
+
+    private ItemStack rewardPreview(ConfigurationSection reward) {
+        ItemStack preview = rewardIcon(reward);
+        String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
+        ItemMeta meta = preview.getItemMeta();
+        if (meta != null) {
+            String originalName = meta.hasDisplayName() ? meta.getDisplayName() : reward.getString("display", type.toUpperCase(Locale.ROOT));
+            meta.setDisplayName(color("&6&lREWARD REVEALED"));
+            List<String> lore = new ArrayList<>();
+            lore.add(color("&7You won: &f" + originalName));
+            if (type.equals("cosmetic")) lore.add(color("&dCosmetic collectible"));
+            else lore.add(color("&7Type: &f" + type.toUpperCase(Locale.ROOT)));
+            lore.add(color("&8GASMP CRATES"));
+            meta.setLore(lore);
+            preview.setItemMeta(meta);
+        }
+        return preview;
     }
 
     @EventHandler
@@ -563,6 +584,31 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 Map<Integer, ItemStack> left = player.getInventory().addItem(rewardItem);
                 left.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
                 player.sendMessage(color("&6&lCRATE REWARD &8» &f" + amount + "x " + material.name()));
+                opening.remove(player.getUniqueId());
+            }
+            case "cosmetic" -> {
+                String contentId = reward.getString("content", "");
+                if (contentId.isBlank()) {
+                    refundKey(player, crateId, "Cosmetic reward has no content ID configured.");
+                    plugin.getLogger().warning("Missing cosmetic content ID in crate " + crateId);
+                    return;
+                }
+                if (amount > 64) {
+                    refundKey(player, crateId, "Configured cosmetic amount must be between 1 and 64.");
+                    return;
+                }
+                ItemStack cosmetic = createEngineItem(contentId, (int) amount);
+                if (cosmetic == null) {
+                    refundKey(player, crateId, "Cosmetic '" + contentId + "' is not loaded by RP Engine.");
+                    plugin.getLogger().warning("Could not create cosmetic reward " + contentId + " from crate " + crateId);
+                    return;
+                }
+                Map<Integer, ItemStack> left = player.getInventory().addItem(cosmetic);
+                left.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
+                ItemMeta meta = cosmetic.getItemMeta();
+                String rewardName = meta != null && meta.hasDisplayName()
+                        ? ChatColor.stripColor(meta.getDisplayName()) : contentId;
+                player.sendMessage(color("&d&lCOSMETIC UNLOCKED &8» &f" + rewardName));
                 opening.remove(player.getUniqueId());
             }
             case "coins" -> {
