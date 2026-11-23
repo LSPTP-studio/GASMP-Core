@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** Server-side virtual-Coins arcade engine. No real-money deposits or cash-out. */
+/** Server-side Shards-based arcade engine. Shards are virtual server currency; no real-money payments. */
 public final class CasinoService implements Listener, CommandExecutor, TabCompleter {
     private record Result(String label, double grossPayout) { }
     private final GASMPCore plugin;
@@ -43,19 +43,17 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) { sender.sendMessage("Casino is a player command."); return true; }
-        if (!plugin.getConfig().getBoolean("modules.casino", false) || !config.getBoolean("settings.enabled", false)) {
+        if (!plugin.getConfig().getBoolean("modules.casino", true) || !config.getBoolean("settings.enabled", true)) {
             player.sendMessage(color("&cThe GASMP arcade is currently disabled.")); return true;
-        }
-        if (!plugin.getEconomyBridge().isAvailable()) {
-            player.sendMessage(color("&cCoins provider unavailable. Install Vault and a Vault-compatible economy plugin.")); return true;
         }
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) { help(player); return true; }
         if (args[0].equalsIgnoreCase("menu")) { openMenu(player, 10.0); return true; }
         if (args[0].equalsIgnoreCase("odds")) { showOdds(player); return true; }
-        if (!spinTasks.isEmpty() && spinTasks.containsKey(player.getUniqueId())) {
+        if (spinTasks.containsKey(player.getUniqueId())) {
             player.sendMessage(color("&cFinish or close your current arcade spin first."));
             return true;
         }
+
         String game = args[0].toLowerCase(Locale.ROOT);
         String configKey = switch (game) {
             case "slots" -> "drums";
@@ -67,18 +65,24 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         if (!config.getBoolean("games." + configKey, false)) {
             player.sendMessage(color("&cThat arcade game is disabled in casino.yml.")); return true;
         }
-        if (args.length < 2) { player.sendMessage(color("&e/casino " + game + " <bet> [choice]")); return true; }
-        double bet;
-        try { bet = Double.parseDouble(args[1]); }
-        catch (NumberFormatException ex) { player.sendMessage(color("&cInvalid bet.")); return true; }
-        double min = config.getDouble("settings.minimum-bet", 1.0);
-        double max = config.getDouble("settings.maximum-bet", 100.0);
-        if (!Double.isFinite(bet) || bet < min || bet > max) {
-            player.sendMessage(color("&cBet must be between " + min + " and " + max + " Coins.")); return true;
+        if (args.length < 2) { player.sendMessage(color("&e/casino " + game + " <shards> [choice]")); return true; }
+
+        long bet;
+        try { bet = Long.parseLong(args[1]); }
+        catch (NumberFormatException ex) { player.sendMessage(color("&cEnter a whole-number Shard wager.")); return true; }
+        long min = Math.max(1L, (long) Math.ceil(config.getDouble("settings.minimum-bet", 1.0)));
+        long max = Math.max(min, (long) Math.floor(config.getDouble("settings.maximum-bet", 100.0)));
+        if (bet < min || bet > max) {
+            player.sendMessage(color("&cWager must be between " + min + " and " + max + " Shards.")); return true;
         }
-        if (active.contains(player.getUniqueId())) { player.sendMessage(color("&cYour previous game is still processing.")); return true; }
+        if (active.contains(player.getUniqueId())) {
+            player.sendMessage(color("&cYour previous game is still processing.")); return true;
+        }
         long cooldown = cooldowns.getOrDefault(player.getUniqueId(), 0L);
-        if (cooldown > System.currentTimeMillis()) { player.sendMessage(color("&cWait " + ((cooldown-System.currentTimeMillis()+999)/1000) + "s before playing again.")); return true; }
+        if (cooldown > System.currentTimeMillis()) {
+            player.sendMessage(color("&cWait " + ((cooldown-System.currentTimeMillis()+999)/1000)
+                    + "s before playing again.")); return true;
+        }
 
         Result result;
         try { result = play(game, bet, args.length > 2 ? args[2].toLowerCase(Locale.ROOT) : ""); }
@@ -86,80 +90,80 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         if (result == null) { player.sendMessage(color("&cUnknown game. Use /casino help.")); return true; }
 
         active.add(player.getUniqueId());
-        boolean debited = false;
-        try {
-            if (!plugin.getEconomyBridge().has(player, bet)) {
-                player.sendMessage(color("&cYou do not have enough Coins.")); active.remove(player.getUniqueId()); return true;
-            }
-            double balanceBeforeDebit = plugin.getEconomyBridge().getBalance(player);
-            EconomyResponse debit = plugin.getEconomyBridge().withdraw(player, bet);
-            if (debit == null) {
-                // Defensive handling for a broken Vault provider. If it changed the balance
-                // despite returning null, compensate only when the exact debit is observable.
-                double balanceAfterDebit = plugin.getEconomyBridge().getBalance(player);
-                if (Math.abs((balanceBeforeDebit - balanceAfterDebit) - bet) < 0.000001) {
-                    EconomyResponse compensation = plugin.getEconomyBridge().deposit(player, bet);
-                    if (compensation == null || !compensation.transactionSuccess()) {
-                        plugin.getLogger().severe("Null Vault debit response compensation failed for " + player.getUniqueId());
+        // Shards are the arcade's only currency. Debit first, then credit the
+        // rounded whole-Shard payout through the existing transactional ledger.
+        plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
+                "ARCADE_WAGER", bet, net.gasmp.core.data.PlayerDataStore.ShardChange.TAKE,
+                "GASMP Arcade: " + game)
+                .whenComplete((balance, debitError) -> Bukkit.getScheduler().runTask(plugin, () -> {
+                    if (debitError != null) {
+                        active.remove(player.getUniqueId());
+                        player.sendMessage(color("&cYou do not have enough Shards, or the Shard ledger is unavailable."));
+                        plugin.getLogger().fine("Arcade wager rejected for " + player.getUniqueId() + ": " + rootMessage(debitError));
+                        return;
                     }
-                }
-                player.sendMessage(color("&cYour economy provider returned an invalid payment response. No game was played."));
-                active.remove(player.getUniqueId());
-                return true;
-            }
-            if (!debit.transactionSuccess()) {
-                player.sendMessage(color("&cYour bet was rejected by the economy provider.")); active.remove(player.getUniqueId()); return true;
-            }
-            debited = true;
-            if (result.grossPayout() > 0.0) {
-                EconomyResponse credit = plugin.getEconomyBridge().deposit(player, result.grossPayout());
-                if (!credit.transactionSuccess()) {
-                    EconomyResponse refund = plugin.getEconomyBridge().deposit(player, bet);
-                    if (!refund.transactionSuccess()) plugin.getLogger().severe("Casino refund failed for " + player.getUniqueId());
-                    else debited = false;
-                    player.sendMessage(color("&cPayout failed; your bet was refunded where possible."));
-                    active.remove(player.getUniqueId()); return true;
-                }
-            }
-            String outcome = result.grossPayout() > bet ? "WIN" : result.grossPayout() == bet ? "PUSH" : "LOSS";
-            plugin.getDataStore().recordCasinoTransaction(player.getUniqueId(), player.getName(), game,
-                    bet, result.grossPayout(), outcome).exceptionally(error -> {
-                plugin.getLogger().warning("Casino audit write failed: " + error.getMessage()); return null;
-            });
-            debited = false; // A losing wager is a completed, intentional debit.
-            double net = result.grossPayout() - bet;
-            player.sendMessage(color("&6&lGASMP ARCADE &8» &f" + result.label()));
-            player.sendMessage(color(outcome.equals("WIN") ? "&aWIN &8| &6+" + money(net) + " Coins"
-                    : outcome.equals("PUSH") ? "&ePUSH &8| &fYour bet was returned"
-                    : "&cLOSS &8| &f-" + money(bet) + " Coins"));
-            cooldowns.put(player.getUniqueId(), System.currentTimeMillis() + config.getLong("settings.cooldown-seconds", 3) * 1000L);
-        } catch (Exception ex) {
-            if (debited) {
-                try {
-                    EconomyResponse refund = plugin.getEconomyBridge().deposit(player, bet);
-                    if (!refund.transactionSuccess()) plugin.getLogger().severe("Casino exception refund failed for " + player.getUniqueId());
-                } catch (Exception refundError) {
-                    plugin.getLogger().severe("Casino exception refund threw for " + player.getUniqueId() + ": " + refundError.getMessage());
-                }
-            }
-            player.sendMessage(color("&cThe game could not be completed. Any accepted wager was refunded where possible."));
-            plugin.getLogger().severe("Casino processing error for " + player.getName() + ": " + ex.getMessage());
-        } finally { active.remove(player.getUniqueId()); }
+                    settleShardsGame(player, game, bet, result);
+                }));
         return true;
+    }
+
+    private void settleShardsGame(Player player, String game, long bet, Result result) {
+        long payout = Math.max(0L, Math.round(result.grossPayout()));
+        java.util.concurrent.CompletableFuture<Long> credit = payout > 0L
+                ? plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), null,
+                        "ARCADE_REWARD", payout, net.gasmp.core.data.PlayerDataStore.ShardChange.GIVE,
+                        "GASMP Arcade win: " + game)
+                : java.util.concurrent.CompletableFuture.completedFuture(0L);
+
+        credit.whenComplete((balance, payoutError) -> Bukkit.getScheduler().runTask(plugin, () -> {
+            if (payoutError != null) {
+                plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), null,
+                        "ARCADE_REFUND", bet, net.gasmp.core.data.PlayerDataStore.ShardChange.GIVE,
+                        "Refund after arcade payout failure: " + game)
+                        .whenComplete((refunded, refundError) -> {
+                            if (refundError != null) plugin.getLogger().severe("Arcade refund failed for "
+                                    + player.getUniqueId() + ": " + rootMessage(refundError));
+                        });
+                player.sendMessage(color("&cArcade payout failed. Your wager is being refunded."));
+                plugin.getLogger().severe("Arcade payout failed for " + player.getUniqueId() + ": " + rootMessage(payoutError));
+                active.remove(player.getUniqueId());
+                return;
+            }
+
+            String outcome = payout > bet ? "WIN" : payout == bet ? "PUSH" : "LOSS";
+            plugin.getDataStore().recordCasinoTransaction(player.getUniqueId(), player.getName(), game,
+                    bet, payout, outcome).exceptionally(error -> {
+                plugin.getLogger().warning("Arcade audit write failed: " + rootMessage(error)); return null;
+            });
+            long net = payout - bet;
+            player.sendMessage(color("&6&lGASMP ARCADE &8» &f" + result.label()));
+            player.sendMessage(color(outcome.equals("WIN") ? "&aWIN &8| &d+" + net + " Shards"
+                    : outcome.equals("PUSH") ? "&ePUSH &8| &fYour wager was returned"
+                    : "&cLOSS &8| &f-" + bet + " Shards"));
+            cooldowns.put(player.getUniqueId(), System.currentTimeMillis()
+                    + config.getLong("settings.cooldown-seconds", 5) * 1000L);
+            active.remove(player.getUniqueId());
+        }));
+    }
+
+    private String rootMessage(Throwable error) {
+        Throwable cause = error;
+        while (cause.getCause() != null) cause = cause.getCause();
+        return cause.getMessage() == null ? cause.getClass().getSimpleName() : cause.getMessage();
     }
 
     private void openMenu(Player player, double selectedBet) {
         CasinoMenuHolder holder = new CasinoMenuHolder(CasinoMenuHolder.Stage.MENU, null, selectedBet);
-        Inventory inventory = create(holder, 54, "&8GASMP &7• &6Arcade");
+        Inventory inventory = create(holder, 54, ScreenUi.title("casino", "&8GASMP &7• &6Arcade"));
         set(inventory, 4, Material.SUNFLOWER, "&6&lGASMP ARCADE", "&7Choose a wager, then pick a game.",
-                "&7Virtual Coins only; no real-money deposits or cash-out.");
+                "&7Virtual Shards only; no real-money deposits or cash-out.");
         double[] bets = {1, 5, 10, 25, 50};
         int[] betSlots = {20, 21, 22, 23, 24};
         for (int i = 0; i < bets.length; i++) {
             double bet = bets[i];
             boolean selected = Math.abs(selectedBet - bet) < 0.0001;
             set(inventory, betSlots[i], selected ? Material.LIME_CONCRETE : Material.GOLD_NUGGET,
-                    (selected ? "&a&lSELECTED " : "&e") + money(bet) + " Coins", "&7Click to select this wager.");
+                    (selected ? "&a&lSELECTED " : "&e") + money(bet) + " Shards", "&7Click to select this wager.");
             holder.action(betSlots[i], "BET:" + bet);
         }
         String[][] games = {
@@ -186,8 +190,8 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
 
     private void openChoices(Player player, String game, double bet) {
         CasinoMenuHolder holder = new CasinoMenuHolder(CasinoMenuHolder.Stage.CHOICES, game, bet);
-        Inventory inventory = create(holder, 36, "&8GASMP &7• &6" + game.toUpperCase(Locale.ROOT));
-        set(inventory, 4, Material.GOLD_INGOT, "&6&l" + game.toUpperCase(Locale.ROOT), "&7Wager: &e" + money(bet) + " Coins", "&7Choose your play.");
+        Inventory inventory = create(holder, 36, ScreenUi.title("casino_choices", "&8GASMP &7• &6" + game.toUpperCase(Locale.ROOT)));
+        set(inventory, 4, Material.GOLD_INGOT, "&6&l" + game.toUpperCase(Locale.ROOT), "&7Wager: &e" + money(bet) + " Shards", "&7Choose your play.");
         if (game.equals("blackjack") || game.equals("drums") || game.equals("tictactoe") || game.equals("poker")) {
             set(inventory, 13, Material.LIME_CONCRETE, "&a&lPLAY NOW", "&7Start this game with the selected wager.");
             holder.action(13, "PLAY:");
@@ -238,7 +242,7 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
     private void startSpin(Player player, String game, double bet, String choice) {
         if (spinTasks.containsKey(player.getUniqueId())) return;
         CasinoMenuHolder holder = new CasinoMenuHolder(CasinoMenuHolder.Stage.SPIN, game, bet);
-        Inventory inventory = create(holder, 27, "&8GASMP &7• &6Spinning...");
+        Inventory inventory = create(holder, 27, ScreenUi.title("casino_spin", "&8GASMP &7• &6Spinning..."));
         set(inventory, 4, Material.CLOCK, "&6&lGOOD LUCK", "&7Wager: &e" + money(bet) + " Coins");
         player.openInventory(inventory);
         spinTicks.put(player.getUniqueId(), 0);
@@ -540,7 +544,7 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
     }
 
     private void showOdds(Player player) {
-        player.sendMessage(color("&6&lGASMP ARCADE ODDS &8- &7Virtual Coins only"));
+        player.sendMessage(color("&6&lGASMP ARCADE ODDS &8- &7Virtual Shards only"));
         player.sendMessage(color("&7Roulette: 18/37 red or black, pays 1.95x gross (~94.9% RTP)."));
         player.sendMessage(color("&7Slots: triples 7.00x, pairs 1.40x gross."));
         player.sendMessage(color("&7Races: 1/5, pays 4.75x. Lottery: 1/10, pays 9.50x."));
@@ -582,7 +586,7 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         try { double n = Double.parseDouble(value); if (!Double.isFinite(n) || n < min || n > max) throw new NumberFormatException(); return n; }
         catch (NumberFormatException ex) { throw new IllegalArgumentException(error); }
     }
-    private String money(double value) { return String.format(Locale.US, "%.2f", value); }
+    private String money(double value) { return String.format(Locale.US, "%.0f", value); }
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
 
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
