@@ -193,10 +193,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             actor.sendMessage(color("&cAmount must be between 1 and 64."));
             return;
         }
-        String contentId = chestPackTier(id)
-                ? (suffix.equals("_crate_block") ? "gasmp_chests:" + id + "_crate_block"
-                    : "gasmp_chests:" + id + "_chest_display")
-                : "gasmp_crates:" + id + suffix;
+        String contentId = "gasmp_crates:" + id + suffix;
         ItemStack custom = createEngineItem(contentId, amount);
         if (custom == null) {
             actor.sendMessage(color("&cCould not create &f" + contentId + "&c. Check that RP Engine loaded the matching block/item definition in /rp info."));
@@ -268,10 +265,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             return;
         }
 
-        // Normal left-click is deliberately allowed through to RP Engine so a
-        // placed crate block can be mined and drops its matching crate item.
-        // Sneak + left-click is the non-destructive reward-preview gesture.
-        if (event.getPlayer().isSneaking()) {
+        // Left-click previews the configured reward pool. Sneak + left-click
+        // is deliberately passed through to RP Engine so the matching block
+        // item is dropped and can be picked up.
+        if (!event.getPlayer().isSneaking()) {
             event.setCancelled(true);
             openPreview(event.getPlayer(), id);
         }
@@ -287,12 +284,12 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         openCrate(event.getPlayer(), id);
     }
 
-    /** Sneak-punch previews; an ordinary punch is left to RP Engine to pick up the display model. */
+    /** Ordinary punch previews; sneak + punch is left to RP Engine to pick up the model. */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onCrateModelPunch(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player player) || !plugin.getConfig().getBoolean("modules.crates", true)) return;
         String id = crateIdFromModelEntity(event.getEntity());
-        if (id == null || !player.isSneaking()) return;
+        if (id == null || player.isSneaking()) return;
         event.setCancelled(true);
         openPreview(player, id);
     }
@@ -1004,8 +1001,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     private ItemStack createKey(String id, int amount) {
         String canonical = canonicalCrateId(id);
-        String contentId = chestPackTier(canonical)
-                ? "gasmp_chests:" + canonical + "_key" : "gasmp_crates:" + canonical + "_key";
+        String contentId = "gasmp_crates:" + canonical + "_key";
         ItemStack item = createEngineItem(contentId, amount);
         if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
         ItemMeta meta = item.getItemMeta();
@@ -1018,42 +1014,110 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return item;
     }
 
-    /** RP Engine create() is main-thread-only. Falls back to vanilla items if it is absent. */
+    /**
+     * Resolve GASMP's own RP Engine items and external cosmetics from ItemsAdder,
+     * Oraxen or Nexo without compile-time dependencies on those optional plugins.
+     * Multiple candidates may be provided with '|'; the first loaded provider wins.
+     * This method must be called on the server thread because item APIs are not
+     * guaranteed to be thread-safe.
+     */
     private ItemStack createEngineItem(String contentIdText, int amount) {
-        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled()) return null;
-        try {
-            ClassLoader loader = engine.getClass().getClassLoader();
-            Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
-            Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
-            if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) return null;
-            java.lang.reflect.Method accessor = engine.getClass().getMethod("items");
-            Object items = accessor.invoke(engine);
-            Class<?> itemsApi = accessor.getReturnType();
-
-            Object created;
+        if (contentIdText == null || contentIdText.isBlank() || amount < 1 || amount > 64) return null;
+        for (String rawCandidate : contentIdText.split("\\|")) {
+            String candidate = rawCandidate.trim();
+            if (candidate.isEmpty()) continue;
             try {
-                created = itemsApi.getMethod("create", contentIdClass, int.class)
-                        .invoke(items, optional.get(), amount);
-            } catch (NoSuchMethodException olderApi) {
-                created = itemsApi.getMethod("create", contentIdClass).invoke(items, optional.get());
+                ItemStack item = createExternalItem(candidate, amount);
+                if (item != null) return item;
+                item = createRpEngineItem(candidate, amount);
+                if (item != null) return item;
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                plugin.getLogger().fine("Could not resolve cosmetic '" + candidate + "': " + ex.getMessage());
             }
-
-            if (created instanceof Optional<?> stackOptional && stackOptional.isPresent()
-                    && stackOptional.get() instanceof ItemStack stack) {
-                ItemStack result = stack.clone();
-                if (result.getAmount() != amount) result.setAmount(Math.min(amount, result.getMaxStackSize()));
-                return result;
-            }
-            if (created instanceof ItemStack stack) {
-                ItemStack result = stack.clone();
-                if (result.getAmount() != amount) result.setAmount(Math.min(amount, result.getMaxStackSize()));
-                return result;
-            }
-        } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().warning("RP Engine could not create '" + contentIdText + "': " + ex.getMessage());
         }
         return null;
+    }
+
+    /** Public bridge used by the Shards decoration shop for the same provider resolution. */
+    public ItemStack createContentItem(String contentIdText, int amount) {
+        return createEngineItem(contentIdText, amount);
+    }
+
+    private ItemStack createExternalItem(String candidate, int amount) throws ReflectiveOperationException {
+        int separator = candidate.indexOf(':');
+        if (separator <= 0) return null;
+        String provider = candidate.substring(0, separator).toLowerCase(Locale.ROOT);
+        String externalId = candidate.substring(separator + 1);
+        String pluginName = switch (provider) {
+            case "itemsadder" -> "ItemsAdder";
+            case "oraxen" -> "Oraxen";
+            case "nexo" -> "Nexo";
+            default -> null;
+        };
+        if (pluginName == null) return null;
+        Plugin providerPlugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        if (providerPlugin == null || !providerPlugin.isEnabled()) return null;
+        ClassLoader loader = providerPlugin.getClass().getClassLoader();
+        Object resolved;
+        Object stack;
+        switch (provider) {
+            case "itemsadder" -> {
+                Class<?> api = Class.forName("dev.lone.itemsadder.api.CustomStack", true, loader);
+                resolved = api.getMethod("getInstance", String.class).invoke(null, externalId);
+                resolved = unwrapOptional(resolved);
+                if (resolved == null) return null;
+                stack = resolved.getClass().getMethod("getItemStack").invoke(resolved);
+            }
+            case "oraxen" -> {
+                Class<?> api = Class.forName("io.th0rgal.oraxen.api.OraxenItems", true, loader);
+                resolved = api.getMethod("getItemById", String.class).invoke(null, externalId);
+                resolved = unwrapOptional(resolved);
+                if (resolved == null) return null;
+                stack = resolved.getClass().getMethod("build").invoke(resolved);
+            }
+            case "nexo" -> {
+                Class<?> api = Class.forName("com.nexomc.nexo.api.NexoItems", true, loader);
+                resolved = api.getMethod("itemFromId", String.class).invoke(null, externalId);
+                resolved = unwrapOptional(resolved);
+                if (resolved == null) return null;
+                stack = resolved.getClass().getMethod("build").invoke(resolved);
+            }
+            default -> { return null; }
+        }
+        return normalizeCreatedItem(stack, amount);
+    }
+
+    private Object unwrapOptional(Object value) {
+        if (value instanceof Optional<?> optional) return optional.orElse(null);
+        return value;
+    }
+
+    private ItemStack createRpEngineItem(String contentIdText, int amount) throws ReflectiveOperationException {
+        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
+        if (engine == null || !engine.isEnabled()) return null;
+        ClassLoader loader = engine.getClass().getClassLoader();
+        Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
+        Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
+        if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) return null;
+        java.lang.reflect.Method accessor = engine.getClass().getMethod("items");
+        Object items = accessor.invoke(engine);
+        Class<?> itemsApi = accessor.getReturnType();
+        Object created;
+        try {
+            created = itemsApi.getMethod("create", contentIdClass, int.class)
+                    .invoke(items, optional.get(), amount);
+        } catch (NoSuchMethodException olderApi) {
+            created = itemsApi.getMethod("create", contentIdClass).invoke(items, optional.get());
+        }
+        return normalizeCreatedItem(created, amount);
+    }
+
+    private ItemStack normalizeCreatedItem(Object created, int amount) {
+        Object resolved = unwrapOptional(created);
+        if (!(resolved instanceof ItemStack stack)) return null;
+        ItemStack result = stack.clone();
+        result.setAmount(Math.min(amount, result.getMaxStackSize()));
+        return result;
     }
 
     private String canonicalCrateId(String rawId) {
@@ -1081,8 +1145,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             Object result = accessor.getReturnType().getMethod("idOf", ItemStack.class).invoke(items, item);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
             String actual = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
-            String expected = chestPackTier(canonical)
-                    ? "gasmp_chests:" + canonical + "_key" : "gasmp_crates:" + canonical + "_key";
+            String expected = "gasmp_crates:" + canonical + "_key";
             if (expected.equalsIgnoreCase(actual)) return true;
             // Existing Common/Rare/Epic/Legendary keys remain usable after the tier migration.
             String legacyPrefix = "gasmp_crates:";
