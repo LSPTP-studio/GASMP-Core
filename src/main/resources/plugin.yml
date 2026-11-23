@@ -1,5 +1,5 @@
 name: GASMP-Core
-version: '0.7.5'
+version: '0.7.6'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
@@ -65,7 +65,7 @@ commands:
     permission: gasmpcore.auction
   casino:
     description: GASMP Shards-based arcade.
-    usage: /casino <menu|game> <bet> [choice]
+    usage: /casino <menu|game|challenge|accept|decline|duel|odds> [arguments]
     permission: gasmpcore.casino.play
   battlepass:
     description: View Battle Pass progress and claim rewards.
