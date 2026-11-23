@@ -898,7 +898,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             player.sendMessage(color("&cThe crate-key shop is currently unavailable."));
             return;
         }
-        long price = plugin.getConfig().getLong("key-shop.prices." + id, -1L);
+        long price = plugin.getConfig().getLong("key-shop.prices." + crateId, -1L);
         if (price < 0L || config.getConfigurationSection("crates." + crateId) == null) {
             player.sendMessage(color("&cThat crate key is not for sale."));
             return;
