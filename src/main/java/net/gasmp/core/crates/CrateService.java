@@ -434,7 +434,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         holder.inventory(inventory);
         ItemStack filler = named(Material.PURPLE_STAINED_GLASS_PANE, " ");
         for (int i = 0; i < inventory.getSize(); i++) {
-            if (i < 9 || i >= 18 || i % 9 == 0 || i % 9 == 8) inventory.setItem(i, filler.clone());
+            int row = i / 9;
+            int column = i % 9;
+            if (row == 0 || row == 5 || column == 0 || column == 8) inventory.setItem(i, filler.clone());
         }
         inventory.setItem(22, named(Material.CHEST, "&d&lOPENING...", "&7Your reward is being rolled."));
         player.openInventory(inventory);
@@ -558,7 +560,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                     plugin.getLogger().warning("Ignoring invalid enchantment " + name + " in crate reward.");
                     continue;
                 }
-                item.addUnsafeEnchantment(enchantment, level);
+                meta.addEnchant(enchantment, level, true);
             }
         }
         if (reward.getBoolean("unbreakable", false)) meta.setUnbreakable(true);
