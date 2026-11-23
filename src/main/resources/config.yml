@@ -1,4 +1,4 @@
-# GASMP Core 0.7.2 — Paper 26.2 / Java 25
+# GASMP Core 0.7.3 — Paper 26.2 / Java 25
 # GASMP Core gameplay systems, Shard Shop, Arcade and equipment crates.
 general:
   debug: false
@@ -35,7 +35,6 @@ menus:
     shop: "blue-storefront"
     statistics: "pink-statistics"
     decorations: "blue-decorations"
-    music: "retro-player"
     shards: "violet-crystal"
     casino: "arcade-casino"
 economy:
