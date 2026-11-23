@@ -2,6 +2,7 @@ package net.gasmp.core.crates;
 
 import net.gasmp.core.GASMPCore;
 import net.gasmp.core.data.PlayerDataStore;
+import net.gasmp.core.gui.ScreenUi;
 import net.gasmp.core.staff.StaffAccess;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -125,7 +126,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             actor.sendMessage(color("&cAmount must be between 1 and 64."));
             return;
         }
-        ItemStack custom = createEngineItem("gasmp_crates:" + id + suffix, amount);
+        String contentId = chestPackTier(id)
+                ? (suffix.equals("_crate_block") ? "gasmp_chests:" + id + "_crate_block" : "gasmp_chests:" + id + "_chest_display")
+                : "gasmp_crates:" + id + suffix;
+        ItemStack custom = createEngineItem(contentId, amount);
         if (custom == null) {
             actor.sendMessage(color("&cRP Engine is not installed or the custom content ID is not loaded. Use /rp reload first."));
             return;
@@ -259,7 +263,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             Object result = blocks.getClass().getMethod("idAt", Block.class).invoke(blocks, block);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return null;
             String raw = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
-            String prefix = "gasmp_crates:";
+            String prefix = raw.startsWith("gasmp_chests:") ? "gasmp_chests:" : "gasmp_crates:";
             String suffix = "_crate_block";
             if (!raw.startsWith(prefix) || !raw.endsWith(suffix)) return null;
             String id = raw.substring(prefix.length(), raw.length() - suffix.length());
@@ -282,7 +286,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             String raw = String.valueOf(placement.getClass().getMethod("modelId").invoke(placement)).toLowerCase(Locale.ROOT);
             int colon = raw.indexOf(':');
             String slug = colon >= 0 ? raw.substring(colon + 1) : raw;
-            if (slug.endsWith("_crate_display")) slug = slug.substring(0, slug.length() - "_crate_display".length());
+            if (slug.endsWith("_chest_display")) slug = slug.substring(0, slug.length() - "_chest_display".length());
+            else if (slug.endsWith("_chest")) slug = slug.substring(0, slug.length() - "_chest".length());
+            else if (slug.endsWith("_crate_display")) slug = slug.substring(0, slug.length() - "_crate_display".length());
             else if (slug.endsWith("_crate")) slug = slug.substring(0, slug.length() - "_crate".length());
             return config.getConfigurationSection("crates." + slug) == null ? null : slug;
         } catch (ReflectiveOperationException | RuntimeException ex) {
@@ -362,7 +368,6 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     /** Displays the reward table and weighted odds without consuming a key. */
-    /** Displays the reward table and weighted odds without consuming a key. */
     private void openPreview(Player player, String crateId) {
         ConfigurationSection crate = config.getConfigurationSection("crates." + crateId);
         ConfigurationSection section = crate == null ? null : crate.getConfigurationSection("rewards");
@@ -381,54 +386,57 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
 
         CrateAnimationHolder holder = new CrateAnimationHolder(crateId);
-        Inventory inventory = Bukkit.createInventory(holder, 27,
-                color("&8GASMP &7• &e" + crateId.toUpperCase(Locale.ROOT) + " COSMETICS"));
+        Inventory inventory = Bukkit.createInventory(holder, 54,
+                ScreenUi.title("crate_details", "&8GASMP &7• &e" + crateId.toUpperCase(Locale.ROOT) + " LOOT"));
         holder.inventory(inventory);
         ItemStack filler = named(Material.PURPLE_STAINED_GLASS_PANE, " ");
-        for (int slot = 0; slot < 27; slot++) {
-            if (slot < 9 || slot >= 18 || slot % 9 == 0 || slot % 9 == 8) inventory.setItem(slot, filler.clone());
+        for (int slot = 0; slot < 54; slot++) {
+            int row = slot / 9;
+            int column = slot % 9;
+            if (row == 0 || row == 5 || column == 0 || column == 8) inventory.setItem(slot, filler.clone());
         }
 
-        int[] slots = {10, 11, 12, 13, 14, 15, 16};
+        int[] slots = {20, 21, 22, 23, 24, 25, 26};
         int index = 0;
         for (String key : section.getKeys(false)) {
             ConfigurationSection reward = section.getConfigurationSection(key);
             if (reward == null) continue;
             int weight = Math.max(0, reward.getInt("weight", 0));
             if (weight <= 0 || index >= slots.length) continue;
-
             ItemStack icon = rewardIcon(reward);
             ItemMeta meta = icon.getItemMeta();
             if (meta != null) {
                 String display = reward.getString("display", key.replace('_', ' ').toUpperCase(Locale.ROOT));
                 meta.setDisplayName(color("&e&l" + display));
                 List<String> lore = new ArrayList<>();
-                lore.add(color("&7Reward type: &dCOSMETIC"));
+                String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
+                lore.add(color(type.equals("key") ? "&dCrate key jackpot" : "&7Equipment reward"));
                 lore.add(color("&7Chance: &a" + String.format(Locale.ROOT, "%.2f", weight * 100.0d / totalWeight) + "%"));
-                String contentId = reward.getString("content", "");
-                if (!contentId.isBlank()) lore.add(color("&8" + contentId));
-                if (icon.getType() == Material.BARRIER) lore.add(color("&cCosmetic content was not found. Check /rp items."));
+                if (type.equals("item")) {
+                    ConfigurationSection enchants = reward.getConfigurationSection("enchantments");
+                    if (enchants != null) lore.add(color("&bEnchantments: &f" + String.join(", ", enchants.getKeys(false))));
+                }
                 meta.setLore(lore);
                 icon.setItemMeta(meta);
             }
             inventory.setItem(slots[index++], icon);
         }
-        inventory.setItem(22, named(Material.BOOK, "&f&lHow to open",
-                "&7Right-click this crate while holding its matching key.",
-                "&7Sneak + left-click to inspect cosmetic rewards.",
-                "&8Your key is only consumed when the opening finishes."));
+        inventory.setItem(31, named(Material.BOOK, "&f&lHOW TO OPEN",
+                "&7Right-click while holding the matching key.",
+                "&7Sneak + left-click to inspect the equipment and odds.",
+                "&8Keys are consumed only after the opening animation."));
         player.openInventory(inventory);
     }
 
     private void animateOpening(Player player, String crateId, ConfigurationSection reward) {
         CrateAnimationHolder holder = new CrateAnimationHolder(crateId);
-        Inventory inventory = Bukkit.createInventory(holder, 27, color("&8GASMP &7• &d" + crateId.toUpperCase(Locale.ROOT) + " CRATE"));
+        Inventory inventory = Bukkit.createInventory(holder, 54, ScreenUi.title("crates", "&8GASMP &7• &d" + crateId.toUpperCase(Locale.ROOT) + " CRATE"));
         holder.inventory(inventory);
         ItemStack filler = named(Material.PURPLE_STAINED_GLASS_PANE, " ");
         for (int i = 0; i < inventory.getSize(); i++) {
             if (i < 9 || i >= 18 || i % 9 == 0 || i % 9 == 8) inventory.setItem(i, filler.clone());
         }
-        inventory.setItem(13, named(Material.CHEST, "&d&lOPENING...", "&7Your reward is being rolled."));
+        inventory.setItem(22, named(Material.CHEST, "&d&lOPENING...", "&7Your reward is being rolled."));
         player.openInventory(inventory);
 
         Material[] reel = {Material.AMETHYST_SHARD, Material.DIAMOND, Material.EMERALD,
@@ -443,7 +451,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 return;
             }
             ticks[0]++;
-            for (int slot : new int[]{11, 13, 15}) {
+            for (int slot : new int[]{21, 22, 23}) {
                 Material material = reel[ThreadLocalRandom.current().nextInt(reel.length)];
                 inventory.setItem(slot, named(material, "&e&l" + material.name().replace('_', ' ')));
             }
@@ -453,7 +461,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 BukkitTask current = animationTasks.remove(player.getUniqueId());
                 if (current != null) current.cancel();
                 player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.0f);
-                inventory.setItem(13, rewardPreview(reward));
+                inventory.setItem(22, rewardPreview(reward));
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     if (!player.isOnline() || player.getOpenInventory().getTopInventory().getHolder() != holder) {
                         opening.remove(player.getUniqueId());
@@ -491,17 +499,19 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     private ItemStack rewardIcon(ConfigurationSection reward) {
         String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
-        if (type.equals("cosmetic")) {
-            String contentId = reward.getString("content", "");
-            ItemStack custom = contentId.isBlank() ? null : createEngineItem(contentId, 1);
-            return custom == null ? new ItemStack(Material.BARRIER) : custom;
+        if (type.equals("key")) {
+            String tier = reward.getString("crate", "normal").toLowerCase(Locale.ROOT);
+            return createKey(tier, 1);
+        }
+        if (type.equals("item")) {
+            ItemStack item = equipmentReward(reward, 1);
+            return item == null ? new ItemStack(Material.BARRIER) : item;
         }
         Material material = switch (type) {
-            case "coins" -> Material.GOLD_INGOT;
             case "shards" -> Material.AMETHYST_SHARD;
-            default -> Material.matchMaterial(reward.getString("material", "DIAMOND"));
+            case "coins" -> Material.GOLD_INGOT;
+            default -> Material.CHEST;
         };
-        if (material == null || !material.isItem() || material.isAir()) material = Material.CHEST;
         return new ItemStack(material);
     }
 
@@ -510,17 +520,50 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
         ItemMeta meta = preview.getItemMeta();
         if (meta != null) {
-            String originalName = meta.hasDisplayName() ? meta.getDisplayName() : reward.getString("display", type.toUpperCase(Locale.ROOT));
+            String originalName = meta.hasDisplayName() ? meta.getDisplayName()
+                    : reward.getString("display", type.equals("key") ? "Crate Key" : "Equipment");
             meta.setDisplayName(color("&6&lREWARD REVEALED"));
             List<String> lore = new ArrayList<>();
-            lore.add(color("&7You won: &f" + originalName));
-            if (type.equals("cosmetic")) lore.add(color("&dCosmetic collectible"));
-            else lore.add(color("&7Type: &f" + type.toUpperCase(Locale.ROOT)));
+            lore.add(color("&7You won: &f" + ChatColor.stripColor(originalName)));
+            lore.add(color(type.equals("key") ? "&dRare crate-key drop" : "&7Equipment loot"));
+            if (type.equals("item")) {
+                ConfigurationSection enchants = reward.getConfigurationSection("enchantments");
+                if (enchants != null) lore.add(color("&bEnchantments: &f" + String.join(", ", enchants.getKeys(false))));
+            }
             lore.add(color("&8GASMP CRATES"));
             meta.setLore(lore);
             preview.setItemMeta(meta);
         }
         return preview;
+    }
+
+    private ItemStack equipmentReward(ConfigurationSection reward, int amount) {
+        Material material = Material.matchMaterial(reward.getString("material", "IRON_INGOT"));
+        if (material == null || !material.isItem() || material.isAir() || amount < 1 || amount > 64) return null;
+        ItemStack item = new ItemStack(material, amount);
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return item;
+
+        String display = reward.getString("display", "");
+        if (!display.isBlank()) meta.setDisplayName(color(display));
+        List<String> lore = reward.getStringList("lore");
+        if (!lore.isEmpty()) meta.setLore(lore.stream().map(this::color).toList());
+        ConfigurationSection enchantments = reward.getConfigurationSection("enchantments");
+        if (enchantments != null) {
+            for (String name : enchantments.getKeys(false)) {
+                org.bukkit.enchantments.Enchantment enchantment =
+                        org.bukkit.enchantments.Enchantment.getByName(name.toUpperCase(Locale.ROOT));
+                int level = enchantments.getInt(name, 1);
+                if (enchantment == null || level < 1 || level > 255) {
+                    plugin.getLogger().warning("Ignoring invalid enchantment " + name + " in crate reward.");
+                    continue;
+                }
+                item.addUnsafeEnchantment(enchantment, level);
+            }
+        }
+        if (reward.getBoolean("unbreakable", false)) meta.setUnbreakable(true);
+        item.setItemMeta(meta);
+        return item;
     }
 
     @EventHandler
@@ -571,19 +614,29 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
         switch (type) {
             case "item" -> {
-                Material material = Material.matchMaterial(reward.getString("material", "DIAMOND"));
-                if (material == null || !material.isItem() || material.isAir()) {
-                    refundKey(player, crateId, "Crate reward item is invalid; contact staff."); return;
-                }
                 if (amount < 1 || amount > 64) {
-                    refundKey(player, crateId, "Configured item reward amount must be between 1 and 64.");
-                    plugin.getLogger().warning("Invalid item reward amount " + amount + " in crate " + crateId);
+                    refundKey(player, crateId, "Configured equipment amount must be between 1 and 64.");
                     return;
                 }
-                ItemStack rewardItem = new ItemStack(material, (int) amount);
+                ItemStack rewardItem = equipmentReward(reward, (int) amount);
+                if (rewardItem == null) {
+                    refundKey(player, crateId, "Crate equipment definition is invalid; contact staff.");
+                    return;
+                }
                 Map<Integer, ItemStack> left = player.getInventory().addItem(rewardItem);
                 left.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
-                player.sendMessage(color("&6&lCRATE REWARD &8» &f" + amount + "x " + material.name()));
+                player.sendMessage(color("&6&lEQUIPMENT UNLOCKED &8» &f" + reward.getString("display", reward.getString("material", "Equipment"))));
+                opening.remove(player.getUniqueId());
+            }
+            case "key" -> {
+                String targetCrate = reward.getString("crate", "").toLowerCase(Locale.ROOT);
+                if (amount > 64 || !chestPackTier(targetCrate)
+                        || config.getConfigurationSection("crates." + targetCrate) == null) {
+                    refundKey(player, crateId, "Crate-key reward definition is invalid.");
+                    return;
+                }
+                giveKeyTo(player, targetCrate, (int) amount, false);
+                player.sendMessage(color("&d&lKEY JACKPOT &8» &f" + targetCrate.toUpperCase(Locale.ROOT) + " KEY"));
                 opening.remove(player.getUniqueId());
             }
             case "cosmetic" -> {
@@ -747,8 +800,13 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return true;
     }
 
+    private boolean chestPackTier(String id) {
+        return "normal".equalsIgnoreCase(id) || "medium".equalsIgnoreCase(id) || "premium".equalsIgnoreCase(id);
+    }
+
     private ItemStack createKey(String id, int amount) {
-        ItemStack item = createEngineItem("gasmp_crates:" + id + "_key", amount);
+        String contentId = chestPackTier(id) ? "gasmp_chests:" + id + "_key" : "gasmp_crates:" + id + "_key";
+        ItemStack item = createEngineItem(contentId, amount);
         if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -815,7 +873,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             Object items = engine.getClass().getMethod("items").invoke(engine);
             Object result = items.getClass().getMethod("idOf", ItemStack.class).invoke(items, item);
             if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
-            return ("gasmp_crates:" + id + "_key").equalsIgnoreCase(String.valueOf(optional.get()));
+            String actual = String.valueOf(optional.get());
+            String expected = chestPackTier(id) ? "gasmp_chests:" + id + "_key" : "gasmp_crates:" + id + "_key";
+            return expected.equalsIgnoreCase(actual);
         } catch (ReflectiveOperationException | RuntimeException ex) {
             plugin.getLogger().fine("RP Engine key identity lookup unavailable: " + ex.getMessage());
             return false;
@@ -828,9 +888,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         player.sendMessage(color("&e/crates list &7- list configured crates"));
         player.sendMessage(color("&e/crates set <id> &7- set target chest/barrel"));
         player.sendMessage(color("&e/crates unset <id> &7- remove location"));
+        player.sendMessage(color("&eSneak + left-click &7- preview crate loot"));
+        player.sendMessage(color("&eMine/punch &7- pick up an already-placed crate"));
         player.sendMessage(color("&e/crates givekey <player> <id> [amount]"));
-        player.sendMessage(color("&e/crates giveblock <player> <id> [amount] &7- custom protected block item"));
-        player.sendMessage(color("&e/crates givemodel <player> <id> [amount] &7- animated placed model"));
+        player.sendMessage(color("&e/crates giveblock <player> <normal|medium|premium> [amount] &7- placeable chest crate"));
+        player.sendMessage(color("&e/crates givemodel <player> <normal|medium|premium> [amount] &7- chest model display"));
         player.sendMessage(color("&e/crates reload &7- reload crate definitions"));
         player.sendMessage(color("&e/keyall <crate-id|all> <amount> [world:<world>] [silent] &7- distribute keys"));
     }
