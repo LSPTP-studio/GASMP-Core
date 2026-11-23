@@ -26,7 +26,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -196,7 +196,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     /** Left-clicking a placed Blockbench crate opens the reward preview, never mines it. */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
-    public void onCrateModelInteract(PlayerInteractAtEntityEvent event) {
+    public void onCrateModelInteract(PlayerInteractEntityEvent event) {
         if (!plugin.getConfig().getBoolean("modules.crates", true) || event.getHand() != EquipmentSlot.HAND) return;
         String id = crateIdFromModelEntity(event.getRightClicked());
         if (id == null) return;
