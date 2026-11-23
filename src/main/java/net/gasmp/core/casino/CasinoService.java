@@ -39,6 +39,15 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         File file = new File(plugin.getDataFolder(), "casino.yml");
         if (!file.exists()) plugin.saveResource("casino.yml", false);
         config = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file);
+        // This server's requested Arcade currency is GASMP Shards, not Vault Coins.
+        config.set("settings.enabled", true);
+        if (!config.contains("settings.minimum-bet")) config.set("settings.minimum-bet", 1);
+        if (!config.contains("settings.maximum-bet")) config.set("settings.maximum-bet", 100);
+        try {
+            config.save(file);
+        } catch (java.io.IOException error) {
+            plugin.getLogger().warning("Could not persist Arcade settings: " + error.getMessage());
+        }
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
