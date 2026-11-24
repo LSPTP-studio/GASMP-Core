@@ -1,4 +1,4 @@
-# GASMP Core 0.7.0 — Day 1 stabilization candidate
+# GASMP Core 0.7.8 — RP Engine-only cosmetic migration
 
 **Target:** Paper 26.2 (Purpur compatibility only where the Paper API behavior is shared)  
 **Runtime:** Java 25  
@@ -23,7 +23,7 @@ This is a **source release candidate**, not a verified production JAR. The works
 - TAB — reads LuckPerms primary group and `%luckperms-prefix%`
 - PlaceholderAPI — placeholders in compatible displays
 - Geyser + Floodgate — Bedrock cross-play; RP Engine can build/deliver a Bedrock pack when Geyser-Spigot is running on the same server
-- RP Engine — recommended free/open-source resource-pack, custom-item, custom-block and animated placed-model option; ItemsAdder/Nexo remain optional alternatives
+- RP Engine — the sole free/open-source resource-pack, custom-item, custom-block and animated placed-model provider
 - OpenInv, Lib's Disguises, HeadDatabase/HeadDB, Skript, ImageFrame and Typewriter — restricted third-party staff/build tools, not bundled into GASMP Core
 
 **Economy compatibility note:** Coins features support any plugin that exposes a Vault `Economy` provider. A proprietary economy API without Vault support needs a separate adapter and is not automatically compatible.
@@ -93,7 +93,7 @@ The command list and aliases are declared in `src/main/resources/plugin.yml`. Th
 
 ## Rank assets for Phase 2
 
-The three rank-art bundles supplied by the server owner are preserved in `assets/phase2-rank-sources/`. The existing optional ItemsAdder export under `integrations/itemsadder/contents/` contains the 72 badge images, English PIXED prefix images and Chiaki bundle content. Phase 2 will turn the rank artwork into the custom rank/menu experience. Do not install the asset bundle into a live pack until namespaced assets and all client formats are reviewed.
+The three rank-art bundles supplied by the server owner are preserved in `assets/phase2-rank-sources/`. Phase 2 will turn the supplied rank artwork into the custom rank/menu experience. Do not install the asset bundle into a live pack until namespaced assets and all client formats are reviewed.
 
 ## Phase 2 scope
 
