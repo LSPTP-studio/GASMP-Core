@@ -696,7 +696,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         String type = reward.getString("type", "item").toLowerCase(Locale.ROOT);
         if (type.equals("key")) {
             String tier = reward.getString("crate", "normal").toLowerCase(Locale.ROOT);
-            return createKey(tier, 1);
+            ItemStack key = createKey(tier, 1);
+            return key == null ? new ItemStack(Material.BARRIER) : key;
         }
         if (type.equals("item")) {
             ItemStack item = equipmentReward(reward, 1);
