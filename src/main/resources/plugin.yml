@@ -1,5 +1,5 @@
 name: GASMP-Core
-version: '0.8.0'
+version: '0.8.1'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
