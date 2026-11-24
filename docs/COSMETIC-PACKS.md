@@ -1,28 +1,52 @@
-# Cosmetic crate packs
+# GASMP cosmetic packs — RP Engine only
 
-GASMP Core 0.7.6 includes reward entries for the three cosmetic packs uploaded with the project:
+GASMP Core 0.7.7 uses **RP Engine as its only custom-item provider**. The crate rewards point directly to RP Engine content IDs. There are no ItemsAdder, Oraxen or Nexo runtime integrations and none of those plugins need to be installed.
 
-- FNAF plushies: Freddy, Chica, Bonnie, Foxy, Golden Freddy and The Puppet.
-- Feral Fantasy: bear, cat, fox, rabbit, tiger and wolf ears/tails.
-- Wing Cosmetics: angel, astronaut, bluefire, brown, butterfly, demon, dragon, eagle, golden, ocean, phoenix and purple wings.
+## Included cosmetics
 
-All Normal, Medium and Premium pools contain these cosmetic reward families. The pools do not award combat equipment. Existing GASMP furniture entries remain cosmetic placeables.
+The uploaded packs provide these items:
 
-## Install the assets
+- **FNAF plushies:** Freddy, Chica, Bonnie, Foxy, Golden Freddy and The Puppet.
+- **Feral Fantasy:** bear, cat, fox, rabbit, tiger and wolf ears/tails.
+- **Wing Cosmetics:** angel, astronaut, bluefire, brown, butterfly, demon, dragon, eagle, golden, ocean, phoenix and purple wings.
 
-Use the companion GASMP-Cosmetic-Assets.zip bundle:
+All three cosmetic crate tiers use these content families in their reward pools. The reward pools do not award combat equipment.
 
-- ItemsAdder: copy ItemsAdder/contents/ into plugins/ItemsAdder/contents/.
-- Oraxen: merge Oraxen/items/ and Oraxen/pack/ into the matching folders under plugins/Oraxen/.
-- Nexo: merge Nexo/items/ and Nexo/pack/ into the matching folders under plugins/Nexo/. The supplied Nexo files cover Feral Fantasy.
+## Install
 
-ItemsAdder is the easiest single-provider setup for the three uploaded packs. Oraxen is also supported for all three. You do not need to install all three providers; install the one whose assets you are using. Avoid loading duplicate versions of the same pack through multiple resource-pack engines.
+Use `GASMP-RPEngine-Cosmetics.zip`. Its paths are already arranged for the server root:
 
-After copying the files, run the appropriate item-plugin reload and resource-pack build/reload commands for the installed plugin version, then reconnect with a client to receive the updated pack. Command names vary by plugin version; use that plugin's installed documentation. Verify each pack's item IDs are loaded before opening crates.
+`plugins/RPEngine/content/fnafpack/`
+`plugins/RPEngine/content/ero_feral_fantasy_set/`
+`plugins/RPEngine/content/ax_wings_pack/`
+
+1. Back up `plugins/RPEngine/content/`.
+2. Extract the ZIP into the **server root**, preserving the folder paths.
+3. Run `/rp reload` from console.
+4. Read the RP Engine console output and fix any asset-import warnings before testing.
+5. Regenerate/resend the RP Engine resource pack using the workflow for your installed RP Engine version, then reconnect clients.
+
+The files are the original supplied ItemsAdder-format pack folders placed in RP Engine's documented direct-import layout. RP Engine reads those files itself; this does **not** install or run ItemsAdder.
+
+The imported pack folder names become namespaces:
+
+| Pack folder | RP Engine item ID examples |
+|---|---|
+| `fnafpack` | `fnafpack:freddy_plush` |
+| `ero_feral_fantasy_set` | `ero_feral_fantasy_set:ero_feral_fantasy_bear_ears` |
+| `ax_wings_pack` | `ax_wings_pack:angel_wings` |
+
+Test the imports from console:
+
+```text
+rp give fnafpack:freddy_plush 1
+rp give ero_feral_fantasy_set:ero_feral_fantasy_bear_ears 1
+rp give ax_wings_pack:angel_wings 1
+```
 
 ## Physical GASMP crates
 
-Copy integrations/rp-engine/content/gasmp_crates/ into plugins/RPEngine/content/gasmp_crates/, then reload RP Engine and regenerate/reload its resource pack. The pack defines Normal, Medium and Premium keys, physical crate blocks and animated placed crate displays. The Normal and Medium block models reuse the included Vote crate model; Premium reuses the Legendary model.
+The same RP Engine content folder contains GASMP's Normal, Medium and Premium crate keys, blocks and animated display models. Keep `integrations/rp-engine/content/gasmp_crates/` in place alongside the cosmetic pack folders.
 
 - Right-click a physical crate to open it with its matching key.
 - Left-click to preview its configured reward pool.
@@ -30,22 +54,21 @@ Copy integrations/rp-engine/content/gasmp_crates/ into plugins/RPEngine/content/
 
 Give test items from the server console or as an Owner/Developer:
 
-    crates givekey <player> normal 1
-    crates givekey <player> medium 1
-    crates givekey <player> premium 1
-    crates giveblock <player> normal 1
-    crates giveblock <player> medium 1
-    crates giveblock <player> premium 1
-    crates givemodel <player> normal 1
-    crates givemodel <player> medium 1
-    crates givemodel <player> premium 1
+```text
+crates givekey <player> normal 1
+crates givekey <player> medium 1
+crates givekey <player> premium 1
+crates giveblock <player> normal 1
+crates giveblock <player> medium 1
+crates giveblock <player> premium 1
+crates givemodel <player> normal 1
+crates givemodel <player> medium 1
+crates givemodel <player> premium 1
+```
 
-## Provider resolution
+## Important notes
 
-Reward IDs use provider alternatives separated by a vertical bar. GASMP Core tries each configured provider and uses the first matching loaded item. For example, the Freddy Plush reward tries ItemsAdder fnafpack:freddy_plush and then Oraxen freddy_plush. Feral Fantasy also has Nexo candidates.
-
-The optional provider APIs are resolved reflectively; there are no hard compile-time dependencies on ItemsAdder, Oraxen or Nexo. If none of the configured providers is installed or an item ID is missing, the crate reward is rejected and its key is returned instead of consuming a key without a reward.
-
-## Asset licensing
-
-The packs were supplied by the server owner for this project. Keep each pack's original license and creator terms with the files; do not redistribute them outside the server/project unless their respective licenses allow it.
+- Install **RP Engine only** for these cosmetic items. Do not install ItemsAdder, Oraxen or Nexo for this setup.
+- The FNAF plushes import as placeable furniture where their original config defines that behavior.
+- The wings and Feral Fantasy models are custom items. Their display/equip behavior is limited to what the source item definitions and RP Engine importer support; a separate cosmetic-equipment plugin is not included.
+- Follow the original creators' license and attribution terms. The uploaded files are being prepared for this server's own use; do not redistribute them outside the server unless their licenses allow it.
