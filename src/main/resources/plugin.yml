@@ -1,5 +1,5 @@
 name: GASMP-Core
-version: '0.7.6'
+version: '0.7.7'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
@@ -13,9 +13,6 @@ softdepend:
   - Geyser-Spigot
   - floodgate
   - TAB
-  - Nexo
-  - ItemsAdder
-  - Oraxen
   - ImageFrame
   - Typewriter
   - OpenInv
