@@ -136,7 +136,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             defaults = YamlConfiguration.loadConfiguration(
                     new java.io.InputStreamReader(input, java.nio.charset.StandardCharsets.UTF_8));
         } catch (java.io.IOException error) {
-            plugin.getLogger().warning("Could not load bundled crate defaults for RP Engine ID migration: " + error.getMessage());
+            plugin.getLogger().warning("Could not load bundled crate defaults for ItemsAdder ID migration: " + error.getMessage());
             return;
         }
 
@@ -145,33 +145,26 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             ConfigurationSection rewards = current.getConfigurationSection("crates." + tier + ".rewards");
             ConfigurationSection defaultRewards = defaults.getConfigurationSection("crates." + tier + ".rewards");
             if (rewards == null || defaultRewards == null) continue;
-
             for (String rewardId : rewards.getKeys(false)) {
                 ConfigurationSection reward = rewards.getConfigurationSection(rewardId);
                 if (reward == null) continue;
                 String oldContent = reward.getString("content", "").trim();
-                String normalized = oldContent.toLowerCase(Locale.ROOT);
-                boolean legacyProviderId = normalized.startsWith("itemsadder:")
-                        || normalized.startsWith("oraxen:")
-                        || normalized.startsWith("nexo:");
-                if (!legacyProviderId) continue;
-
-                String rpEngineId = defaultRewards.getString(rewardId + ".content", "");
-                if (rpEngineId == null || rpEngineId.isBlank()) continue;
-                reward.set("content", rpEngineId);
-                migrated++;
+                if (oldContent.isBlank() || oldContent.toLowerCase(Locale.ROOT).startsWith("gasmp:")) continue;
+                String newContent = defaultRewards.getString(rewardId + ".content", "");
+                if (newContent != null && newContent.startsWith("gasmp:")) {
+                    reward.set("content", newContent);
+                    migrated++;
+                }
             }
         }
-
         if (migrated == 0) return;
         try {
             File backup = new File(plugin.getDataFolder(), "crates-provider-backup.yml");
             if (!backup.exists()) java.nio.file.Files.copy(file.toPath(), backup.toPath());
             current.save(file);
-            plugin.getLogger().info("Migrated " + migrated
-                    + " saved cosmetic reward IDs to RP Engine namespaces. Backup: crates-provider-backup.yml.");
+            plugin.getLogger().info("Migrated " + migrated + " saved crate reward IDs to the ItemsAdder gasmp namespace. Backup: crates-provider-backup.yml.");
         } catch (Exception error) {
-            plugin.getLogger().severe("Could not migrate saved cosmetic reward IDs: " + error.getMessage());
+            plugin.getLogger().severe("Could not migrate saved crate reward IDs: " + error.getMessage());
         }
     }
 
@@ -248,10 +241,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             actor.sendMessage(color("&cAmount must be between 1 and 64."));
             return;
         }
-        String contentId = "gasmp_crates:" + id + suffix;
+        String contentId = "gasmp:" + id + "_crate";
         ItemStack custom = createEngineItem(contentId, amount);
         if (custom == null) {
-            actor.sendMessage(color("&cCould not create &f" + contentId + "&c. Check that RP Engine loaded the matching block/item definition in /rp info."));
+            actor.sendMessage(color("&cCould not create &f" + contentId
+                    + "&c. Confirm ItemsAdder has loaded the GASMP contents folder, then run /iareload."));
             return;
         }
         Map<Integer, ItemStack> left = target.getInventory().addItem(custom);
@@ -320,10 +314,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             return;
         }
 
-        // Left-click previews the configured reward pool. Sneak + left-click
-        // is deliberately passed through to RP Engine so the matching block
-        // item is dropped and can be picked up.
-        if (!event.getPlayer().isSneaking()) {
+        // Sneak + left-click previews. Normal mining is left to ItemsAdder so
+        // its furniture/custom-block handler can return the placed item.
+        if (event.getPlayer().isSneaking()) {
             event.setCancelled(true);
             openPreview(event.getPlayer(), id);
         }
@@ -339,12 +332,14 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         openCrate(event.getPlayer(), id);
     }
 
-    /** Ordinary punch previews; sneak + punch is left to RP Engine to pick up the model. */
+    /** Sneak-punch previews; ordinary punches are handled by ItemsAdder to pick up furniture. */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onCrateModelPunch(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player player) || !plugin.getConfig().getBoolean("modules.crates", true)) return;
+        if (!(event.getDamager() instanceof Player player)
+                || !plugin.getConfig().getBoolean("modules.crates", true)
+                || !player.isSneaking()) return;
         String id = crateIdFromModelEntity(event.getEntity());
-        if (id == null || player.isSneaking()) return;
+        if (id == null) return;
         event.setCancelled(true);
         openPreview(player, id);
     }
@@ -364,7 +359,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private String crateIdAt(Block block) {
-        String custom = rpCrateBlockAt(block);
+        String custom = crateTierFromContentId(plugin.getItemsAdderBridge().furnitureIdAt(block));
+        if (custom == null) custom = crateTierFromContentId(plugin.getItemsAdderBridge().customBlockIdAt(block));
         if (custom != null) return custom;
         String configured = configuredCrateAt(block);
         String canonical = configured == null ? null : canonicalCrateId(configured);
@@ -373,52 +369,19 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     private boolean isConfiguredCrate(Block block) { return configuredCrateAt(block) != null; }
     private boolean isProtectedCrate(Block block) { return crateIdAt(block) != null; }
-    private boolean isRpEngineCrateBlock(Block block) { return rpCrateBlockAt(block) != null; }
 
-    /** Return the tier from gasmp_crates:<tier>_crate_block, or null if it is not a configured GASMP crate. */
-    private String rpCrateBlockAt(Block block) {
-        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled()) return null;
-        try {
-            java.lang.reflect.Method accessor = engine.getClass().getMethod("blocks");
-            Object blocks = accessor.invoke(engine);
-            Object result = accessor.getReturnType().getMethod("idAt", Block.class).invoke(blocks, block);
-            if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return null;
-            String raw = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
-            String prefix = raw.startsWith("gasmp_chests:") ? "gasmp_chests:" : "gasmp_crates:";
-            String suffix = "_crate_block";
-            if (!raw.startsWith(prefix) || !raw.endsWith(suffix)) return null;
-            String id = canonicalCrateId(raw.substring(prefix.length(), raw.length() - suffix.length()));
-            return config.getConfigurationSection("crates." + id) == null ? null : id;
-        } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().fine("RP Engine custom-block lookup unavailable: " + ex.getMessage());
-            return null;
-        }
+    private String crateIdFromModelEntity(Entity entity) {
+        return crateTierFromContentId(plugin.getItemsAdderBridge().furnitureIdAt(entity));
     }
 
-    /** Resolve an RP Engine placed model's id without compiling against its optional API. */
-    private String crateIdFromModelEntity(Entity entity) {
-        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled() || entity == null) return null;
-        try {
-            java.lang.reflect.Method accessor = engine.getClass().getMethod("models");
-            Object models = accessor.invoke(engine);
-            Object result = accessor.getReturnType().getMethod("at", Entity.class).invoke(models, entity);
-            if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return null;
-            Object placement = optional.get();
-            String raw = String.valueOf(placement.getClass().getMethod("modelId").invoke(placement)).toLowerCase(Locale.ROOT);
-            int colon = raw.indexOf(':');
-            String slug = colon >= 0 ? raw.substring(colon + 1) : raw;
-            if (slug.endsWith("_chest_display")) slug = slug.substring(0, slug.length() - "_chest_display".length());
-            else if (slug.endsWith("_chest")) slug = slug.substring(0, slug.length() - "_chest".length());
-            else if (slug.endsWith("_crate_display")) slug = slug.substring(0, slug.length() - "_crate_display".length());
-            else if (slug.endsWith("_crate")) slug = slug.substring(0, slug.length() - "_crate".length());
-            slug = canonicalCrateId(slug);
-            return config.getConfigurationSection("crates." + slug) == null ? null : slug;
-        } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().fine("RP Engine model lookup unavailable: " + ex.getMessage());
-            return null;
-        }
+    private String crateTierFromContentId(String namespacedId) {
+        if (namespacedId == null || namespacedId.isBlank()) return null;
+        String id = namespacedId.toLowerCase(Locale.ROOT);
+        if (id.startsWith("gasmp:")) id = id.substring("gasmp:".length());
+        if (id.endsWith("_crate_block")) id = id.substring(0, id.length() - "_crate_block".length());
+        else if (id.endsWith("_crate")) id = id.substring(0, id.length() - "_crate".length());
+        String tier = canonicalCrateId(id);
+        return config.getConfigurationSection("crates." + tier) == null ? null : tier;
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -1056,7 +1019,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     private ItemStack createKey(String id, int amount) {
         String canonical = canonicalCrateId(id);
-        String contentId = "gasmp_crates:" + canonical + "_key";
+        String contentId = "gasmp:" + canonical + "_key";
         ItemStack item = createEngineItem(contentId, amount);
         if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
         ItemMeta meta = item.getItemMeta();
@@ -1069,65 +1032,18 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return item;
     }
 
-    /**
-     * Resolve a cosmetic or crate item through RP Engine only. Cosmetic pack
-     * folders are imported directly into plugins/RPEngine/content/, so the
-     * reward id is the RP Engine namespace:item id (for example
-     * fnafpack:freddy_plush).
-     */
+    /** Resolve a GASMP item from the ItemsAdder registry. */
     private ItemStack createEngineItem(String contentIdText, int amount) {
         if (contentIdText == null || contentIdText.isBlank() || amount < 1 || amount > 64) return null;
-        try {
-            return createRpEngineItem(contentIdText.trim(), amount);
-        } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().warning("RP Engine could not create '" + contentIdText
-                    + "': " + ex.getClass().getSimpleName() + ": " + ex.getMessage());
-            return null;
-        }
+        ItemStack stack = plugin.getItemsAdderBridge().createItem(contentIdText.trim());
+        if (stack == null) return null;
+        stack.setAmount(Math.min(amount, stack.getMaxStackSize()));
+        return stack;
     }
 
-    /** Public bridge used by the Shards decoration shop; RP Engine is the sole item provider. */
+    /** Public bridge used by the Shards decoration shop; ItemsAdder is the sole item provider. */
     public ItemStack createContentItem(String contentIdText, int amount) {
         return createEngineItem(contentIdText, amount);
-    }
-
-    private ItemStack createRpEngineItem(String contentIdText, int amount) throws ReflectiveOperationException {
-        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled()) {
-            plugin.getLogger().warning("RP Engine is not installed/enabled; cannot create '" + contentIdText + "'.");
-            return null;
-        }
-        ClassLoader loader = engine.getClass().getClassLoader();
-        Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
-        Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
-        if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) {
-            plugin.getLogger().warning("Invalid RP Engine content ID: " + contentIdText);
-            return null;
-        }
-        java.lang.reflect.Method accessor = engine.getClass().getMethod("items");
-        Object items = accessor.invoke(engine);
-        Class<?> itemsApi = accessor.getReturnType();
-        Object created;
-        try {
-            created = itemsApi.getMethod("create", contentIdClass, int.class)
-                    .invoke(items, optional.get(), amount);
-        } catch (NoSuchMethodException olderApi) {
-            created = itemsApi.getMethod("create", contentIdClass).invoke(items, optional.get());
-        }
-        return normalizeCreatedItem(created, amount);
-    }
-
-    private Object unwrapOptional(Object value) {
-        if (value instanceof Optional<?> optional) return optional.orElse(null);
-        return value;
-    }
-
-    private ItemStack normalizeCreatedItem(Object created, int amount) {
-        Object resolved = unwrapOptional(created);
-        if (!(resolved instanceof ItemStack stack)) return null;
-        ItemStack result = stack.clone();
-        result.setAmount(Math.min(amount, result.getMaxStackSize()));
-        return result;
     }
 
     private String canonicalCrateId(String rawId) {
@@ -1146,28 +1062,17 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         String canonical = canonicalCrateId(id);
         String tagged = item.getItemMeta().getPersistentDataContainer().get(crateKey, PersistentDataType.STRING);
         if (canonical.equals(canonicalCrateId(tagged))) return true;
-        // Also accept a genuine RP Engine key handed out through /rp give or another RP Engine shop.
-        Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled()) return false;
-        try {
-            java.lang.reflect.Method accessor = engine.getClass().getMethod("items");
-            Object items = accessor.invoke(engine);
-            Object result = accessor.getReturnType().getMethod("idOf", ItemStack.class).invoke(items, item);
-            if (!(result instanceof Optional<?> optional) || optional.isEmpty()) return false;
-            String actual = String.valueOf(optional.get()).toLowerCase(Locale.ROOT);
-            String expected = "gasmp_crates:" + canonical + "_key";
-            if (expected.equalsIgnoreCase(actual)) return true;
-            // Existing Common/Rare/Epic/Legendary keys remain usable after the tier migration.
-            String legacyPrefix = "gasmp_crates:";
-            if (actual.startsWith(legacyPrefix) && actual.endsWith("_key")) {
-                String legacyTier = actual.substring(legacyPrefix.length(), actual.length() - "_key".length());
-                return canonical.equals(canonicalCrateId(legacyTier));
-            }
-            return false;
-        } catch (ReflectiveOperationException | RuntimeException ex) {
-            plugin.getLogger().fine("RP Engine key identity lookup unavailable: " + ex.getMessage());
-            return false;
+        String actual = plugin.getItemsAdderBridge().idOf(item);
+        if (actual == null) return false;
+        String expected = "gasmp:" + canonical + "_key";
+        if (expected.equalsIgnoreCase(actual)) return true;
+        // Legacy RP Engine keys are accepted only when their GASMP PDC tag survived.
+        String[] aliases = {"common", "rare", "epic", "legendary", "cosmetics", "cosmetic"};
+        for (String alias : aliases) {
+            if (actual.equalsIgnoreCase("gasmp:" + alias + "_key")
+                    && canonical.equals(canonicalCrateId(alias))) return true;
         }
+        return false;
     }
 
     private void save() { try { config.save(new File(plugin.getDataFolder(), "crates.yml")); } catch (Exception ex) { plugin.getLogger().severe("Could not save crates.yml: " + ex.getMessage()); } }
