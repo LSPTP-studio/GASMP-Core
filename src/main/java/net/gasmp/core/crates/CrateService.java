@@ -1015,90 +1015,40 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     /**
-     * Resolve GASMP's own RP Engine items and external cosmetics from ItemsAdder,
-     * Oraxen or Nexo without compile-time dependencies on those optional plugins.
-     * Multiple candidates may be provided with '|'; the first loaded provider wins.
-     * This method must be called on the server thread because item APIs are not
-     * guaranteed to be thread-safe.
+     * Resolve a cosmetic or crate item through RP Engine only. Cosmetic pack
+     * folders are imported directly into plugins/RPEngine/content/, so the
+     * reward id is the RP Engine namespace:item id (for example
+     * fnafpack:freddy_plush).
      */
     private ItemStack createEngineItem(String contentIdText, int amount) {
         if (contentIdText == null || contentIdText.isBlank() || amount < 1 || amount > 64) return null;
-        for (String rawCandidate : contentIdText.split("\\|")) {
-            String candidate = rawCandidate.trim();
-            if (candidate.isEmpty()) continue;
-            try {
-                ItemStack item = createExternalItem(candidate, amount);
-                if (item != null) return item;
-                item = createRpEngineItem(candidate, amount);
-                if (item != null) return item;
-            } catch (ReflectiveOperationException | RuntimeException ex) {
-                plugin.getLogger().fine("Could not resolve cosmetic '" + candidate + "': " + ex.getMessage());
-            }
+        try {
+            return createRpEngineItem(contentIdText.trim(), amount);
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            plugin.getLogger().warning("RP Engine could not create '" + contentIdText
+                    + "': " + ex.getClass().getSimpleName() + ": " + ex.getMessage());
+            return null;
         }
-        return null;
     }
 
-    /** Public bridge used by the Shards decoration shop for the same provider resolution. */
+    /** Public bridge used by the Shards decoration shop; RP Engine is the sole item provider. */
     public ItemStack createContentItem(String contentIdText, int amount) {
         return createEngineItem(contentIdText, amount);
     }
 
-    private ItemStack createExternalItem(String candidate, int amount) throws ReflectiveOperationException {
-        int separator = candidate.indexOf(':');
-        if (separator <= 0) return null;
-        String provider = candidate.substring(0, separator).toLowerCase(Locale.ROOT);
-        String externalId = candidate.substring(separator + 1);
-        String pluginName = switch (provider) {
-            case "itemsadder" -> "ItemsAdder";
-            case "oraxen" -> "Oraxen";
-            case "nexo" -> "Nexo";
-            default -> null;
-        };
-        if (pluginName == null) return null;
-        Plugin providerPlugin = Bukkit.getPluginManager().getPlugin(pluginName);
-        if (providerPlugin == null || !providerPlugin.isEnabled()) return null;
-        ClassLoader loader = providerPlugin.getClass().getClassLoader();
-        Object resolved;
-        Object stack;
-        switch (provider) {
-            case "itemsadder" -> {
-                Class<?> api = Class.forName("dev.lone.itemsadder.api.CustomStack", true, loader);
-                resolved = api.getMethod("getInstance", String.class).invoke(null, externalId);
-                resolved = unwrapOptional(resolved);
-                if (resolved == null) return null;
-                stack = resolved.getClass().getMethod("getItemStack").invoke(resolved);
-            }
-            case "oraxen" -> {
-                Class<?> api = Class.forName("io.th0rgal.oraxen.api.OraxenItems", true, loader);
-                resolved = api.getMethod("getItemById", String.class).invoke(null, externalId);
-                resolved = unwrapOptional(resolved);
-                if (resolved == null) return null;
-                stack = resolved.getClass().getMethod("build").invoke(resolved);
-            }
-            case "nexo" -> {
-                Class<?> api = Class.forName("com.nexomc.nexo.api.NexoItems", true, loader);
-                resolved = api.getMethod("itemFromId", String.class).invoke(null, externalId);
-                resolved = unwrapOptional(resolved);
-                if (resolved == null) return null;
-                stack = resolved.getClass().getMethod("build").invoke(resolved);
-            }
-            default -> { return null; }
-        }
-        return normalizeCreatedItem(stack, amount);
-    }
-
-    private Object unwrapOptional(Object value) {
-        if (value instanceof Optional<?> optional) return optional.orElse(null);
-        return value;
-    }
-
     private ItemStack createRpEngineItem(String contentIdText, int amount) throws ReflectiveOperationException {
         Plugin engine = Bukkit.getPluginManager().getPlugin("RPEngine");
-        if (engine == null || !engine.isEnabled()) return null;
+        if (engine == null || !engine.isEnabled()) {
+            plugin.getLogger().warning("RP Engine is not installed/enabled; cannot create '" + contentIdText + "'.");
+            return null;
+        }
         ClassLoader loader = engine.getClass().getClassLoader();
         Class<?> contentIdClass = Class.forName("ai.resourcepack.engine.api.ContentId", true, loader);
         Object parsed = contentIdClass.getMethod("parse", String.class).invoke(null, contentIdText);
-        if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) return null;
+        if (!(parsed instanceof Optional<?> optional) || optional.isEmpty()) {
+            plugin.getLogger().warning("Invalid RP Engine content ID: " + contentIdText);
+            return null;
+        }
         java.lang.reflect.Method accessor = engine.getClass().getMethod("items");
         Object items = accessor.invoke(engine);
         Class<?> itemsApi = accessor.getReturnType();
@@ -1110,6 +1060,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             created = itemsApi.getMethod("create", contentIdClass).invoke(items, optional.get());
         }
         return normalizeCreatedItem(created, amount);
+    }
+
+    private Object unwrapOptional(Object value) {
+        if (value instanceof Optional<?> optional) return optional.orElse(null);
+        return value;
     }
 
     private ItemStack normalizeCreatedItem(Object created, int amount) {
