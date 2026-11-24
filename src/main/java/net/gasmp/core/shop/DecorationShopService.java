@@ -155,11 +155,11 @@ public final class DecorationShopService implements Listener {
             player.sendMessage(color("&cYour previous decoration purchase is still processing."));
             return;
         }
-        ItemStack reward = createEngineItem(product.contentId());
+        ItemStack reward = createItemsAdderItem(product.contentId());
         if (reward == null) {
             purchasing.remove(player.getUniqueId());
             player.sendMessage(color("&cThis ItemsAdder item is not loaded: &f" + product.contentId()));
-            player.sendMessage(color("&7Ask staff to run /rp reload and verify the GASMP ItemsAdder contents pack."));
+            player.sendMessage(color("&7Ask staff to run /iareload and verify the GASMP ItemsAdder contents folder."));
             return;
         }
         plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
@@ -247,7 +247,7 @@ public final class DecorationShopService implements Listener {
         inventory.setItem(slot, item);
     }
 
-    private ItemStack createEngineItem(String contentIdText) {
+    private ItemStack createItemsAdderItem(String contentIdText) {
         return plugin.getCrateService().createContentItem(contentIdText, 1);
     }
     private Throwable root(Throwable error) {
