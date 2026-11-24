@@ -1114,8 +1114,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         player.sendMessage(color("&eSneak + left-click &7- preview cosmetic loot"));
         player.sendMessage(color("&eMine/punch &7- pick up an already-placed crate"));
         player.sendMessage(color("&e/crates givekey <player> <normal|medium|premium> [amount]"));
-        player.sendMessage(color("&e/crates giveblock <player> <normal|medium|premium> [amount] &7- placeable cosmetic crate block"));
-        player.sendMessage(color("&e/crates givemodel <player> <normal|medium|premium> [amount] &7- placeable cosmetic crate display"));
+        player.sendMessage(color("&e/crates giveblock <player> <normal|medium|premium> [amount] &7- placeable ItemsAdder cosmetic crate furniture"));
+        player.sendMessage(color("&e/crates givemodel <player> <normal|medium|premium> [amount] &7- placeable ItemsAdder cosmetic crate furniture"));
         player.sendMessage(color("&7Example: /crates giveblock " + player.getName() + " normal 1"));
         player.sendMessage(color("&e/crates reload &7- reload crate definitions"));
         player.sendMessage(color("&e/keyall <crate-id|all> <amount> [world:<world>] [silent] &7- distribute keys"));
