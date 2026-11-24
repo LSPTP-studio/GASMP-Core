@@ -70,7 +70,7 @@ commands:
     usage: /crates <list|reload|givekey|giveblock|givemodel> <player> <normal|medium|premium> [amount]
   gcrateopen:
     description: Internal console-only command for GASMP crate interactions.
-    usage: /gcrateopen <player> <crate-id>
+    usage: /gcrateopen <player> <normal|medium|premium>
   keyall:
     description: Distribute matching GASMP crate keys to online players.
     usage: /keyall <crate-id|all> <amount> [world:<world>] [silent]
