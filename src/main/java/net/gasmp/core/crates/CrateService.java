@@ -419,7 +419,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         ItemStack keyItem = keyInMainHand ? mainHand : player.getInventory().getItemInOffHand();
         if (!isKey(keyItem, id)) {
             opening.remove(player.getUniqueId());
-            player.sendMessage(color("&cYou need a &f" + id.toUpperCase(Locale.ROOT) + " &ccosmetic crate key."));
+            player.sendMessage(color("&cYou need a &f" + crateDisplayName(id) + " &ckey."));
             return;
         }
 
@@ -491,7 +491,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         int page = Math.max(0, Math.min(requestedPage, pages - 1));
         CrateAnimationHolder holder = new CrateAnimationHolder(crateId, page);
         Inventory inventory = Bukkit.createInventory(holder, 54,
-                ScreenUi.title("crate_details", "&8GASMP &7• &d" + crateId.toUpperCase(Locale.ROOT) + " COSMETICS"));
+                ScreenUi.title("crate_details", "&8GASMP &7• " + crateColor(crateId) + crateDisplayName(crateId)));
         holder.inventory(inventory);
 
         ItemStack[] frame = {
@@ -547,7 +547,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private void animateOpening(Player player, String crateId, ConfigurationSection reward) {
         CrateAnimationHolder holder = new CrateAnimationHolder(crateId);
         Inventory inventory = Bukkit.createInventory(holder, 54,
-                ScreenUi.title("crates", "&8GASMP &7• &d" + crateId.toUpperCase(Locale.ROOT) + " CRATE"));
+                ScreenUi.title("crates", "&8GASMP &7• " + crateColor(crateId) + crateDisplayName(crateId)));
         holder.inventory(inventory);
 
         Material[] borderMaterials = {
@@ -564,10 +564,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             inventory.setItem(borderSlots[i], named(borderMaterials[i % borderMaterials.length], " "));
         }
         inventory.setItem(4, named(Material.FIREWORK_STAR,
-                "&d&lGASMP COSMETIC VAULT",
-                "&7A collectible is waiting inside..."));
-        inventory.setItem(22, named(Material.SHULKER_BOX, "&d&lUNSEALING...",
-                "&7The crate is searching for a reward."));
+                crateColor(crateId) + "&l" + crateDisplayName(crateId),
+                "&7A GASMP collectible is waiting inside..."));
+        inventory.setItem(22, named(Material.SHULKER_BOX, crateColor(crateId) + "&lBREAKING THE SEAL...",
+                "&7Scanning the " + crateDisplayName(crateId) + " collection..."));
         inventory.setItem(31, named(Material.ENCHANTED_BOOK,
                 "&5&lGOOD LUCK",
                 "&7Watch the reel. The key is only consumed at the reveal."));
@@ -618,10 +618,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
             if (tick == 34) {
                 player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.65f, 1.1f);
-                player.sendTitle(color("&d&lGASMP VAULT"), color("&7The seals are breaking..."), 0, 22, 4);
+                player.sendTitle(color(crateColor(crateId) + "&l" + crateDisplayName(crateId)), color("&7The seals are breaking..."), 0, 22, 4);
             } else if (tick == 58) {
                 player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 0.8f, 1.0f);
-                player.sendTitle(color("&5&lALMOST THERE"), color("&dOne final roll..."), 0, 24, 4);
+                player.sendTitle(color(crateColor(crateId) + "&lTHE FINAL REVEAL"), color("&dOne last roll..."), 0, 24, 4);
             }
 
             if (tick >= maxTicks) {
@@ -653,7 +653,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 world.spawnParticle(org.bukkit.Particle.WITCH, center, 28, 0.55, 0.8, 0.55, 0.04);
                 player.playSound(center, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 0.85f);
                 player.playSound(center, Sound.ENTITY_PLAYER_LEVELUP, 0.8f, 1.35f);
-                player.sendTitle(color("&d&lCOSMETIC UNLOCKED"),
+                player.sendTitle(color(crateColor(crateId) + "&l" + crateDisplayName(crateId) + " OPENED"),
                         color("&f" + reward.getString("display", "Mystery cosmetic")), 3, 48, 12);
 
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -1036,8 +1036,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(color("&d&l" + canonical.toUpperCase(Locale.ROOT) + " COSMETIC KEY"));
-            meta.setLore(List.of(color("&7Use at the matching GASMP crate."), color("&8GASMP key")));
+            // Keep the styled ItemsAdder display name and lore. GASMP only adds
+            // its internal crate-tier identity tag.
             meta.getPersistentDataContainer().set(crateKey, PersistentDataType.STRING, canonical);
             item.setItemMeta(meta);
         }
@@ -1056,6 +1056,24 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     /** Public bridge used by the Shards decoration shop; ItemsAdder is the sole item provider. */
     public ItemStack createContentItem(String contentIdText, int amount) {
         return createItemsAdderItem(contentIdText, amount);
+    }
+
+    private String crateDisplayName(String crateId) {
+        return switch (canonicalCrateId(crateId)) {
+            case "normal" -> "STARLIGHT CACHE";
+            case "medium" -> "ASTRAL CACHE";
+            case "premium" -> "CELESTIAL VAULT";
+            default -> canonicalCrateId(crateId).toUpperCase(Locale.ROOT) + " CACHE";
+        };
+    }
+
+    private String crateColor(String crateId) {
+        return switch (canonicalCrateId(crateId)) {
+            case "normal" -> "&b";
+            case "medium" -> "&d";
+            case "premium" -> "&6";
+            default -> "&f";
+        };
     }
 
     private String canonicalCrateId(String rawId) {
