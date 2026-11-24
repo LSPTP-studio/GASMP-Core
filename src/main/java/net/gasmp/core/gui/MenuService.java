@@ -37,6 +37,10 @@ public final class MenuService implements Listener {
     }
 
     public void open(Player player, MenuPage page) {
+        if (page == MenuPage.SHOP) {
+            open(player, MenuPage.KEY_SHOP);
+            return;
+        }
         if (page == MenuPage.DECORATIONS) {
             plugin.getDecorationShopService().openCategories(player);
             return;
@@ -80,8 +84,8 @@ public final class MenuService implements Listener {
     }
 
     private void buildMain(MenuHolder holder, Inventory inventory) {
-        set(inventory, 10, Material.ENDER_CHEST, "&d&lSHOP", "&7Browse both GASMP currencies", "&6Coins &8• &dShards", "&eClick to open");
-        holder.navigate(10, MenuPage.SHOP);
+        set(inventory, 10, Material.SHULKER_BOX, "&d&lSHARD SHOP", "&7Normal, Medium and Premium cosmetic keys", "&7Custom GASMP cosmetics and crates", "&eClick to browse");
+        holder.navigate(10, MenuPage.KEY_SHOP);
 
         set(inventory, 12, Material.WRITABLE_BOOK, "&d&lStatistics", "&7View your server statistics", "&eClick to open");
         holder.navigate(12, MenuPage.STATISTICS);
@@ -159,7 +163,7 @@ public final class MenuService implements Listener {
         for (int i = 0; i < ids.length; i++) {
             long price = plugin.getConfig().getLong("key-shop.prices." + ids[i], -1L);
             String priceText = price < 0 ? "&cNot for sale" : "&d" + price + " ✦";
-            set(inventory, slots[i], icons[i], "&f&l" + ids[i].toUpperCase(java.util.Locale.ROOT) + " COSMETIC KEY",
+            set(inventory, slots[i], icons[i], "&f&l" + switch (ids[i]) { case "normal" -> "STARLIGHT KEY"; case "medium" -> "ASTRAL KEY"; default -> "CELESTIAL KEY"; } + "",
                     descriptions[i], "&7Price: " + priceText, "&eClick to purchase");
         }
         set(inventory, 22, Material.BOOK, "&f&lKEY DROP SYSTEM",
