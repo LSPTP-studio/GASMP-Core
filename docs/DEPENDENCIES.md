@@ -21,7 +21,7 @@
 
 ## Optional server plugins
 
-- **RP Engine:** GASMP's only custom-item, custom-block, furniture, model and resource-pack engine. It is free/open-source. The uploaded FNAF Plushies, Feral Fantasy and Wing Cosmetics packs are installed by copying their included RP Engine import folders into `plugins/RPEngine/content/`; ItemsAdder, Oraxen and Nexo do not need to be installed. See `docs/COSMETIC-PACKS.md` and `integrations/rp-engine/README.md`.
+- **RP Engine:** GASMP's sole custom-item, custom-block, furniture, model and resource-pack engine. It is free/open-source. Install the included FNAF Plushies, Feral Fantasy and Wing Cosmetics folders in `plugins/RPEngine/content/`. See `docs/COSMETIC-PACKS.md` and `integrations/rp-engine/README.md`.
 - **Economy:** a plugin which registers Vault `Economy` (e.g. EssentialsX Economy). Without a provider, Shards still work but Coins shop and Coins bounties remain unavailable.
 - **TAB:** displays LuckPerms prefix and primary group; see `integrations/tab/README.md`.
 - **PlaceholderAPI:** placeholders in supported external displays.
