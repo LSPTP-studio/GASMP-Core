@@ -6,361 +6,361 @@ crates:
     rewards:
       freddy_plush:
         type: cosmetic
-        content: "fnafpack:freddy_plush"
+        content: "gasmp:freddy_plush"
         display: "Freddy Plush"
         amount: 1
         weight: 8
       chica_plush:
         type: cosmetic
-        content: "fnafpack:chica_plush"
+        content: "gasmp:chica_plush"
         display: "Chica Plush"
         amount: 1
         weight: 8
       bonnie_plush:
         type: cosmetic
-        content: "fnafpack:bonnie_plush"
+        content: "gasmp:bonnie_plush"
         display: "Bonnie Plush"
         amount: 1
         weight: 8
       foxy_plush:
         type: cosmetic
-        content: "fnafpack:foxy_plush"
+        content: "gasmp:foxy_plush"
         display: "Foxy Plush"
         amount: 1
         weight: 8
       golden_freddy_plush:
         type: cosmetic
-        content: "fnafpack:golden_freddy_plush"
+        content: "gasmp:golden_freddy_plush"
         display: "Golden Freddy Plush"
         amount: 1
         weight: 8
       the_puppet_plush:
         type: cosmetic
-        content: "fnafpack:the_puppet_plush"
+        content: "gasmp:the_puppet_plush"
         display: "The Puppet Plush"
         amount: 1
         weight: 8
       feral_bear_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_bear_ears"
+        content: "gasmp:feral_bear_ears"
         display: "Bear Ears"
         amount: 1
         weight: 7
       feral_bear_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_bear_tail"
+        content: "gasmp:feral_bear_tail"
         display: "Bear Tail"
         amount: 1
         weight: 6
       feral_cat_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_cat_ears"
+        content: "gasmp:feral_cat_ears"
         display: "Cat Ears"
         amount: 1
         weight: 7
       feral_cat_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_cat_tail"
+        content: "gasmp:feral_cat_tail"
         display: "Cat Tail"
         amount: 1
         weight: 6
       feral_fox_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_fox_ears"
+        content: "gasmp:feral_fox_ears"
         display: "Fox Ears"
         amount: 1
         weight: 7
       feral_fox_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_fox_tail"
+        content: "gasmp:feral_fox_tail"
         display: "Fox Tail"
         amount: 1
         weight: 6
       feral_rabbit_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_rabbit_ears"
+        content: "gasmp:feral_rabbit_ears"
         display: "Rabbit Ears"
         amount: 1
         weight: 7
       feral_rabbit_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_rabbit_tail"
+        content: "gasmp:feral_rabbit_tail"
         display: "Rabbit Tail"
         amount: 1
         weight: 6
       feral_tiger_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_tiger_ears"
+        content: "gasmp:feral_tiger_ears"
         display: "Tiger Ears"
         amount: 1
         weight: 7
       feral_tiger_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_tiger_tail"
+        content: "gasmp:feral_tiger_tail"
         display: "Tiger Tail"
         amount: 1
         weight: 6
       feral_wolf_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_wolf_ears"
+        content: "gasmp:feral_wolf_ears"
         display: "Wolf Ears"
         amount: 1
         weight: 7
       feral_wolf_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_wolf_tail"
+        content: "gasmp:feral_wolf_tail"
         display: "Wolf Tail"
         amount: 1
         weight: 6
       angel_wings:
         type: cosmetic
-        content: "ax_wings_pack:angel_wings"
+        content: "gasmp:angel_wings"
         display: "Angel Wings"
         amount: 1
         weight: 2
       astronaut_wings:
         type: cosmetic
-        content: "ax_wings_pack:astronaut_wings"
+        content: "gasmp:astronaut_wings"
         display: "Astronaut Wings"
         amount: 1
         weight: 2
       bluefire_wings:
         type: cosmetic
-        content: "ax_wings_pack:bluefire_wings"
+        content: "gasmp:bluefire_wings"
         display: "Bluefire Wings"
         amount: 1
         weight: 1
       brown_wings:
         type: cosmetic
-        content: "ax_wings_pack:brown_wings"
+        content: "gasmp:brown_wings"
         display: "Brown Wings"
         amount: 1
         weight: 2
       butterfly_wings:
         type: cosmetic
-        content: "ax_wings_pack:butterfly_wings"
+        content: "gasmp:butterfly_wings"
         display: "Butterfly Wings"
         amount: 1
         weight: 2
       demon_wings:
         type: cosmetic
-        content: "ax_wings_pack:demon_wings"
+        content: "gasmp:demon_wings"
         display: "Demon Wings"
         amount: 1
         weight: 1
       dragon_wings:
         type: cosmetic
-        content: "ax_wings_pack:dragon_wings"
+        content: "gasmp:dragon_wings"
         display: "Dragon Wings"
         amount: 1
         weight: 1
       eagle_wings:
         type: cosmetic
-        content: "ax_wings_pack:eagle_wings"
+        content: "gasmp:eagle_wings"
         display: "Eagle Wings"
         amount: 1
         weight: 2
       golden_wings:
         type: cosmetic
-        content: "ax_wings_pack:golden_wings"
+        content: "gasmp:golden_wings"
         display: "Golden Wings"
         amount: 1
         weight: 1
       ocean_wings:
         type: cosmetic
-        content: "ax_wings_pack:ocean_wings"
+        content: "gasmp:ocean_wings"
         display: "Ocean Wings"
         amount: 1
         weight: 2
       phoenix_wings:
         type: cosmetic
-        content: "ax_wings_pack:phoenix_wings"
+        content: "gasmp:phoenix_wings"
         display: "Phoenix Wings"
         amount: 1
         weight: 1
       purple_wings:
         type: cosmetic
-        content: "ax_wings_pack:purple_wings"
+        content: "gasmp:purple_wings"
         display: "Purple Wings"
         amount: 1
         weight: 2
       backpack:
         type: cosmetic
-        content: "gasmp_default_models:backpack"
+        content: "gasmp:backpack"
         display: "Backpack"
         amount: 1
         weight: 4
       top_hat:
         type: cosmetic
-        content: "gasmp_default_models:top_hat"
+        content: "gasmp:top_hat"
         display: "Top Hat"
         amount: 1
         weight: 4
       enchants:
         type: cosmetic
-        content: "gasmp_default_models:enchants"
+        content: "gasmp:enchants"
         display: "Enchantment Display"
         amount: 1
         weight: 3
       bed_large:
         type: cosmetic
-        content: "gasmp_default_models:bed_large"
+        content: "gasmp:bed_large"
         display: "Large Bed"
         amount: 1
         weight: 3
       bed_small:
         type: cosmetic
-        content: "gasmp_default_models:bed_small"
+        content: "gasmp:bed_small"
         display: "Small Bed"
         amount: 1
         weight: 3
       bench:
         type: cosmetic
-        content: "gasmp_default_models:bench"
+        content: "gasmp:bench"
         display: "Bench"
         amount: 1
         weight: 3
       chandelier:
         type: cosmetic
-        content: "gasmp_default_models:chandelier"
+        content: "gasmp:chandelier"
         display: "Chandelier"
         amount: 1
         weight: 3
       decorative_plant:
         type: cosmetic
-        content: "gasmp_default_models:decorative_plant"
+        content: "gasmp:decorative_plant"
         display: "Decorative Plant"
         amount: 1
         weight: 3
       door_frame:
         type: cosmetic
-        content: "gasmp_default_models:door_frame"
+        content: "gasmp:door_frame"
         display: "Door Frame"
         amount: 1
         weight: 3
       glass_table:
         type: cosmetic
-        content: "gasmp_default_models:glass_table"
+        content: "gasmp:glass_table"
         display: "Glass Table"
         amount: 1
         weight: 3
       lamp:
         type: cosmetic
-        content: "gasmp_default_models:lamp"
+        content: "gasmp:lamp"
         display: "Lamp"
         amount: 1
         weight: 3
       pizza_box:
         type: cosmetic
-        content: "gasmp_default_models:pizza_box"
+        content: "gasmp:pizza_box"
         display: "Pizza Box"
         amount: 1
         weight: 3
       sofa:
         type: cosmetic
-        content: "gasmp_default_models:sofa"
+        content: "gasmp:sofa"
         display: "Small Sofa"
         amount: 1
         weight: 3
       sofa_large:
         type: cosmetic
-        content: "gasmp_default_models:sofa_large"
+        content: "gasmp:sofa_large"
         display: "Large Sofa"
         amount: 1
         weight: 3
       wardrobe:
         type: cosmetic
-        content: "gasmp_default_models:wardrobe"
+        content: "gasmp:wardrobe"
         display: "Wardrobe"
         amount: 1
         weight: 3
       window:
         type: cosmetic
-        content: "gasmp_default_models:window"
+        content: "gasmp:window"
         display: "Window"
         amount: 1
         weight: 3
       window_curtains:
         type: cosmetic
-        content: "gasmp_default_models:window_curtains"
+        content: "gasmp:window_curtains"
         display: "Window Curtains"
         amount: 1
         weight: 3
       chimney:
         type: cosmetic
-        content: "gasmp_default_models:chimney"
+        content: "gasmp:chimney"
         display: "Kitchen Chimney"
         amount: 1
         weight: 3
       fridge:
         type: cosmetic
-        content: "gasmp_default_models:fridge"
+        content: "gasmp:fridge"
         display: "Fridge"
         amount: 1
         weight: 3
       kitchen_cabinet:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_cabinet"
+        content: "gasmp:kitchen_cabinet"
         display: "Kitchen Cabinet"
         amount: 1
         weight: 3
       kitchen_cabinet_1:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_cabinet_1"
+        content: "gasmp:kitchen_cabinet_1"
         display: "Open Kitchen Cabinet"
         amount: 1
         weight: 3
       kitchen_cabinet_2:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_cabinet_2"
+        content: "gasmp:kitchen_cabinet_2"
         display: "Large Open Kitchen Cabinet"
         amount: 1
         weight: 3
       kitchen_chair:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_chair"
+        content: "gasmp:kitchen_chair"
         display: "Kitchen Chair"
         amount: 1
         weight: 3
       kitchen_sink:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_sink"
+        content: "gasmp:kitchen_sink"
         display: "Kitchen Sink"
         amount: 1
         weight: 3
       kitchen_table:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_table"
+        content: "gasmp:kitchen_table"
         display: "Kitchen Table"
         amount: 1
         weight: 3
       stove:
         type: cosmetic
-        content: "gasmp_default_models:stove"
+        content: "gasmp:stove"
         display: "Stove"
         amount: 1
         weight: 3
       laptop:
         type: cosmetic
-        content: "gasmp_default_models:laptop"
+        content: "gasmp:laptop"
         display: "Laptop"
         amount: 1
         weight: 3
       tv:
         type: cosmetic
-        content: "gasmp_default_models:tv"
+        content: "gasmp:tv"
         display: "Television"
         amount: 1
         weight: 3
       washing_machine:
         type: cosmetic
-        content: "gasmp_default_models:washing_machine"
+        content: "gasmp:washing_machine"
         display: "Washing Machine"
         amount: 1
         weight: 3
       modern_sofa:
         type: cosmetic
-        content: "gasmp_furniture:modern_sofa"
+        content: "gasmp:modern_sofa"
         display: "Modern Sofa"
         amount: 1
         weight: 3
@@ -386,365 +386,582 @@ crates:
         display: "35 Shards Bonus"
         amount: 35
         weight: 1
+      hat_trailblazer:
+        type: cosmetic
+        content: "gasmp:trailblazer"
+        display: "Trailblazer"
+        amount: 1
+        weight: 1
+      hat_midnight_wizard:
+        type: cosmetic
+        content: "gasmp:midnight_wizard"
+        display: "Midnight Wizard"
+        amount: 1
+        weight: 1
+      hat_frog_bucket:
+        type: cosmetic
+        content: "gasmp:frog_bucket"
+        display: "Frog Bucket Hat"
+        amount: 1
+        weight: 1
+      hat_axolotl_hood:
+        type: cosmetic
+        content: "gasmp:axolotl_hood"
+        display: "Axolotl Hood"
+        amount: 1
+        weight: 1
+      hat_fox_ears:
+        type: cosmetic
+        content: "gasmp:fox_ears"
+        display: "Fox Cap"
+        amount: 1
+        weight: 1
+      hat_bunny_beanie:
+        type: cosmetic
+        content: "gasmp:bunny_beanie"
+        display: "Bunny Beanie"
+        amount: 1
+        weight: 1
+      hat_panda_cap:
+        type: cosmetic
+        content: "gasmp:panda_cap"
+        display: "Panda Cap"
+        amount: 1
+        weight: 1
+      hat_bumblebee:
+        type: cosmetic
+        content: "gasmp:bumblebee"
+        display: "Bumblebee Hat"
+        amount: 1
+        weight: 1
+      hat_toadstool:
+        type: cosmetic
+        content: "gasmp:toadstool"
+        display: "Toadstool"
+        amount: 1
+        weight: 1
+      hat_royal_crown:
+        type: cosmetic
+        content: "gasmp:royal_crown"
+        display: "Royal Crown"
+        amount: 1
+        weight: 1
+      hat_corsair:
+        type: cosmetic
+        content: "gasmp:corsair"
+        display: "Corsair"
+        amount: 1
+        weight: 1
+      hat_steam_topper:
+        type: cosmetic
+        content: "gasmp:steam_topper"
+        display: "Steampunk Top Hat"
+        amount: 1
+        weight: 1
+      hat_dusty_cowboy:
+        type: cosmetic
+        content: "gasmp:dusty_cowboy"
+        display: "Dusty Cowboy"
+        amount: 1
+        weight: 1
+      hat_fiesta:
+        type: cosmetic
+        content: "gasmp:fiesta"
+        display: "Fiesta Sombrero"
+        amount: 1
+        weight: 1
+      hat_straw_garden:
+        type: cosmetic
+        content: "gasmp:straw_garden"
+        display: "Garden Straw Hat"
+        amount: 1
+        weight: 1
+      hat_street_cap:
+        type: cosmetic
+        content: "gasmp:street_cap"
+        display: "Street Cap"
+        amount: 1
+        weight: 1
+      hat_cozy_pom:
+        type: cosmetic
+        content: "gasmp:cozy_pom"
+        display: "Cozy Pom Beanie"
+        amount: 1
+        weight: 1
+      hat_chef:
+        type: cosmetic
+        content: "gasmp:chef"
+        display: "Chef Hat"
+        amount: 1
+        weight: 1
+      hat_miner:
+        type: cosmetic
+        content: "gasmp:miner"
+        display: "Miner Helmet"
+        amount: 1
+        weight: 1
+      hat_aviator:
+        type: cosmetic
+        content: "gasmp:aviator"
+        display: "Aviator Cap"
+        amount: 1
+        weight: 1
+      hat_sea_captain:
+        type: cosmetic
+        content: "gasmp:sea_captain"
+        display: "Sea Captain"
+        amount: 1
+        weight: 1
+      hat_ufo:
+        type: cosmetic
+        content: "gasmp:ufo"
+        display: "UFO Hat"
+        amount: 1
+        weight: 1
+      hat_retro_tv:
+        type: cosmetic
+        content: "gasmp:retro_tv"
+        display: "Retro TV Hat"
+        amount: 1
+        weight: 1
+      hat_parcel:
+        type: cosmetic
+        content: "gasmp:parcel"
+        display: "Parcel Hat"
+        amount: 1
+        weight: 1
+      hat_jellyfish:
+        type: cosmetic
+        content: "gasmp:jellyfish"
+        display: "Jellyfish Hat"
+        amount: 1
+        weight: 1
+      hat_bloom_crown:
+        type: cosmetic
+        content: "gasmp:bloom_crown"
+        display: "Flower Crown"
+        amount: 1
+        weight: 1
+      hat_frost_diadem:
+        type: cosmetic
+        content: "gasmp:frost_diadem"
+        display: "Frost Diadem"
+        amount: 1
+        weight: 1
+      hat_little_dragon:
+        type: cosmetic
+        content: "gasmp:little_dragon"
+        display: "Little Dragon"
+        amount: 1
+        weight: 1
+      hat_sushi:
+        type: cosmetic
+        content: "gasmp:sushi"
+        display: "Salmon Sushi"
+        amount: 1
+        weight: 1
+      hat_rubber_duck:
+        type: cosmetic
+        content: "gasmp:rubber_duck"
+        display: "Rubber Duck"
+        amount: 1
+        weight: 1
+      hat_diving_helmet:
+        type: cosmetic
+        content: "gasmp:diving_helmet"
+        display: "Diving Helmet"
+        amount: 1
+        weight: 1
+      hat_chicken_hat:
+        type: cosmetic
+        content: "gasmp:chicken_hat"
+        display: "Chicken Hat"
+        amount: 1
+        weight: 1
+      hat_flight_hat:
+        type: cosmetic
+        content: "gasmp:flight_hat"
+        display: "Flight Hat"
+        amount: 1
+        weight: 1
+      hat_military_helmet:
+        type: cosmetic
+        content: "gasmp:military_helmet"
+        display: "Military Helmet"
+        amount: 1
+        weight: 1
+      hat_motorcycle_helmet:
+        type: cosmetic
+        content: "gasmp:motorcycle_helmet"
+        display: "Motorcycle Helmet"
+        amount: 1
+        weight: 1
+      hat_pot_hat:
+        type: cosmetic
+        content: "gasmp:pot_hat"
+        display: "Pot Hat"
+        amount: 1
+        weight: 1
+
   medium:
     rewards:
       freddy_plush:
         type: cosmetic
-        content: "fnafpack:freddy_plush"
+        content: "gasmp:freddy_plush"
         display: "Freddy Plush"
         amount: 1
         weight: 5
       chica_plush:
         type: cosmetic
-        content: "fnafpack:chica_plush"
+        content: "gasmp:chica_plush"
         display: "Chica Plush"
         amount: 1
         weight: 5
       bonnie_plush:
         type: cosmetic
-        content: "fnafpack:bonnie_plush"
+        content: "gasmp:bonnie_plush"
         display: "Bonnie Plush"
         amount: 1
         weight: 5
       foxy_plush:
         type: cosmetic
-        content: "fnafpack:foxy_plush"
+        content: "gasmp:foxy_plush"
         display: "Foxy Plush"
         amount: 1
         weight: 5
       golden_freddy_plush:
         type: cosmetic
-        content: "fnafpack:golden_freddy_plush"
+        content: "gasmp:golden_freddy_plush"
         display: "Golden Freddy Plush"
         amount: 1
         weight: 5
       the_puppet_plush:
         type: cosmetic
-        content: "fnafpack:the_puppet_plush"
+        content: "gasmp:the_puppet_plush"
         display: "The Puppet Plush"
         amount: 1
         weight: 5
       feral_bear_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_bear_ears"
+        content: "gasmp:feral_bear_ears"
         display: "Bear Ears"
         amount: 1
         weight: 5
       feral_bear_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_bear_tail"
+        content: "gasmp:feral_bear_tail"
         display: "Bear Tail"
         amount: 1
         weight: 5
       feral_cat_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_cat_ears"
+        content: "gasmp:feral_cat_ears"
         display: "Cat Ears"
         amount: 1
         weight: 5
       feral_cat_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_cat_tail"
+        content: "gasmp:feral_cat_tail"
         display: "Cat Tail"
         amount: 1
         weight: 5
       feral_fox_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_fox_ears"
+        content: "gasmp:feral_fox_ears"
         display: "Fox Ears"
         amount: 1
         weight: 5
       feral_fox_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_fox_tail"
+        content: "gasmp:feral_fox_tail"
         display: "Fox Tail"
         amount: 1
         weight: 5
       feral_rabbit_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_rabbit_ears"
+        content: "gasmp:feral_rabbit_ears"
         display: "Rabbit Ears"
         amount: 1
         weight: 5
       feral_rabbit_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_rabbit_tail"
+        content: "gasmp:feral_rabbit_tail"
         display: "Rabbit Tail"
         amount: 1
         weight: 5
       feral_tiger_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_tiger_ears"
+        content: "gasmp:feral_tiger_ears"
         display: "Tiger Ears"
         amount: 1
         weight: 5
       feral_tiger_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_tiger_tail"
+        content: "gasmp:feral_tiger_tail"
         display: "Tiger Tail"
         amount: 1
         weight: 5
       feral_wolf_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_wolf_ears"
+        content: "gasmp:feral_wolf_ears"
         display: "Wolf Ears"
         amount: 1
         weight: 5
       feral_wolf_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_wolf_tail"
+        content: "gasmp:feral_wolf_tail"
         display: "Wolf Tail"
         amount: 1
         weight: 5
       angel_wings:
         type: cosmetic
-        content: "ax_wings_pack:angel_wings"
+        content: "gasmp:angel_wings"
         display: "Angel Wings"
         amount: 1
         weight: 5
       astronaut_wings:
         type: cosmetic
-        content: "ax_wings_pack:astronaut_wings"
+        content: "gasmp:astronaut_wings"
         display: "Astronaut Wings"
         amount: 1
         weight: 5
       bluefire_wings:
         type: cosmetic
-        content: "ax_wings_pack:bluefire_wings"
+        content: "gasmp:bluefire_wings"
         display: "Bluefire Wings"
         amount: 1
         weight: 3
       brown_wings:
         type: cosmetic
-        content: "ax_wings_pack:brown_wings"
+        content: "gasmp:brown_wings"
         display: "Brown Wings"
         amount: 1
         weight: 5
       butterfly_wings:
         type: cosmetic
-        content: "ax_wings_pack:butterfly_wings"
+        content: "gasmp:butterfly_wings"
         display: "Butterfly Wings"
         amount: 1
         weight: 5
       demon_wings:
         type: cosmetic
-        content: "ax_wings_pack:demon_wings"
+        content: "gasmp:demon_wings"
         display: "Demon Wings"
         amount: 1
         weight: 3
       dragon_wings:
         type: cosmetic
-        content: "ax_wings_pack:dragon_wings"
+        content: "gasmp:dragon_wings"
         display: "Dragon Wings"
         amount: 1
         weight: 3
       eagle_wings:
         type: cosmetic
-        content: "ax_wings_pack:eagle_wings"
+        content: "gasmp:eagle_wings"
         display: "Eagle Wings"
         amount: 1
         weight: 5
       golden_wings:
         type: cosmetic
-        content: "ax_wings_pack:golden_wings"
+        content: "gasmp:golden_wings"
         display: "Golden Wings"
         amount: 1
         weight: 3
       ocean_wings:
         type: cosmetic
-        content: "ax_wings_pack:ocean_wings"
+        content: "gasmp:ocean_wings"
         display: "Ocean Wings"
         amount: 1
         weight: 5
       phoenix_wings:
         type: cosmetic
-        content: "ax_wings_pack:phoenix_wings"
+        content: "gasmp:phoenix_wings"
         display: "Phoenix Wings"
         amount: 1
         weight: 3
       purple_wings:
         type: cosmetic
-        content: "ax_wings_pack:purple_wings"
+        content: "gasmp:purple_wings"
         display: "Purple Wings"
         amount: 1
         weight: 5
       backpack:
         type: cosmetic
-        content: "gasmp_default_models:backpack"
+        content: "gasmp:backpack"
         display: "Backpack"
         amount: 1
         weight: 4
       top_hat:
         type: cosmetic
-        content: "gasmp_default_models:top_hat"
+        content: "gasmp:top_hat"
         display: "Top Hat"
         amount: 1
         weight: 4
       enchants:
         type: cosmetic
-        content: "gasmp_default_models:enchants"
+        content: "gasmp:enchants"
         display: "Enchantment Display"
         amount: 1
         weight: 3
       bed_large:
         type: cosmetic
-        content: "gasmp_default_models:bed_large"
+        content: "gasmp:bed_large"
         display: "Large Bed"
         amount: 1
         weight: 3
       bed_small:
         type: cosmetic
-        content: "gasmp_default_models:bed_small"
+        content: "gasmp:bed_small"
         display: "Small Bed"
         amount: 1
         weight: 3
       bench:
         type: cosmetic
-        content: "gasmp_default_models:bench"
+        content: "gasmp:bench"
         display: "Bench"
         amount: 1
         weight: 3
       chandelier:
         type: cosmetic
-        content: "gasmp_default_models:chandelier"
+        content: "gasmp:chandelier"
         display: "Chandelier"
         amount: 1
         weight: 3
       decorative_plant:
         type: cosmetic
-        content: "gasmp_default_models:decorative_plant"
+        content: "gasmp:decorative_plant"
         display: "Decorative Plant"
         amount: 1
         weight: 3
       door_frame:
         type: cosmetic
-        content: "gasmp_default_models:door_frame"
+        content: "gasmp:door_frame"
         display: "Door Frame"
         amount: 1
         weight: 3
       glass_table:
         type: cosmetic
-        content: "gasmp_default_models:glass_table"
+        content: "gasmp:glass_table"
         display: "Glass Table"
         amount: 1
         weight: 3
       lamp:
         type: cosmetic
-        content: "gasmp_default_models:lamp"
+        content: "gasmp:lamp"
         display: "Lamp"
         amount: 1
         weight: 3
       pizza_box:
         type: cosmetic
-        content: "gasmp_default_models:pizza_box"
+        content: "gasmp:pizza_box"
         display: "Pizza Box"
         amount: 1
         weight: 3
       sofa:
         type: cosmetic
-        content: "gasmp_default_models:sofa"
+        content: "gasmp:sofa"
         display: "Small Sofa"
         amount: 1
         weight: 3
       sofa_large:
         type: cosmetic
-        content: "gasmp_default_models:sofa_large"
+        content: "gasmp:sofa_large"
         display: "Large Sofa"
         amount: 1
         weight: 3
       wardrobe:
         type: cosmetic
-        content: "gasmp_default_models:wardrobe"
+        content: "gasmp:wardrobe"
         display: "Wardrobe"
         amount: 1
         weight: 3
       window:
         type: cosmetic
-        content: "gasmp_default_models:window"
+        content: "gasmp:window"
         display: "Window"
         amount: 1
         weight: 3
       window_curtains:
         type: cosmetic
-        content: "gasmp_default_models:window_curtains"
+        content: "gasmp:window_curtains"
         display: "Window Curtains"
         amount: 1
         weight: 3
       chimney:
         type: cosmetic
-        content: "gasmp_default_models:chimney"
+        content: "gasmp:chimney"
         display: "Kitchen Chimney"
         amount: 1
         weight: 3
       fridge:
         type: cosmetic
-        content: "gasmp_default_models:fridge"
+        content: "gasmp:fridge"
         display: "Fridge"
         amount: 1
         weight: 3
       kitchen_cabinet:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_cabinet"
+        content: "gasmp:kitchen_cabinet"
         display: "Kitchen Cabinet"
         amount: 1
         weight: 3
       kitchen_cabinet_1:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_cabinet_1"
+        content: "gasmp:kitchen_cabinet_1"
         display: "Open Kitchen Cabinet"
         amount: 1
         weight: 3
       kitchen_cabinet_2:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_cabinet_2"
+        content: "gasmp:kitchen_cabinet_2"
         display: "Large Open Kitchen Cabinet"
         amount: 1
         weight: 3
       kitchen_chair:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_chair"
+        content: "gasmp:kitchen_chair"
         display: "Kitchen Chair"
         amount: 1
         weight: 3
       kitchen_sink:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_sink"
+        content: "gasmp:kitchen_sink"
         display: "Kitchen Sink"
         amount: 1
         weight: 3
       kitchen_table:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_table"
+        content: "gasmp:kitchen_table"
         display: "Kitchen Table"
         amount: 1
         weight: 3
       stove:
         type: cosmetic
-        content: "gasmp_default_models:stove"
+        content: "gasmp:stove"
         display: "Stove"
         amount: 1
         weight: 3
       laptop:
         type: cosmetic
-        content: "gasmp_default_models:laptop"
+        content: "gasmp:laptop"
         display: "Laptop"
         amount: 1
         weight: 3
       tv:
         type: cosmetic
-        content: "gasmp_default_models:tv"
+        content: "gasmp:tv"
         display: "Television"
         amount: 1
         weight: 3
       washing_machine:
         type: cosmetic
-        content: "gasmp_default_models:washing_machine"
+        content: "gasmp:washing_machine"
         display: "Washing Machine"
         amount: 1
         weight: 3
       modern_sofa:
         type: cosmetic
-        content: "gasmp_furniture:modern_sofa"
+        content: "gasmp:modern_sofa"
         display: "Modern Sofa"
         amount: 1
         weight: 3
@@ -770,365 +987,582 @@ crates:
         display: "70 Shards Bonus"
         amount: 70
         weight: 1
+      hat_trailblazer:
+        type: cosmetic
+        content: "gasmp:trailblazer"
+        display: "Trailblazer"
+        amount: 1
+        weight: 3
+      hat_midnight_wizard:
+        type: cosmetic
+        content: "gasmp:midnight_wizard"
+        display: "Midnight Wizard"
+        amount: 1
+        weight: 3
+      hat_frog_bucket:
+        type: cosmetic
+        content: "gasmp:frog_bucket"
+        display: "Frog Bucket Hat"
+        amount: 1
+        weight: 3
+      hat_axolotl_hood:
+        type: cosmetic
+        content: "gasmp:axolotl_hood"
+        display: "Axolotl Hood"
+        amount: 1
+        weight: 3
+      hat_fox_ears:
+        type: cosmetic
+        content: "gasmp:fox_ears"
+        display: "Fox Cap"
+        amount: 1
+        weight: 3
+      hat_bunny_beanie:
+        type: cosmetic
+        content: "gasmp:bunny_beanie"
+        display: "Bunny Beanie"
+        amount: 1
+        weight: 3
+      hat_panda_cap:
+        type: cosmetic
+        content: "gasmp:panda_cap"
+        display: "Panda Cap"
+        amount: 1
+        weight: 3
+      hat_bumblebee:
+        type: cosmetic
+        content: "gasmp:bumblebee"
+        display: "Bumblebee Hat"
+        amount: 1
+        weight: 3
+      hat_toadstool:
+        type: cosmetic
+        content: "gasmp:toadstool"
+        display: "Toadstool"
+        amount: 1
+        weight: 3
+      hat_royal_crown:
+        type: cosmetic
+        content: "gasmp:royal_crown"
+        display: "Royal Crown"
+        amount: 1
+        weight: 2
+      hat_corsair:
+        type: cosmetic
+        content: "gasmp:corsair"
+        display: "Corsair"
+        amount: 1
+        weight: 3
+      hat_steam_topper:
+        type: cosmetic
+        content: "gasmp:steam_topper"
+        display: "Steampunk Top Hat"
+        amount: 1
+        weight: 3
+      hat_dusty_cowboy:
+        type: cosmetic
+        content: "gasmp:dusty_cowboy"
+        display: "Dusty Cowboy"
+        amount: 1
+        weight: 3
+      hat_fiesta:
+        type: cosmetic
+        content: "gasmp:fiesta"
+        display: "Fiesta Sombrero"
+        amount: 1
+        weight: 3
+      hat_straw_garden:
+        type: cosmetic
+        content: "gasmp:straw_garden"
+        display: "Garden Straw Hat"
+        amount: 1
+        weight: 3
+      hat_street_cap:
+        type: cosmetic
+        content: "gasmp:street_cap"
+        display: "Street Cap"
+        amount: 1
+        weight: 3
+      hat_cozy_pom:
+        type: cosmetic
+        content: "gasmp:cozy_pom"
+        display: "Cozy Pom Beanie"
+        amount: 1
+        weight: 3
+      hat_chef:
+        type: cosmetic
+        content: "gasmp:chef"
+        display: "Chef Hat"
+        amount: 1
+        weight: 3
+      hat_miner:
+        type: cosmetic
+        content: "gasmp:miner"
+        display: "Miner Helmet"
+        amount: 1
+        weight: 3
+      hat_aviator:
+        type: cosmetic
+        content: "gasmp:aviator"
+        display: "Aviator Cap"
+        amount: 1
+        weight: 3
+      hat_sea_captain:
+        type: cosmetic
+        content: "gasmp:sea_captain"
+        display: "Sea Captain"
+        amount: 1
+        weight: 3
+      hat_ufo:
+        type: cosmetic
+        content: "gasmp:ufo"
+        display: "UFO Hat"
+        amount: 1
+        weight: 2
+      hat_retro_tv:
+        type: cosmetic
+        content: "gasmp:retro_tv"
+        display: "Retro TV Hat"
+        amount: 1
+        weight: 2
+      hat_parcel:
+        type: cosmetic
+        content: "gasmp:parcel"
+        display: "Parcel Hat"
+        amount: 1
+        weight: 3
+      hat_jellyfish:
+        type: cosmetic
+        content: "gasmp:jellyfish"
+        display: "Jellyfish Hat"
+        amount: 1
+        weight: 3
+      hat_bloom_crown:
+        type: cosmetic
+        content: "gasmp:bloom_crown"
+        display: "Flower Crown"
+        amount: 1
+        weight: 3
+      hat_frost_diadem:
+        type: cosmetic
+        content: "gasmp:frost_diadem"
+        display: "Frost Diadem"
+        amount: 1
+        weight: 2
+      hat_little_dragon:
+        type: cosmetic
+        content: "gasmp:little_dragon"
+        display: "Little Dragon"
+        amount: 1
+        weight: 2
+      hat_sushi:
+        type: cosmetic
+        content: "gasmp:sushi"
+        display: "Salmon Sushi"
+        amount: 1
+        weight: 3
+      hat_rubber_duck:
+        type: cosmetic
+        content: "gasmp:rubber_duck"
+        display: "Rubber Duck"
+        amount: 1
+        weight: 3
+      hat_diving_helmet:
+        type: cosmetic
+        content: "gasmp:diving_helmet"
+        display: "Diving Helmet"
+        amount: 1
+        weight: 2
+      hat_chicken_hat:
+        type: cosmetic
+        content: "gasmp:chicken_hat"
+        display: "Chicken Hat"
+        amount: 1
+        weight: 3
+      hat_flight_hat:
+        type: cosmetic
+        content: "gasmp:flight_hat"
+        display: "Flight Hat"
+        amount: 1
+        weight: 2
+      hat_military_helmet:
+        type: cosmetic
+        content: "gasmp:military_helmet"
+        display: "Military Helmet"
+        amount: 1
+        weight: 3
+      hat_motorcycle_helmet:
+        type: cosmetic
+        content: "gasmp:motorcycle_helmet"
+        display: "Motorcycle Helmet"
+        amount: 1
+        weight: 2
+      hat_pot_hat:
+        type: cosmetic
+        content: "gasmp:pot_hat"
+        display: "Pot Hat"
+        amount: 1
+        weight: 3
+
   premium:
     rewards:
       freddy_plush:
         type: cosmetic
-        content: "fnafpack:freddy_plush"
+        content: "gasmp:freddy_plush"
         display: "Freddy Plush"
         amount: 1
         weight: 3
       chica_plush:
         type: cosmetic
-        content: "fnafpack:chica_plush"
+        content: "gasmp:chica_plush"
         display: "Chica Plush"
         amount: 1
         weight: 3
       bonnie_plush:
         type: cosmetic
-        content: "fnafpack:bonnie_plush"
+        content: "gasmp:bonnie_plush"
         display: "Bonnie Plush"
         amount: 1
         weight: 3
       foxy_plush:
         type: cosmetic
-        content: "fnafpack:foxy_plush"
+        content: "gasmp:foxy_plush"
         display: "Foxy Plush"
         amount: 1
         weight: 3
       golden_freddy_plush:
         type: cosmetic
-        content: "fnafpack:golden_freddy_plush"
+        content: "gasmp:golden_freddy_plush"
         display: "Golden Freddy Plush"
         amount: 1
         weight: 3
       the_puppet_plush:
         type: cosmetic
-        content: "fnafpack:the_puppet_plush"
+        content: "gasmp:the_puppet_plush"
         display: "The Puppet Plush"
         amount: 1
         weight: 3
       feral_bear_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_bear_ears"
+        content: "gasmp:feral_bear_ears"
         display: "Bear Ears"
         amount: 1
         weight: 3
       feral_bear_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_bear_tail"
+        content: "gasmp:feral_bear_tail"
         display: "Bear Tail"
         amount: 1
         weight: 3
       feral_cat_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_cat_ears"
+        content: "gasmp:feral_cat_ears"
         display: "Cat Ears"
         amount: 1
         weight: 3
       feral_cat_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_cat_tail"
+        content: "gasmp:feral_cat_tail"
         display: "Cat Tail"
         amount: 1
         weight: 3
       feral_fox_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_fox_ears"
+        content: "gasmp:feral_fox_ears"
         display: "Fox Ears"
         amount: 1
         weight: 3
       feral_fox_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_fox_tail"
+        content: "gasmp:feral_fox_tail"
         display: "Fox Tail"
         amount: 1
         weight: 3
       feral_rabbit_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_rabbit_ears"
+        content: "gasmp:feral_rabbit_ears"
         display: "Rabbit Ears"
         amount: 1
         weight: 3
       feral_rabbit_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_rabbit_tail"
+        content: "gasmp:feral_rabbit_tail"
         display: "Rabbit Tail"
         amount: 1
         weight: 3
       feral_tiger_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_tiger_ears"
+        content: "gasmp:feral_tiger_ears"
         display: "Tiger Ears"
         amount: 1
         weight: 3
       feral_tiger_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_tiger_tail"
+        content: "gasmp:feral_tiger_tail"
         display: "Tiger Tail"
         amount: 1
         weight: 3
       feral_wolf_ears:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_wolf_ears"
+        content: "gasmp:feral_wolf_ears"
         display: "Wolf Ears"
         amount: 1
         weight: 3
       feral_wolf_tail:
         type: cosmetic
-        content: "ero_feral_fantasy_set:ero_feral_fantasy_wolf_tail"
+        content: "gasmp:feral_wolf_tail"
         display: "Wolf Tail"
         amount: 1
         weight: 3
       angel_wings:
         type: cosmetic
-        content: "ax_wings_pack:angel_wings"
+        content: "gasmp:angel_wings"
         display: "Angel Wings"
         amount: 1
         weight: 3
       astronaut_wings:
         type: cosmetic
-        content: "ax_wings_pack:astronaut_wings"
+        content: "gasmp:astronaut_wings"
         display: "Astronaut Wings"
         amount: 1
         weight: 3
       bluefire_wings:
         type: cosmetic
-        content: "ax_wings_pack:bluefire_wings"
+        content: "gasmp:bluefire_wings"
         display: "Bluefire Wings"
         amount: 1
         weight: 2
       brown_wings:
         type: cosmetic
-        content: "ax_wings_pack:brown_wings"
+        content: "gasmp:brown_wings"
         display: "Brown Wings"
         amount: 1
         weight: 3
       butterfly_wings:
         type: cosmetic
-        content: "ax_wings_pack:butterfly_wings"
+        content: "gasmp:butterfly_wings"
         display: "Butterfly Wings"
         amount: 1
         weight: 3
       demon_wings:
         type: cosmetic
-        content: "ax_wings_pack:demon_wings"
+        content: "gasmp:demon_wings"
         display: "Demon Wings"
         amount: 1
         weight: 3
       dragon_wings:
         type: cosmetic
-        content: "ax_wings_pack:dragon_wings"
+        content: "gasmp:dragon_wings"
         display: "Dragon Wings"
         amount: 1
         weight: 2
       eagle_wings:
         type: cosmetic
-        content: "ax_wings_pack:eagle_wings"
+        content: "gasmp:eagle_wings"
         display: "Eagle Wings"
         amount: 1
         weight: 3
       golden_wings:
         type: cosmetic
-        content: "ax_wings_pack:golden_wings"
+        content: "gasmp:golden_wings"
         display: "Golden Wings"
         amount: 1
         weight: 1
       ocean_wings:
         type: cosmetic
-        content: "ax_wings_pack:ocean_wings"
+        content: "gasmp:ocean_wings"
         display: "Ocean Wings"
         amount: 1
         weight: 3
       phoenix_wings:
         type: cosmetic
-        content: "ax_wings_pack:phoenix_wings"
+        content: "gasmp:phoenix_wings"
         display: "Phoenix Wings"
         amount: 1
         weight: 1
       purple_wings:
         type: cosmetic
-        content: "ax_wings_pack:purple_wings"
+        content: "gasmp:purple_wings"
         display: "Purple Wings"
         amount: 1
         weight: 3
       backpack:
         type: cosmetic
-        content: "gasmp_default_models:backpack"
+        content: "gasmp:backpack"
         display: "Backpack"
         amount: 1
         weight: 3
       top_hat:
         type: cosmetic
-        content: "gasmp_default_models:top_hat"
+        content: "gasmp:top_hat"
         display: "Top Hat"
         amount: 1
         weight: 3
       enchants:
         type: cosmetic
-        content: "gasmp_default_models:enchants"
+        content: "gasmp:enchants"
         display: "Enchantment Display"
         amount: 1
         weight: 2
       bed_large:
         type: cosmetic
-        content: "gasmp_default_models:bed_large"
+        content: "gasmp:bed_large"
         display: "Large Bed"
         amount: 1
         weight: 2
       bed_small:
         type: cosmetic
-        content: "gasmp_default_models:bed_small"
+        content: "gasmp:bed_small"
         display: "Small Bed"
         amount: 1
         weight: 2
       bench:
         type: cosmetic
-        content: "gasmp_default_models:bench"
+        content: "gasmp:bench"
         display: "Bench"
         amount: 1
         weight: 2
       chandelier:
         type: cosmetic
-        content: "gasmp_default_models:chandelier"
+        content: "gasmp:chandelier"
         display: "Chandelier"
         amount: 1
         weight: 2
       decorative_plant:
         type: cosmetic
-        content: "gasmp_default_models:decorative_plant"
+        content: "gasmp:decorative_plant"
         display: "Decorative Plant"
         amount: 1
         weight: 2
       door_frame:
         type: cosmetic
-        content: "gasmp_default_models:door_frame"
+        content: "gasmp:door_frame"
         display: "Door Frame"
         amount: 1
         weight: 2
       glass_table:
         type: cosmetic
-        content: "gasmp_default_models:glass_table"
+        content: "gasmp:glass_table"
         display: "Glass Table"
         amount: 1
         weight: 2
       lamp:
         type: cosmetic
-        content: "gasmp_default_models:lamp"
+        content: "gasmp:lamp"
         display: "Lamp"
         amount: 1
         weight: 2
       pizza_box:
         type: cosmetic
-        content: "gasmp_default_models:pizza_box"
+        content: "gasmp:pizza_box"
         display: "Pizza Box"
         amount: 1
         weight: 2
       sofa:
         type: cosmetic
-        content: "gasmp_default_models:sofa"
+        content: "gasmp:sofa"
         display: "Small Sofa"
         amount: 1
         weight: 2
       sofa_large:
         type: cosmetic
-        content: "gasmp_default_models:sofa_large"
+        content: "gasmp:sofa_large"
         display: "Large Sofa"
         amount: 1
         weight: 2
       wardrobe:
         type: cosmetic
-        content: "gasmp_default_models:wardrobe"
+        content: "gasmp:wardrobe"
         display: "Wardrobe"
         amount: 1
         weight: 2
       window:
         type: cosmetic
-        content: "gasmp_default_models:window"
+        content: "gasmp:window"
         display: "Window"
         amount: 1
         weight: 2
       window_curtains:
         type: cosmetic
-        content: "gasmp_default_models:window_curtains"
+        content: "gasmp:window_curtains"
         display: "Window Curtains"
         amount: 1
         weight: 2
       chimney:
         type: cosmetic
-        content: "gasmp_default_models:chimney"
+        content: "gasmp:chimney"
         display: "Kitchen Chimney"
         amount: 1
         weight: 2
       fridge:
         type: cosmetic
-        content: "gasmp_default_models:fridge"
+        content: "gasmp:fridge"
         display: "Fridge"
         amount: 1
         weight: 2
       kitchen_cabinet:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_cabinet"
+        content: "gasmp:kitchen_cabinet"
         display: "Kitchen Cabinet"
         amount: 1
         weight: 2
       kitchen_cabinet_1:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_cabinet_1"
+        content: "gasmp:kitchen_cabinet_1"
         display: "Open Kitchen Cabinet"
         amount: 1
         weight: 2
       kitchen_cabinet_2:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_cabinet_2"
+        content: "gasmp:kitchen_cabinet_2"
         display: "Large Open Kitchen Cabinet"
         amount: 1
         weight: 2
       kitchen_chair:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_chair"
+        content: "gasmp:kitchen_chair"
         display: "Kitchen Chair"
         amount: 1
         weight: 2
       kitchen_sink:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_sink"
+        content: "gasmp:kitchen_sink"
         display: "Kitchen Sink"
         amount: 1
         weight: 2
       kitchen_table:
         type: cosmetic
-        content: "gasmp_default_models:kitchen_table"
+        content: "gasmp:kitchen_table"
         display: "Kitchen Table"
         amount: 1
         weight: 2
       stove:
         type: cosmetic
-        content: "gasmp_default_models:stove"
+        content: "gasmp:stove"
         display: "Stove"
         amount: 1
         weight: 2
       laptop:
         type: cosmetic
-        content: "gasmp_default_models:laptop"
+        content: "gasmp:laptop"
         display: "Laptop"
         amount: 1
         weight: 2
       tv:
         type: cosmetic
-        content: "gasmp_default_models:tv"
+        content: "gasmp:tv"
         display: "Television"
         amount: 1
         weight: 2
       washing_machine:
         type: cosmetic
-        content: "gasmp_default_models:washing_machine"
+        content: "gasmp:washing_machine"
         display: "Washing Machine"
         amount: 1
         weight: 2
       modern_sofa:
         type: cosmetic
-        content: "gasmp_furniture:modern_sofa"
+        content: "gasmp:modern_sofa"
         display: "Modern Sofa"
         amount: 1
         weight: 2
@@ -1155,4 +1589,221 @@ crates:
         amount: 150
         weight: 1
 
+
+      hat_trailblazer:
+        type: cosmetic
+        content: "gasmp:trailblazer"
+        display: "Trailblazer"
+        amount: 1
+        weight: 5
+      hat_midnight_wizard:
+        type: cosmetic
+        content: "gasmp:midnight_wizard"
+        display: "Midnight Wizard"
+        amount: 1
+        weight: 5
+      hat_frog_bucket:
+        type: cosmetic
+        content: "gasmp:frog_bucket"
+        display: "Frog Bucket Hat"
+        amount: 1
+        weight: 5
+      hat_axolotl_hood:
+        type: cosmetic
+        content: "gasmp:axolotl_hood"
+        display: "Axolotl Hood"
+        amount: 1
+        weight: 5
+      hat_fox_ears:
+        type: cosmetic
+        content: "gasmp:fox_ears"
+        display: "Fox Cap"
+        amount: 1
+        weight: 5
+      hat_bunny_beanie:
+        type: cosmetic
+        content: "gasmp:bunny_beanie"
+        display: "Bunny Beanie"
+        amount: 1
+        weight: 5
+      hat_panda_cap:
+        type: cosmetic
+        content: "gasmp:panda_cap"
+        display: "Panda Cap"
+        amount: 1
+        weight: 5
+      hat_bumblebee:
+        type: cosmetic
+        content: "gasmp:bumblebee"
+        display: "Bumblebee Hat"
+        amount: 1
+        weight: 5
+      hat_toadstool:
+        type: cosmetic
+        content: "gasmp:toadstool"
+        display: "Toadstool"
+        amount: 1
+        weight: 5
+      hat_royal_crown:
+        type: cosmetic
+        content: "gasmp:royal_crown"
+        display: "Royal Crown"
+        amount: 1
+        weight: 3
+      hat_corsair:
+        type: cosmetic
+        content: "gasmp:corsair"
+        display: "Corsair"
+        amount: 1
+        weight: 5
+      hat_steam_topper:
+        type: cosmetic
+        content: "gasmp:steam_topper"
+        display: "Steampunk Top Hat"
+        amount: 1
+        weight: 5
+      hat_dusty_cowboy:
+        type: cosmetic
+        content: "gasmp:dusty_cowboy"
+        display: "Dusty Cowboy"
+        amount: 1
+        weight: 5
+      hat_fiesta:
+        type: cosmetic
+        content: "gasmp:fiesta"
+        display: "Fiesta Sombrero"
+        amount: 1
+        weight: 5
+      hat_straw_garden:
+        type: cosmetic
+        content: "gasmp:straw_garden"
+        display: "Garden Straw Hat"
+        amount: 1
+        weight: 5
+      hat_street_cap:
+        type: cosmetic
+        content: "gasmp:street_cap"
+        display: "Street Cap"
+        amount: 1
+        weight: 5
+      hat_cozy_pom:
+        type: cosmetic
+        content: "gasmp:cozy_pom"
+        display: "Cozy Pom Beanie"
+        amount: 1
+        weight: 5
+      hat_chef:
+        type: cosmetic
+        content: "gasmp:chef"
+        display: "Chef Hat"
+        amount: 1
+        weight: 5
+      hat_miner:
+        type: cosmetic
+        content: "gasmp:miner"
+        display: "Miner Helmet"
+        amount: 1
+        weight: 5
+      hat_aviator:
+        type: cosmetic
+        content: "gasmp:aviator"
+        display: "Aviator Cap"
+        amount: 1
+        weight: 5
+      hat_sea_captain:
+        type: cosmetic
+        content: "gasmp:sea_captain"
+        display: "Sea Captain"
+        amount: 1
+        weight: 5
+      hat_ufo:
+        type: cosmetic
+        content: "gasmp:ufo"
+        display: "UFO Hat"
+        amount: 1
+        weight: 3
+      hat_retro_tv:
+        type: cosmetic
+        content: "gasmp:retro_tv"
+        display: "Retro TV Hat"
+        amount: 1
+        weight: 3
+      hat_parcel:
+        type: cosmetic
+        content: "gasmp:parcel"
+        display: "Parcel Hat"
+        amount: 1
+        weight: 5
+      hat_jellyfish:
+        type: cosmetic
+        content: "gasmp:jellyfish"
+        display: "Jellyfish Hat"
+        amount: 1
+        weight: 5
+      hat_bloom_crown:
+        type: cosmetic
+        content: "gasmp:bloom_crown"
+        display: "Flower Crown"
+        amount: 1
+        weight: 5
+      hat_frost_diadem:
+        type: cosmetic
+        content: "gasmp:frost_diadem"
+        display: "Frost Diadem"
+        amount: 1
+        weight: 3
+      hat_little_dragon:
+        type: cosmetic
+        content: "gasmp:little_dragon"
+        display: "Little Dragon"
+        amount: 1
+        weight: 3
+      hat_sushi:
+        type: cosmetic
+        content: "gasmp:sushi"
+        display: "Salmon Sushi"
+        amount: 1
+        weight: 5
+      hat_rubber_duck:
+        type: cosmetic
+        content: "gasmp:rubber_duck"
+        display: "Rubber Duck"
+        amount: 1
+        weight: 5
+      hat_diving_helmet:
+        type: cosmetic
+        content: "gasmp:diving_helmet"
+        display: "Diving Helmet"
+        amount: 1
+        weight: 3
+      hat_chicken_hat:
+        type: cosmetic
+        content: "gasmp:chicken_hat"
+        display: "Chicken Hat"
+        amount: 1
+        weight: 5
+      hat_flight_hat:
+        type: cosmetic
+        content: "gasmp:flight_hat"
+        display: "Flight Hat"
+        amount: 1
+        weight: 3
+      hat_military_helmet:
+        type: cosmetic
+        content: "gasmp:military_helmet"
+        display: "Military Helmet"
+        amount: 1
+        weight: 5
+      hat_motorcycle_helmet:
+        type: cosmetic
+        content: "gasmp:motorcycle_helmet"
+        display: "Motorcycle Helmet"
+        amount: 1
+        weight: 3
+      hat_pot_hat:
+        type: cosmetic
+        content: "gasmp:pot_hat"
+        display: "Pot Hat"
+        amount: 1
+        weight: 5
 locations: {}
