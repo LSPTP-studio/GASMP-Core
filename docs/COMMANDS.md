@@ -38,13 +38,13 @@ Commands are registered in src/main/resources/plugin.yml. Actual access is also 
 
 ## Cosmetic crate commands
 
-Normal, Medium and Premium are cosmetic crate tiers, not equipment tiers.
+The public crate names are VERDANT CACHE, RUNIC RELIQUARY and ECLIPSE VAULT. Normal, Medium and Premium remain the internal IDs used by commands/configuration; these are cosmetic crates, not equipment tiers.
 
 | Command | Purpose |
 |---|---|
 | /crates list | List configured crate tiers and legacy location status. |
 | /crates help | Display crate administration help. |
-| /crates givekey <player> <normal|medium|premium> [amount] | Give a matching ItemsAdder crate key. |
+| /crates givekey <player> <normal|medium|premium> [amount] | Give a matching named ItemsAdder key (Verdant Seal, Runic Sigil or Eclipse Crest). |
 | /crates giveblock <player> <normal|medium|premium> [amount] | Give the matching placeable ItemsAdder crate furniture item. |
 | /crates givemodel <player> <normal|medium|premium> [amount] | Compatibility alias for giveblock. |
 | /crates set <normal|medium|premium> | Set a legacy vanilla chest/barrel crate location while looking at it. |
@@ -56,7 +56,7 @@ Crate administration is restricted to Owner/Developer staff by the service check
 
 ### Player crate interactions
 
-- Right-click a placed crate while holding the matching key in either hand.
+- Right-click a placed crate while holding the matching named key (Verdant Seal, Runic Sigil or Eclipse Crest) in either hand.
 - Sneak + left-click a configured vanilla crate block to preview its reward pool.
 - Right-click a placed ItemsAdder crate furniture model to open it.
 - Sneak + punch a placed ItemsAdder crate model to preview the pool.

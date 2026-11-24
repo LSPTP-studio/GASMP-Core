@@ -49,9 +49,9 @@ The source snapshot did not contain the original custom model exports for the pr
 
 | Tier | Display name | Key ID | Placeable crate ID |
 |---|---|---|---|
-| Normal | STARLIGHT CACHE | gasmp:normal_key | gasmp:normal_crate |
-| Medium | ASTRAL CACHE | gasmp:medium_key | gasmp:medium_crate |
-| Premium | CELESTIAL VAULT | gasmp:premium_key | gasmp:premium_crate |
+| Normal | VERDANT CACHE | gasmp:normal_key — VERDANT SEAL | gasmp:normal_crate |
+| Medium | RUNIC RELIQUARY | gasmp:medium_key — RUNIC SIGIL | gasmp:medium_crate |
+| Premium | ECLIPSE VAULT | gasmp:premium_key — ECLIPSE CREST | gasmp:premium_crate |
 
 All three tiers are cosmetic crates. Their configured reward pools contain cosmetics and small Shards bonuses, not weapons or combat equipment.
 

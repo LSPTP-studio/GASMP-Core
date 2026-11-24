@@ -298,7 +298,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (crates == null || crates.getKeys(false).isEmpty()) { player.sendMessage(color("&7No crates configured.")); return; }
         for (String id : crates.getKeys(false)) {
             boolean placed = config.getConfigurationSection("locations." + id) != null;
-            player.sendMessage(color("&e" + id + " &8- " + (placed ? "&aPlaced" : "&cNot placed")));
+            player.sendMessage(color(crateColor(id) + crateDisplayName(id) + " &8(" + id + ") &8- " + (placed ? "&aPlaced" : "&cNot placed")));
         }
     }
 
@@ -849,7 +849,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                     return;
                 }
                 giveKeyTo(player, targetCrate, (int) amount, false);
-                player.sendMessage(color("&d&lKEY JACKPOT &8» &f" + targetCrate.toUpperCase(Locale.ROOT) + " KEY"));
+                player.sendMessage(color("&d&lKEY JACKPOT &8» &f" + crateKeyName(targetCrate)));
                 opening.remove(player.getUniqueId());
             }
             case "cosmetic" -> {
@@ -925,7 +925,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (key == null) return false;
         Map<Integer, ItemStack> left = target.getInventory().addItem(key);
         left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
-        if (message) target.sendMessage(color("&d&lGASMP &8» &fYou received &d" + amount + " " + id.toUpperCase(Locale.ROOT) + " crate key(s)&f."));
+        if (message) target.sendMessage(color("&d&lGASMP &8» &fYou received &d" + amount + "x " + crateKeyName(id) + "&f."));
         return true;
     }
 
@@ -946,7 +946,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             return;
         }
         plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
-                "KEY_SHOP", price, PlayerDataStore.ShardChange.TAKE, "Purchased " + crateId + " crate key")
+                "KEY_SHOP", price, PlayerDataStore.ShardChange.TAKE, "Purchased " + crateKeyName(crateId))
                 .whenComplete((balance, error) -> Bukkit.getScheduler().runTask(plugin, () -> {
                     if (!player.isOnline()) return;
                     if (error != null) {
@@ -957,11 +957,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                     if (!giveKeyTo(player, crateId, 1, false)) {
                         plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
                                 "KEY_SHOP_REFUND", price, PlayerDataStore.ShardChange.GIVE,
-                                "Refund: could not create " + crateId + " crate key");
+                                "Refund: could not create " + crateKeyName(crateId));
                         player.sendMessage(color("&cThe key could not be created. Your Shards are being refunded."));
                         return;
                     }
-                    player.sendMessage(color("&aPurchased a &f" + crateId.toUpperCase(Locale.ROOT) + " Key &afor &d" + price + " Shards&a. Balance: &d" + balance + " ✦"));
+                    player.sendMessage(color("&aPurchased the &f" + crateKeyName(crateId) + " &afor &d" + price + " Shards&a. Balance: &d" + balance + " ✦"));
                 }));
     }
 
@@ -1017,7 +1017,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             for (String id : ids) giveKeyTo(target, id, amount, false);
             recipients++;
         }
-        if (!silent) Bukkit.broadcastMessage(color("&d&lGASMP &8» &f" + amount + " key(s) for " + String.join(", ", ids) + " were distributed to &d" + recipients + " &fplayer(s)."));
+        if (!silent) Bukkit.broadcastMessage(color("&d&lGASMP &8» &f" + amount + "x " + String.join(", ", ids.stream().map(this::crateKeyName).toList()) + " distributed to &d" + recipients + " &fplayer(s)."));
         sender.sendMessage(color("&aDistributed " + amount + " key(s) for " + String.join(", ", ids) + " to " + recipients + " online player(s)."));
         return true;
     }
@@ -1060,17 +1060,27 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     private String crateDisplayName(String crateId) {
         return switch (canonicalCrateId(crateId)) {
-            case "normal" -> "STARLIGHT CACHE";
-            case "medium" -> "ASTRAL CACHE";
-            case "premium" -> "CELESTIAL VAULT";
+            case "normal" -> "VERDANT CACHE";
+            case "medium" -> "RUNIC RELIQUARY";
+            case "premium" -> "ECLIPSE VAULT";
             default -> canonicalCrateId(crateId).toUpperCase(Locale.ROOT) + " CACHE";
+        };
+    }
+
+
+    private String crateKeyName(String crateId) {
+        return switch (canonicalCrateId(crateId)) {
+            case "normal" -> "VERDANT SEAL";
+            case "medium" -> "RUNIC SIGIL";
+            case "premium" -> "ECLIPSE CREST";
+            default -> canonicalCrateId(crateId).toUpperCase(Locale.ROOT) + " KEY";
         };
     }
 
     private String crateColor(String crateId) {
         return switch (canonicalCrateId(crateId)) {
-            case "normal" -> "&b";
-            case "medium" -> "&d";
+            case "normal" -> "&a";
+            case "medium" -> "&5";
             case "premium" -> "&6";
             default -> "&f";
         };

@@ -31,9 +31,9 @@ The included models use vanilla Minecraft block textures with self-contained sta
 
 | Tier | Display name | Key | Placeable crate |
 |---|---|---|---|
-| Normal | STARLIGHT CACHE | gasmp:normal_key | gasmp:normal_crate |
-| Medium | ASTRAL CACHE | gasmp:medium_key | gasmp:medium_crate |
-| Premium | CELESTIAL VAULT | gasmp:premium_key | gasmp:premium_crate |
+| Normal | VERDANT CACHE | gasmp:normal_key (VERDANT SEAL) | gasmp:normal_crate |
+| Medium | RUNIC RELIQUARY | gasmp:medium_key (RUNIC SIGIL) | gasmp:medium_crate |
+| Premium | ECLIPSE VAULT | gasmp:premium_key (ECLIPSE CREST) | gasmp:premium_crate |
 
 Give test items from console or as Owner/Developer staff:
 

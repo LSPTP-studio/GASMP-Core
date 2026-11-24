@@ -3,10 +3,10 @@ info:
   namespace: gasmp
 items:
   normal_key:
-    name: "&b&lSTARLIGHT CACHE KEY"
+    name: "&a&lVERDANT SEAL"
     material: TRIPWIRE_HOOK
     lore:
-      - "&7Opens the STARLIGHT CACHE."
+      - "&7Unlocks the VERDANT CACHE."
       - "&8GASMP • KEY ITEM"
     graphics:
       model: item/crates/key
@@ -15,10 +15,10 @@ items:
       generate: false
       model_path: item/crates/key
   medium_key:
-    name: "&d&lASTRAL CACHE KEY"
+    name: "&5&lRUNIC SIGIL"
     material: TRIPWIRE_HOOK
     lore:
-      - "&7Opens the ASTRAL CACHE."
+      - "&7Unlocks the RUNIC RELIQUARY."
       - "&8GASMP • KEY ITEM"
     graphics:
       model: item/crates/key
@@ -27,10 +27,10 @@ items:
       generate: false
       model_path: item/crates/key
   premium_key:
-    name: "&6&lCELESTIAL VAULT KEY"
+    name: "&6&lECLIPSE CREST"
     material: TRIPWIRE_HOOK
     lore:
-      - "&7Opens the CELESTIAL VAULT."
+      - "&7Unlocks the ECLIPSE VAULT."
       - "&8GASMP • KEY ITEM"
     graphics:
       model: item/crates/key
@@ -39,10 +39,10 @@ items:
       generate: false
       model_path: item/crates/key
   normal_crate:
-    name: "&b&lSTARLIGHT CACHE"
+    name: "&a&lTHE VERDANT CACHE"
     material: PAPER
     lore:
-      - "&7A Starlight Cache filled with GASMP cosmetics."
+      - "&7An emerald-sealed cache holding classic GASMP cosmetics."
       - "&8GASMP • CRATE"
     graphics:
       model: item/crates/normal_crate
@@ -70,10 +70,10 @@ items:
           translation: { x: 0, y: 0.04, z: 0 }
           scale: { x: 0.94, y: 0.94, z: 0.94 }
   medium_crate:
-    name: "&d&lASTRAL CACHE"
+    name: "&5&lTHE RUNIC RELIQUARY"
     material: PAPER
     lore:
-      - "&7An Astral Cache with improved cosmetic odds."
+      - "&7A rune-bound reliquary with improved rare cosmetic odds."
       - "&8GASMP • CRATE"
     graphics:
       model: item/crates/medium_crate
@@ -101,10 +101,10 @@ items:
           translation: { x: 0, y: 0.04, z: 0 }
           scale: { x: 0.94, y: 0.94, z: 0.94 }
   premium_crate:
-    name: "&6&lCELESTIAL VAULT"
+    name: "&6&lTHE ECLIPSE VAULT"
     material: PAPER
     lore:
-      - "&7A Celestial Vault with the rarest cosmetics."
+      - "&7A gilded eclipse vault with the rarest cosmetic odds."
       - "&8GASMP • CRATE"
     graphics:
       model: item/crates/premium_crate
