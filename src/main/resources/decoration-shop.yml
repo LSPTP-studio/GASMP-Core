@@ -5,367 +5,578 @@ settings:
 products:
   enchants:
     category: furniture
-    content: "gasmp_default_models:enchants"
+    content: "gasmp:enchants"
     name: "Custom Enchantments Display"
     price: 250
     description: "Custom Enchantments Display for your builds and collection."
   bed_large:
     category: furniture
-    content: "gasmp_default_models:bed_large"
+    content: "gasmp:bed_large"
     name: "Large Bed"
     price: 650
     description: "Large Bed for your builds and collection."
   bed_small:
     category: furniture
-    content: "gasmp_default_models:bed_small"
+    content: "gasmp:bed_small"
     name: "Small Bed"
     price: 450
     description: "Small Bed for your builds and collection."
   bench:
     category: furniture
-    content: "gasmp_default_models:bench"
+    content: "gasmp:bench"
     name: "Bench"
     price: 350
     description: "Bench for your builds and collection."
   chandelier:
     category: furniture
-    content: "gasmp_default_models:chandelier"
+    content: "gasmp:chandelier"
     name: "Chandelier"
     price: 550
     description: "Chandelier for your builds and collection."
   decorative_plant:
     category: furniture
-    content: "gasmp_default_models:decorative_plant"
+    content: "gasmp:decorative_plant"
     name: "Decorative Plant"
     price: 250
     description: "Decorative Plant for your builds and collection."
   door_frame:
     category: furniture
-    content: "gasmp_default_models:door_frame"
+    content: "gasmp:door_frame"
     name: "Door Frame"
     price: 350
     description: "Door Frame for your builds and collection."
   glass_table:
     category: furniture
-    content: "gasmp_default_models:glass_table"
+    content: "gasmp:glass_table"
     name: "Glass Table"
     price: 400
     description: "Glass Table for your builds and collection."
   lamp:
     category: furniture
-    content: "gasmp_default_models:lamp"
+    content: "gasmp:lamp"
     name: "Lamp"
     price: 300
     description: "Lamp for your builds and collection."
   pizza_box:
     category: furniture
-    content: "gasmp_default_models:pizza_box"
+    content: "gasmp:pizza_box"
     name: "Pizza Box"
     price: 150
     description: "Pizza Box for your builds and collection."
   sofa:
     category: furniture
-    content: "gasmp_default_models:sofa"
+    content: "gasmp:sofa"
     name: "Small Sofa"
     price: 450
     description: "Small Sofa for your builds and collection."
   sofa_large:
     category: furniture
-    content: "gasmp_default_models:sofa_large"
+    content: "gasmp:sofa_large"
     name: "Large Sofa"
     price: 650
     description: "Large Sofa for your builds and collection."
   wardrobe:
     category: furniture
-    content: "gasmp_default_models:wardrobe"
+    content: "gasmp:wardrobe"
     name: "Large Wardrobe"
     price: 600
     description: "Large Wardrobe for your builds and collection."
   window:
     category: furniture
-    content: "gasmp_default_models:window"
+    content: "gasmp:window"
     name: "3x3 Window"
     price: 550
     description: "3x3 Window for your builds and collection."
   window_curtains:
     category: furniture
-    content: "gasmp_default_models:window_curtains"
+    content: "gasmp:window_curtains"
     name: "Window Curtains"
     price: 300
     description: "Window Curtains for your builds and collection."
   chimney:
     category: furniture
-    content: "gasmp_default_models:chimney"
+    content: "gasmp:chimney"
     name: "Kitchen Chimney"
     price: 450
     description: "Kitchen Chimney for your builds and collection."
   fridge:
     category: furniture
-    content: "gasmp_default_models:fridge"
+    content: "gasmp:fridge"
     name: "Kitchen Fridge"
     price: 550
     description: "Kitchen Fridge for your builds and collection."
   kitchen_cabinet:
     category: furniture
-    content: "gasmp_default_models:kitchen_cabinet"
+    content: "gasmp:kitchen_cabinet"
     name: "Small Kitchen Cabinet"
     price: 300
     description: "Small Kitchen Cabinet for your builds and collection."
   kitchen_cabinet_1:
     category: furniture
-    content: "gasmp_default_models:kitchen_cabinet_1"
+    content: "gasmp:kitchen_cabinet_1"
     name: "Small Open Kitchen Cabinet"
     price: 350
     description: "Small Open Kitchen Cabinet for your builds and collection."
   kitchen_cabinet_2:
     category: furniture
-    content: "gasmp_default_models:kitchen_cabinet_2"
+    content: "gasmp:kitchen_cabinet_2"
     name: "Large Open Kitchen Cabinet"
     price: 450
     description: "Large Open Kitchen Cabinet for your builds and collection."
   kitchen_chair:
     category: furniture
-    content: "gasmp_default_models:kitchen_chair"
+    content: "gasmp:kitchen_chair"
     name: "Kitchen Chair"
     price: 250
     description: "Kitchen Chair for your builds and collection."
   kitchen_sink:
     category: furniture
-    content: "gasmp_default_models:kitchen_sink"
+    content: "gasmp:kitchen_sink"
     name: "Kitchen Sink"
     price: 350
     description: "Kitchen Sink for your builds and collection."
   kitchen_table:
     category: furniture
-    content: "gasmp_default_models:kitchen_table"
+    content: "gasmp:kitchen_table"
     name: "Kitchen Table"
     price: 450
     description: "Kitchen Table for your builds and collection."
   stove:
     category: furniture
-    content: "gasmp_default_models:stove"
+    content: "gasmp:stove"
     name: "Stove"
     price: 400
     description: "Stove for your builds and collection."
   laptop:
     category: furniture
-    content: "gasmp_default_models:laptop"
+    content: "gasmp:laptop"
     name: "Laptop"
     price: 500
     description: "Laptop for your builds and collection."
   tv:
     category: furniture
-    content: "gasmp_default_models:tv"
+    content: "gasmp:tv"
     name: "Television"
     price: 600
     description: "Television for your builds and collection."
   washing_machine:
     category: furniture
-    content: "gasmp_default_models:washing_machine"
+    content: "gasmp:washing_machine"
     name: "Washing Machine"
     price: 550
     description: "Washing Machine for your builds and collection."
   modern_sofa:
     category: furniture
-    content: "gasmp_furniture:modern_sofa"
+    content: "gasmp:modern_sofa"
     name: "Modern Sofa"
     price: 800
     description: "Placeable GASMP modern sofa."
   freddy_plush:
     category: furniture
-    content: "gasmp_cosmetics:freddy_plush"
+    content: "gasmp:freddy_plush"
     name: "Freddy Plush"
     price: 450
     description: "Placeable FNAF plush collectible."
   chica_plush:
     category: furniture
-    content: "gasmp_cosmetics:chica_plush"
+    content: "gasmp:chica_plush"
     name: "Chica Plush"
     price: 450
     description: "Placeable FNAF plush collectible."
   bonnie_plush:
     category: furniture
-    content: "gasmp_cosmetics:bonnie_plush"
+    content: "gasmp:bonnie_plush"
     name: "Bonnie Plush"
     price: 450
     description: "Placeable FNAF plush collectible."
   foxy_plush:
     category: furniture
-    content: "gasmp_cosmetics:foxy_plush"
+    content: "gasmp:foxy_plush"
     name: "Foxy Plush"
     price: 450
     description: "Placeable FNAF plush collectible."
   golden_freddy_plush:
     category: furniture
-    content: "gasmp_cosmetics:golden_freddy_plush"
+    content: "gasmp:golden_freddy_plush"
     name: "Golden Freddy Plush"
     price: 650
     description: "Placeable FNAF plush collectible."
   the_puppet_plush:
     category: furniture
-    content: "gasmp_cosmetics:the_puppet_plush"
+    content: "gasmp:the_puppet_plush"
     name: "The Puppet Plush"
     price: 550
     description: "Placeable FNAF plush collectible."
   backpack:
     category: cosmetics
-    content: "gasmp_default_models:backpack"
+    content: "gasmp:backpack"
     name: "Backpack"
     price: 650
     description: "Imported cosmetic display item."
   top_hat:
     category: cosmetics
-    content: "gasmp_default_models:top_hat"
+    content: "gasmp:top_hat"
     name: "Top Hat"
     price: 650
     description: "Wearable hat cosmetic."
   angel_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:angel_wings"
+    content: "gasmp:angel_wings"
     name: "Angel Wings"
     price: 1600
     description: "Artillex wing cosmetic collectible."
   astronaut_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:astronaut_wings"
+    content: "gasmp:astronaut_wings"
     name: "Astronaut Wings"
     price: 1400
     description: "Artillex wing cosmetic collectible."
   bluefire_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:bluefire_wings"
+    content: "gasmp:bluefire_wings"
     name: "Bluefire Wings"
     price: 1900
     description: "Artillex wing cosmetic collectible."
   brown_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:brown_wings"
+    content: "gasmp:brown_wings"
     name: "Brown Wings"
     price: 1100
     description: "Artillex wing cosmetic collectible."
   butterfly_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:butterfly_wings"
+    content: "gasmp:butterfly_wings"
     name: "Butterfly Wings"
     price: 1600
     description: "Artillex wing cosmetic collectible."
   demon_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:demon_wings"
+    content: "gasmp:demon_wings"
     name: "Demon Wings"
     price: 1900
     description: "Artillex wing cosmetic collectible."
   dragon_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:dragon_wings"
+    content: "gasmp:dragon_wings"
     name: "Dragon Wings"
     price: 2200
     description: "Artillex wing cosmetic collectible."
   eagle_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:eagle_wings"
+    content: "gasmp:eagle_wings"
     name: "Eagle Wings"
     price: 1500
     description: "Artillex wing cosmetic collectible."
   golden_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:golden_wings"
+    content: "gasmp:golden_wings"
     name: "Golden Wings"
     price: 2500
     description: "Artillex wing cosmetic collectible."
   ocean_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:ocean_wings"
+    content: "gasmp:ocean_wings"
     name: "Ocean Wings"
     price: 1700
     description: "Artillex wing cosmetic collectible."
   purple_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:purple_wings"
+    content: "gasmp:purple_wings"
     name: "Purple Wings"
     price: 1600
     description: "Artillex wing cosmetic collectible."
   phoenix_wings:
     category: cosmetics
-    content: "gasmp_cosmetics:phoenix_wings"
+    content: "gasmp:phoenix_wings"
     name: "Phoenix Wings"
     price: 2300
     description: "Artillex wing cosmetic collectible."
   feral_bear_ears:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_bear_ears"
+    content: "gasmp:feral_bear_ears"
     name: "Bear Ears"
     price: 950
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_bear_tail:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_bear_tail"
+    content: "gasmp:feral_bear_tail"
     name: "Bear Tail"
     price: 1250
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_cat_ears:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_cat_ears"
+    content: "gasmp:feral_cat_ears"
     name: "Cat Ears"
     price: 950
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_cat_tail:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_cat_tail"
+    content: "gasmp:feral_cat_tail"
     name: "Cat Tail"
     price: 1250
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_fox_ears:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_fox_ears"
+    content: "gasmp:feral_fox_ears"
     name: "Fox Ears"
     price: 950
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_fox_tail:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_fox_tail"
+    content: "gasmp:feral_fox_tail"
     name: "Fox Tail"
     price: 1250
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_rabbit_ears:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_rabbit_ears"
+    content: "gasmp:feral_rabbit_ears"
     name: "Rabbit Ears"
     price: 950
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_rabbit_tail:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_rabbit_tail"
+    content: "gasmp:feral_rabbit_tail"
     name: "Rabbit Tail"
     price: 1250
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_tiger_ears:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_tiger_ears"
+    content: "gasmp:feral_tiger_ears"
     name: "Tiger Ears"
     price: 950
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_tiger_tail:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_tiger_tail"
+    content: "gasmp:feral_tiger_tail"
     name: "Tiger Tail"
     price: 1250
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_wolf_ears:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_wolf_ears"
+    content: "gasmp:feral_wolf_ears"
     name: "Wolf Ears"
     price: 950
     description: "Feral Fantasy wearable cosmetic collectible."
   feral_wolf_tail:
     category: cosmetics
-    content: "gasmp_cosmetics:feral_wolf_tail"
+    content: "gasmp:feral_wolf_tail"
     name: "Wolf Tail"
     price: 1250
     description: "Feral Fantasy wearable cosmetic collectible."
-  cosmetics_key:
+
+  hat_trailblazer:
     category: cosmetics
-    content: "gasmp_cosmetics:cosmetics_key"
-    name: "Cosmetic Shulker Key"
-    price: 750
-    description: "Open the Cosmetic Shulker for a random cosmetic."
+    content: "gasmp:trailblazer"
+    name: "Trailblazer"
+    price: 791
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_midnight_wizard:
+    category: cosmetics
+    content: "gasmp:midnight_wizard"
+    name: "Midnight Wizard"
+    price: 915
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_frog_bucket:
+    category: cosmetics
+    content: "gasmp:frog_bucket"
+    name: "Frog Bucket Hat"
+    price: 791
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_axolotl_hood:
+    category: cosmetics
+    content: "gasmp:axolotl_hood"
+    name: "Axolotl Hood"
+    price: 822
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_fox_ears:
+    category: cosmetics
+    content: "gasmp:fox_ears"
+    name: "Fox Cap"
+    price: 698
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_bunny_beanie:
+    category: cosmetics
+    content: "gasmp:bunny_beanie"
+    name: "Bunny Beanie"
+    price: 822
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_panda_cap:
+    category: cosmetics
+    content: "gasmp:panda_cap"
+    name: "Panda Cap"
+    price: 729
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_bumblebee:
+    category: cosmetics
+    content: "gasmp:bumblebee"
+    name: "Bumblebee Hat"
+    price: 729
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_toadstool:
+    category: cosmetics
+    content: "gasmp:toadstool"
+    name: "Toadstool"
+    price: 729
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_royal_crown:
+    category: cosmetics
+    content: "gasmp:royal_crown"
+    name: "Royal Crown"
+    price: 947
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_corsair:
+    category: cosmetics
+    content: "gasmp:corsair"
+    name: "Corsair"
+    price: 667
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_steam_topper:
+    category: cosmetics
+    content: "gasmp:steam_topper"
+    name: "Steampunk Top Hat"
+    price: 822
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_dusty_cowboy:
+    category: cosmetics
+    content: "gasmp:dusty_cowboy"
+    name: "Dusty Cowboy"
+    price: 822
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_fiesta:
+    category: cosmetics
+    content: "gasmp:fiesta"
+    name: "Fiesta Sombrero"
+    price: 636
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_straw_garden:
+    category: cosmetics
+    content: "gasmp:straw_garden"
+    name: "Garden Straw Hat"
+    price: 822
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_street_cap:
+    category: cosmetics
+    content: "gasmp:street_cap"
+    name: "Street Cap"
+    price: 760
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_cozy_pom:
+    category: cosmetics
+    content: "gasmp:cozy_pom"
+    name: "Cozy Pom Beanie"
+    price: 698
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_chef:
+    category: cosmetics
+    content: "gasmp:chef"
+    name: "Chef Hat"
+    price: 574
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_miner:
+    category: cosmetics
+    content: "gasmp:miner"
+    name: "Miner Helmet"
+    price: 605
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_aviator:
+    category: cosmetics
+    content: "gasmp:aviator"
+    name: "Aviator Cap"
+    price: 667
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_sea_captain:
+    category: cosmetics
+    content: "gasmp:sea_captain"
+    name: "Sea Captain"
+    price: 791
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_ufo:
+    category: cosmetics
+    content: "gasmp:ufo"
+    name: "UFO Hat"
+    price: 731
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_retro_tv:
+    category: cosmetics
+    content: "gasmp:retro_tv"
+    name: "Retro TV Hat"
+    price: 866
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_parcel:
+    category: cosmetics
+    content: "gasmp:parcel"
+    name: "Parcel Hat"
+    price: 636
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_jellyfish:
+    category: cosmetics
+    content: "gasmp:jellyfish"
+    name: "Jellyfish Hat"
+    price: 729
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_bloom_crown:
+    category: cosmetics
+    content: "gasmp:bloom_crown"
+    name: "Flower Crown"
+    price: 791
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_frost_diadem:
+    category: cosmetics
+    content: "gasmp:frost_diadem"
+    name: "Frost Diadem"
+    price: 974
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_little_dragon:
+    category: cosmetics
+    content: "gasmp:little_dragon"
+    name: "Little Dragon"
+    price: 1001
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_sushi:
+    category: cosmetics
+    content: "gasmp:sushi"
+    name: "Salmon Sushi"
+    price: 605
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_rubber_duck:
+    category: cosmetics
+    content: "gasmp:rubber_duck"
+    name: "Rubber Duck"
+    price: 791
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_diving_helmet:
+    category: cosmetics
+    content: "gasmp:diving_helmet"
+    name: "Diving Helmet"
+    price: 1001
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_chicken_hat:
+    category: cosmetics
+    content: "gasmp:chicken_hat"
+    name: "Chicken Hat"
+    price: 791
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_flight_hat:
+    category: cosmetics
+    content: "gasmp:flight_hat"
+    name: "Flight Hat"
+    price: 920
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_military_helmet:
+    category: cosmetics
+    content: "gasmp:military_helmet"
+    name: "Military Helmet"
+    price: 915
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_motorcycle_helmet:
+    category: cosmetics
+    content: "gasmp:motorcycle_helmet"
+    name: "Motorcycle Helmet"
+    price: 1109
+    description: "Wearable ItemsAdder cosmetic hat collectible."
+  hat_pot_hat:
+    category: cosmetics
+    content: "gasmp:pot_hat"
+    name: "Pot Hat"
+    price: 667
+    description: "Wearable ItemsAdder cosmetic hat collectible."
