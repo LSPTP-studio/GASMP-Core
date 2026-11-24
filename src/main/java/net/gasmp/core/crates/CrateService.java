@@ -68,6 +68,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         } else {
             migrateEquipmentCrates(file);
         }
+        migrateLegacyRewardContentIds(file);
         config = YamlConfiguration.loadConfiguration(file);
     }
 
@@ -117,6 +118,60 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             plugin.getLogger().info("Migrated Normal/Medium/Premium crates to cosmetic loot. Old file backed up as crates-equipment-backup.yml.");
         } catch (Exception error) {
             plugin.getLogger().severe("Could not migrate equipment crates to cosmetics: " + error.getMessage());
+        }
+    }
+
+    /**
+     * Upgrade saved cosmetic reward IDs from previous item-provider prefixes to
+     * the native RP Engine IDs shipped in the current crates.yml resource.
+     *
+     * Existing weights, display names, amounts, custom rewards and placed
+     * locations are preserved. The original file is backed up once.
+     */
+    private void migrateLegacyRewardContentIds(File file) {
+        YamlConfiguration current = YamlConfiguration.loadConfiguration(file);
+        YamlConfiguration defaults;
+        try (java.io.InputStream input = plugin.getResource("crates.yml")) {
+            if (input == null) return;
+            defaults = YamlConfiguration.loadConfiguration(
+                    new java.io.InputStreamReader(input, java.nio.charset.StandardCharsets.UTF_8));
+        } catch (java.io.IOException error) {
+            plugin.getLogger().warning("Could not load bundled crate defaults for RP Engine ID migration: " + error.getMessage());
+            return;
+        }
+
+        int migrated = 0;
+        for (String tier : List.of("normal", "medium", "premium")) {
+            ConfigurationSection rewards = current.getConfigurationSection("crates." + tier + ".rewards");
+            ConfigurationSection defaultRewards = defaults.getConfigurationSection("crates." + tier + ".rewards");
+            if (rewards == null || defaultRewards == null) continue;
+
+            for (String rewardId : rewards.getKeys(false)) {
+                ConfigurationSection reward = rewards.getConfigurationSection(rewardId);
+                if (reward == null) continue;
+                String oldContent = reward.getString("content", "").trim();
+                String normalized = oldContent.toLowerCase(Locale.ROOT);
+                boolean legacyProviderId = normalized.startsWith("itemsadder:")
+                        || normalized.startsWith("oraxen:")
+                        || normalized.startsWith("nexo:");
+                if (!legacyProviderId) continue;
+
+                String rpEngineId = defaultRewards.getString(rewardId + ".content", "");
+                if (rpEngineId == null || rpEngineId.isBlank()) continue;
+                reward.set("content", rpEngineId);
+                migrated++;
+            }
+        }
+
+        if (migrated == 0) return;
+        try {
+            File backup = new File(plugin.getDataFolder(), "crates-provider-backup.yml");
+            if (!backup.exists()) java.nio.file.Files.copy(file.toPath(), backup.toPath());
+            current.save(file);
+            plugin.getLogger().info("Migrated " + migrated
+                    + " saved cosmetic reward IDs to RP Engine namespaces. Backup: crates-provider-backup.yml.");
+        } catch (Exception error) {
+            plugin.getLogger().severe("Could not migrate saved cosmetic reward IDs: " + error.getMessage());
         }
     }
 
