@@ -244,7 +244,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         // ItemsAdder furniture is a placeable item, not a note-block custom block.
         // Both historical subcommands intentionally issue that same furniture stack.
         String contentId = "gasmp:" + id + "_crate";
-        ItemStack custom = createEngineItem(contentId, amount);
+        ItemStack custom = createItemsAdderItem(contentId, amount);
         if (custom == null) {
             actor.sendMessage(color("&cCould not create &f" + contentId
                     + "&c. Confirm ItemsAdder has loaded the GASMP contents folder, then run /iareload."));
@@ -285,7 +285,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         int amount = 1;
         if (args.length == 4) try { amount = Integer.parseInt(args[3]); } catch (NumberFormatException ex) { amount = 0; }
         if (amount < 1 || amount > 64) { player.sendMessage(color("&cAmount must be between 1 and 64.")); return; }
-        Map<Integer, ItemStack> left = target.getInventory().addItem(createKey(id, amount));
+        ItemStack key = createKey(id, amount);
+        if (key == null) { player.sendMessage(color("&cItemsAdder key item is not loaded: gasmp:" + id + "_key")); return; }
+        Map<Integer, ItemStack> left = target.getInventory().addItem(key);
         left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
         player.sendMessage(color("&aGave " + amount + " " + id + " key(s) to " + target.getName() + "."));
     }
@@ -702,7 +704,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
         if (type.equals("cosmetic")) {
             String contentId = reward.getString("content", "");
-            ItemStack cosmetic = contentId.isBlank() ? null : createEngineItem(contentId, 1);
+            ItemStack cosmetic = contentId.isBlank() ? null : createItemsAdderItem(contentId, 1);
             return cosmetic == null ? new ItemStack(Material.BARRIER) : cosmetic;
         }
         Material material = switch (type) {
@@ -860,7 +862,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                     refundKey(player, crateId, "Configured cosmetic amount must be between 1 and 64.");
                     return;
                 }
-                ItemStack cosmetic = createEngineItem(contentId, (int) amount);
+                ItemStack cosmetic = createItemsAdderItem(contentId, (int) amount);
                 if (cosmetic == null) {
                     refundKey(player, crateId, "Cosmetic '" + contentId + "' is not loaded by ItemsAdder.");
                     plugin.getLogger().warning("Could not create cosmetic reward " + contentId + " from crate " + crateId);
@@ -906,9 +908,12 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private void refundKey(Player player, String id, String reason) {
-        Map<Integer, ItemStack> left = player.getInventory().addItem(createKey(id, 1));
-        left.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
-        player.sendMessage(color("&cCrate opening cancelled: " + reason + " Your key was returned."));
+        ItemStack key = createKey(id, 1);
+        if (key != null) {
+            Map<Integer, ItemStack> left = player.getInventory().addItem(key);
+            left.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
+        }
+        player.sendMessage(color("&cCrate opening cancelled: " + reason + " If the key was not returned, contact staff."));
         opening.remove(player.getUniqueId());
     }
 
@@ -916,6 +921,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         id = canonicalCrateId(id);
         if (target == null || config.getConfigurationSection("crates." + id) == null || amount < 1 || amount > 64) return false;
         ItemStack key = createKey(id, amount);
+        if (key == null) return false;
         Map<Integer, ItemStack> left = target.getInventory().addItem(key);
         left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
         if (message) target.sendMessage(color("&d&lGASMP &8» &fYou received &d" + amount + " " + id.toUpperCase(Locale.ROOT) + " crate key(s)&f."));
@@ -1022,8 +1028,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private ItemStack createKey(String id, int amount) {
         String canonical = canonicalCrateId(id);
         String contentId = "gasmp:" + canonical + "_key";
-        ItemStack item = createEngineItem(contentId, amount);
-        if (item == null) item = new ItemStack(Material.TRIPWIRE_HOOK, amount);
+        ItemStack item = createItemsAdderItem(contentId, amount);
+        if (item == null) {
+            plugin.getLogger().warning("ItemsAdder key item is missing: " + contentId);
+            return null;
+        }
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             meta.setDisplayName(color("&d&l" + canonical.toUpperCase(Locale.ROOT) + " COSMETIC KEY"));
@@ -1035,7 +1044,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     /** Resolve a GASMP item from the ItemsAdder registry. */
-    private ItemStack createEngineItem(String contentIdText, int amount) {
+    private ItemStack createItemsAdderItem(String contentIdText, int amount) {
         if (contentIdText == null || contentIdText.isBlank() || amount < 1 || amount > 64) return null;
         ItemStack stack = plugin.getItemsAdderBridge().createItem(contentIdText.trim());
         if (stack == null) return null;
@@ -1045,7 +1054,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     /** Public bridge used by the Shards decoration shop; ItemsAdder is the sole item provider. */
     public ItemStack createContentItem(String contentIdText, int amount) {
-        return createEngineItem(contentIdText, amount);
+        return createItemsAdderItem(contentIdText, amount);
     }
 
     private String canonicalCrateId(String rawId) {
