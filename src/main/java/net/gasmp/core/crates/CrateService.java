@@ -252,7 +252,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
         Map<Integer, ItemStack> left = target.getInventory().addItem(custom);
         left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
-        actor.sendMessage(color("&aGave " + amount + " custom " + id + " crate item(s) to " + target.getName() + "."));
+        actor.sendMessage(color("&aGave " + amount + "x " + crateDisplayName(id) + " to " + target.getName() + "."));
     }
 
     private void setLocation(Player player, String[] args) {
@@ -289,7 +289,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (key == null) { player.sendMessage(color("&cItemsAdder key item is not loaded: gasmp:" + id + "_key")); return; }
         Map<Integer, ItemStack> left = target.getInventory().addItem(key);
         left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
-        player.sendMessage(color("&aGave " + amount + " " + id + " key(s) to " + target.getName() + "."));
+        player.sendMessage(color("&aGave " + amount + "x " + crateKeyName(id) + " to " + target.getName() + "."));
     }
 
     private void list(CommandSender player) {
@@ -1018,7 +1018,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             recipients++;
         }
         if (!silent) Bukkit.broadcastMessage(color("&d&lGASMP &8» &f" + amount + "x " + String.join(", ", ids.stream().map(this::crateKeyName).toList()) + " distributed to &d" + recipients + " &fplayer(s)."));
-        sender.sendMessage(color("&aDistributed " + amount + " key(s) for " + String.join(", ", ids) + " to " + recipients + " online player(s)."));
+        sender.sendMessage(color("&aDistributed " + amount + "x " + String.join(", ", ids.stream().map(this::crateKeyName).toList()) + " to " + recipients + " online player(s)."));
         return true;
     }
 
