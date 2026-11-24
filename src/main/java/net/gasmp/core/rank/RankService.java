@@ -118,7 +118,7 @@ public final class RankService {
         // has the badge permission. Keep this in sync with ItemsAdder font_images.yml.
         for (RankDefinition definition : byKey.values()) {
             grant(groupPermissions, definition.group(),
-                    "gasmp.tag." + definition.imageKey());
+                    "gasmp.tag." + definition.key());
         }
 
         Map<String, RankDefinition> groupsToCreate = new LinkedHashMap<>();
@@ -149,7 +149,7 @@ public final class RankService {
                         "openinv.search.inventory", "openinv.access.online", "openinv.access.offline", "skript.admin"
                 ));
                 for (RankDefinition definition : byKey.values()) {
-                    managedPermissions.add("gasmp.tag." + definition.imageKey());
+                    managedPermissions.add("gasmp.tag." + definition.key());
                 }
                 group.data().clear(node -> node instanceof PermissionNode
                         && (wanted.contains(node.getKey().toLowerCase(Locale.ROOT))
