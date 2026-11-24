@@ -1,10 +1,11 @@
 name: GASMP-Core
-version: '0.7.8'
+version: '0.8.0'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
-description: GASMP Core gameplay systems, enabled casino, rank cinematics, economy, teams and cosmetic crates.
+description: GASMP ItemsAdder Edition: shards, custom cosmetics, furniture, animated crates, casino, ranks and server systems.
 depend:
+  - ItemsAdder
   - Vault
   - LuckPerms
 softdepend:
@@ -19,10 +20,6 @@ softdepend:
   - LibsDisguises
   - HeadDatabase
   - HeadDB
-  - RPEngine
-  - RPEPaintball
-  - RPEGoKarts
-  - RPESkateboards
   - Multiverse-Core
 commands:
   gasmp:
@@ -72,7 +69,7 @@ commands:
     description: Restricted crate administration. Crate opening uses physical keys.
     usage: /crates <list|reload|givekey|giveblock|givemodel> <player> <normal|medium|premium> [amount]
   gcrateopen:
-    description: Internal console-only command triggered by RP Engine crate content.
+    description: Internal console-only command for GASMP crate interactions.
     usage: /gcrateopen <player> <crate-id>
   keyall:
     description: Distribute matching GASMP crate keys to online players.
