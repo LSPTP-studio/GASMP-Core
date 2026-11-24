@@ -173,7 +173,7 @@ public final class GASMPCore extends JavaPlugin {
         if (getConfig().getBoolean("modules.chat-games", true)) chatGameService.startScheduler();
 
         getLogger().info("GASMP Core v" + getPluginMeta().getVersion() + " enabled.");
-        getLogger().info("Phase 1 active: profiles, Shards, Vault shop, RTP, combat logging, bounties, auction house, battle pass, crates, teams, moderation, maintenance, holograms, tool skills, chat games, casino (disabled by default), leaderboards, performance snapshot and staff utilities.");
+        getLogger().info("GASMP ItemsAdder Edition active: profiles, Shards, Vault Coins, decorations, custom cosmetic crates, casino, ranks, chat games, teams and staff tools.");
         if (!BukkitCompatibleVault()) getLogger().warning("Vault economy unavailable; Coins features are disabled until a provider registers Economy.class.");
     }
 
