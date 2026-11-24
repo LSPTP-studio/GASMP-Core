@@ -114,11 +114,11 @@ public final class RankService {
         grant(groupPermissions, "mod", "gasmpcore.staff.vanish");
         grant(groupPermissions, "helper", "gasmpcore.staff.vanish");
 
-        // RP Engine rank badges only appear when the matching LuckPerms group
-        // has the badge permission. Keep this in sync with fonts/ranks.yml.
+        // ItemsAdder rank glyph permissions are synchronized to the matching LuckPerms group
+        // has the badge permission. Keep this in sync with ItemsAdder font_images.yml.
         for (RankDefinition definition : byKey.values()) {
             grant(groupPermissions, definition.group(),
-                    "rpengine.tag.gasmp_ranks." + definition.imageKey());
+                    "gasmp.tag." + definition.imageKey());
         }
 
         Map<String, RankDefinition> groupsToCreate = new LinkedHashMap<>();
@@ -149,7 +149,7 @@ public final class RankService {
                         "openinv.search.inventory", "openinv.access.online", "openinv.access.offline", "skript.admin"
                 ));
                 for (RankDefinition definition : byKey.values()) {
-                    managedPermissions.add("rpengine.tag.gasmp_ranks." + definition.imageKey());
+                    managedPermissions.add("gasmp.tag." + definition.imageKey());
                 }
                 group.data().clear(node -> node instanceof PermissionNode
                         && (wanted.contains(node.getKey().toLowerCase(Locale.ROOT))
