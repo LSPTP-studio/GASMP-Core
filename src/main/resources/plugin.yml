@@ -1,5 +1,5 @@
 name: GASMP-Core
-version: '0.8.1'
+version: '0.8.2'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
@@ -67,7 +67,11 @@ commands:
     aliases: [bp]
   crates:
     description: Restricted crate administration. Crate opening uses physical keys.
-    usage: /crates <list|reload|givekey|giveblock|givemodel> <player> <normal|medium|premium> [amount]
+    usage: /crates <list|set|unset|reload|givekey|giveblock|givemodel> [player] [normal|medium|premium] [amount]
+  gcrateopen:
+    description: Internal console-only crate-opening dispatcher.
+    usage: /gcrateopen <player> <normal|medium|premium>
+    permission: gasmpcore.internal
   keyall:
     description: Distribute matching GASMP crate keys to online players.
     usage: /keyall <crate-id|all> <amount> [world:<world>] [silent]
@@ -115,6 +119,9 @@ permissions:
   gasmpcore.menu:
     description: Allows opening the GASMP main menu.
     default: true
+  gasmpcore.internal:
+    description: Internal crate automation permission; player senders are rejected by the handler.
+    default: false
   gasmpcore.admin:
     description: Allows reloading GASMP Core and using administrative core commands.
     default: op
