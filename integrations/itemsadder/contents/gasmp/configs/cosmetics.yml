@@ -419,12 +419,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/lamp
       color: "#fde68a"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/lamp
     behaviours:
       furniture:
         entity: item_display
@@ -513,12 +513,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/lamp
       color: "#fde68a"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/lamp
     behaviours:
       furniture:
         entity: item_display
@@ -575,12 +575,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/plant
       color: "#f9a8d4"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/plant
     behaviours:
       furniture:
         entity: item_display
@@ -635,12 +635,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/window
       color: "#f9a8d4"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/window
     behaviours:
       furniture:
         entity: item_display
@@ -1017,12 +1017,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/cabinet
       color: "#fca5a5"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/cabinet
     behaviours:
       furniture:
         entity: item_display
@@ -1079,12 +1079,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/table
       color: "#fca5a5"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/table
     behaviours:
       furniture:
         entity: item_display
@@ -1171,12 +1171,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/cabinet
       color: "#67e8f9"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/cabinet
     behaviours:
       furniture:
         entity: item_display
@@ -1203,12 +1203,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/cabinet
       color: "#67e8f9"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/cabinet
     behaviours:
       furniture:
         entity: item_display
@@ -1235,12 +1235,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/cabinet
       color: "#fdba74"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/cabinet
     behaviours:
       furniture:
         entity: item_display
@@ -1299,12 +1299,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/sink
       color: "#fdba74"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/sink
     behaviours:
       furniture:
         entity: item_display
@@ -1331,12 +1331,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/table
       color: "#67e8f9"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/table
     behaviours:
       furniture:
         entity: item_display
@@ -1363,12 +1363,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/lamp
       color: "#a5b4fc"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/lamp
     behaviours:
       furniture:
         entity: item_display
@@ -1395,12 +1395,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/screen
       color: "#a5b4fc"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/screen
     behaviours:
       furniture:
         entity: item_display
@@ -1590,12 +1590,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/box
       color: "#fdba74"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/box
     behaviours:
       furniture:
         entity: item_display
@@ -1789,12 +1789,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/cabinet
       color: "#93c5fd"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/cabinet
     behaviours:
       furniture:
         entity: item_display
@@ -1943,12 +1943,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/screen
       color: "#86efac"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/screen
     behaviours:
       furniture:
         entity: item_display
@@ -1990,12 +1990,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/cabinet
       color: "#a5b4fc"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/cabinet
     behaviours:
       furniture:
         entity: item_display
@@ -2022,12 +2022,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/cabinet
       color: "#fde68a"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/cabinet
     behaviours:
       furniture:
         entity: item_display
@@ -2054,12 +2054,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/window
       color: "#86efac"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/window
     behaviours:
       furniture:
         entity: item_display
@@ -2086,12 +2086,12 @@ items:
       - "&7GASMP Cosmetic Collectible"
       - "&8GASMP • DECOR COLLECTION"
     graphics:
-      model: item/furniture/props
+      model: item/furniture/window
       color: "#fdba74"
     resource:
       material: PAPER
       generate: false
-      model_path: item/furniture/props
+      model_path: item/furniture/window
     behaviours:
       furniture:
         entity: item_display

@@ -3,7 +3,7 @@
   "ambientocclusion": true,
   "textures": {
     "base": "minecraft:block/brown_wool",
-    "accent": "minecraft:block/chest",
+    "accent": "minecraft:block/brown_concrete",
     "particle": "#base"
   },
   "elements": [
