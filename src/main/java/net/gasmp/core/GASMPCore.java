@@ -13,7 +13,6 @@ import net.gasmp.core.command.ShardCommand;
 import net.gasmp.core.command.ShopCommand;
 import net.gasmp.core.combat.CombatService;
 import net.gasmp.core.crates.CrateService;
-import net.gasmp.core.crates.KeyRewardBridge;
 import net.gasmp.core.data.PlayerDataStore;
 import net.gasmp.core.data.PlayerProfileListener;
 import net.gasmp.core.economy.VaultEconomyBridge;
@@ -26,6 +25,7 @@ import net.gasmp.core.rank.RankService;
 import net.gasmp.core.rtp.RtpService;
 import net.gasmp.core.shop.ShopService;
 import net.gasmp.core.shop.DecorationShopService;
+import net.gasmp.core.integration.ItemsAdderBridge;
 import net.gasmp.core.skills.ToolSkillsService;
 import net.gasmp.core.staff.CommandRestrictionService;
 import net.gasmp.core.staff.StaffAccess;
@@ -51,7 +51,7 @@ public final class GASMPCore extends JavaPlugin {
     private BattlePassService battlePassService;
     private CasinoService casinoService;
     private CrateService crateService;
-    private KeyRewardBridge keyRewardBridge;
+    private ItemsAdderBridge itemsAdderBridge;
     private TeamService teamService;
     private MaintenanceService maintenanceService;
     private ModerationService moderationService;
@@ -73,6 +73,13 @@ public final class GASMPCore extends JavaPlugin {
             dataStore.initialize().join();
         } catch (CompletionException exception) {
             getLogger().severe("SQLite initialization failed: " + rootMessage(exception));
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        itemsAdderBridge = new ItemsAdderBridge(this);
+        if (!itemsAdderBridge.isAvailable()) {
+            getLogger().severe("ItemsAdder is required for GASMP ItemsAdder Edition. Install ItemsAdder 4.x and restart.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -111,8 +118,6 @@ public final class GASMPCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(crateService, this);
         decorationShopService = new DecorationShopService(this);
         getServer().getPluginManager().registerEvents(decorationShopService, this);
-        keyRewardBridge = new KeyRewardBridge(this, crateService);
-        keyRewardBridge.start();
         teamService = new TeamService(this);
 
         maintenanceService = new MaintenanceService(this, staffAccess);
@@ -206,7 +211,6 @@ public final class GASMPCore extends JavaPlugin {
     @Override
     public void onDisable() {
         if (chatGameService != null) chatGameService.stopAll();
-        if (keyRewardBridge != null) keyRewardBridge.stop();
         if (auctionService != null) auctionService.shutdown();
         if (dataStore != null) dataStore.close();
         getLogger().info("GASMP Core disabled.");
@@ -219,6 +223,7 @@ public final class GASMPCore extends JavaPlugin {
     public ShopService getShopService() { return shopService; }
     public DecorationShopService getDecorationShopService() { return decorationShopService; }
     public CrateService getCrateService() { return crateService; }
+    public ItemsAdderBridge getItemsAdderBridge() { return itemsAdderBridge; }
     public CombatService getCombatService() { return combatService; }
     public RtpService getRtpService() { return rtpService; }
 
