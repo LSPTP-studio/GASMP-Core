@@ -1,5 +1,5 @@
-# GASMP Core 0.7.5 — Paper 26.2 / Java 25
-# GASMP Core gameplay systems, Shard Shop, Arcade and equipment crates.
+# GASMP Core 0.8.0 — ItemsAdder Edition / Paper 26.2 / Java 25
+# GASMP Core gameplay systems, Shard Shop, Shards Arcade and cosmetic crates.
 general:
   debug: false
   brand: "&d&lGASMP"
@@ -60,7 +60,7 @@ integrations:
   tab: true
   placeholderapi: true
   itemsadder-rank-assets: true
-  rp-engine: true
+  rp-engine: false
   geyser-floodgate: true
   vault-economy: true
   nexo: true
