@@ -60,10 +60,9 @@ integrations:
   tab: true
   placeholderapi: true
   itemsadder-rank-assets: true
-  rp-engine: false
   geyser-floodgate: true
   vault-economy: true
-  nexo: true
+  nexo: false
   itemsadder: true
   imageframe: true
   typewriter: true
