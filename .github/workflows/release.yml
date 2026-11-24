@@ -1,0 +1,137 @@
+name: Publish GASMP Core 0.8.2 Preview
+
+on:
+  push:
+    branches:
+      - itemsadder-edition-0.8.2
+    paths:
+      - .github/workflows/release.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build and publish downloadable package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          ref: itemsadder-edition-0.8.2
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '25'
+          verify-signature: true
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '9.9.2'
+
+      - name: Build plugin
+        run: gradle --no-daemon clean build
+
+      - name: Verify plugin JAR
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s build/libs/GASMP-Core-0.8.2.jar
+          jar tf build/libs/GASMP-Core-0.8.2.jar | grep -q 'plugin.yml'
+
+      - name: Assemble full source and server-install package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PACKAGE_ROOT="dist/GASMP-Core-0.8.2-Full-Package"
+          mkdir -p "$PACKAGE_ROOT/source"
+          mkdir -p "$PACKAGE_ROOT/server-install/plugins/ItemsAdder/contents"
+
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.gradle/' \
+            --exclude='build/' \
+            --exclude='dist/' \
+            ./ "$PACKAGE_ROOT/source/"
+
+          cp build/libs/GASMP-Core-0.8.2.jar "$PACKAGE_ROOT/server-install/plugins/"
+          cp -a integrations/itemsadder/contents/gasmp "$PACKAGE_ROOT/server-install/plugins/ItemsAdder/contents/"
+          cp -a integrations/itemsadder/contents/gasmp_ranks "$PACKAGE_ROOT/server-install/plugins/ItemsAdder/contents/"
+          if [[ -d integrations/itemsadder/contents/rank_bundle ]]; then
+            cp -a integrations/itemsadder/contents/rank_bundle "$PACKAGE_ROOT/server-install/plugins/ItemsAdder/contents/"
+          fi
+          cp README.md "$PACKAGE_ROOT/"
+          cp docs/COMMANDS.md "$PACKAGE_ROOT/"
+
+          cat > "$PACKAGE_ROOT/server-install/INSTALL.txt" <<'EOF'
+          GASMP CORE 0.8.2 — ITEMSADDER EDITION
+          ======================================
+
+          REQUIREMENTS
+          - Paper 26.2
+          - Java 25
+          - ItemsAdder 4.x
+          - LuckPerms 5.x
+          - Vault and a Vault-compatible economy provider
+
+          INSTALL
+          1. Stop the server and make a full backup.
+          2. Copy plugins/GASMP-Core-0.8.2.jar into your server's plugins/ folder.
+          3. Copy the complete plugins/ItemsAdder/contents/ folder from this package
+             into your server's plugins/ItemsAdder/contents/ folder.
+          4. Start or restart the server.
+          5. Run /iareload and review the console for ItemsAdder YAML/model warnings.
+          6. Run /iazip and ensure the server's resource-pack delivery is configured.
+          7. Reconnect with a Java client and test the crate models and interactions.
+          8. Review the plugin's generated config files in plugins/GASMP-Core/.
+
+          CRATE DISPLAY NAMES
+          Normal:  VERDANT CACHE — key: VERDANT SEAL
+          Medium:  RUNIC RELIQUARY — key: RUNIC SIGIL
+          Premium: ECLIPSE VAULT — key: ECLIPSE CREST
+
+          NOTES
+          - All three tiers are cosmetic crates.
+          - RP Engine is not required for this edition.
+          - Back up your existing config and database before upgrading.
+          - This is a preview release. Validate it on a staging server first.
+          - See README.md and docs/COMMANDS.md in the source folder for details.
+          EOF
+
+          cd dist
+          zip -qr GASMP-Core-0.8.2-Full-Package.zip GASMP-Core-0.8.2-Full-Package
+          test -s GASMP-Core-0.8.2-Full-Package.zip
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.8.2
+          target_commitish: itemsadder-edition-0.8.2
+          name: GASMP Core 0.8.2 — ItemsAdder Edition
+          body: |
+            ## GASMP Core 0.8.2 Preview
+
+            ItemsAdder-only cosmetic crate edition for Paper 26.2 / Java 25.
+
+            **Downloads**
+            - `GASMP-Core-0.8.2.jar` — plugin JAR
+            - `GASMP-Core-0.8.2-Full-Package.zip` — full source tree, built plugin, ItemsAdder contents and install instructions
+            - GitHub also provides source ZIP and TAR archives below.
+
+            **Cosmetic crate names**
+            - Normal: VERDANT CACHE / VERDANT SEAL
+            - Medium: RUNIC RELIQUARY / RUNIC SIGIL
+            - Premium: ECLIPSE VAULT / ECLIPSE CREST
+
+            The Java build is verified by CI. A live Paper + ItemsAdder staging test is still required before production use.
+          draft: false
+          prerelease: true
+          make_latest: false
+          files: |
+            build/libs/GASMP-Core-0.8.2.jar
+            dist/GASMP-Core-0.8.2-Full-Package.zip
+          fail_on_unmatched_files: true

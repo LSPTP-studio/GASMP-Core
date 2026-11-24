@@ -121,7 +121,7 @@ public final class MenuService implements Listener {
                 "&7Paid with your Vault Coins balance",
                 "&eClick to browse");
         set(inventory, 24, Material.AMETHYST_SHARD, "&d&lSHARD SHOP",
-                "&7Buy Normal, Medium and Premium cosmetic keys",
+                "&7Shop the Verdant Cache, Runic Reliquary and Eclipse Vault keys",
                 "&7Paid with GASMP Shards",
                 "&eClick to browse");
         set(inventory, 31, Material.BOOK, "&f&lTWO CURRENCIES",
@@ -156,14 +156,14 @@ public final class MenuService implements Listener {
         Material[] icons = {Material.SHULKER_BOX, Material.ENDER_CHEST, Material.PURPLE_SHULKER_BOX};
         int[] slots = {11, 13, 15};
         String[] descriptions = {
-                "&7Common cosmetic collectibles",
-                "&7Wings, plushies and Feral Fantasy",
-                "&7The rarest cosmetic drop pool"
+                "&7Starter cosmetics and small Shard bonuses",
+                "&7Expanded collectibles and improved rare-drop odds",
+                "&7The rarest collectibles and premium cosmetic odds"
         };
         for (int i = 0; i < ids.length; i++) {
             long price = plugin.getConfig().getLong("key-shop.prices." + ids[i], -1L);
             String priceText = price < 0 ? "&cNot for sale" : "&d" + price + " ✦";
-            set(inventory, slots[i], icons[i], "&f&l" + switch (ids[i]) { case "normal" -> "STARLIGHT KEY"; case "medium" -> "ASTRAL KEY"; default -> "CELESTIAL KEY"; } + "",
+            set(inventory, slots[i], icons[i], "&f&l" + switch (ids[i]) { case "normal" -> "VERDANT SEAL"; case "medium" -> "RUNIC SIGIL"; default -> "ECLIPSE CREST"; } + "",
                     descriptions[i], "&7Price: " + priceText, "&eClick to purchase");
         }
         set(inventory, 22, Material.BOOK, "&f&lKEY DROP SYSTEM",
