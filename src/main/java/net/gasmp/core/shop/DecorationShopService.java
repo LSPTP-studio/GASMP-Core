@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** Shards-funded Furniture and Cosmetics catalogue backed by RP Engine custom items. */
+/** Shards-funded Furniture and Cosmetics catalogue backed by ItemsAdder custom items. */
 public final class DecorationShopService implements Listener {
     private static final int[] PRODUCT_SLOTS = {
             10, 11, 12, 13, 14, 15, 16,
@@ -125,7 +125,7 @@ public final class DecorationShopService implements Listener {
         for (int index = start; index < end; index++) {
             Product product = visible.get(index);
             int slot = PRODUCT_SLOTS[index - start];
-            ItemStack icon = createEngineItem(product.contentId());
+            ItemStack icon = createItemsAdderItem(product.contentId());
             if (icon == null) icon = new ItemStack(category.equals("furniture") ? Material.ARMOR_STAND : Material.PAPER);
             ItemMeta meta = icon.getItemMeta();
             if (meta != null) {
@@ -158,8 +158,8 @@ public final class DecorationShopService implements Listener {
         ItemStack reward = createEngineItem(product.contentId());
         if (reward == null) {
             purchasing.remove(player.getUniqueId());
-            player.sendMessage(color("&cThis RP Engine item is not loaded: &f" + product.contentId()));
-            player.sendMessage(color("&7Ask staff to run /rp reload and verify the cosmetic content pack."));
+            player.sendMessage(color("&cThis ItemsAdder item is not loaded: &f" + product.contentId()));
+            player.sendMessage(color("&7Ask staff to run /rp reload and verify the GASMP ItemsAdder contents pack."));
             return;
         }
         plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
