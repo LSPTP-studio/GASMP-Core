@@ -6,7 +6,7 @@ This folder contains GASMP's native RP Engine crate content:
 - Normal, Medium and Premium cosmetic crate keys, custom blocks and placeable display models.
 - Interactions routed to GASMP Core's console-only `gcrateopen` command.
 
-**GASMP uses RP Engine only.** ItemsAdder, Oraxen and Nexo are not required or used by GASMP Core for the cosmetic rewards.
+**GASMP uses RP Engine as its sole custom-item provider.** No additional custom-item plugin is required.
 
 ## Install RP Engine
 
@@ -19,7 +19,7 @@ This folder contains GASMP's native RP Engine crate content:
 7. Regenerate/resend RP Engine's resource pack using the workflow for your installed version.
 8. Test the items, physical blocks and placed models on your Java clients. Validate Bedrock/Geyser separately if you use it.
 
-The cosmetics ZIP contains the original supplied ItemsAdder-format folders in RP Engine's direct-import layout. RP Engine can import those formats itself; the ItemsAdder plugin is not required.
+The cosmetics ZIP contains the supplied source folders in RP Engine's direct-import layout. RP Engine imports those folders directly.
 
 ## GASMP crate commands
 
