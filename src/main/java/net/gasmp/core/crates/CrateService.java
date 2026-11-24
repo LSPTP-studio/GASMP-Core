@@ -123,7 +123,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     /**
      * Upgrade saved cosmetic reward IDs from previous item-provider prefixes to
-     * the native RP Engine IDs shipped in the current crates.yml resource.
+     * the native ItemsAdder IDs shipped in the current crates.yml resource.
      *
      * Existing weights, display names, amounts, custom rewards and placed
      * locations are preserved. The original file is backed up once.
@@ -169,7 +169,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // RP Engine's custom-block actions run as console.
+        // ItemsAdder furniture can be opened by the Core furniture interaction listener; this command remains a staff/testing fallback.
         if (command.getName().equalsIgnoreCase("keyall")) return keyAll(sender, args);
         if (command.getName().equalsIgnoreCase("gcrateopen")) {
             if (!(sender instanceof ConsoleCommandSender)) {
@@ -241,6 +241,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             actor.sendMessage(color("&cAmount must be between 1 and 64."));
             return;
         }
+        // ItemsAdder furniture is a placeable item, not a note-block custom block.
+        // Both historical subcommands intentionally issue that same furniture stack.
         String contentId = "gasmp:" + id + "_crate";
         ItemStack custom = createEngineItem(contentId, amount);
         if (custom == null) {
@@ -860,7 +862,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 }
                 ItemStack cosmetic = createEngineItem(contentId, (int) amount);
                 if (cosmetic == null) {
-                    refundKey(player, crateId, "Cosmetic '" + contentId + "' is not loaded by RP Engine.");
+                    refundKey(player, crateId, "Cosmetic '" + contentId + "' is not loaded by ItemsAdder.");
                     plugin.getLogger().warning("Could not create cosmetic reward " + contentId + " from crate " + crateId);
                     return;
                 }
@@ -1066,7 +1068,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (actual == null) return false;
         String expected = "gasmp:" + canonical + "_key";
         if (expected.equalsIgnoreCase(actual)) return true;
-        // Legacy RP Engine keys are accepted only when their GASMP PDC tag survived.
+        // Legacy crates are accepted only when their GASMP PDC tag survived.
         String[] aliases = {"common", "rare", "epic", "legendary", "cosmetics", "cosmetic"};
         for (String alias : aliases) {
             if (actual.equalsIgnoreCase("gasmp:" + alias + "_key")
