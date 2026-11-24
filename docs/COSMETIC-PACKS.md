@@ -1,6 +1,6 @@
 # GASMP cosmetic packs — RP Engine only
 
-GASMP Core 0.7.7 uses **RP Engine as its only custom-item provider**. The crate rewards point directly to RP Engine content IDs. There are no ItemsAdder, Oraxen or Nexo runtime integrations and none of those plugins need to be installed.
+GASMP Core 0.7.8 uses **RP Engine as its only custom-item provider**. Every crate reward points directly to a native RP Engine content ID.
 
 ## Included cosmetics
 
@@ -26,7 +26,7 @@ Use `GASMP-RPEngine-Cosmetics.zip`. Its paths are already arranged for the serve
 4. Read the RP Engine console output and fix any asset-import warnings before testing.
 5. Regenerate/resend the RP Engine resource pack using the workflow for your installed RP Engine version, then reconnect clients.
 
-The files are the original supplied ItemsAdder-format pack folders placed in RP Engine's documented direct-import layout. RP Engine reads those files itself; this does **not** install or run ItemsAdder.
+The supplied source folders are already arranged in RP Engine's documented direct-import layout. RP Engine imports them directly; no second custom-item plugin is needed.
 
 The imported pack folder names become namespaces:
 
@@ -68,7 +68,7 @@ crates givemodel <player> premium 1
 
 ## Important notes
 
-- Install **RP Engine only** for these cosmetic items. Do not install ItemsAdder, Oraxen or Nexo for this setup.
+- Install **RP Engine only** for these cosmetic items.
 - The FNAF plushes import as placeable furniture where their original config defines that behavior.
 - The wings and Feral Fantasy models are custom items. Their display/equip behavior is limited to what the source item definitions and RP Engine importer support; a separate cosmetic-equipment plugin is not included.
 - Follow the original creators' license and attribution terms. The uploaded files are being prepared for this server's own use; do not redistribute them outside the server unless their licenses allow it.
