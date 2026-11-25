@@ -149,6 +149,7 @@ public final class GASMPCore extends JavaPlugin {
         bind("battlepass", battlePassService);
         bind("crates", crateService);
         bind("keyall", crateService);
+        bind("gcrateopen", crateService);
         bind("team", teamService);
         bind("gmaintenance", maintenanceService);
         bind("gban", moderationService);

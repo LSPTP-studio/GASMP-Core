@@ -45,8 +45,12 @@ public final class RtpService implements Listener {
     }
 
     public void start(Player player) {
+        start(player, null);
+    }
+
+    public void start(Player player, String selectedWorld) {
         if (!Bukkit.isPrimaryThread()) {
-            Bukkit.getScheduler().runTask(plugin, () -> start(player));
+            Bukkit.getScheduler().runTask(plugin, () -> start(player, selectedWorld));
             return;
         }
         var cfg = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
@@ -71,7 +75,9 @@ public final class RtpService implements Listener {
             return;
         }
 
-        String worldName = cfg.getString("settings.world", "world");
+        String worldName = selectedWorld == null || selectedWorld.isBlank()
+                ? cfg.getString("worlds.overworld", cfg.getString("settings.world", "world"))
+                : selectedWorld.trim();
         World world = Bukkit.getWorld(worldName);
         if (world == null || cfg.getStringList("settings.blocked-worlds").contains(player.getWorld().getName())) {
             player.sendMessage(color("&cRTP is unavailable in this world."));

@@ -1,0 +1,179 @@
+name: GASMP Core Releases — JAR and Full Package
+
+on:
+  push:
+    branches:
+      - itemsadder-edition-0.8.3
+    paths:
+      - .github/workflows/release.yml
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version (numeric x.y.z, without v)
+        required: true
+        default: 0.8.3
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gasmp-release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    name: Build, package and publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Determine release version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            VERSION="${{ inputs.version }}"
+          else
+            VERSION="0.8.3"
+          fi
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Version must use numeric x.y.z format."
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Building GASMP Core $VERSION"
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '25'
+          verify-signature: true
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '9.9.2'
+
+      - name: Apply release version to plugin descriptor
+        shell: bash
+        run: |
+          sed -i "s/^version:.*/version: '${{ steps.version.outputs.version }}'/" src/main/resources/plugin.yml
+
+      - name: Build plugin
+        run: gradle --no-daemon clean build -PreleaseVersion=${{ steps.version.outputs.version }}
+
+      - name: Verify plugin JAR
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          JAR="build/libs/GASMP-Core-${VERSION}.jar"
+          test -s "$JAR"
+          jar tf "$JAR" | grep -q 'plugin.yml'
+          unzip -p "$JAR" plugin.yml | grep -q "version: '${VERSION}'"
+
+      - name: Assemble full source and server-install package
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          PACKAGE_ROOT="dist/GASMP-Core-${VERSION}-Full-Package"
+          mkdir -p "$PACKAGE_ROOT/source"
+          mkdir -p "$PACKAGE_ROOT/server-install/plugins/ItemsAdder/contents"
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.gradle/' \
+            --exclude='build/' \
+            --exclude='dist/' \
+            ./ "$PACKAGE_ROOT/source/"
+          cp "build/libs/GASMP-Core-${VERSION}.jar" "$PACKAGE_ROOT/server-install/plugins/"
+          cp -a integrations/itemsadder/contents/gasmp "$PACKAGE_ROOT/server-install/plugins/ItemsAdder/contents/"
+          cp -a integrations/itemsadder/contents/gasmp_ranks "$PACKAGE_ROOT/server-install/plugins/ItemsAdder/contents/"
+          if [[ -d integrations/itemsadder/contents/rank_bundle ]]; then
+            cp -a integrations/itemsadder/contents/rank_bundle "$PACKAGE_ROOT/server-install/plugins/ItemsAdder/contents/"
+          fi
+          cp README.md "$PACKAGE_ROOT/"
+          cp docs/COMMANDS.md "$PACKAGE_ROOT/"
+          cat > "$PACKAGE_ROOT/server-install/INSTALL.txt" <<'EOF'
+          GASMP CORE 0.8.3 — ITEMSADDER EDITION
+          ======================================
+
+          REQUIREMENTS
+          - Paper 26.2
+          - Java 25
+          - ItemsAdder 4.x
+          - LuckPerms 5.x
+          - Vault and a Vault-compatible economy provider
+
+          INSTALL
+          1. Stop the server and make a full backup.
+          2. Copy the GASMP-Core JAR into your server's plugins/ folder.
+          3. Copy the ItemsAdder contents folder from this package into
+             your server's plugins/ItemsAdder/contents/ folder.
+          4. Start or restart the server.
+          5. Run /iareload and review the console for ItemsAdder errors.
+          6. Run /iazip and ensure the updated resource pack is delivered.
+          7. Reconnect and accept the updated resource pack.
+          8. Review generated settings in plugins/GASMP-Core/.
+
+          SIX COSMETIC CRATES
+          VERDANT CACHE / VERDANT SEAL
+          RUNIC RELIQUARY / RUNIC SIGIL
+          ECLIPSE VAULT / ECLIPSE CREST
+          AETHER SANCTUM / AETHER SIGIL
+          TIDAL TROVE / TIDAL TOKEN
+          OBSIDIAN RELIC / OBSIDIAN SEAL
+
+          CRATE ADMIN
+          /crates list
+          /crates info <crate-id>
+          /crates preview <crate-id>
+          /crates givekey <player> <crate-id> [amount]
+          /crates giveblock <player> <crate-id> [amount]
+          /crates givebundle <player> <crate-id> [amount]
+          /crates reload
+          /keyall <crate-id|all> <amount> [world:<world>] [silent]
+
+          NOTES
+          - All crates are cosmetic-only.
+          - RP Engine is not required.
+          - Back up configs and databases before upgrading.
+          - Preview release: test on a staging server before production.
+          EOF
+          cd dist
+          zip -qr "GASMP-Core-${VERSION}-Full-Package.zip" "GASMP-Core-${VERSION}-Full-Package"
+          test -s "GASMP-Core-${VERSION}-Full-Package.zip"
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: GASMP Core ${{ steps.version.outputs.version }} — ItemsAdder Edition
+          body: |
+            ## GASMP Core ${{ steps.version.outputs.version }} Preview
+
+            Paper 26.2 / Java 25 / ItemsAdder edition.
+
+            **Downloads**
+            - GASMP-Core-${{ steps.version.outputs.version }}.jar — plugin JAR
+            - GASMP-Core-${{ steps.version.outputs.version }}-Full-Package.zip — source code, plugin JAR, ItemsAdder assets and install instructions
+
+            **New crate themes**
+            - AETHER SANCTUM / AETHER SIGIL
+            - TIDAL TROVE / TIDAL TOKEN
+            - OBSIDIAN RELIC / OBSIDIAN SEAL
+
+            This release verifies compilation and packaging. A live Paper + ItemsAdder staging test is still required before production use.
+          draft: false
+          prerelease: true
+          make_latest: false
+          files: |
+            build/libs/GASMP-Core-${{ steps.version.outputs.version }}.jar
+            dist/GASMP-Core-${{ steps.version.outputs.version }}-Full-Package.zip
+          fail_on_unmatched_files: true

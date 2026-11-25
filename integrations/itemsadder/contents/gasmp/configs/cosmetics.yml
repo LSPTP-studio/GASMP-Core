@@ -1,0 +1,2248 @@
+# GASMP ItemsAdder 4.x content; IDs match crates.yml and decoration-shop.yml.
+info:
+  namespace: gasmp
+items:
+  normal_key:
+    name: "&a&lVERDANT SEAL"
+    material: TRIPWIRE_HOOK
+    lore:
+      - "&7Unlocks the VERDANT CACHE."
+      - "&8GASMP • KEY ITEM"
+    graphics:
+      model: item/crates/key
+    resource:
+      material: TRIPWIRE_HOOK
+      generate: false
+      model_path: item/crates/key
+  medium_key:
+    name: "&5&lRUNIC SIGIL"
+    material: TRIPWIRE_HOOK
+    lore:
+      - "&7Unlocks the RUNIC RELIQUARY."
+      - "&8GASMP • KEY ITEM"
+    graphics:
+      model: item/crates/key
+    resource:
+      material: TRIPWIRE_HOOK
+      generate: false
+      model_path: item/crates/key
+  premium_key:
+    name: "&6&lECLIPSE CREST"
+    material: TRIPWIRE_HOOK
+    lore:
+      - "&7Unlocks the ECLIPSE VAULT."
+      - "&8GASMP • KEY ITEM"
+    graphics:
+      model: item/crates/key
+    resource:
+      material: TRIPWIRE_HOOK
+      generate: false
+      model_path: item/crates/key
+  normal_crate:
+    name: "&a&lTHE VERDANT CACHE"
+    material: PAPER
+    lore:
+      - "&7An emerald-sealed cache holding classic GASMP cosmetics."
+      - "&8GASMP • CRATE"
+    graphics:
+      model: item/crates/normal_crate
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/crates/normal_crate
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.04, z: 0 }
+          scale: { x: 0.94, y: 0.94, z: 0.94 }
+  medium_crate:
+    name: "&5&lTHE RUNIC RELIQUARY"
+    material: PAPER
+    lore:
+      - "&7A rune-bound reliquary with improved rare cosmetic odds."
+      - "&8GASMP • CRATE"
+    graphics:
+      model: item/crates/medium_crate
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/crates/medium_crate
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.04, z: 0 }
+          scale: { x: 0.94, y: 0.94, z: 0.94 }
+  premium_crate:
+    name: "&6&lTHE ECLIPSE VAULT"
+    material: PAPER
+    lore:
+      - "&7A gilded eclipse vault with the rarest cosmetic odds."
+      - "&8GASMP • CRATE"
+    graphics:
+      model: item/crates/premium_crate
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/crates/premium_crate
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.04, z: 0 }
+          scale: { x: 0.94, y: 0.94, z: 0.94 }
+  aether_key:
+    name: "&b&lAETHER SIGIL"
+    material: TRIPWIRE_HOOK
+    lore:
+      - "&7Unlocks AETHER SANCTUM cosmetics."
+      - "&8GASMP • KEY ITEM"
+    graphics:
+      model: item/crates/aether_key
+    resource:
+      material: TRIPWIRE_HOOK
+      generate: false
+      model_path: item/crates/aether_key
+
+  aether_crate:
+    name: "&b&lTHE AETHER SANCTUM"
+    material: PAPER
+    lore:
+      - "&7An emerald-sealed cache holding classic GASMP cosmetics."
+      - "&8GASMP • CRATE"
+    graphics:
+      model: item/crates/aether_crate
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/crates/aether_crate
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.04, z: 0 }
+          scale: { x: 0.94, y: 0.94, z: 0.94 }
+
+  tidal_key:
+    name: "&3&lTIDAL TOKEN"
+    material: TRIPWIRE_HOOK
+    lore:
+      - "&7Unlocks TIDAL TROVE cosmetics."
+      - "&8GASMP • KEY ITEM"
+    graphics:
+      model: item/crates/tidal_key
+    resource:
+      material: TRIPWIRE_HOOK
+      generate: false
+      model_path: item/crates/tidal_key
+
+  tidal_crate:
+    name: "&3&lTHE TIDAL TROVE"
+    material: PAPER
+    lore:
+      - "&7An emerald-sealed cache holding classic GASMP cosmetics."
+      - "&8GASMP • CRATE"
+    graphics:
+      model: item/crates/tidal_crate
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/crates/tidal_crate
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.04, z: 0 }
+          scale: { x: 0.94, y: 0.94, z: 0.94 }
+
+  obsidian_key:
+    name: "&c&lOBSIDIAN SEAL"
+    material: TRIPWIRE_HOOK
+    lore:
+      - "&7Unlocks OBSIDIAN RELIC cosmetics."
+      - "&8GASMP • KEY ITEM"
+    graphics:
+      model: item/crates/obsidian_key
+    resource:
+      material: TRIPWIRE_HOOK
+      generate: false
+      model_path: item/crates/obsidian_key
+
+  obsidian_crate:
+    name: "&c&lTHE OBSIDIAN RELIC"
+    material: PAPER
+    lore:
+      - "&7An emerald-sealed cache holding classic GASMP cosmetics."
+      - "&8GASMP • CRATE"
+    graphics:
+      model: item/crates/obsidian_crate
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/crates/obsidian_crate
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.04, z: 0 }
+          scale: { x: 0.94, y: 0.94, z: 0.94 }
+
+  angel_wings:
+    name: "&d&lAngel Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#86efac"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  astronaut_wings:
+    name: "&d&lAstronaut Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#d8b4fe"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  aviator:
+    name: "&d&lAviator Cap"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fdba74"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  axolotl_hood:
+    name: "&d&lAxolotl Hood"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fdba74"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  backpack:
+    name: "&d&lBackpack"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/backpack
+      color: "#fdba74"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/backpack
+  bed_large:
+    name: "&d&lLarge Bed"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/bed
+      color: "#fde68a"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/bed
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  bed_small:
+    name: "&d&lSmall Bed"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/bed
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/bed
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  bench:
+    name: "&d&lBench"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/seat
+      color: "#f9a8d4"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/seat
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  bloom_crown:
+    name: "&d&lFlower Crown"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  bluefire_wings:
+    name: "&d&lBluefire Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  bonnie_plush:
+    name: "&d&lBonnie Plush"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/plush
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/plush
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  brown_wings:
+    name: "&d&lBrown Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  bumblebee:
+    name: "&d&lBumblebee Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fde68a"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  bunny_beanie:
+    name: "&d&lBunny Beanie"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  butterfly_wings:
+    name: "&d&lButterfly Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#f9a8d4"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  chandelier:
+    name: "&d&lChandelier"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/lamp
+      color: "#fde68a"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/lamp
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  chef:
+    name: "&d&lChef Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  chica_plush:
+    name: "&d&lChica Plush"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/plush
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/plush
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  chicken_hat:
+    name: "&d&lChicken Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  chimney:
+    name: "&d&lKitchen Chimney"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/lamp
+      color: "#fde68a"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/lamp
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  corsair:
+    name: "&d&lCorsair"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  cozy_pom:
+    name: "&d&lCozy Pom Beanie"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fdba74"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  decorative_plant:
+    name: "&d&lDecorative Plant"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/plant
+      color: "#f9a8d4"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/plant
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  demon_wings:
+    name: "&d&lDemon Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#86efac"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  diving_helmet:
+    name: "&d&lDiving Helmet"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  door_frame:
+    name: "&d&lDoor Frame"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/window
+      color: "#f9a8d4"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/window
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  dragon_wings:
+    name: "&d&lDragon Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#f9a8d4"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  dusty_cowboy:
+    name: "&d&lDusty Cowboy"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  eagle_wings:
+    name: "&d&lEagle Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  enchants:
+    name: "&d&lEnchantment Display"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/props
+      color: "#f9a8d4"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/props
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  feral_bear_ears:
+    name: "&d&lBear Ears"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/ears
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/ears
+    behaviours:
+      hat: true
+  feral_bear_tail:
+    name: "&d&lBear Tail"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/tails
+      color: "#86efac"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/tails
+  feral_cat_ears:
+    name: "&d&lCat Ears"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/ears
+      color: "#93c5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/ears
+    behaviours:
+      hat: true
+  feral_cat_tail:
+    name: "&d&lCat Tail"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/tails
+      color: "#d8b4fe"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/tails
+  feral_fox_ears:
+    name: "&d&lFox Ears"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/ears
+      color: "#d8b4fe"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/ears
+    behaviours:
+      hat: true
+  feral_fox_tail:
+    name: "&d&lFox Tail"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/tails
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/tails
+  feral_rabbit_ears:
+    name: "&d&lRabbit Ears"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/ears
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/ears
+    behaviours:
+      hat: true
+  feral_rabbit_tail:
+    name: "&d&lRabbit Tail"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/tails
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/tails
+  feral_tiger_ears:
+    name: "&d&lTiger Ears"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/ears
+      color: "#d8b4fe"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/ears
+    behaviours:
+      hat: true
+  feral_tiger_tail:
+    name: "&d&lTiger Tail"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/tails
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/tails
+  feral_wolf_ears:
+    name: "&d&lWolf Ears"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/ears
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/ears
+    behaviours:
+      hat: true
+  feral_wolf_tail:
+    name: "&d&lWolf Tail"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/tails
+      color: "#fdba74"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/tails
+  fiesta:
+    name: "&d&lFiesta Sombrero"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  flight_hat:
+    name: "&d&lFlight Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#f9a8d4"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  fox_ears:
+    name: "&d&lFox Cap"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fde68a"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  foxy_plush:
+    name: "&d&lFoxy Plush"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/plush
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/plush
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  freddy_plush:
+    name: "&d&lFreddy Plush"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/plush
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/plush
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  fridge:
+    name: "&d&lFridge"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/cabinet
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/cabinet
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  frog_bucket:
+    name: "&d&lFrog Bucket Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  frost_diadem:
+    name: "&d&lFrost Diadem"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  glass_table:
+    name: "&d&lGlass Table"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/table
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/table
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  golden_freddy_plush:
+    name: "&d&lGolden Freddy Plush"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/plush
+      color: "#93c5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/plush
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  golden_wings:
+    name: "&d&lGolden Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  jellyfish:
+    name: "&d&lJellyfish Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  kitchen_cabinet:
+    name: "&d&lKitchen Cabinet"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/cabinet
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/cabinet
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  kitchen_cabinet_1:
+    name: "&d&lOpen Kitchen Cabinet"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/cabinet
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/cabinet
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  kitchen_cabinet_2:
+    name: "&d&lLarge Open Kitchen Cabinet"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/cabinet
+      color: "#fdba74"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/cabinet
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  kitchen_chair:
+    name: "&d&lKitchen Chair"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/seat
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/seat
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  kitchen_sink:
+    name: "&d&lKitchen Sink"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/sink
+      color: "#fdba74"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/sink
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  kitchen_table:
+    name: "&d&lKitchen Table"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/table
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/table
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  lamp:
+    name: "&d&lLamp"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/lamp
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/lamp
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  laptop:
+    name: "&d&lLaptop"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/screen
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/screen
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  little_dragon:
+    name: "&d&lLittle Dragon"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#86efac"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  midnight_wizard:
+    name: "&d&lMidnight Wizard"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#86efac"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  military_helmet:
+    name: "&d&lMilitary Helmet"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fde68a"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  miner:
+    name: "&d&lMiner Helmet"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  modern_sofa:
+    name: "&d&lModern Sofa"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/seat
+      color: "#93c5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/seat
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  motorcycle_helmet:
+    name: "&d&lMotorcycle Helmet"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  ocean_wings:
+    name: "&d&lOcean Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#93c5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  panda_cap:
+    name: "&d&lPanda Cap"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  parcel:
+    name: "&d&lParcel Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#93c5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  phoenix_wings:
+    name: "&d&lPhoenix Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#86efac"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  pizza_box:
+    name: "&d&lPizza Box"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/box
+      color: "#fdba74"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/box
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  pot_hat:
+    name: "&d&lPot Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fde68a"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  purple_wings:
+    name: "&d&lPurple Wings"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/wings
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/wings
+  retro_tv:
+    name: "&d&lRetro TV Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  royal_crown:
+    name: "&d&lRoyal Crown"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  rubber_duck:
+    name: "&d&lRubber Duck"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  sea_captain:
+    name: "&d&lSea Captain"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#86efac"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  sofa:
+    name: "&d&lSmall Sofa"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/seat
+      color: "#fca5a5"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/seat
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  sofa_large:
+    name: "&d&lLarge Sofa"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/seat
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/seat
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  steam_topper:
+    name: "&d&lSteampunk Top Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  stove:
+    name: "&d&lStove"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/cabinet
+      color: "#93c5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/cabinet
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  straw_garden:
+    name: "&d&lGarden Straw Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#fde68a"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  street_cap:
+    name: "&d&lStreet Cap"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#d8b4fe"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  sushi:
+    name: "&d&lSalmon Sushi"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  the_puppet_plush:
+    name: "&d&lThe Puppet Plush"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/plush
+      color: "#fde68a"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/plush
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  toadstool:
+    name: "&d&lToadstool"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#c4b5fd"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  top_hat:
+    name: "&d&lTop Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#67e8f9"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  trailblazer:
+    name: "&d&lTrailblazer"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#f9a8d4"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  tv:
+    name: "&d&lTelevision"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/screen
+      color: "#86efac"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/screen
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  ufo:
+    name: "&d&lUFO Hat"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • COSMETIC COLLECTION"
+    graphics:
+      model: item/cosmetics/hat
+      color: "#d8b4fe"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/cosmetics/hat
+    behaviours:
+      hat: true
+  wardrobe:
+    name: "&d&lWardrobe"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/cabinet
+      color: "#a5b4fc"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/cabinet
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  washing_machine:
+    name: "&d&lWashing Machine"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/cabinet
+      color: "#fde68a"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/cabinet
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  window:
+    name: "&d&lWindow"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/window
+      color: "#86efac"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/window
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }
+  window_curtains:
+    name: "&d&lWindow Curtains"
+    material: PAPER
+    lore:
+      - "&7GASMP Cosmetic Collectible"
+      - "&8GASMP • DECOR COLLECTION"
+    graphics:
+      model: item/furniture/window
+      color: "#fdba74"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/furniture/window
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.08, z: 0 }
+          scale: { x: 0.88, y: 0.88, z: 0.88 }

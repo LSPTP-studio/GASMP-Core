@@ -1,4 +1,4 @@
-# GASMP Core 0.8.1 — ItemsAdder Edition / Paper 26.2 / Java 25
+# GASMP Core 0.8.3 — ItemsAdder Edition / Paper 26.2 / Java 25
 # GASMP Core gameplay systems, Shard Shop, Shards Arcade and cosmetic crates.
 general:
   debug: false
@@ -120,13 +120,23 @@ teams:
   home-set-roles: [LEADER, COLEADER, OFFICER]
   max-homes-per-team: 3
   max-alliances-per-team: 5
-  ally-request-expiry-seconds: 60\n\n# Crate keys: normal players buy these with Shards or earn them from configured minigames.
+  ally-request-expiry-seconds: 60
+
+# Crate keys: normal players buy these with Shards or earn them from configured minigames.
 key-shop:
   enabled: true
   prices:
     normal: 100
     medium: 300
     premium: 800
+    aether: 1200
+    tidal: 1800
+    obsidian: 2500
+
+warps:\n  # These commands are dispatched only after the player clicks a destination.\n  crates-command: "warp crates"\n  spawn-command: "spawn"\n\nwarps:
+  # These commands are dispatched after a player clicks a destination.
+  crates-command: "warp crates"
+  spawn-command: "spawn"
 
 # Set these to the exact world names shown by /mv list.
 game-worlds:
@@ -134,7 +144,7 @@ game-worlds:
   gokarts-command: "kart arena generate 1"
   skatepark-command: "mv teleport skatepark"
 
-# Optional rewards paid once when an RP Engine minigame finishes.
+# Optional rewards paid once when a configured external minigame finishes.
 key-rewards:
   gokarts:
     enabled: true

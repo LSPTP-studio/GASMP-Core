@@ -7,6 +7,8 @@ public enum MenuPage {
     DECORATIONS,
     SHARDS,
     KEY_SHOP,
+    RTP,
+    WARPS,
     GAME_WORLDS,
     CASINO,
     PROFILE,

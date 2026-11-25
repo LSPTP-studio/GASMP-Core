@@ -305,9 +305,13 @@ public final class RankAdminMenu implements Listener, CommandExecutor, TabComple
         Inventory inv = Bukkit.createInventory(holder, size, color(title));
         holder.setInventory(inv);
         ItemStack filler = item(Material.BLACK_STAINED_GLASS_PANE, " ");
+        ItemStack accent = item(Material.CYAN_STAINED_GLASS_PANE, " ");
         for (int i = 0; i < size; i++) {
             int row = i / 9, col = i % 9;
             if (row == 0 || row == size / 9 - 1 || col == 0 || col == 8) inv.setItem(i, filler.clone());
+        }
+        if (size == 54) {
+            for (int slot : new int[]{2, 3, 5, 6, 47, 48, 50, 51}) inv.setItem(slot, accent.clone());
         }
         return inv;
     }

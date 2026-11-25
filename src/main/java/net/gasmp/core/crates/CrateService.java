@@ -69,7 +69,60 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             migrateEquipmentCrates(file);
         }
         migrateLegacyRewardContentIds(file);
+        migrateNewCosmeticCrates(file);
         config = YamlConfiguration.loadConfiguration(file);
+        ensureKeyShopDefaults();
+    }
+
+    /**
+     * Add new crate tiers and missing display metadata without replacing the
+     * server's custom reward pools or legacy placed-crate coordinates.
+     */
+    private void migrateNewCosmeticCrates(File file) {
+        try (java.io.InputStream stream = plugin.getResource("crates.yml")) {
+            if (stream == null) return;
+            YamlConfiguration defaults = YamlConfiguration.loadConfiguration(
+                    new java.io.InputStreamReader(stream, java.nio.charset.StandardCharsets.UTF_8));
+            YamlConfiguration current = YamlConfiguration.loadConfiguration(file);
+            boolean changed = false;
+            for (String id : List.of("normal", "medium", "premium", "aether", "tidal", "obsidian")) {
+                ConfigurationSection template = defaults.getConfigurationSection("crates." + id);
+                if (template == null) continue;
+                if (current.getConfigurationSection("crates." + id) == null) {
+                    // Copy leaf values one at a time; do not store Bukkit MemorySection objects.
+                    for (String nestedPath : template.getKeys(true)) {
+                        if (template.isConfigurationSection(nestedPath)) continue;
+                        current.set("crates." + id + "." + nestedPath, template.get(nestedPath));
+                    }
+                    changed = true;
+                    continue;
+                }
+                for (String field : List.of("display-name", "key-name", "color", "description")) {
+                    String path = "crates." + id + "." + field;
+                    if (!current.contains(path) && template.contains(field)) {
+                        current.set(path, template.get(field));
+                        changed = true;
+                    }
+                }
+            }
+            if (changed) current.save(file);
+        } catch (Exception ex) {
+            plugin.getLogger().warning("Could not migrate new cosmetic crate definitions: " + ex.getMessage());
+        }
+    }
+
+    /** Add the new Shards prices to existing config.yml files without overwriting prices. */
+    private void ensureKeyShopDefaults() {
+        Map<String, Long> prices = Map.of("aether", 1200L, "tidal", 1800L, "obsidian", 2500L);
+        boolean changed = false;
+        for (Map.Entry<String, Long> entry : prices.entrySet()) {
+            String path = "key-shop.prices." + entry.getKey();
+            if (!plugin.getConfig().contains(path)) {
+                plugin.getConfig().set(path, entry.getValue());
+                changed = true;
+            }
+        }
+        if (changed) plugin.saveConfig();
     }
 
     /**
@@ -190,6 +243,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 case "giveblock" -> giveCustomCrateItem(sender, args, "_crate_block");
                 case "givemodel" -> giveCustomCrateItem(sender, args, "_crate_display");
                 case "givekey" -> giveKey(sender, args);
+                case "givebundle" -> giveBundle(sender, args);
+                case "info" -> crateInfo(sender, args);
                 case "reload" -> { reload(); sender.sendMessage("GASMP cosmetic crate configuration reloaded."); }
                 case "list" -> list(sender);
                 default -> help(sender);
@@ -215,6 +270,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             case "givekey" -> giveKey(player, args);
             case "giveblock" -> giveCustomCrateItem(player, args, "_crate_block");
             case "givemodel" -> giveCustomCrateItem(player, args, "_crate_display");
+            case "givebundle" -> giveBundle(player, args);
+            case "preview" -> previewCrate(player, args);
+            case "info" -> crateInfo(player, args);
             case "list" -> list(player);
             default -> help(player);
         }
@@ -224,7 +282,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private void giveCustomCrateItem(CommandSender actor, String[] args, String suffix) {
         if (args.length < 3 || args.length > 4) {
             actor.sendMessage(color("&e/crates " + (suffix.equals("_crate_block") ? "giveblock" : "givemodel")
-                    + " <online-player> <normal|medium|premium> [amount]"));
+                    + " <online-player> <crate-id> [amount]"));
             return;
         }
         Player target = Bukkit.getPlayerExact(args[1]);
@@ -252,7 +310,79 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
         Map<Integer, ItemStack> left = target.getInventory().addItem(custom);
         left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
-        actor.sendMessage(color("&aGave " + amount + " custom " + id + " crate item(s) to " + target.getName() + "."));
+        actor.sendMessage(color("&aGave " + amount + "x " + crateDisplayName(id) + " to " + target.getName() + "."));
+    }
+
+    private void giveBundle(CommandSender actor, String[] args) {
+        if (args.length < 3 || args.length > 4) {
+            actor.sendMessage(color("&e/crates givebundle <online-player> <crate-id> [amount]"));
+            return;
+        }
+        Player target = Bukkit.getPlayerExact(args[1]);
+        String id = canonicalCrateId(args[2]);
+        if (target == null || config.getConfigurationSection("crates." + id) == null) {
+            actor.sendMessage(color("&cOnline player or crate ID not found."));
+            return;
+        }
+        int amount = 1;
+        if (args.length == 4) {
+            try { amount = Integer.parseInt(args[3]); } catch (NumberFormatException ex) { amount = 0; }
+        }
+        if (amount < 1 || amount > 64) {
+            actor.sendMessage(color("&cAmount must be between 1 and 64."));
+            return;
+        }
+        ItemStack crateItem = createItemsAdderItem("gasmp:" + id + "_crate", amount);
+        ItemStack keyItem = createKey(id, amount);
+        if (crateItem == null || keyItem == null) {
+            actor.sendMessage(color("&cThe ItemsAdder crate or matching key is missing for &f" + id
+                    + "&c. Run /iareload and check the console."));
+            return;
+        }
+        target.getInventory().addItem(crateItem).values()
+                .forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
+        target.getInventory().addItem(keyItem).values()
+                .forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
+        actor.sendMessage(color("&aGave &f" + amount + "x " + crateDisplayName(id)
+                + " &aand &f" + amount + "x " + crateKeyName(id) + " &ato " + target.getName() + "."));
+    }
+
+    private void previewCrate(Player player, String[] args) {
+        if (args.length != 2) {
+            player.sendMessage(color("&e/crates preview <crate-id>"));
+            return;
+        }
+        String id = canonicalCrateId(args[1]);
+        if (config.getConfigurationSection("crates." + id) == null) {
+            player.sendMessage(color("&cUnknown crate ID. Use /crates list."));
+            return;
+        }
+        openPreview(player, id);
+    }
+
+    private void crateInfo(CommandSender sender, String[] args) {
+        if (args.length != 2) {
+            sender.sendMessage(color("&e/crates info <crate-id>"));
+            return;
+        }
+        String id = canonicalCrateId(args[1]);
+        ConfigurationSection definition = config.getConfigurationSection("crates." + id);
+        if (definition == null) {
+            sender.sendMessage(color("&cUnknown crate ID. Use /crates list."));
+            return;
+        }
+        ConfigurationSection rewards = definition.getConfigurationSection("rewards");
+        int rewardCount = rewards == null ? 0 : rewards.getKeys(false).size();
+        long price = plugin.getConfig().getLong("key-shop.prices." + id, -1L);
+        boolean placed = config.getConfigurationSection("locations." + id) != null;
+        sender.sendMessage(color("&8&m--------------------------------"));
+        sender.sendMessage(color(crateColor(id) + "&l" + crateDisplayName(id) + " &8(" + id + ")"));
+        sender.sendMessage(color("&7Matching key: &f" + crateKeyName(id)));
+        sender.sendMessage(color("&7Reward entries: &f" + rewardCount));
+        sender.sendMessage(color("&7Shards key price: " + (price < 0 ? "&cNot for sale" : "&d" + price + " ✦")));
+        sender.sendMessage(color("&7Legacy chest location: " + (placed ? "&aConfigured" : "&7Not configured")));
+        sender.sendMessage(color("&7Description: &f" + definition.getString("description", "GASMP cosmetic collection")));
+        sender.sendMessage(color("&8&m--------------------------------"));
     }
 
     private void setLocation(Player player, String[] args) {
@@ -289,17 +419,26 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (key == null) { player.sendMessage(color("&cItemsAdder key item is not loaded: gasmp:" + id + "_key")); return; }
         Map<Integer, ItemStack> left = target.getInventory().addItem(key);
         left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
-        player.sendMessage(color("&aGave " + amount + " " + id + " key(s) to " + target.getName() + "."));
+        player.sendMessage(color("&aGave " + amount + "x " + crateKeyName(id) + " to " + target.getName() + "."));
     }
 
     private void list(CommandSender player) {
         ConfigurationSection crates = config.getConfigurationSection("crates");
-        player.sendMessage(color("&6&lGASMP CRATES"));
-        if (crates == null || crates.getKeys(false).isEmpty()) { player.sendMessage(color("&7No crates configured.")); return; }
+        player.sendMessage(color("&6&lGASMP COSMETIC CRATES &8• &f" + (crates == null ? 0 : crates.getKeys(false).size())));
+        if (crates == null || crates.getKeys(false).isEmpty()) {
+            player.sendMessage(color("&7No crates configured."));
+            return;
+        }
         for (String id : crates.getKeys(false)) {
             boolean placed = config.getConfigurationSection("locations." + id) != null;
-            player.sendMessage(color("&e" + id + " &8- " + (placed ? "&aPlaced" : "&cNot placed")));
+            ConfigurationSection rewards = config.getConfigurationSection("crates." + id + ".rewards");
+            int count = rewards == null ? 0 : rewards.getKeys(false).size();
+            player.sendMessage(color(crateColor(id) + "&l" + crateDisplayName(id)
+                    + " &8[" + id + "] &7• &f" + crateKeyName(id)
+                    + " &7• &f" + count + " rewards &7• "
+                    + (placed ? "&aLegacy location set" : "&8ItemsAdder furniture enabled")));
         }
+        player.sendMessage(color("&7Use /crates info <id> or /crates preview <id> for details."));
     }
 
     /** Both custom note-block crates and legacy configured chest locations are handled here. */
@@ -494,9 +633,18 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 ScreenUi.title("crate_details", "&8GASMP &7• " + crateColor(crateId) + crateDisplayName(crateId)));
         holder.inventory(inventory);
 
+        Material accentMaterial = switch (canonicalCrateId(crateId)) {
+            case "normal" -> Material.LIME_STAINED_GLASS_PANE;
+            case "medium" -> Material.PURPLE_STAINED_GLASS_PANE;
+            case "premium" -> Material.ORANGE_STAINED_GLASS_PANE;
+            case "aether" -> Material.LIGHT_BLUE_STAINED_GLASS_PANE;
+            case "tidal" -> Material.CYAN_STAINED_GLASS_PANE;
+            case "obsidian" -> Material.RED_STAINED_GLASS_PANE;
+            default -> Material.MAGENTA_STAINED_GLASS_PANE;
+        };
         ItemStack[] frame = {
-                named(Material.PURPLE_STAINED_GLASS_PANE, " "),
-                named(Material.MAGENTA_STAINED_GLASS_PANE, " ")
+                named(Material.BLACK_STAINED_GLASS_PANE, " "),
+                named(accentMaterial, " ")
         };
         for (int slot = 0; slot < 54; slot++) {
             int row = slot / 9;
@@ -550,11 +698,23 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 ScreenUi.title("crates", "&8GASMP &7• " + crateColor(crateId) + crateDisplayName(crateId)));
         holder.inventory(inventory);
 
-        Material[] borderMaterials = {
-                Material.PURPLE_STAINED_GLASS_PANE,
-                Material.MAGENTA_STAINED_GLASS_PANE,
-                Material.CYAN_STAINED_GLASS_PANE,
-                Material.AMETHYST_BLOCK
+        Material[] borderMaterials = switch (canonicalCrateId(crateId)) {
+            case "aether" -> new Material[] {
+                    Material.LIGHT_BLUE_STAINED_GLASS_PANE, Material.CYAN_STAINED_GLASS_PANE,
+                    Material.SEA_LANTERN, Material.QUARTZ_BLOCK
+            };
+            case "tidal" -> new Material[] {
+                    Material.CYAN_STAINED_GLASS_PANE, Material.BLUE_STAINED_GLASS_PANE,
+                    Material.PRISMARINE_BRICKS, Material.SEA_LANTERN
+            };
+            case "obsidian" -> new Material[] {
+                    Material.BLACK_STAINED_GLASS_PANE, Material.RED_STAINED_GLASS_PANE,
+                    Material.CRYING_OBSIDIAN, Material.AMETHYST_BLOCK
+            };
+            default -> new Material[] {
+                    Material.PURPLE_STAINED_GLASS_PANE, Material.MAGENTA_STAINED_GLASS_PANE,
+                    Material.CYAN_STAINED_GLASS_PANE, Material.AMETHYST_BLOCK
+            };
         };
         int[] borderSlots = {
                 0,1,2,3,4,5,6,7,8, 9,17, 18,26, 27,35, 36,44,
@@ -598,6 +758,17 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             }
 
             int tick = ++ticks[0];
+            if (tick < 76 && tick % 6 == 0) {
+                org.bukkit.Location pulse = player.getLocation().clone().add(0, 1.0, 0);
+                player.getWorld().spawnParticle(org.bukkit.Particle.PORTAL, pulse, 10, 0.45, 0.5, 0.45, 0.08);
+                if (canonicalCrateId(crateId).equals("aether")) {
+                    player.getWorld().spawnParticle(org.bukkit.Particle.END_ROD, pulse, 4, 0.35, 0.4, 0.35, 0.01);
+                } else if (canonicalCrateId(crateId).equals("tidal")) {
+                    player.getWorld().spawnParticle(org.bukkit.Particle.BUBBLE_POP, pulse, 6, 0.35, 0.4, 0.35, 0.02);
+                } else if (canonicalCrateId(crateId).equals("obsidian")) {
+                    player.getWorld().spawnParticle(org.bukkit.Particle.SOUL_FIRE_FLAME, pulse, 4, 0.35, 0.4, 0.35, 0.01);
+                }
+            }
             int borderOffset = (tick / 3) % borderMaterials.length;
             for (int i = 0; i < borderSlots.length; i++) {
                 if ((i + tick) % 3 == 0) {
@@ -849,7 +1020,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                     return;
                 }
                 giveKeyTo(player, targetCrate, (int) amount, false);
-                player.sendMessage(color("&d&lKEY JACKPOT &8» &f" + targetCrate.toUpperCase(Locale.ROOT) + " KEY"));
+                player.sendMessage(color("&d&lKEY JACKPOT &8» &f" + crateKeyName(targetCrate)));
                 opening.remove(player.getUniqueId());
             }
             case "cosmetic" -> {
@@ -925,7 +1096,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (key == null) return false;
         Map<Integer, ItemStack> left = target.getInventory().addItem(key);
         left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
-        if (message) target.sendMessage(color("&d&lGASMP &8» &fYou received &d" + amount + " " + id.toUpperCase(Locale.ROOT) + " crate key(s)&f."));
+        if (message) target.sendMessage(color("&d&lGASMP &8» &fYou received &d" + amount + "x " + crateKeyName(id) + "&f."));
         return true;
     }
 
@@ -946,7 +1117,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             return;
         }
         plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
-                "KEY_SHOP", price, PlayerDataStore.ShardChange.TAKE, "Purchased " + crateId + " crate key")
+                "KEY_SHOP", price, PlayerDataStore.ShardChange.TAKE, "Purchased " + crateKeyName(crateId))
                 .whenComplete((balance, error) -> Bukkit.getScheduler().runTask(plugin, () -> {
                     if (!player.isOnline()) return;
                     if (error != null) {
@@ -957,11 +1128,11 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                     if (!giveKeyTo(player, crateId, 1, false)) {
                         plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
                                 "KEY_SHOP_REFUND", price, PlayerDataStore.ShardChange.GIVE,
-                                "Refund: could not create " + crateId + " crate key");
+                                "Refund: could not create " + crateKeyName(crateId));
                         player.sendMessage(color("&cThe key could not be created. Your Shards are being refunded."));
                         return;
                     }
-                    player.sendMessage(color("&aPurchased a &f" + crateId.toUpperCase(Locale.ROOT) + " Key &afor &d" + price + " Shards&a. Balance: &d" + balance + " ✦"));
+                    player.sendMessage(color("&aPurchased the &f" + crateKeyName(crateId) + " &afor &d" + price + " Shards&a. Balance: &d" + balance + " ✦"));
                 }));
     }
 
@@ -1017,8 +1188,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             for (String id : ids) giveKeyTo(target, id, amount, false);
             recipients++;
         }
-        if (!silent) Bukkit.broadcastMessage(color("&d&lGASMP &8» &f" + amount + " key(s) for " + String.join(", ", ids) + " were distributed to &d" + recipients + " &fplayer(s)."));
-        sender.sendMessage(color("&aDistributed " + amount + " key(s) for " + String.join(", ", ids) + " to " + recipients + " online player(s)."));
+        if (!silent) Bukkit.broadcastMessage(color("&d&lGASMP &8» &f" + amount + "x " + String.join(", ", ids.stream().map(this::crateKeyName).toList()) + " distributed to &d" + recipients + " &fplayer(s)."));
+        sender.sendMessage(color("&aDistributed " + amount + "x " + String.join(", ", ids.stream().map(this::crateKeyName).toList()) + " to " + recipients + " online player(s)."));
         return true;
     }
 
@@ -1059,18 +1230,36 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private String crateDisplayName(String crateId) {
-        return switch (canonicalCrateId(crateId)) {
-            case "normal" -> "STARLIGHT CACHE";
-            case "medium" -> "ASTRAL CACHE";
-            case "premium" -> "CELESTIAL VAULT";
-            default -> canonicalCrateId(crateId).toUpperCase(Locale.ROOT) + " CACHE";
+        String id = canonicalCrateId(crateId);
+        String configured = config == null ? null : config.getString("crates." + id + ".display-name");
+        if (configured != null && !configured.isBlank()) return ChatColor.stripColor(color(configured));
+        return switch (id) {
+            case "normal" -> "VERDANT CACHE";
+            case "medium" -> "RUNIC RELIQUARY";
+            case "premium" -> "ECLIPSE VAULT";
+            default -> id.toUpperCase(Locale.ROOT) + " CACHE";
+        };
+    }
+
+    private String crateKeyName(String crateId) {
+        String id = canonicalCrateId(crateId);
+        String configured = config == null ? null : config.getString("crates." + id + ".key-name");
+        if (configured != null && !configured.isBlank()) return ChatColor.stripColor(color(configured));
+        return switch (id) {
+            case "normal" -> "VERDANT SEAL";
+            case "medium" -> "RUNIC SIGIL";
+            case "premium" -> "ECLIPSE CREST";
+            default -> id.toUpperCase(Locale.ROOT) + " KEY";
         };
     }
 
     private String crateColor(String crateId) {
-        return switch (canonicalCrateId(crateId)) {
-            case "normal" -> "&b";
-            case "medium" -> "&d";
+        String id = canonicalCrateId(crateId);
+        String configured = config == null ? null : config.getString("crates." + id + ".color");
+        if (configured != null && !configured.isBlank()) return configured;
+        return switch (id) {
+            case "normal" -> "&a";
+            case "medium" -> "&5";
             case "premium" -> "&6";
             default -> "&f";
         };
@@ -1107,18 +1296,20 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     private void save() { try { config.save(new File(plugin.getDataFolder(), "crates.yml")); } catch (Exception ex) { plugin.getLogger().severe("Could not save crates.yml: " + ex.getMessage()); } }
     private void help(CommandSender player) {
-        player.sendMessage(color("&6&lGASMP CRATES &8- &cDeveloper/Owner only"));
-        player.sendMessage(color("&e/crates list &7- list configured crates"));
-        player.sendMessage(color("&e/crates set <id> &7- legacy vanilla chest/barrel location"));
-        player.sendMessage(color("&e/crates unset <id> &7- remove location"));
-        player.sendMessage(color("&eSneak + left-click &7- preview cosmetic loot"));
-        player.sendMessage(color("&eMine/punch &7- pick up an already-placed crate"));
-        player.sendMessage(color("&e/crates givekey <player> <normal|medium|premium> [amount]"));
-        player.sendMessage(color("&e/crates giveblock <player> <normal|medium|premium> [amount] &7- placeable ItemsAdder cosmetic crate furniture"));
-        player.sendMessage(color("&e/crates givemodel <player> <normal|medium|premium> [amount] &7- placeable ItemsAdder cosmetic crate furniture"));
-        player.sendMessage(color("&7Example: /crates giveblock " + player.getName() + " normal 1"));
+        player.sendMessage(color("&6&lGASMP COSMETIC CRATES &8• &cOwner/Developer"));
+        player.sendMessage(color("&e/crates list &7- list crates, keys and reward counts"));
+        player.sendMessage(color("&e/crates info <id> &7- show crate name, key, price and rewards"));
+        player.sendMessage(color("&e/crates preview <id> &7- open the paged reward preview"));
+        player.sendMessage(color("&e/crates givekey <player> <id> [amount] &7- give matching key"));
+        player.sendMessage(color("&e/crates giveblock <player> <id> [amount] &7- give placeable crate"));
+        player.sendMessage(color("&e/crates givebundle <player> <id> [amount] &7- give crate + matching keys"));
+        player.sendMessage(color("&e/crates givemodel <player> <id> [amount] &7- compatibility alias"));
+        player.sendMessage(color("&e/crates set <id> &7- set a legacy chest/barrel location"));
+        player.sendMessage(color("&e/crates unset <id> &7- remove a legacy location"));
         player.sendMessage(color("&e/crates reload &7- reload crate definitions"));
-        player.sendMessage(color("&e/keyall <crate-id|all> <amount> [world:<world>] [silent] &7- distribute keys"));
+        player.sendMessage(color("&e/keyall <id|all> <amount> [world:<world>] [silent] &7- distribute keys"));
+        player.sendMessage(color("&7IDs: normal, medium, premium, aether, tidal, obsidian"));
+        player.sendMessage(color("&8Right-click a crate with its key; sneak + left-click previews."));
     }
     private String color(String text) { return ChatColor.translateAlternateColorCodes('&', text); }
     @Override
@@ -1135,13 +1326,22 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             if (args.length == 4) return List.of("silent");
             return List.of();
         }
-        if (args.length == 1) return matching(args[0], List.of("help", "list", "reload", "givekey", "giveblock", "givemodel", "set", "unset"));
-        if (args.length == 2 && List.of("givekey", "giveblock", "givemodel").contains(args[0].toLowerCase(Locale.ROOT))) {
+        if (args.length == 1) return matching(args[0], List.of("help", "list", "info", "preview", "reload", "givekey", "giveblock", "givemodel", "givebundle", "set", "unset"));
+        if (args.length == 2 && List.of("givekey", "giveblock", "givemodel", "givebundle").contains(args[0].toLowerCase(Locale.ROOT))) {
             return Bukkit.getOnlinePlayers().stream().map(Player::getName)
                     .filter(v -> v.toLowerCase(Locale.ROOT).startsWith(args[1].toLowerCase(Locale.ROOT))).toList();
         }
-        if (args.length == 3 && List.of("givekey", "giveblock", "givemodel", "set", "unset").contains(args[0].toLowerCase(Locale.ROOT))) {
-            return matching(args[2], List.of("normal", "medium", "premium", "common", "rare", "epic", "legendary"));
+        if (args.length == 2 && List.of("preview", "info", "set", "unset").contains(args[0].toLowerCase(Locale.ROOT))) {
+            ConfigurationSection crates = config.getConfigurationSection("crates");
+            List<String> ids = crates == null ? new ArrayList<>() : new ArrayList<>(crates.getKeys(false));
+            ids.addAll(List.of("common", "rare", "epic", "legendary"));
+            return matching(args[1], ids);
+        }
+        if (args.length == 3 && List.of("givekey", "giveblock", "givemodel", "givebundle").contains(args[0].toLowerCase(Locale.ROOT))) {
+            ConfigurationSection crates = config.getConfigurationSection("crates");
+            List<String> ids = crates == null ? new ArrayList<>() : new ArrayList<>(crates.getKeys(false));
+            ids.addAll(List.of("common", "rare", "epic", "legendary"));
+            return matching(args[2], ids);
         }
         if (args.length == 4 && List.of("givekey", "giveblock", "givemodel").contains(args[0].toLowerCase(Locale.ROOT))) {
             return matching(args[3], List.of("1", "2", "4", "8", "16", "32", "64"));

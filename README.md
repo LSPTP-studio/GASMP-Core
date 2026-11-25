@@ -1,129 +1,117 @@
-# GASMP Core 0.7.8 — RP Engine-only cosmetic migration
+# GASMP Core 0.8.3 — ItemsAdder Edition
 
-**Target:** Paper 26.2 (Purpur compatibility only where the Paper API behavior is shared)  
-**Runtime:** Java 25  
-**Build:** Gradle Kotlin DSL  
-**Package:** `net.gasmp`
+**GASMP Core** is an all-in-one Paper SMP plugin for the GASMP server, with Shards, Coins, shops, teams, casino arcade, Battle Pass, moderation, furniture, cosmetic collections and animated crate systems.
 
-## Important release status
+**Official server:** Paper 26.2 · **Test server:** Paper 26.3 · **Runtime:** Java 25 · **Build:** Gradle 9.x · **Custom item provider:** ItemsAdder 4.x
 
-This is a **source release candidate**, not a verified production JAR. The workspace used to prepare it has Java 21 and does not have Gradle or cached Paper/Vault/LuckPerms dependencies. Static/source and database checks are possible here, but Paper 26.2 compilation and live server integration tests remain outstanding. Build it with JDK 25 and Gradle on a network-enabled development machine before installing it on GASMP.
+## Downloads
 
-## Dependencies
+- **[Download EVERYTHING — Full Package ZIP](https://github.com/LSPTP-studio/GASMP-Core/releases/download/v0.8.3/GASMP-Core-0.8.3-Full-Package.zip)** — source code, plugin JAR, ItemsAdder models, custom item icons and installation guide.
+- **[Plugin JAR only](https://github.com/LSPTP-studio/GASMP-Core/releases/download/v0.8.3/GASMP-Core-0.8.3.jar)**
+- **[All releases](https://github.com/LSPTP-studio/GASMP-Core/releases)**
+- **[0.8.3 source branch](https://github.com/LSPTP-studio/GASMP-Core/tree/itemsadder-edition-0.8.3)**
 
-### Required
-- Paper 26.2 (or a compatible Purpur build)
-- Java 25
-- LuckPerms 5.x — rank and staff group API
-- Vault — economy service API
-- A Coins plugin that registers the Vault `Economy` service (for example EssentialsX Economy)
-- Gradle 9.x for building from source
+## What's new in 0.8.3
 
-### Optional integrations
-- TAB — reads LuckPerms primary group and `%luckperms-prefix%`
-- PlaceholderAPI — placeholders in compatible displays
-- Geyser + Floodgate — Bedrock cross-play; RP Engine can build/deliver a Bedrock pack when Geyser-Spigot is running on the same server
-- RP Engine — the sole free/open-source resource-pack, custom-item, custom-block and animated placed-model provider
-- OpenInv, Lib's Disguises, HeadDatabase/HeadDB, Skript, ImageFrame and Typewriter — restricted third-party staff/build tools, not bundled into GASMP Core
+- Replaced oversized font-image overlays with native Minecraft inventory menus, clear item grids and compact titles.
+- Added RTP world selection (Overworld / Nether; End locked) and a Warps menu (Crates / Spawn / Mystery locked / minigame destinations).
+- Added a paged Auction House inventory with listing preview and explicit purchase confirmation.
+- Unified the shop, decoration, Arcade and main menu borders with a dark pixel-grid frame and cyan / purple accents; added custom ItemsAdder category icons where available.
+- Added three new GASMP crate themes: AETHER SANCTUM, TIDAL TROVE and OBSIDIAN RELIC.
+- Added matching AETHER SIGIL, TIDAL TOKEN and OBSIDIAN SEAL keys, furniture items and unique model textures.
+- Added crate-specific roulette color palettes and tier particles during the opening animation.
+- Added /crates preview, /crates info and /crates givebundle.
+- Added migration logic to add the new crate tiers and Shards key prices to existing servers without replacing saved reward pools or placed locations.
+- Expanded crate list output, help messages, tab completion and command documentation.
 
-**Economy compatibility note:** Coins features support any plugin that exposes a Vault `Economy` provider. A proprietary economy API without Vault support needs a separate adapter and is not automatically compatible.
+## Required server plugins
 
-## Build
+- Paper 26.2 and Java 25 for the official server; Paper 26.3 and Java 25 for the test server
+- ItemsAdder 4.x (4.0.13+ recommended)
+- LuckPerms 5.x
+- Vault plus a plugin that registers Vault Economy for Coins features
 
-```powershell
-gradle build
+Optional integrations include PlaceholderAPI, TAB, Geyser + Floodgate, ProtocolLib, ImageFrame, Typewriter, OpenInv, Lib's Disguises, HeadDatabase/HeadDB and Multiverse-Core.
+
+**RP Engine is not required or used by this edition.** The old integrations/rp-engine directory is retained only as a legacy reference. Do not install its pack for this ItemsAdder edition.
+
+## Install
+
+1. Stop the server and make a full backup, including plugins/GASMP-Core/ and its SQLite database.
+2. Put GASMP-Core-0.8.3.jar in the server's plugins/ folder.
+3. Copy the included plugins/ItemsAdder/contents/gasmp/ and gasmp_ranks/ folders into your server's plugins/ItemsAdder/contents/ folder. The optional rank_bundle/ folder adds extra rank emblems.
+4. Start or restart the server.
+5. Run /iareload and fix any YAML or model warnings in the console.
+6. Run /iazip to rebuild the resource pack.
+7. Ensure the ItemsAdder pack is hosted and delivered to players, then reconnect and ACCEPT the updated pack. A stale cached pack or declined pack will show missing custom item and furniture models.
+8. Test the menus and all six crate/key pairs before production use.
+
+GASMP menus use native Minecraft inventory slots and do not need custom font-image background overlays. ItemsAdder supplies the custom crate, cosmetic and furniture icons.
+
+## Six cosmetic crates
+
+| ID | Crate display name | Matching key | Default Shards price |
+|---|---|---|---:|
+| normal | VERDANT CACHE | VERDANT SEAL | 100 |
+| medium | RUNIC RELIQUARY | RUNIC SIGIL | 300 |
+| premium | ECLIPSE VAULT | ECLIPSE CREST | 800 |
+| aether | AETHER SANCTUM | AETHER SIGIL | 1,200 |
+| tidal | TIDAL TROVE | TIDAL TOKEN | 1,800 |
+| obsidian | OBSIDIAN RELIC | OBSIDIAN SEAL | 2,500 |
+
+All six are cosmetic crates. Their configured pools award ItemsAdder cosmetics and small Shards bonuses, not weapons or combat equipment. Each crate has its own matching key, placeable furniture model, display name, color and opening-animation palette.
+
+The animation uses a decelerating three-slot roulette, themed border materials, portal/tier particles, staged titles and sounds, a final reward reveal and burst particles. Keys are consumed only after the final reveal; closing or disconnecting before that point cancels the opening without consuming the key.
+
+## Crate commands
+
+```text
+/crates list
+/crates info <crate-id>
+/crates preview <crate-id>
+/crates givekey <player> <crate-id> [amount]
+/crates giveblock <player> <crate-id> [amount]
+/crates givebundle <player> <crate-id> [amount]
+/crates givemodel <player> <crate-id> [amount]
+/crates set <crate-id>
+/crates unset <crate-id>
+/crates reload
+/keyall <crate-id|all> <amount> [world:<world>] [silent]
 ```
 
-Output: `build/libs/GASMP-Core-0.7.0.jar`.
+Crate administration is restricted to Owner/Developer staff by the service checks. The console can run crate distribution and administration commands. Players can sneak + left-click or sneak-punch a placed crate to open its reward preview.
 
-The Gradle build targets Paper API `26.2.build.135-stable`, LuckPerms API 5.5 and VaultAPI 1.7. SQLite JDBC is included as a runtime dependency in the plugin JAR. Do not use JDK 21 for this target; compile and run with Java 25.
+See docs/COMMANDS.md for the full player, staff, console and crate command reference.
 
-## Phase 1 feature status
+## Other systems
 
-| System | Current source implementation | Limitations / release notes |
-|---|---|---|
-| Player profiles | SQLite UUID profiles, first/last seen, kills/deaths/play ticks | Static checks only; live migration test required |
-| Shards | Persistent integer balance, give/take/set, transaction ledger | Separate from Coins; no transfers, cash-out or real-money top-ups |
-| Coins shop | Vault-backed categories, pages, confirm, purchase log and rollback/reconciliation | Verify provider behavior on the actual economy plugin |
-| RTP | Safe-location search, warmup, cooldown, combat restriction, movement cancellation | Depends on configured world being loaded and suitable terrain |
-| Combat | Combat tags, logout record/punishment, quit/join handling | Tune tag duration and punishment policy before launch |
-| Bounties | Vault-funded placements, kill claims, top list and refund/reconciliation paths | Economy provider failure can require staff reconciliation |
-| Auction house | Text-command list/sell/buy/cancel/mine, expiry, persistent item mailbox, payment reconciliation and Owner review queue | Not yet a polished searchable GUI; inventory-to-mailbox delivery still needs live crash stress tests |
-| Battle Pass | Season XP, ore/mob XP events, level rewards and claim records | Basic progression/reward implementation, not full mission/season GUI |
-| Crates | Configurable weighted rewards, physical key checks, location persistence, protected custom blocks, RP Engine keys and animated placed Vote/Legendary crate models | RP Engine content must be installed/reloaded; custom block variant is static, use the placed model for the lid animation; reward preview UI still needs work |
-| Teams | Leader/Co-Leader/Officer/Member roles, team bank, capacity upgrades, descriptions, named homes/list, alliances, invite expiry, team chat and membership management | Requires a Vault provider for Coins bank/upgrades; team missions, contribution tracking, friendly-fire/war and custom GUI still need work |
-| Casino | Casino selector GUI, wager selection, game-themed animated spin panels, server-side results, transaction audit, odds/help | Disabled by default; Blackjack, Poker and Tic-Tac-Toe are simplified quick-match simulations, not full interactive game rules/boards |
-| Chat games | Scheduled/manual chat rounds and configured rewards | Text-based formats, not a large custom GUI game suite |
-| Moderation | Ban/unban, mute/unmute, warn, kick and history | Verify moderation policy, online/offline handling and persistence on live server |
-| Maintenance | Persistent enable/disable, login gate and MOTD change | Test bypass groups and server-list display with actual clients |
-| Holograms | Persistent text-display entities and basic create/set/delete/list | Not a full editor, animated hologram suite or placeholder leaderboard system |
-| Tool skills | Vein Miner and Tree Capitator with block limits and permissions | Test against protection plugins and custom block providers |
-| Staff vanish | LuckPerms group-gated vanish and join/quit visibility behavior | Verify with TAB, Geyser and other vanish plugins to avoid duplicate visibility control |
-| Leaderboards / performance | Basic top-stat queries and server snapshot command | Snapshot is diagnostic, not an automatic optimizer |
+Player profiles, Shards ledger, Vault Coins shop, RTP, combat tagging, bounties, auction house and item mailbox, Battle Pass progression, Shards Decoration Shop, casino arcade, teams, chat games, moderation, maintenance, holograms, leaderboards, staff vanish, tool skills and rank administration.
 
-## Default release safety
+## Dual Paper build targets
 
-- Casino is disabled by default (`modules.casino: false`, `casino.yml settings.enabled: false`). Keep it disabled until odds, limits and provider error behavior are tested on the live economy plugin.
-- Shards cannot go negative. Player-to-player transfers, real-money purchases and cash-outs are disabled.
-- `/crates` management is Owner/Developer-only; players open configured crate blocks with physical keys.
-- OpenInv is restricted to Builder/Developer/Owner policy as configured for your server, but the default permission mapping is read-only and does not grant inventory-edit nodes.
-- Lib's Disguises and Skript management are Developer/Owner-only; HeadDatabase is Builder/Developer/Owner; vanish is staff-group-only.
-- Never grant the Developer group access to Owner/Admin/Manager/Dev rank assignment. The rank GUI implementation is a Phase 2 area for further review and polish.
-- Back up the entire server and database before testing this candidate.
+The plugin version remains **0.8.3**. Two separate artifacts are produced:
 
-## Config files
+| Artifact | Purpose |
+|---|---|
+| `GASMP-Core-0.8.3-paper-26.2.jar` | Official Paper 26.2 server |
+| `GASMP-Core-0.8.3-paper-26.3.jar` | Paper 26.3 test server only |
 
-On first start, Core copies the default resources into `plugins/GASMP-Core/`:
-- `config.yml` — master settings and module toggles
-- `shop.yml` — product list/prices/category settings
-- `rtp.yml` — safe teleport world, radius, attempts and cooldown
-- `casino.yml` — command-game enable flags, odds limits and bet range
-- `battlepass.yml` — season ID, levels and reward definitions
-- `crates.yml` — crate rewards/weights and placed crate locations
-- `chat-games.yml` — chat-game timing and reward settings
-- `maintenance.yml` — maintenance status, kick message and MOTD
-- `holograms.yml` — persistent display definitions
-- `ranks.yml` — LuckPerms group/rank definitions (Phase 2 polish)
+Use JDK 25 and Gradle 9.x:
 
-Read `docs/` before changing live data. Avoid manually editing the SQLite database.
+```bash
+# Official server
+gradle clean build -PreleaseVersion=0.8.3 -PpaperApiVersion=26.2.build.+ -PpaperTarget=paper-26.2
 
-## Commands
+# Test server only
+gradle clean build -PreleaseVersion=0.8.3 -PpaperApiVersion=26.3.build.+ -PpaperTarget=paper-26.3
+```
 
-The command list and aliases are declared in `src/main/resources/plugin.yml`. The key user commands include `/gasmp`, `/shards`, `/shop`, `/rtp`, `/bounty`, `/ah`, `/team`, `/battlepass`, `/casino` (disabled by default), and `/gvanish`. Staff/admin commands include `/gasmpcore`, `/gasmpadmin`, `/crates`, `/gmaintenance`, `/gban`, `/gunban`, `/gmute`, `/gunmute`, `/gwarn`, `/gkick`, `/ghistory`, `/gholo`, `/gchatgame`, `/gtop` and `/gperf`.
+GitHub Actions builds both targets separately and uploads the JAR and full install ZIP for each. Never place the 26.3 test JAR on the official 26.2 server. SQLite JDBC is bundled into both plugin JARs.
 
-## Rank assets for Phase 2
+## Asset notes
 
-The three rank-art bundles supplied by the server owner are preserved in `assets/phase2-rank-sources/`. Phase 2 will turn the supplied rank artwork into the custom rank/menu experience. Do not install the asset bundle into a live pack until namespaced assets and all client formats are reviewed.
+The menus are built from native Minecraft inventory slots; they do not use full-screen background panels. The themed crate and furniture models are GASMP starter assets using vanilla Minecraft textures. The source snapshot did not contain the original custom model exports for the previously referenced plush, wing and Feral Fantasy packs. Replace those starter models only with licensed final art, keeping the item IDs and model paths unchanged.
 
-## Phase 2 scope
+## Release validation
 
-- Final rank ladder/role tracks and rank prefix design using the supplied icons
-- Owner-only and Developer-only admin dashboards
-- Fully customized Owner/Developer dashboards and refreshed player/shop/team/auction/crate/casino/staff menus
-- Final rank ladder, rank art wiring and cinematic rank-up with sound, particles, emblems and optional model/texture effects
-- Final Java/Bedrock UI artwork, Geyser validation and cross-edition fallbacks
-
-## Required launch testing
-
-1. Build with JDK 25 and Gradle 9.x.
-2. Start a clean Paper 26.2 test server with LuckPerms, Vault and an economy provider.
-3. Confirm SQLite schema initialization and restart persistence.
-4. Test Shards, shop transactions, bounties and auction mailbox with normal players.
-5. Test team invites, crate keys/rewards, Battle Pass claims and chat games.
-6. Test maintenance and staff permissions with separate Player, Builder, Mod, Admin, Developer and Owner accounts.
-7. Test with Java and Bedrock clients, and confirm TAB prefixes from LuckPerms.
-8. Test with protection plugins installed; confirm vein miner/tree capitator do not bypass protection.
-9. Keep casino disabled until all bets/payouts and provider-failure scenarios are verified.
-10. Review console logs and database after repeated join/quit, plugin reload and server restart cycles.
-
-
-## 0.7.0 remaining-system additions
-- Expanded Teams service and full command guide, including named homes and `/team homes`.
-- Transactionally limited team homes and symmetric alliance creation.
-- Original 64×64 Vote and Legendary pixel-art crate atlases, Blockbench 5 models, separate animated lid bones, key icons and display icons.
-- RP Engine content definitions for custom static crate blocks, animated placed crate displays, physical keys and guarded console interaction.
-- Casino GUI menu layout fix and game-specific visual spin panels for the configured game set.
-- Casino payout calibration updates and honest descriptions for simplified quick-match simulations.
-- Staging-server launch plan, dependency notes and GitHub Actions Java 25 build workflow.
-
-The GitHub Actions workflow is included at `.github/workflows/build.yml`. It runs static release validation and builds with Java 25 / Gradle 9.9.2, then uploads the JAR artifact. Follow `docs/GITHUB-ACTIONS.md` to publish this source to your GitHub repository and download the artifact. This source project has not been compiled here; live Paper 26.2 / Geyser / RP Engine testing remains necessary.
+The release pipeline verifies the Java build, checks the JAR, assembles the source + server-install ZIP and uploads both assets to GitHub Releases. A successful build does not replace a live Paper/ItemsAdder staging test. Validate resource-pack delivery, model rendering, menu alignment, crate interactions, key consumption, economy transactions and database persistence on a staging server.
