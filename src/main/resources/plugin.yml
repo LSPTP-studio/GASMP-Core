@@ -2,6 +2,9 @@ name: GASMP-Core
 version: '0.8.3'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
+
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:2.4.20
 author: GASMP Development
 description: "GASMP Core: ItemsAdder 4.0.18 cosmetics, custom furniture, six themed crates, Shards, shops, casino, teams and staff tools."
 depend:
