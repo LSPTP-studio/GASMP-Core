@@ -135,6 +135,6 @@ The GitHub Actions workflow builds both targets independently and uploads separa
 2. Run /iareload and check the console for YAML/model/font-image errors.
 3. Run /iazip to regenerate the resource pack.
 4. Ensure the ItemsAdder resource pack is hosted and pushed to players.
-5. Reconnect and accept the updated pack. Clients using an older cached pack or declining the pack will not see the custom UI panels or custom models.
+5. Reconnect and accept the updated pack. Clients using an older cached pack or declining the pack will not see the custom item and furniture models.
 
 GASMP menus use native Minecraft inventory grids and do not require font-image overlays. ItemsAdder is still required for the custom item icons, cosmetics, crates and furniture models.
