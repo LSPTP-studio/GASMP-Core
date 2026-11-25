@@ -1,6 +1,7 @@
 package net.gasmp.core.gui;
 
 import net.gasmp.core.GASMPCore;
+import net.gasmp.core.ui.GASMPCustomUi;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -31,6 +32,12 @@ public final class MenuService implements Listener {
     public void openMain(Player player) {
         if (!plugin.getConfig().getBoolean("menus.enabled", true)) {
             player.sendMessage(color("&cGASMP menus are currently disabled."));
+            return;
+        }
+        // Prefer the VoidRP dashboard when its service and pack are ready.
+        // Keep the native inventory menu as a fallback when the UI is unavailable.
+        if (plugin.getServer().getPluginManager().isPluginEnabled("VoidRpUI")
+                && GASMPCustomUi.open(plugin, player)) {
             return;
         }
         open(player, MenuPage.MAIN);

@@ -79,7 +79,7 @@ public final class GASMPCore extends JavaPlugin {
 
         itemsAdderBridge = new ItemsAdderBridge(this);
         if (!itemsAdderBridge.isAvailable()) {
-            getLogger().severe("ItemsAdder is required for GASMP ItemsAdder Edition. Install ItemsAdder 4.x and restart.");
+            getLogger().severe("ItemsAdder is required for GASMP ItemsAdder Edition. Install ItemsAdder 4.0.18 and restart.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }

@@ -1,10 +1,10 @@
-name: GASMP Core Dual Paper Build
+name: GASMP Core — ItemsAdder 4.0.18 Dual Paper Build
 
 on:
   push:
     branches:
       - main
-      - itemsadder-edition-0.8.3
+      - itemsadder-4.0.18-edition-0.8.3
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
             server_role: 'official'
           - paper_api_version: '26.3.build.+'
             paper_target: 'paper-26.3'
-            server_role: 'test'
+            server_role: 'compile-test-only'
 
     steps:
       - name: Checkout source
@@ -90,18 +90,18 @@ jobs:
           Server target: Paper ${{ matrix.paper_target == 'paper-26.2' && '26.2 OFFICIAL' || '26.3 TEST' }}
           Plugin version: 0.8.3 (unchanged)
           Java: 25
-          Required: ItemsAdder 4.x, Vault, LuckPerms and a Vault economy provider.
+          Required: ItemsAdder 4.0.18, Vault, LuckPerms and a Vault economy provider.
 
           INSTALL
           1. Stop the target server and back up plugins/GASMP-Core/ and plugins/ItemsAdder/.
           2. Copy the JAR from plugins/ into the server plugins/ folder.
           3. Merge the ItemsAdder contents folder into plugins/ItemsAdder/contents/.
           4. Start the server and check the console for GASMP or ItemsAdder errors.
-          5. Run /iareload, then /iazip, and make sure clients accept the updated pack.
-          6. Test menus, purchases and teleports before using the build on a live server.
+          5. Run /iareload, then /iazip, and make sure clients accept the ItemsAdder pack. VoidRP UI sends a separate pack when installed; clients must accept that too.
+          6. Optional: install VoidRP UI 0.4.0 as a separate plugin JAR.\n          7. Test menus, purchases and teleports before using the build on a live server.\n\n          ItemsAdder 4.0.18 documents Paper 26.2 compatibility. The 26.3 artifact is compile/test only.
 
           This package is built for the ${{ matrix.paper_target }} API line.
-          Do not put the Paper 26.3 test build on the official Paper 26.2 server.
+          Do not put the Paper 26.3 compile/test only build on the official Paper 26.2 server.
           EOF
           (cd dist && zip -qr "GASMP-Core-0.8.3-${TARGET}-Full-Package.zip" "GASMP-Core-0.8.3-${TARGET}")
           test -s "dist/GASMP-Core-0.8.3-${TARGET}-Full-Package.zip"
