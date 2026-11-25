@@ -67,6 +67,8 @@ public final class MenuService implements Listener {
             case STATISTICS -> buildStatistics(holder, inventory, player);
             case SHARDS -> buildShards(holder, inventory);
             case KEY_SHOP -> buildKeyShop(holder, inventory);
+            case RTP -> buildRtp(holder, inventory);
+            case WARPS -> buildWarps(holder, inventory);
             case GAME_WORLDS -> buildGameWorlds(holder, inventory);
             case CASINO -> buildCasino(holder, inventory);
             case PROFILE -> buildProfile(holder, inventory, player);
@@ -74,8 +76,13 @@ public final class MenuService implements Listener {
         }
 
         if (page != MenuPage.MAIN) {
-            set(inventory, BACK_SLOT, Material.ARROW, "&f&lBack", "&7Return to the GASMP main menu");
-            holder.navigate(BACK_SLOT, page == MenuPage.KEY_SHOP ? MenuPage.SHARDS : MenuPage.MAIN);
+            set(inventory, BACK_SLOT, Material.ARROW, "&f&lBACK", "&7Return to the previous menu");
+            MenuPage backPage = switch (page) {
+                case KEY_SHOP -> MenuPage.SHARDS;
+                case GAME_WORLDS -> MenuPage.WARPS;
+                default -> MenuPage.MAIN;
+            };
+            holder.navigate(BACK_SLOT, backPage);
         }
 
         player.openInventory(inventory);
@@ -93,10 +100,10 @@ public final class MenuService implements Listener {
         set(inventory, 14, Material.ARMOR_STAND, "&9&lDecorations", "&7Browse cosmetic decorations", "&eClick to open");
         holder.navigate(14, MenuPage.DECORATIONS);
 
-        set(inventory, 20, Material.ENDER_PEARL, "&b&lRandom Teleport", "&7Find a safe wilderness location", "&eClick to use /rtp");
-        holder.notice(20, "&bUse /rtp to find a safe wilderness location.");
-        set(inventory, 22, Material.FIREWORK_ROCKET, "&6&lGame Worlds", "&7Paintball, Go Karts and Skatepark", "&eClick to choose a game world");
-        holder.navigate(22, MenuPage.GAME_WORLDS);
+        set(inventory, 20, Material.ENDER_PEARL, "&b&lRANDOM TELEPORT", "&7Choose where your adventure begins", "&eClick to select a world");
+        holder.navigate(20, MenuPage.RTP);
+        set(inventory, 22, Material.COMPASS, "&3&lWARPS", "&7Crates, Spawn and server destinations", "&eClick to browse warps");
+        holder.navigate(22, MenuPage.WARPS);
         set(inventory, 24, Material.TARGET, "&6&lBounties", "&7Place and claim player bounties", "&eUse /bounty");
         holder.notice(24, "&6Use /bounty place <player> <amount> or /bounty top.");
 
@@ -173,13 +180,98 @@ public final class MenuService implements Listener {
         for (int i = 0; i < ids.length; i++) {
             long price = plugin.getConfig().getLong("key-shop.prices." + ids[i], -1L);
             String priceText = price < 0 ? "&cNot for sale" : "&d" + price + " ✦";
-            set(inventory, slots[i], icons[i], "&f&l" + names[i],
-                    descriptions[i], "&7Price: " + priceText, "&eClick to purchase");
+            setCustomOrFallback(inventory, slots[i], "gasmp:" + ids[i] + "_key", icons[i],
+                    "&f&l" + names[i], descriptions[i], "&7Price: " + priceText, "&eClick to purchase");
         }
         set(inventory, 31, Material.BOOK, "&f&lSIX COSMETIC VAULTS",
                 "&7All six tiers award GASMP cosmetics.",
                 "&7Each vault has a unique key, theme and reward pool.",
                 "&8No weapons or combat equipment are in these crates.");
+    }
+
+    private void buildRtp(MenuHolder holder, Inventory inventory) {
+        org.bukkit.configuration.file.YamlConfiguration rtp =
+                org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                        new java.io.File(plugin.getDataFolder(), "rtp.yml"));
+        String overworld = rtp.getString("worlds.overworld", rtp.getString("settings.world", "world"));
+        String nether = rtp.getString("worlds.nether", "world_nether");
+
+        rtpWorldButton(holder, inventory, 20, Material.GRASS_BLOCK, "OVERWORLD",
+                "&7Find a safe location in the main world.", overworld);
+        rtpWorldButton(holder, inventory, 22, Material.NETHERRACK, "NETHER",
+                "&7Search for a safe location in the Nether.", nether);
+        set(inventory, 24, Material.BARRIER, "&c&lTHE END",
+                "&7This destination is currently locked.",
+                "&8Coming in a future update.");
+        holder.notice(24, "&cThe End RTP destination is locked right now.");
+
+        set(inventory, 31, Material.CLOCK, "&b&lRTP SAFETY",
+                "&7A short warm-up starts after you choose a world.",
+                "&7Moving or entering combat cancels the request.",
+                "&8Existing cooldown and safe-location checks still apply.");
+    }
+
+    private void rtpWorldButton(MenuHolder holder, Inventory inventory, int slot,
+                                Material icon, String title, String description, String worldName) {
+        boolean loaded = Bukkit.getWorld(worldName) != null;
+        set(inventory, slot, loaded ? icon : Material.GRAY_DYE,
+                (loaded ? "&a&l" : "&c&l") + title,
+                description,
+                loaded ? "&eClick to find a safe location" : "&cWorld is not loaded: " + worldName);
+        if (loaded) holder.command(slot, "gasmp-rtp-world:" + worldName);
+        else holder.notice(slot, "&cThe configured world '" + worldName + "' is not loaded.");
+    }
+
+    private void buildWarps(MenuHolder holder, Inventory inventory) {
+        String cratesCommand = plugin.getConfig().getString("warps.crates-command", "warp crates").trim();
+        String spawnCommand = plugin.getConfig().getString("warps.spawn-command", "spawn").trim();
+
+        set(inventory, 20, Material.CHEST, "&6&lCRATES",
+                "&7Visit the GASMP crate area.",
+                cratesCommand.isBlank() ? "&cWarp command is not configured." : "&eClick to travel");
+        if (cratesCommand.isBlank()) holder.notice(20, "&cSet warps.crates-command in config.yml first.");
+        else holder.command(20, cratesCommand);
+
+        set(inventory, 22, Material.COMPASS, "&a&lSPAWN",
+                "&7Return to the community hub.",
+                spawnCommand.isBlank() ? "&cSpawn command is not configured." : "&eClick to travel");
+        if (spawnCommand.isBlank()) holder.notice(22, "&cSet warps.spawn-command in config.yml first.");
+        else holder.command(22, spawnCommand);
+
+        set(inventory, 24, Material.BARRIER, "&c&lMYSTERY",
+                "&7A destination hidden in the fog.",
+                "&8Locked • Coming soon");
+        holder.notice(24, "&7The Mystery warp has not been opened yet.");
+
+        set(inventory, 31, Material.FIREWORK_ROCKET, "&d&lMINIGAME WORLDS",
+                "&7Paintball, Go-Karts and Skatepark.",
+                "&eClick to view destinations");
+        holder.navigate(31, MenuPage.GAME_WORLDS);
+
+        set(inventory, 33, Material.ENDER_CHEST, "&5&lSHARD SHOP",
+                "&7Browse the six cosmetic vault tiers.",
+                "&eClick to browse");
+        holder.navigate(33, MenuPage.KEY_SHOP);
+    }
+
+    private void setCustomOrFallback(Inventory inventory, int slot, String contentId,
+                                     Material fallback, String name, String... lore) {
+        ItemStack stack = plugin.getCrateService().createContentItem(contentId, 1);
+        if (stack == null) {
+            stack = item(fallback, name, lore);
+        } else {
+            ItemMeta meta = stack.getItemMeta();
+            if (meta != null) {
+                meta.setDisplayName(color(name));
+                if (lore.length > 0) {
+                    List<String> lines = new ArrayList<>(lore.length);
+                    for (String line : lore) lines.add(color(line));
+                    meta.setLore(lines);
+                }
+                stack.setItemMeta(meta);
+            }
+        }
+        inventory.setItem(slot, stack);
     }
 
     private void buildGameWorlds(MenuHolder holder, Inventory inventory) {
@@ -204,6 +296,8 @@ public final class MenuService implements Listener {
             case STATISTICS -> "statistics";
             case DECORATIONS -> "decorations";
             case SHARDS -> "shards";
+            case RTP -> "rtp";
+            case WARPS -> "warps";
             case GAME_WORLDS -> "adventure";
             case CASINO -> "casino";
             case PROFILE -> "profile";
@@ -286,6 +380,15 @@ public final class MenuService implements Listener {
         int slot = event.getRawSlot();
         String command = holder.commandAt(slot);
         if (command != null) {
+            if (command.startsWith("gasmp-rtp-world:")) {
+                String worldName = command.substring("gasmp-rtp-world:".length());
+                if (Bukkit.getWorld(worldName) == null) {
+                    player.sendMessage(color("&cThat RTP world is not currently loaded."));
+                    return;
+                }
+                plugin.getRtpService().start(player, worldName);
+                return;
+            }
             player.performCommand(command);
             return;
         }
@@ -343,7 +446,8 @@ public final class MenuService implements Listener {
             case MAIN, STATISTICS, PROFILE -> Material.MAGENTA_STAINED_GLASS_PANE;
             case SHOP, DECORATIONS -> Material.BLUE_STAINED_GLASS_PANE;
             case SHARDS, KEY_SHOP -> Material.PURPLE_STAINED_GLASS_PANE;
-            case GAME_WORLDS -> Material.BLUE_STAINED_GLASS_PANE;
+            case RTP, GAME_WORLDS -> Material.CYAN_STAINED_GLASS_PANE;
+            case WARPS -> Material.PURPLE_STAINED_GLASS_PANE;
             case CASINO -> Material.ORANGE_STAINED_GLASS_PANE;
             case SETTINGS -> Material.BLACK_STAINED_GLASS_PANE;
         };
@@ -387,6 +491,8 @@ public final class MenuService implements Listener {
             case DECORATIONS -> color("&9&lGASMP &8• &3Decorations");
             case SHARDS -> color("&d&lGASMP &8• &5Shards");
             case KEY_SHOP -> color("&d&lGASMP &8• &5Shard Shop");
+            case RTP -> color("&b&lGASMP &8• &3Choose a World");
+            case WARPS -> color("&d&lGASMP &8• &5Warps");
             case GAME_WORLDS -> color("&b&lGASMP &8• &3Game Worlds");
             case CASINO -> color("&6&lGASMP &8• &eCasino");
             case PROFILE -> color("&a&lGASMP &8• &2Profile");
