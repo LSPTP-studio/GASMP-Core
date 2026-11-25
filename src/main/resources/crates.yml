@@ -3,6 +3,9 @@
 # Relative weights decide odds. Higher tiers improve the rare-wing odds.
 crates:
   normal:
+    display-name: "VERDANT CACHE"
+    key-name: "VERDANT SEAL"
+    color: "&a"
     rewards:
       freddy_plush:
         type: cosmetic
@@ -604,6 +607,9 @@ crates:
         weight: 1
 
   medium:
+    display-name: "RUNIC RELIQUARY"
+    key-name: "RUNIC SIGIL"
+    color: "&5"
     rewards:
       freddy_plush:
         type: cosmetic
@@ -1205,6 +1211,9 @@ crates:
         weight: 3
 
   premium:
+    display-name: "ECLIPSE VAULT"
+    key-name: "ECLIPSE CREST"
+    color: "&6"
     rewards:
       freddy_plush:
         type: cosmetic
@@ -1806,4 +1815,207 @@ crates:
         display: "Pot Hat"
         amount: 1
         weight: 5
+
+  aether:
+    display-name: "AETHER SANCTUM"
+    key-name: "AETHER SIGIL"
+    color: "&b"
+    description: "A sky-forged vault of celestial cosmetics."
+    rewards:
+      aether_angel_wings:
+        type: cosmetic
+        content: "gasmp:angel_wings"
+        display: "Angel Wings"
+        amount: 1
+        weight: 5
+      aether_astronaut_wings:
+        type: cosmetic
+        content: "gasmp:astronaut_wings"
+        display: "Astronaut Wings"
+        amount: 1
+        weight: 4
+      aether_bluefire_wings:
+        type: cosmetic
+        content: "gasmp:bluefire_wings"
+        display: "Bluefire Wings"
+        amount: 1
+        weight: 2
+      aether_dragon_wings:
+        type: cosmetic
+        content: "gasmp:dragon_wings"
+        display: "Dragon Wings"
+        amount: 1
+        weight: 3
+      aether_golden_wings:
+        type: cosmetic
+        content: "gasmp:golden_wings"
+        display: "Golden Wings"
+        amount: 1
+        weight: 2
+      aether_phoenix_wings:
+        type: cosmetic
+        content: "gasmp:phoenix_wings"
+        display: "Phoenix Wings"
+        amount: 1
+        weight: 1
+      aether_little_dragon:
+        type: cosmetic
+        content: "gasmp:little_dragon"
+        display: "Little Dragon"
+        amount: 1
+        weight: 3
+      aether_frost_diadem:
+        type: cosmetic
+        content: "gasmp:frost_diadem"
+        display: "Frost Diadem"
+        amount: 1
+        weight: 3
+      aether_bloom_crown:
+        type: cosmetic
+        content: "gasmp:bloom_crown"
+        display: "Flower Crown"
+        amount: 1
+        weight: 4
+      aether_diving_helmet:
+        type: cosmetic
+        content: "gasmp:diving_helmet"
+        display: "Diving Helmet"
+        amount: 1
+        weight: 4
+      aether_backpack:
+        type: cosmetic
+        content: "gasmp:backpack"
+        display: "Backpack"
+        amount: 1
+        weight: 2
+      aether_shards:
+        type: shards
+        display: "80 Shards Bonus"
+        amount: 80
+        weight: 4
+  tidal:
+    display-name: "TIDAL TROVE"
+    key-name: "TIDAL TOKEN"
+    color: "&3"
+    description: "A deep-sea treasure chest filled with oceanic collectibles."
+    rewards:
+      tidal_ocean_wings:
+        type: cosmetic
+        content: "gasmp:ocean_wings"
+        display: "Ocean Wings"
+        amount: 1
+        weight: 5
+      tidal_butterfly_wings:
+        type: cosmetic
+        content: "gasmp:butterfly_wings"
+        display: "Butterfly Wings"
+        amount: 1
+        weight: 3
+      tidal_jellyfish:
+        type: cosmetic
+        content: "gasmp:jellyfish"
+        display: "Jellyfish"
+        amount: 1
+        weight: 3
+      tidal_sea_captain:
+        type: cosmetic
+        content: "gasmp:sea_captain"
+        display: "Sea Captain Hat"
+        amount: 1
+        weight: 3
+      tidal_sushi:
+        type: cosmetic
+        content: "gasmp:sushi"
+        display: "Salmon Sushi"
+        amount: 1
+        weight: 5
+      tidal_rubber_duck:
+        type: cosmetic
+        content: "gasmp:rubber_duck"
+        display: "Rubber Duck"
+        amount: 1
+        weight: 4
+      tidal_tiger_ears:
+        type: cosmetic
+        content: "gasmp:feral_tiger_ears"
+        display: "Tiger Ears"
+        amount: 1
+        weight: 3
+      tidal_wolf_tail:
+        type: cosmetic
+        content: "gasmp:feral_wolf_tail"
+        display: "Wolf Tail"
+        amount: 1
+        weight: 3
+      tidal_diving_helmet:
+        type: cosmetic
+        content: "gasmp:diving_helmet"
+        display: "Diving Helmet"
+        amount: 1
+        weight: 4
+      tidal_shards:
+        type: shards
+        display: "100 Shards Bonus"
+        amount: 100
+        weight: 3
+  obsidian:
+    display-name: "OBSIDIAN RELIC"
+    key-name: "OBSIDIAN SEAL"
+    color: "&c"
+    description: "A sealed relic vault with dark, rare collectibles."
+    rewards:
+      obsidian_demon_wings:
+        type: cosmetic
+        content: "gasmp:demon_wings"
+        display: "Demon Wings"
+        amount: 1
+        weight: 2
+      obsidian_puppet:
+        type: cosmetic
+        content: "gasmp:the_puppet_plush"
+        display: "The Puppet Plush"
+        amount: 1
+        weight: 3
+      obsidian_golden_freddy:
+        type: cosmetic
+        content: "gasmp:golden_freddy_plush"
+        display: "Golden Freddy Plush"
+        amount: 1
+        weight: 2
+      obsidian_midnight_wizard:
+        type: cosmetic
+        content: "gasmp:midnight_wizard"
+        display: "Midnight Wizard"
+        amount: 1
+        weight: 4
+      obsidian_ufo:
+        type: cosmetic
+        content: "gasmp:ufo"
+        display: "UFO Hat"
+        amount: 1
+        weight: 3
+      obsidian_royal_crown:
+        type: cosmetic
+        content: "gasmp:royal_crown"
+        display: "Royal Crown"
+        amount: 1
+        weight: 2
+      obsidian_cozy_pom:
+        type: cosmetic
+        content: "gasmp:cozy_pom"
+        display: "Cozy Pom Beanie"
+        amount: 1
+        weight: 4
+      obsidian_phoenix:
+        type: cosmetic
+        content: "gasmp:phoenix_wings"
+        display: "Phoenix Wings"
+        amount: 1
+        weight: 2
+      obsidian_shards:
+        type: shards
+        display: "150 Shards Bonus"
+        amount: 150
+        weight: 3
+
 locations: {}

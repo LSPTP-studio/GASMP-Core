@@ -131,6 +131,141 @@ items:
           transform: HEAD
           translation: { x: 0, y: 0.04, z: 0 }
           scale: { x: 0.94, y: 0.94, z: 0.94 }
+  aether_key:
+    name: "&b&lAETHER SIGIL"
+    material: TRIPWIRE_HOOK
+    lore:
+      - "&7Unlocks AETHER SANCTUM cosmetics."
+      - "&8GASMP • KEY ITEM"
+    graphics:
+      model: item/crates/key
+    resource:
+      material: TRIPWIRE_HOOK
+      generate: false
+      model_path: item/crates/key
+
+  aether_crate:
+    name: "&b&lTHE AETHER SANCTUM"
+    material: PAPER
+    lore:
+      - "&7An emerald-sealed cache holding classic GASMP cosmetics."
+      - "&8GASMP • CRATE"
+    graphics:
+      model: item/crates/aether_crate
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/crates/aether_crate
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.04, z: 0 }
+          scale: { x: 0.94, y: 0.94, z: 0.94 }
+
+  tidal_key:
+    name: "&3&lTIDAL TOKEN"
+    material: TRIPWIRE_HOOK
+    lore:
+      - "&7Unlocks TIDAL TROVE cosmetics."
+      - "&8GASMP • KEY ITEM"
+    graphics:
+      model: item/crates/key
+    resource:
+      material: TRIPWIRE_HOOK
+      generate: false
+      model_path: item/crates/key
+
+  tidal_crate:
+    name: "&3&lTHE TIDAL TROVE"
+    material: PAPER
+    lore:
+      - "&7An emerald-sealed cache holding classic GASMP cosmetics."
+      - "&8GASMP • CRATE"
+    graphics:
+      model: item/crates/tidal_crate
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/crates/tidal_crate
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.04, z: 0 }
+          scale: { x: 0.94, y: 0.94, z: 0.94 }
+
+  obsidian_key:
+    name: "&c&lOBSIDIAN SEAL"
+    material: TRIPWIRE_HOOK
+    lore:
+      - "&7Unlocks OBSIDIAN RELIC cosmetics."
+      - "&8GASMP • KEY ITEM"
+    graphics:
+      model: item/crates/key
+    resource:
+      material: TRIPWIRE_HOOK
+      generate: false
+      model_path: item/crates/key
+
+  obsidian_crate:
+    name: "&c&lTHE OBSIDIAN RELIC"
+    material: PAPER
+    lore:
+      - "&7An emerald-sealed cache holding classic GASMP cosmetics."
+      - "&8GASMP • CRATE"
+    graphics:
+      model: item/crates/obsidian_crate
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/crates/obsidian_crate
+    behaviours:
+      furniture:
+        entity: item_display
+        gravity: false
+        fixed_rotation: false
+        solid: true
+        drop_when_mined: true
+        hitbox:
+          length: 1
+          width: 1
+          height: 1
+        placeable_on:
+          walls: false
+          ceiling: false
+          floor: true
+        display_transformation:
+          transform: HEAD
+          translation: { x: 0, y: 0.04, z: 0 }
+          scale: { x: 0.94, y: 0.94, z: 0.94 }
+
   angel_wings:
     name: "&d&lAngel Wings"
     material: PAPER

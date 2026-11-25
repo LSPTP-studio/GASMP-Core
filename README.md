@@ -1,103 +1,104 @@
-# GASMP Core — ItemsAdder Edition
+# GASMP Core 0.8.3 — ItemsAdder Edition
 
-> All-in-one Paper SMP plugin with Shards, economy, cosmetic crates, ItemsAdder models, shops, casino, Battle Pass, teams and staff tools.
+**GASMP Core** is an all-in-one Paper SMP plugin for the GASMP server, with Shards, Coins, shops, teams, casino arcade, Battle Pass, moderation, furniture, cosmetic collections and animated crate systems.
 
-**Version:** 0.8.2 Preview · **Target:** Paper 26.2 · **Java:** 25 · **Custom item provider:** ItemsAdder 4.x
+**Target:** Paper 26.2 · **Runtime:** Java 25 · **Build:** Gradle 9.x · **Custom item and font provider:** ItemsAdder 4.x
 
 ## Downloads
 
-- **[Download page — GASMP Core 0.8.2](https://github.com/LSPTP-studio/GASMP-Core/releases/tag/v0.8.2)** — JAR and full package
-- **[Direct plugin JAR](https://github.com/LSPTP-studio/GASMP-Core/releases/download/v0.8.2/GASMP-Core-0.8.2.jar)**
-- **[Full package ZIP](https://github.com/LSPTP-studio/GASMP-Core/releases/download/v0.8.2/GASMP-Core-0.8.2-Full-Package.zip)** — source code, plugin JAR, ItemsAdder contents and install guide
-- **[Source code ZIP](https://github.com/LSPTP-studio/GASMP-Core/archive/refs/tags/v0.8.2.zip)**
+- **[Download EVERYTHING — Full Package ZIP](https://github.com/LSPTP-studio/GASMP-Core/releases/download/v0.8.3/GASMP-Core-0.8.3-Full-Package.zip)** — source code, plugin JAR, ItemsAdder models, UI textures and installation guide.
+- **[Plugin JAR only](https://github.com/LSPTP-studio/GASMP-Core/releases/download/v0.8.3/GASMP-Core-0.8.3.jar)**
+- **[All releases](https://github.com/LSPTP-studio/GASMP-Core/releases)**
+- **[0.8.3 source branch](https://github.com/LSPTP-studio/GASMP-Core/tree/itemsadder-edition-0.8.3)**
 
-## Release status
+## What's new in 0.8.3
 
-The Java 25 / Gradle build passed in GitHub Actions for commit `27fe377c8582da94af3457d850d19b8936ff9af8`. This preview still needs live Paper + ItemsAdder staging-server validation before production use. The release workflow builds the JAR and publishes a full installation package.
+- Fixed inventory title rendering so menus use ItemsAdder font-image panels rather than ignoring the screen ID.
+- Added custom panel artwork for the main menu, shop screens and crate screens.
+- Added three new GASMP crate themes: AETHER SANCTUM, TIDAL TROVE and OBSIDIAN RELIC.
+- Added matching AETHER SIGIL, TIDAL TOKEN and OBSIDIAN SEAL keys, furniture items and unique model textures.
+- Added crate-specific roulette color palettes and tier particles during the opening animation.
+- Added /crates preview, /crates info and /crates givebundle.
+- Added migration logic to add the new crate tiers and Shards key prices to existing servers without replacing saved reward pools or placed locations.
+- Expanded crate list output, help messages, tab completion and command documentation.
 
 ## Required server plugins
 
 - Paper 26.2 and Java 25
-- ItemsAdder 4.x (4.0.13+ recommended for modern item graphics)
+- ItemsAdder 4.x (4.0.13+ recommended)
 - LuckPerms 5.x
 - Vault plus a plugin that registers Vault Economy for Coins features
 
 Optional integrations include PlaceholderAPI, TAB, Geyser + Floodgate, ProtocolLib, ImageFrame, Typewriter, OpenInv, Lib's Disguises, HeadDatabase/HeadDB and Multiverse-Core.
 
-**RP Engine is not required or used by GASMP Core 0.8.2.** The old `integrations/rp-engine` directory is kept only as a legacy reference. Do not install its crate content for this edition.
+**RP Engine is not required or used by this edition.** The old integrations/rp-engine directory is retained only as a legacy reference. Do not install its pack for this ItemsAdder edition.
+
+## Install
+
+1. Stop the server and make a full backup, including plugins/GASMP-Core/ and its SQLite database.
+2. Put GASMP-Core-0.8.3.jar in the server's plugins/ folder.
+3. Copy the included plugins/ItemsAdder/contents/gasmp/ and gasmp_ranks/ folders into your server's plugins/ItemsAdder/contents/ folder. The optional rank_bundle/ folder adds extra rank emblems.
+4. Start or restart the server.
+5. Run /iareload and fix any YAML, model or font-image warnings in the console.
+6. Run /iazip to rebuild the resource pack.
+7. Ensure the ItemsAdder pack is hosted and delivered to players, then reconnect and ACCEPT the updated pack. A stale cached pack or declined pack will show missing glyphs and models.
+8. Test the menus and all six crate/key pairs before production use.
+
+The UI background files live in gasmp/textures/font/ and their glyph definitions live in gasmp/configs/ui.yml. The Java menu title helper references the aliases defined there. See the ItemsAdder Font Images guide: https://wiki.itemsadder.com/adding-content/font-images/font-images/.
+
+## Six cosmetic crates
+
+| ID | Crate display name | Matching key | Default Shards price |
+|---|---|---|---:|
+| normal | VERDANT CACHE | VERDANT SEAL | 100 |
+| medium | RUNIC RELIQUARY | RUNIC SIGIL | 300 |
+| premium | ECLIPSE VAULT | ECLIPSE CREST | 800 |
+| aether | AETHER SANCTUM | AETHER SIGIL | 1,200 |
+| tidal | TIDAL TROVE | TIDAL TOKEN | 1,800 |
+| obsidian | OBSIDIAN RELIC | OBSIDIAN SEAL | 2,500 |
+
+All six are cosmetic crates. Their configured pools award ItemsAdder cosmetics and small Shards bonuses, not weapons or combat equipment. Each crate has its own matching key, placeable furniture model, display name, color and opening-animation palette.
+
+The animation uses a decelerating three-slot roulette, themed border materials, portal/tier particles, staged titles and sounds, a final reward reveal and burst particles. Keys are consumed only after the final reveal; closing or disconnecting before that point cancels the opening without consuming the key.
+
+## Crate commands
+
+```text
+/crates list
+/crates info <crate-id>
+/crates preview <crate-id>
+/crates givekey <player> <crate-id> [amount]
+/crates giveblock <player> <crate-id> [amount]
+/crates givebundle <player> <crate-id> [amount]
+/crates givemodel <player> <crate-id> [amount]
+/crates set <crate-id>
+/crates unset <crate-id>
+/crates reload
+/keyall <crate-id|all> <amount> [world:<world>] [silent]
+```
+
+Crate administration is restricted to Owner/Developer staff by the service checks. The console can run crate distribution and administration commands. Players can sneak + left-click or sneak-punch a placed crate to open its reward preview.
+
+See docs/COMMANDS.md for the full player, staff, console and crate command reference.
+
+## Other systems
+
+Player profiles, Shards ledger, Vault Coins shop, RTP, combat tagging, bounties, auction house and item mailbox, Battle Pass progression, Shards Decoration Shop, casino arcade, teams, chat games, moderation, maintenance, holograms, leaderboards, staff vanish, tool skills and rank administration.
 
 ## Build from source
 
-Run Gradle with JDK 25:
+Use JDK 25 and Gradle 9.x:
 
 ```bash
 gradle clean build
 ```
 
-Expected output: `build/libs/GASMP-Core-0.8.2.jar`.
+Output: build/libs/GASMP-Core-0.8.3.jar. SQLite JDBC is bundled into the plugin JAR.
 
-The build targets Paper API 26.2.build.135-stable, LuckPerms API 5.5 and VaultAPI 1.7. SQLite JDBC is bundled into the plugin JAR.
+## Asset notes
 
-## Install ItemsAdder content
+The new UI panels and themed crate models are GASMP starter assets using vanilla Minecraft textures. The source snapshot did not contain the original custom model exports for the previously referenced plush, wing and Feral Fantasy packs. Replace those starter models only with licensed final art, keeping the item IDs and model paths unchanged.
 
-The full package ZIP already includes the ItemsAdder files in the correct server folder layout. For a manual install, copy these folders into `plugins/ItemsAdder/contents/`:
+## Release validation
 
-- `integrations/itemsadder/contents/gasmp/`
-- `integrations/itemsadder/contents/gasmp_ranks/`
-- Optionally, `integrations/itemsadder/contents/rank_bundle/` for the additional rank emblem font images.
-
-Then run `/iareload`, fix any YAML/model warnings shown in the console, run `/iazip` and refresh the resource pack for clients.
-
-The `gasmp` namespace contains 96 cosmetic reward IDs, all three matching crate keys, all three placeable crate furniture items, and starter models for hats, wings, ears, tails, plushies and decorations. Each item has its own configured display name. The same IDs are referenced by `crates.yml` and `decoration-shop.yml`.
-
-The source snapshot did not contain the original custom model exports for the previously referenced plush, wing and Feral Fantasy packs. The included models are self-contained GASMP starter geometry using vanilla Minecraft block textures, not the original artists' models. Replace the starter JSONs with licensed final art when available, keeping item IDs and paths unchanged.
-
-## Cosmetic crates
-
-| Tier | Display name | Key ID | Placeable crate ID |
-|---|---|---|---|
-| Normal | VERDANT CACHE | `gasmp:normal_key` — VERDANT SEAL | `gasmp:normal_crate` |
-| Medium | RUNIC RELIQUARY | `gasmp:medium_key` — RUNIC SIGIL | `gasmp:medium_crate` |
-| Premium | ECLIPSE VAULT | `gasmp:premium_key` — ECLIPSE CREST | `gasmp:premium_crate` |
-
-All three tiers are cosmetic crates. Their configured reward pools contain cosmetics and small Shards bonuses, not weapons or combat equipment.
-
-The opening GUI includes a slowing three-slot roulette, staged titles and sounds, a final reveal, particles and key-consumption safety checks. Right-click a placed crate with the matching key to open it. Sneak + left-click a crate block previews the pool. For furniture crates, right-click opens and sneak-punch previews.
-
-The default Shards key-shop prices are Normal 100, Medium 300 and Premium 800. They can be changed in `plugins/GASMP-Core/config.yml`.
-
-Hats use ItemsAdder's hat behaviour. Furniture and plush items use ItemsAdder furniture behaviour. Wings, tails and backpacks are currently collectible 3D items; GASMP Core does not yet include a back-slot cosmetic equipment system.
-
-## Systems included
-
-Player profiles, Shards ledger, Vault Coins shop, RTP, combat tagging, bounties, auction house and item mailbox, Battle Pass progression, cosmetic crates, Shards Decoration Shop, casino arcade, teams, chat games, moderation, maintenance, holograms, leaderboards, staff vanish, tool skills and rank administration.
-
-## Commands
-
-See [docs/COMMANDS.md](docs/COMMANDS.md) for the complete player, staff and console command list, including the ItemsAdder crate commands and internal crate dispatcher.
-
-## Main configuration files
-
-GASMP Core copies its default resources into `plugins/GASMP-Core/` on first start:
-
-- `config.yml` — module settings, Shards key-shop prices and game-world commands
-- `crates.yml` — weighted Normal, Medium and Premium cosmetic reward pools
-- `decoration-shop.yml` — Shards furniture/cosmetic catalogue
-- `shop.yml` — Coins shop catalogue
-- `casino.yml`, `battlepass.yml`, `ranks.yml`, `rtp.yml`
-- `chat-games.yml`, `maintenance.yml`, `holograms.yml`
-
-Back up the server and database before upgrading. Do not edit the SQLite database manually.
-
-## Staging checklist
-
-1. Build with JDK 25 and Gradle 9.x.
-2. Install ItemsAdder 4.x, LuckPerms, Vault and a Vault Economy provider.
-3. Copy the ItemsAdder folders, run `/iareload` and `/iazip`, then reconnect a Java client.
-4. Give and place each crate tier; verify its model, interaction and pickup.
-5. Open each tier with the matching key, close the GUI and disconnect mid-animation to confirm keys are not lost before the reveal.
-6. Preview each reward pool and verify only configured cosmetics and Shards bonuses appear.
-7. Test hat behaviour, placeable furniture, Shards purchases and Vault Coins transactions.
-8. Test permissions with separate player, staff, Developer and Owner accounts.
-9. Test Geyser/Bedrock separately; Java resource-pack rendering does not guarantee identical Bedrock output.
-10. Check console output and SQLite persistence through repeated restarts.
+The release pipeline verifies the Java build, checks the JAR, assembles the source + server-install ZIP and uploads both assets to GitHub Releases. A successful build does not replace a live Paper/ItemsAdder staging test. Validate resource-pack delivery, model rendering, menu alignment, crate interactions, key consumption, economy transactions and database persistence on a staging server.

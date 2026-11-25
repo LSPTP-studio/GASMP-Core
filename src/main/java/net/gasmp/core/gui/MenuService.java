@@ -84,7 +84,7 @@ public final class MenuService implements Listener {
     }
 
     private void buildMain(MenuHolder holder, Inventory inventory) {
-        set(inventory, 10, Material.SHULKER_BOX, "&d&lSHARD SHOP", "&7Normal, Medium and Premium cosmetic keys", "&7Custom GASMP cosmetics and crates", "&eClick to browse");
+        set(inventory, 10, Material.SHULKER_BOX, "&d&lSHARD SHOP", "&7Six themed GASMP cosmetic crates and keys", "&7Custom GASMP cosmetics and crates", "&eClick to browse");
         holder.navigate(10, MenuPage.KEY_SHOP);
 
         set(inventory, 12, Material.WRITABLE_BOOK, "&d&lStatistics", "&7View your server statistics", "&eClick to open");
@@ -152,24 +152,34 @@ public final class MenuService implements Listener {
     }
 
     private void buildKeyShop(MenuHolder holder, Inventory inventory) {
-        String[] ids = {"normal", "medium", "premium"};
-        Material[] icons = {Material.SHULKER_BOX, Material.ENDER_CHEST, Material.PURPLE_SHULKER_BOX};
-        int[] slots = {11, 13, 15};
+        String[] ids = {"normal", "medium", "premium", "aether", "tidal", "obsidian"};
+        Material[] icons = {
+                Material.SHULKER_BOX, Material.ENDER_CHEST, Material.PURPLE_SHULKER_BOX,
+                Material.BEACON, Material.HEART_OF_THE_SEA, Material.CRYING_OBSIDIAN
+        };
+        int[] slots = {10, 12, 14, 19, 21, 23};
+        String[] names = {
+                "VERDANT SEAL", "RUNIC SIGIL", "ECLIPSE CREST",
+                "AETHER SIGIL", "TIDAL TOKEN", "OBSIDIAN SEAL"
+        };
         String[] descriptions = {
-                "&7Starter cosmetics and small Shard bonuses",
-                "&7Expanded collectibles and improved rare-drop odds",
-                "&7The rarest collectibles and premium cosmetic odds"
+                "&7Starter cosmetics and classic GASMP collectibles",
+                "&7Runic collectibles with improved rare-drop odds",
+                "&7Gilded vault cosmetics and premium collectibles",
+                "&bCelestial wings, sky relics and rare headwear",
+                "&3Oceanic cosmetics, sea hats and aquatic collectibles",
+                "&cDark relics, plushies and rare shadow cosmetics"
         };
         for (int i = 0; i < ids.length; i++) {
             long price = plugin.getConfig().getLong("key-shop.prices." + ids[i], -1L);
             String priceText = price < 0 ? "&cNot for sale" : "&d" + price + " ✦";
-            set(inventory, slots[i], icons[i], "&f&l" + switch (ids[i]) { case "normal" -> "VERDANT SEAL"; case "medium" -> "RUNIC SIGIL"; default -> "ECLIPSE CREST"; } + "",
+            set(inventory, slots[i], icons[i], "&f&l" + names[i],
                     descriptions[i], "&7Price: " + priceText, "&eClick to purchase");
         }
-        set(inventory, 22, Material.BOOK, "&f&lKEY DROP SYSTEM",
-                "&7All three crates award cosmetic collectibles.",
-                "&7Higher tiers have better odds for rare cosmetics.",
-                "&8Earn Shards in the GASMP Arcade.");
+        set(inventory, 31, Material.BOOK, "&f&lSIX COSMETIC VAULTS",
+                "&7All six tiers award GASMP cosmetics.",
+                "&7Each vault has a unique key, theme and reward pool.",
+                "&8No weapons or combat equipment are in these crates.");
     }
 
     private void buildGameWorlds(MenuHolder holder, Inventory inventory) {
@@ -291,9 +301,12 @@ public final class MenuService implements Listener {
         }
         if (holder.getPage() == MenuPage.KEY_SHOP) {
             String crateId = switch (slot) {
-                case 11 -> "normal";
-                case 13 -> "medium";
-                case 15 -> "premium";
+                case 10 -> "normal";
+                case 12 -> "medium";
+                case 14 -> "premium";
+                case 19 -> "aether";
+                case 21 -> "tidal";
+                case 23 -> "obsidian";
                 default -> null;
             };
             if (crateId != null) {

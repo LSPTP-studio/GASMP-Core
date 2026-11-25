@@ -1,7 +1,7 @@
 plugins { java }
 
 group = "net.gasmp"
-version = "0.8.2"
+version = providers.gradleProperty("releaseVersion").getOrElse("0.8.3")
 
 repositories {
     mavenCentral()

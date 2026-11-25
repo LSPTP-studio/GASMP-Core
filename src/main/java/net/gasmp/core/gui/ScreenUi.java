@@ -1,16 +1,31 @@
 package net.gasmp.core.gui;
 
+import java.util.Locale;
 import org.bukkit.ChatColor;
 
 /**
- * GASMP inventory-title helper for the ItemsAdder edition.
- * Menus use Bukkit inventories and ItemsAdder font images; no RP Engine
- * screen glyph API or separate screen renderer is required.
+ * Shared title renderer for GASMP inventories.
+ * Glyph aliases resolve to ItemsAdder font images in the gasmp namespace.
+ * The client must accept/download the generated ItemsAdder resource pack.
  */
 public final class ScreenUi {
-    private ScreenUi() { }
+    private ScreenUi() {
+    }
 
     public static String title(String screenId, String vanillaTitle) {
-        return ChatColor.translateAlternateColorCodes('&', vanillaTitle);
+        String id = screenId == null ? "" : screenId.toLowerCase(Locale.ROOT);
+        String glyph = switch (id) {
+            case "crates", "crate", "crate_details" -> "ui_crate";
+            case "shard_shop", "shop" -> "ui_shop";
+            case "statistics", "stats" -> "ui_stats";
+            case "decorations" -> "ui_decor";
+            case "shards" -> "ui_shards";
+            case "casino" -> "ui_arcade";
+            case "profile" -> "ui_profile";
+            case "settings" -> "ui_settings";
+            case "adventure" -> "ui_adventure";
+            default -> "ui_main";
+        };
+        return ChatColor.WHITE + ":offset_-8::" + glyph + ":";
     }
 }
