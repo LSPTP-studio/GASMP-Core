@@ -389,16 +389,16 @@ public final class MenuService implements Listener {
     }
 
     private void fillFrame(Inventory inventory, MenuPage page) {
-        Material frame = switch (page) {
+        Material accent = switch (page) {
             case MAIN, STATISTICS, PROFILE -> Material.MAGENTA_STAINED_GLASS_PANE;
-            case RTP -> Material.CYAN_STAINED_GLASS_PANE;
-            case SHOP, DECORATIONS -> Material.BLUE_STAINED_GLASS_PANE;
+            case SHOP, DECORATIONS -> Material.PINK_STAINED_GLASS_PANE;
             case SHARDS, KEY_SHOP -> Material.PURPLE_STAINED_GLASS_PANE;
-            case GAME_WORLDS -> Material.BLUE_STAINED_GLASS_PANE;
+            case RTP, GAME_WORLDS -> Material.CYAN_STAINED_GLASS_PANE;
             case CASINO -> Material.ORANGE_STAINED_GLASS_PANE;
-            case SETTINGS -> Material.BLACK_STAINED_GLASS_PANE;
+            case SETTINGS -> Material.LIGHT_BLUE_STAINED_GLASS_PANE;
         };
-        ItemStack filler = item(frame, " ");
+        ItemStack filler = item(Material.BLACK_STAINED_GLASS_PANE, " ");
+        ItemStack corner = item(accent, " ");
         for (int slot = 0; slot < MENU_SIZE; slot++) {
             int row = slot / 9;
             int column = slot % 9;
@@ -406,6 +406,7 @@ public final class MenuService implements Listener {
                 inventory.setItem(slot, filler.clone());
             }
         }
+        for (int slot : new int[]{0, 8, 45, 53}) inventory.setItem(slot, corner.clone());
     }
 
     private void set(Inventory inventory, int slot, Material material, String name, String... lore) {
