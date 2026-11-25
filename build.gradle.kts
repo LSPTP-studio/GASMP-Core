@@ -5,7 +5,7 @@ version = providers.gradleProperty("releaseVersion").getOrElse("0.8.3")
 
 // Build the same plugin version against separate Paper API lines.
 val paperApiVersion = providers.gradleProperty("paperApiVersion").orElse("26.2.build.+")
-val paperTarget = providers.gradleProperty("paperTarget").orElse("paper-26.2")
+val paperTarget = providers.gradleProperty("paperTarget").orElse("")
 
 repositories {
     mavenCentral()
