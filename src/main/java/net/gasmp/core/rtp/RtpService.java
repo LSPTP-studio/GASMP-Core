@@ -44,13 +44,53 @@ public final class RtpService implements Listener {
         if (!file.exists()) plugin.saveResource("rtp.yml", false);
     }
 
+    public boolean isDestinationEnabled(String destination) {
+        if (destination == null) return false;
+        String key = destination.toLowerCase(java.util.Locale.ROOT);
+        if (!key.equals("overworld") && !key.equals("nether") && !key.equals("end")) return false;
+        var cfg = loadConfig();
+        boolean defaultEnabled = key.equals("overworld") || key.equals("nether");
+        return cfg.getBoolean("destinations." + key + ".enabled", defaultEnabled);
+    }
+
+    public String quickWarpCommand(String warpId) {
+        if (warpId == null) return null;
+        var cfg = loadConfig();
+        String path = "quick-warps." + warpId.toLowerCase(java.util.Locale.ROOT);
+        if (!cfg.getBoolean(path + ".enabled", false)) return null;
+        String command = cfg.getString(path + ".command", "").trim();
+        if (command.isBlank()) return null;
+        return command.startsWith("/") ? command.substring(1) : command;
+    }
+
+    private org.bukkit.configuration.file.YamlConfiguration loadConfig() {
+        return org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                new File(plugin.getDataFolder(), "rtp.yml"));
+    }
+
+    private String defaultWorld(String destination) {
+        return switch (destination) {
+            case "nether" -> "world_nether";
+            case "end" -> "world_the_end";
+            default -> "world";
+        };
+    }
+
     public void start(Player player) {
+        start(player, null);
+    }
+
+    public void start(Player player, String destination) {
         if (!Bukkit.isPrimaryThread()) {
-            Bukkit.getScheduler().runTask(plugin, () -> start(player));
+            Bukkit.getScheduler().runTask(plugin, () -> start(player, destination));
             return;
         }
-        var cfg = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
-                new File(plugin.getDataFolder(), "rtp.yml"));
+        String selected = destination == null ? null : destination.toLowerCase(java.util.Locale.ROOT);
+        if (selected != null && !isDestinationEnabled(selected)) {
+            player.sendMessage(color("&cThat RTP destination is locked or disabled."));
+            return;
+        }
+        var cfg = loadConfig();
         if (!cfg.getBoolean("settings.enabled", true)) {
             player.sendMessage(color("&cRTP is disabled."));
             return;
@@ -71,7 +111,9 @@ public final class RtpService implements Listener {
             return;
         }
 
-        String worldName = cfg.getString("settings.world", "world");
+        String settingsPath = selected == null ? "settings" : "destinations." + selected;
+        String fallbackWorld = selected == null ? cfg.getString("settings.world", "world") : defaultWorld(selected);
+        String worldName = cfg.getString(settingsPath + ".world", fallbackWorld);
         World world = Bukkit.getWorld(worldName);
         if (world == null || cfg.getStringList("settings.blocked-worlds").contains(player.getWorld().getName())) {
             player.sendMessage(color("&cRTP is unavailable in this world."));
@@ -94,18 +136,23 @@ public final class RtpService implements Listener {
                 player.sendMessage(color("&cRTP cancelled: you are in combat."));
                 return;
             }
+            int minY = cfg.getInt(settingsPath + ".min-y", world.getMinHeight() + 1);
+            int defaultMaxY = world.getEnvironment() == World.Environment.NETHER
+                    ? Math.min(118, world.getMaxHeight() - 2) : world.getMaxHeight() - 2;
+            int maxY = cfg.getInt(settingsPath + ".max-y", defaultMaxY);
             tryCandidate(player, world, request,
-                    cfg.getInt("settings.min-radius", 750),
-                    cfg.getInt("settings.max-radius", 6000),
-                    Math.max(1, cfg.getInt("settings.max-attempts", 18)),
-                    cfg.getBoolean("settings.avoid-danger", true),
-                    cfg.getBoolean("settings.avoid-water", true),
-                    Math.max(0, cfg.getInt("settings.cooldown-seconds", 300)));
+                    cfg.getInt(settingsPath + ".min-radius", cfg.getInt("settings.min-radius", 750)),
+                    cfg.getInt(settingsPath + ".max-radius", cfg.getInt("settings.max-radius", 6000)),
+                    minY, maxY,
+                    Math.max(1, cfg.getInt(settingsPath + ".max-attempts", cfg.getInt("settings.max-attempts", 18))),
+                    cfg.getBoolean(settingsPath + ".avoid-danger", cfg.getBoolean("settings.avoid-danger", true)),
+                    cfg.getBoolean(settingsPath + ".avoid-water", cfg.getBoolean("settings.avoid-water", true)),
+                    Math.max(0, cfg.getInt(settingsPath + ".cooldown-seconds", cfg.getInt("settings.cooldown-seconds", 300))));
         }, warmup * 20L);
     }
 
     private void tryCandidate(Player player, World world, Request request,
-                              int minRadius, int maxRadius, int remaining,
+                              int minRadius, int maxRadius, int minY, int maxY, int remaining,
                               boolean avoidDanger, boolean avoidWater, int cooldownSeconds) {
         if (!isCurrent(player, request)) return;
         if (!player.isOnline()) {
@@ -146,14 +193,14 @@ public final class RtpService implements Listener {
                         return;
                     }
                     if (error != null || chunk == null) {
-                        tryCandidate(player, world, request, minRadius, maxRadius, remaining - 1,
+                        tryCandidate(player, world, request, minRadius, maxRadius, minY, maxY, remaining - 1,
                                 avoidDanger, avoidWater, cooldownSeconds);
                         return;
                     }
 
-                    Location safe = findSafeLocation(world, chunk, x, z, avoidDanger, avoidWater);
+                    Location safe = findSafeLocation(world, chunk, x, z, minY, maxY, avoidDanger, avoidWater);
                     if (safe == null || !world.getWorldBorder().isInside(safe)) {
-                        tryCandidate(player, world, request, minRadius, maxRadius, remaining - 1,
+                        tryCandidate(player, world, request, minRadius, maxRadius, minY, maxY, remaining - 1,
                                 avoidDanger, avoidWater, cooldownSeconds);
                         return;
                     }
@@ -177,11 +224,12 @@ public final class RtpService implements Listener {
     }
 
     private Location findSafeLocation(World world, org.bukkit.Chunk chunk, int x, int z,
-                                      boolean avoidDanger, boolean avoidWater) {
+                                      int minY, int maxY, boolean avoidDanger, boolean avoidWater) {
         int bx = x & 15;
         int bz = z & 15;
-        int maxY = world.getMaxHeight() - 2;
-        for (int y = maxY; y > world.getMinHeight() + 1; y--) {
+        int scanMax = Math.min(world.getMaxHeight() - 2, maxY);
+        int scanMin = Math.max(world.getMinHeight() + 1, minY);
+        for (int y = scanMax; y > scanMin; y--) {
             Block floor = chunk.getBlock(bx, y - 1, bz);
             Block feet = chunk.getBlock(bx, y, bz);
             Block head = chunk.getBlock(bx, y + 1, bz);
