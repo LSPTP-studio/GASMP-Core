@@ -31,17 +31,25 @@ public final class DecorationShopService implements Listener {
             28, 29, 30, 31, 32, 33, 34,
             37, 38, 39, 40, 41, 42, 43
     };
+    private static final int[] COSMETIC_PRODUCT_SLOTS = {
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34,
+            37, 38, 39, 40, 41, 42, 43
+    };
+    private static final int[] COSMETIC_TAB_SLOTS = {10, 12, 14, 16};
+    private static final String[] COSMETIC_FILTERS = {"all", "headwear", "wings", "accessories"};
     private record Product(String id, String category, String contentId, String name,
                            long price, String description) { }
     private enum Stage { CATEGORIES, CATALOGUE }
     private static final class Holder implements InventoryHolder {
         private final Stage stage;
         private final String category;
+        private final String filter;
         private final int page;
         private final Map<Integer, String> products = new HashMap<>();
         private Inventory inventory;
-        Holder(Stage stage, String category, int page) {
-            this.stage = stage; this.category = category; this.page = page;
+        Holder(Stage stage, String category, String filter, int page) {
+            this.stage = stage; this.category = category; this.filter = filter; this.page = page;
         }
         void setInventory(Inventory inventory) { this.inventory = inventory; }
         void productAt(int slot, String id) { products.put(slot, id); }
@@ -88,7 +96,7 @@ public final class DecorationShopService implements Listener {
     }
 
     public void openCategories(Player player) {
-        Holder holder = new Holder(Stage.CATEGORIES, null, 0);
+        Holder holder = new Holder(Stage.CATEGORIES, null, "all", 0);
         Inventory inventory = create(holder, 54, ScreenUi.title("decorations", "&8GASMP • Decorations"));
         set(inventory, 20, Material.FLOWER_POT, "&b&lFURNITURE",
                 "&7Furniture, props and plushies",
@@ -110,21 +118,26 @@ public final class DecorationShopService implements Listener {
     }
 
     private void openCatalogue(Player player, String category, int requestedPage) {
-        List<Product> visible = products.values().stream()
-                .filter(p -> p.category().equals(category))
-                .sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER))
-                .toList();
-        int maxPage = Math.max(0, (visible.size() - 1) / PRODUCT_SLOTS.length);
+        openCatalogue(player, category, "all", requestedPage);
+    }
+
+    private void openCatalogue(Player player, String category, String filter, int requestedPage) {
+        List<Product> visible = visibleProducts(category, filter);
+        int[] productSlots = category.equals("cosmetics") ? COSMETIC_PRODUCT_SLOTS : PRODUCT_SLOTS;
+        int maxPage = Math.max(0, (visible.size() - 1) / productSlots.length);
         int page = Math.max(0, Math.min(requestedPage, maxPage));
         String label = category.equals("furniture") ? "Furniture" : "Cosmetics";
-        Holder holder = new Holder(Stage.CATALOGUE, category, page);
-        Inventory inventory = create(holder, 54,
-                ScreenUi.title("decorations", "&8GASMP • " + label));
-        int start = page * PRODUCT_SLOTS.length;
-        int end = Math.min(visible.size(), start + PRODUCT_SLOTS.length);
+        String screen = category.equals("cosmetics") ? "cosmetics" : "decorations";
+        Holder holder = new Holder(Stage.CATALOGUE, category, filter, page);
+        Inventory inventory = create(holder, 54, ScreenUi.title(screen, "&8GASMP • " + label));
+
+        if (category.equals("cosmetics")) buildCosmeticTabs(inventory, filter);
+
+        int start = page * productSlots.length;
+        int end = Math.min(visible.size(), start + productSlots.length);
         for (int index = start; index < end; index++) {
             Product product = visible.get(index);
-            int slot = PRODUCT_SLOTS[index - start];
+            int slot = productSlots[index - start];
             ItemStack icon = createItemsAdderItem(product.contentId());
             if (icon == null) icon = new ItemStack(category.equals("furniture") ? Material.ARMOR_STAND : Material.PAPER);
             ItemMeta meta = icon.getItemMeta();
@@ -134,7 +147,7 @@ public final class DecorationShopService implements Listener {
                 lore.add(color("&7" + product.description()));
                 lore.add(color("&8"));
                 lore.add(color("&7Price: &d" + product.price() + " ✦ Shards"));
-                lore.add(color("&eClick to purchase"));
+                lore.add(color(category.equals("cosmetics") ? "&eClick to unlock this cosmetic" : "&eClick to purchase"));
                 meta.setLore(lore);
                 icon.setItemMeta(meta);
             }
@@ -146,11 +159,55 @@ public final class DecorationShopService implements Listener {
         set(inventory, 49, Material.BARRIER, "&cClose");
         if (page < maxPage) set(inventory, 51, Material.SPECTRAL_ARROW, "&eNext page");
         set(inventory, 53, Material.AMETHYST_SHARD, "&d" + (page + 1) + " / " + (maxPage + 1),
-                "&7Your purchases use GASMP Shards.");
+                "&7Filter: &f" + filterLabel(filter), "&7Your purchases use GASMP Shards.");
         player.openInventory(inventory);
     }
 
-    private void purchase(Player player, Product product, String category, int page) {
+    private void buildCosmeticTabs(Inventory inventory, String selectedFilter) {
+        Material[] icons = {Material.CHEST, Material.LEATHER_HELMET, Material.ELYTRA, Material.RABBIT_FOOT};
+        String[] labels = {"ALL COSMETICS", "HEADWEAR", "WINGS", "ACCESSORIES"};
+        for (int i = 0; i < COSMETIC_TAB_SLOTS.length; i++) {
+            String filter = COSMETIC_FILTERS[i];
+            boolean selected = filter.equals(selectedFilter);
+            long count = visibleProducts("cosmetics", filter).size();
+            set(inventory, COSMETIC_TAB_SLOTS[i],
+                    selected ? Material.GLOWSTONE_DUST : icons[i],
+                    (selected ? "&b&l" : "&f&l") + labels[i],
+                    "&7" + count + " items",
+                    selected ? "&aSelected category" : "&eClick to filter");
+        }
+    }
+
+    private List<Product> visibleProducts(String category, String filter) {
+        return products.values().stream()
+                .filter(product -> product.category().equals(category))
+                .filter(product -> !category.equals("cosmetics") || filter.equals("all")
+                        || cosmeticType(product).equals(filter))
+                .sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER))
+                .toList();
+    }
+
+    private String cosmeticType(Product product) {
+        String text = (product.id() + " " + product.contentId() + " " + product.name() + " "
+                + product.description()).toLowerCase(Locale.ROOT);
+        if (text.contains("wing")) return "wings";
+        if (text.contains("ear") || text.contains("tail") || text.contains("backpack")) return "accessories";
+        if (text.contains("hat") || text.contains("cap") || text.contains("helmet")
+                || text.contains("crown") || text.contains("hood") || text.contains("beanie")
+                || text.contains("diadem") || text.contains("ufo")) return "headwear";
+        return "accessories";
+    }
+
+    private String filterLabel(String filter) {
+        return switch (filter) {
+            case "headwear" -> "Headwear";
+            case "wings" -> "Wings";
+            case "accessories" -> "Accessories";
+            default -> "All cosmetics";
+        };
+    }
+
+    private void purchase(Player player, Product product, String category, String filter, int page) {
         if (!purchasing.add(player.getUniqueId())) {
             player.sendMessage(color("&cYour previous decoration purchase is still processing."));
             return;
@@ -187,7 +244,7 @@ public final class DecorationShopService implements Listener {
                             + product.price() + " Shards&a. Balance: &d" + balance + " ✦"));
                     if (player.getOpenInventory().getTopInventory().getHolder() instanceof Holder current
                             && current.stage == Stage.CATALOGUE && current.category.equals(category)) {
-                        openCatalogue(player, category, page);
+                        openCatalogue(player, category, filter, page);
                     }
                 }));
     }
@@ -201,21 +258,38 @@ public final class DecorationShopService implements Listener {
         if (slot < 0 || slot >= event.getView().getTopInventory().getSize()) return;
 
         if (holder.stage == Stage.CATEGORIES) {
-            if (slot == 20) openCatalogue(player, "furniture", 0);
-            else if (slot == 24) openCatalogue(player, "cosmetics", 0);
+            if (slot == 20) openCatalogue(player, "furniture", "all", 0);
+            else if (slot == 24) openCatalogue(player, "cosmetics", "all", 0);
             else if (slot == 49) plugin.getMenuService().openMain(player);
             return;
         }
 
+        if (holder.category.equals("cosmetics")) {
+            for (int i = 0; i < COSMETIC_TAB_SLOTS.length; i++) {
+                if (slot == COSMETIC_TAB_SLOTS[i]) {
+                    openCatalogue(player, "cosmetics", COSMETIC_FILTERS[i], 0);
+                    return;
+                }
+            }
+        }
+
         if (slot == 45) { openCategories(player); return; }
-        if (slot == 47 && holder.page > 0) { openCatalogue(player, holder.category, holder.page - 1); return; }
-        int maxPage = Math.max(0, (count(holder.category) - 1) / PRODUCT_SLOTS.length);
-        if (slot == 51 && holder.page < maxPage) { openCatalogue(player, holder.category, holder.page + 1); return; }
+        List<Product> visible = visibleProducts(holder.category, holder.filter);
+        int[] productSlots = holder.category.equals("cosmetics") ? COSMETIC_PRODUCT_SLOTS : PRODUCT_SLOTS;
+        int maxPage = Math.max(0, (visible.size() - 1) / productSlots.length);
+        if (slot == 47 && holder.page > 0) {
+            openCatalogue(player, holder.category, holder.filter, holder.page - 1);
+            return;
+        }
+        if (slot == 51 && holder.page < maxPage) {
+            openCatalogue(player, holder.category, holder.filter, holder.page + 1);
+            return;
+        }
         if (slot == 49) { player.closeInventory(); return; }
 
         String productId = holder.productAt(slot);
         Product product = productId == null ? null : products.get(productId);
-        if (product != null) purchase(player, product, holder.category, holder.page);
+        if (product != null) purchase(player, product, holder.category, holder.filter, holder.page);
     }
 
     @EventHandler
@@ -226,13 +300,17 @@ public final class DecorationShopService implements Listener {
     private Inventory create(Holder holder, int size, String title) {
         Inventory inventory = Bukkit.createInventory(holder, size, title);
         holder.setInventory(inventory);
-        ItemStack filler = new ItemStack(Material.PURPLE_STAINED_GLASS_PANE);
+        ItemStack filler = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta meta = filler.getItemMeta();
         if (meta != null) { meta.setDisplayName(" "); filler.setItemMeta(meta); }
         for (int slot = 0; slot < size; slot++) {
             int row = slot / 9, column = slot % 9;
             if (row == 0 || row == 5 || column == 0 || column == 8) inventory.setItem(slot, filler.clone());
         }
+        ItemStack accent = new ItemStack(Material.MAGENTA_STAINED_GLASS_PANE);
+        ItemMeta accentMeta = accent.getItemMeta();
+        if (accentMeta != null) { accentMeta.setDisplayName(" "); accent.setItemMeta(accentMeta); }
+        for (int slot : new int[]{0, 8, 45, 53}) inventory.setItem(slot, accent.clone());
         return inventory;
     }
 
