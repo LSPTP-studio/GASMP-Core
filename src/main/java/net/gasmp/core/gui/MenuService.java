@@ -226,7 +226,7 @@ public final class MenuService implements Listener {
         String cratesCommand = plugin.getConfig().getString("warps.crates-command", "warp crates").trim();
         String spawnCommand = plugin.getConfig().getString("warps.spawn-command", "spawn").trim();
 
-        set(inventory, 20, Material.CHEST, "&6&lCRATES",
+        setCustomOrFallback(inventory, 20, "gasmp:normal_crate", Material.CHEST, "&6&lCRATES",
                 "&7Visit the GASMP crate area.",
                 cratesCommand.isBlank() ? "&cWarp command is not configured." : "&eClick to travel");
         if (cratesCommand.isBlank()) holder.notice(20, "&cSet warps.crates-command in config.yml first.");
