@@ -50,7 +50,7 @@ public final class RtpService implements Listener {
 
     public void start(Player player, String selectedWorld) {
         if (!Bukkit.isPrimaryThread()) {
-            Bukkit.getScheduler().runTask(plugin, () -> start(player));
+            Bukkit.getScheduler().runTask(plugin, () -> start(player, selectedWorld));
             return;
         }
         var cfg = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
