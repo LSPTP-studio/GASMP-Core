@@ -75,7 +75,9 @@ public final class RtpService implements Listener {
             return;
         }
 
-        String worldName = selectedWorld == null || selectedWorld.isBlank()\n                ? cfg.getString("worlds.overworld", cfg.getString("settings.world", "world"))\n                : selectedWorld.trim();
+        String worldName = selectedWorld == null || selectedWorld.isBlank()
+                ? cfg.getString("worlds.overworld", cfg.getString("settings.world", "world"))
+                : selectedWorld.trim();
         World world = Bukkit.getWorld(worldName);
         if (world == null || cfg.getStringList("settings.blocked-worlds").contains(player.getWorld().getName())) {
             player.sendMessage(color("&cRTP is unavailable in this world."));
