@@ -1,6 +1,7 @@
 package net.gasmp.core.shop;
 
 import net.gasmp.core.GASMPCore;
+import net.gasmp.core.gui.ScreenUi;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -101,7 +102,7 @@ public final class ShopService implements Listener {
         int maxPage = Math.max(0, (visible.size() - 1) / CONTENT.length);
         int safePage = Math.max(0, Math.min(page, maxPage));
         ShopHolder holder = new ShopHolder(ShopHolder.Stage.LIST, safePage, null, category);
-        Inventory inventory = create(holder, 54, color(config.getString("settings.title", "&9&lGASMP Shop")));
+        Inventory inventory = create(holder, 54, ScreenUi.title("shop", config.getString("settings.title", "&9&lGASMP Shop")));
 
         set(inventory, 4, Material.GOLD_INGOT, "&e&lCoins Shop",
                 "&7Provider: &f" + (plugin.getEconomyBridge().isAvailable()
@@ -146,7 +147,7 @@ public final class ShopService implements Listener {
 
     private void openConfirm(Player player, Entry entry, String category, int page) {
         ShopHolder holder = new ShopHolder(ShopHolder.Stage.CONFIRM, page, entry.key(), category);
-        Inventory inventory = create(holder, 27, color("&8Confirm Purchase"));
+        Inventory inventory = create(holder, 27, ScreenUi.title("shop_confirm", "&8Confirm Purchase"));
         ItemStack preview = makeItem(entry);
         ItemMeta meta = preview.getItemMeta();
         if (meta != null) {
@@ -415,11 +416,15 @@ public final class ShopService implements Listener {
     private Inventory create(ShopHolder holder, int size, String title) {
         Inventory inventory = Bukkit.createInventory(holder, size, title);
         holder.setInventory(inventory);
-        ItemStack filler = item(Material.BLUE_STAINED_GLASS_PANE, " ");
+        ItemStack filler = item(Material.BLACK_STAINED_GLASS_PANE, " ");
+        ItemStack accent = item(Material.CYAN_STAINED_GLASS_PANE, " ");
         for (int slot = 0; slot < size; slot++) {
             int row = slot / 9;
             int column = slot % 9;
             if (row == 0 || row == size / 9 - 1 || column == 0 || column == 8) inventory.setItem(slot, filler.clone());
+        }
+        if (size == 54) {
+            for (int slot : new int[]{2, 3, 5, 6, 47, 48, 50, 51}) inventory.setItem(slot, accent.clone());
         }
         return inventory;
     }
