@@ -1,4 +1,4 @@
-name: Build and publish GASMP Core release
+name: GASMP Core Releases — JAR and Full Package
 
 on:
   push:
