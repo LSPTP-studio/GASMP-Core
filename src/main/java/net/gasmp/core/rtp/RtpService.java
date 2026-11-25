@@ -56,9 +56,15 @@ public final class RtpService implements Listener {
     public String quickWarpCommand(String warpId) {
         if (warpId == null) return null;
         var cfg = loadConfig();
-        String path = "quick-warps." + warpId.toLowerCase(java.util.Locale.ROOT);
-        if (!cfg.getBoolean(path + ".enabled", false)) return null;
-        String command = cfg.getString(path + ".command", "").trim();
+        String key = warpId.toLowerCase(java.util.Locale.ROOT);
+        String path = "quick-warps." + key;
+        String defaultCommand = switch (key) {
+            case "crates" -> "warp crates";
+            case "spawn" -> "spawn";
+            default -> "";
+        };
+        if (!cfg.getBoolean(path + ".enabled", !defaultCommand.isBlank())) return null;
+        String command = cfg.getString(path + ".command", defaultCommand).trim();
         if (command.isBlank()) return null;
         return command.startsWith("/") ? command.substring(1) : command;
     }
