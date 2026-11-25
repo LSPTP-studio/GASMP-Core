@@ -133,7 +133,12 @@ key-shop:
     tidal: 1800
     obsidian: 2500
 
-warps:\n  # These commands are dispatched only after the player clicks a destination.\n  crates-command: "warp crates"\n  spawn-command: "spawn"\n\n# Set these to the exact world names shown by /mv list.
+warps:\n  # These commands are dispatched only after the player clicks a destination.\n  crates-command: "warp crates"\n  spawn-command: "spawn"\n\nwarps:
+  # These commands are dispatched after a player clicks a destination.
+  crates-command: "warp crates"
+  spawn-command: "spawn"
+
+# Set these to the exact world names shown by /mv list.
 game-worlds:
   paintball-command: "mv teleport paintball"
   gokarts-command: "kart arena generate 1"
