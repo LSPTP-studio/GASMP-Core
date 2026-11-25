@@ -633,9 +633,18 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                 ScreenUi.title("crate_details", "&8GASMP &7• " + crateColor(crateId) + crateDisplayName(crateId)));
         holder.inventory(inventory);
 
+        Material accentMaterial = switch (canonicalCrateId(crateId)) {
+            case "normal" -> Material.LIME_STAINED_GLASS_PANE;
+            case "medium" -> Material.PURPLE_STAINED_GLASS_PANE;
+            case "premium" -> Material.ORANGE_STAINED_GLASS_PANE;
+            case "aether" -> Material.LIGHT_BLUE_STAINED_GLASS_PANE;
+            case "tidal" -> Material.CYAN_STAINED_GLASS_PANE;
+            case "obsidian" -> Material.RED_STAINED_GLASS_PANE;
+            default -> Material.MAGENTA_STAINED_GLASS_PANE;
+        };
         ItemStack[] frame = {
-                named(Material.PURPLE_STAINED_GLASS_PANE, " "),
-                named(Material.MAGENTA_STAINED_GLASS_PANE, " ")
+                named(Material.BLACK_STAINED_GLASS_PANE, " "),
+                named(accentMaterial, " ")
         };
         for (int slot = 0; slot < 54; slot++) {
             int row = slot / 9;
