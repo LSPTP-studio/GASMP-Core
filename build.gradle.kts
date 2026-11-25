@@ -1,7 +1,7 @@
 plugins { java }
 
 group = "net.gasmp"
-version = providers.gradleProperty("releaseVersion").getOrElse("0.8.3")
+version = providers.gradleProperty("releaseVersion").getOrElse("0.8.3")\n\n// Build the same plugin version against separate Paper API lines.\nval paperApiVersion = providers.gradleProperty("paperApiVersion").orElse("26.2.build.+")\nval paperTarget = providers.gradleProperty("paperTarget").orElse("paper-26.2")
 
 repositories {
     mavenCentral()
@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:26.2.build.135-stable")
+    compileOnly("io.papermc.paper:paper-api:${paperApiVersion.get()}")
     compileOnly("net.luckperms:api:5.5")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
         exclude(group = "org.bukkit", module = "bukkit")
@@ -28,7 +28,7 @@ tasks.withType<JavaCompile> {
 }
 
 tasks.jar {
-    archiveBaseName.set("GASMP-Core")
+    archiveBaseName.set("GASMP-Core")\n    archiveClassifier.set(paperTarget.get())
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(configurations.runtimeClasspath.get().map { dep ->
         if (dep.isDirectory) dep else zipTree(dep)
