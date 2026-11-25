@@ -1,5 +1,5 @@
 name: GASMP-Core
-version: '0.8.3'
+version: '0.8.4'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
@@ -44,7 +44,7 @@ commands:
     usage: /shop [coins|shards]
   rtp:
     description: Teleports you to a safe random location.
-    usage: /rtp
+    usage: /rtp <gui|now|overworld|nether|end>
   bounty:
     description: Place, view, and claim Coins bounties.
     usage: /bounty <place|top|help>
