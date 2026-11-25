@@ -17,12 +17,13 @@ repositories {
     mavenCentral()
     maven("https://jitpack.io")
     maven("https://repo.momirealms.net/releases/")
+    maven("https://api.modrinth.com/maven")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:${paperApiVersion.get()}")
-    compileOnly("net.momirealms:craft-engine-core:26.9.2")
-    compileOnly("net.momirealms:craft-engine-bukkit:26.9.2")
+    // CraftEngine 26.9.2 plugin jar exposes the public Bukkit/Core API to compile against.
+    compileOnly("maven.modrinth:tRX6FMfQ:mwFiNxVO")
     compileOnly("com.github.VOIDRP-MINECRAFT:voidrp-ui:v0.4.0")
     compileOnly(kotlin("stdlib"))
     compileOnly("net.luckperms:api:5.5")
