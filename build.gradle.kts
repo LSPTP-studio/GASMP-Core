@@ -8,8 +8,10 @@ val paperApiVersion = providers.gradleProperty("paperApiVersion").orElse("26.2.b
 val paperTarget = providers.gradleProperty("paperTarget").orElse("")
 
 repositories {
-    mavenCentral()
+    // Resolve Paper API coordinates directly from Paper first; Maven Central remains
+    // available for transitive and third-party dependencies.
     maven("https://repo.papermc.io/repository/maven-public/")
+    mavenCentral()
     maven("https://jitpack.io")
 }
 
