@@ -100,6 +100,11 @@ public final class MenuService implements Listener {
         setCustomOrFallback(inventory, 14, "gasmp:modern_sofa", Material.ARMOR_STAND, "&9&lDecorations", "&7Browse cosmetic decorations", "&eClick to open");
         holder.navigate(14, MenuPage.DECORATIONS);
 
+        set(inventory, 16, Material.EMERALD, "&a&lAUCTION HOUSE",
+                "&7Browse player listings with Coins.",
+                "&eClick to browse");
+        holder.command(16, "ah");
+
         set(inventory, 20, Material.ENDER_PEARL, "&b&lRANDOM TELEPORT", "&7Choose where your adventure begins", "&eClick to select a world");
         holder.navigate(20, MenuPage.RTP);
         set(inventory, 22, Material.COMPASS, "&3&lWARPS", "&7Crates, Spawn and server destinations", "&eClick to browse warps");
