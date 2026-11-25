@@ -3,7 +3,7 @@ version: '0.8.3'
 main: net.gasmp.core.GASMPCore
 api-version: '26.2'
 author: GASMP Development
-description: GASMP Core: native inventory GUIs, six themed cosmetic crates, keys, animations, Shards, shops, casino, teams and staff tools.
+description: "GASMP Core: native inventory GUIs, six themed cosmetic crates, keys, animations, Shards, shops, casino, teams and staff tools."
 depend:
   - ItemsAdder
   - Vault
