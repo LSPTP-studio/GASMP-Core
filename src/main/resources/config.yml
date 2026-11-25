@@ -1,4 +1,4 @@
-# GASMP Core 0.8.3 — ItemsAdder Edition / Paper 26.2 / Java 25
+# GASMP Core 0.8.4 — ItemsAdder Edition / Paper 26.2 / Java 25
 # GASMP Core gameplay systems, Shard Shop, Shards Arcade and cosmetic crates.
 general:
   debug: false
@@ -94,7 +94,7 @@ auction-house:
   minimum-price: 1.0
   maximum-price: 100000000.0
   listing-hours: 168
-  page-size: 10
+  page-size: 28
   max-active-listings-per-player: 10
   reservation-timeout-seconds: 120
 battle-pass:
