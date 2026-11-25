@@ -132,7 +132,7 @@ The GitHub Actions workflow builds both targets independently and uploads separa
 ## ItemsAdder setup and custom menu UI
 
 1. Copy the gasmp and gasmp_ranks folders into plugins/ItemsAdder/contents/.
-2. Run /iareload and check the console for YAML/model/font-image errors.
+2. Run /iareload and check the console for YAML or model errors.
 3. Run /iazip to regenerate the resource pack.
 4. Ensure the ItemsAdder resource pack is hosted and pushed to players.
 5. Reconnect and accept the updated pack. Clients using an older cached pack or declining the pack will not see the custom item and furniture models.
