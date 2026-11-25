@@ -43,7 +43,7 @@ Optional integrations include PlaceholderAPI, TAB, Geyser + Floodgate, ProtocolL
 4. Start or restart the server.
 5. Run /iareload and fix any YAML or model warnings in the console.
 6. Run /iazip to rebuild the resource pack.
-7. Ensure the ItemsAdder pack is hosted and delivered to players, then reconnect and ACCEPT the updated pack. A stale cached pack or declined pack will show missing glyphs and models.
+7. Ensure the ItemsAdder pack is hosted and delivered to players, then reconnect and ACCEPT the updated pack. A stale cached pack or declined pack will show missing custom item and furniture models.
 8. Test the menus and all six crate/key pairs before production use.
 
 GASMP menus use native Minecraft inventory slots and do not need custom font-image background overlays. ItemsAdder supplies the custom crate, cosmetic and furniture icons.
@@ -110,7 +110,7 @@ GitHub Actions builds both targets separately and uploads the JAR and full insta
 
 ## Asset notes
 
-The new UI panels and themed crate models are GASMP starter assets using vanilla Minecraft textures. The source snapshot did not contain the original custom model exports for the previously referenced plush, wing and Feral Fantasy packs. Replace those starter models only with licensed final art, keeping the item IDs and model paths unchanged.
+The menus are built from native Minecraft inventory slots; they do not use full-screen background panels. The themed crate and furniture models are GASMP starter assets using vanilla Minecraft textures. The source snapshot did not contain the original custom model exports for the previously referenced plush, wing and Feral Fantasy packs. Replace those starter models only with licensed final art, keeping the item IDs and model paths unchanged.
 
 ## Release validation
 
