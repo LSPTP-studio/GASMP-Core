@@ -1,6 +1,7 @@
 package net.gasmp.core.auction;
 
 import net.gasmp.core.GASMPCore;
+import net.gasmp.core.gui.ScreenUi;
 import net.gasmp.core.data.PlayerDataStore;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -13,7 +14,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.nio.charset.StandardCharsets;
@@ -21,6 +27,27 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class AuctionService implements CommandExecutor, TabCompleter, Listener {
+    private static final int AUCTION_PAGE_SIZE = 21;
+    private static final int[] AUCTION_SLOTS = {
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34
+    };
+
+    private static final class AuctionMenuHolder implements InventoryHolder {
+        enum Stage { LIST, CONFIRM }
+        final Stage stage;
+        final int page;
+        final long auctionId;
+        final Map<Integer, Long> listings = new HashMap<>();
+        Inventory inventory;
+        AuctionMenuHolder(Stage stage, int page, long auctionId) {
+            this.stage = stage;
+            this.page = page;
+            this.auctionId = auctionId;
+        }
+        @Override public Inventory getInventory() { return inventory; }
+    }
     private static final long LISTING_DURATION_MS = 7L * 24 * 60 * 60 * 1000;
     private final GASMPCore plugin;
     private final Set<UUID> busy = ConcurrentHashMap.newKeySet();
@@ -170,17 +197,187 @@ public final class AuctionService implements CommandExecutor, TabCompleter, List
     }
 
     private void list(Player player, int page) {
-        plugin.getDataStore().getActiveAuctions(10, page * 10).whenComplete((records, error) ->
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    if (error != null) { player.sendMessage(color("&cCould not load auctions.")); return; }
-                    player.sendMessage(color("&6&lGASMP AUCTION HOUSE &8- &7Page " + (page + 1)));
-                    if (records.isEmpty()) { player.sendMessage(color("&7No active listings on this page.")); return; }
-                    for (PlayerDataStore.AuctionRecord record : records) {
-                        player.sendMessage(color("&e#" + record.id() + " &f" + record.itemName()
-                                + " &8by &7" + record.sellerName() + " &8- &6" + money(record.price()) + " Coins"));
+        int safePage = Math.max(0, page);
+        plugin.getDataStore().getActiveAuctions(AUCTION_PAGE_SIZE, safePage * AUCTION_PAGE_SIZE)
+                .whenComplete((records, error) -> Bukkit.getScheduler().runTask(plugin, () -> {
+                    if (!player.isOnline()) return;
+                    if (error != null) {
+                        player.sendMessage(color("&cCould not load auctions."));
+                        plugin.getLogger().warning("Auction GUI load failed: " + error.getMessage());
+                        return;
                     }
-                    player.sendMessage(color("&7Use &f/ah buy <id> &7to purchase or &f/ah list <page> &7to browse."));
+                    openAuctionList(player, safePage, records == null ? List.of() : records);
                 }));
+    }
+
+    private void openAuctionList(Player player, int page, List<PlayerDataStore.AuctionRecord> records) {
+        AuctionMenuHolder holder = new AuctionMenuHolder(AuctionMenuHolder.Stage.LIST, page, -1L);
+        Inventory inventory = Bukkit.createInventory(holder, 54,
+                ScreenUi.title("auction", "&8GASMP • Auction House"));
+        holder.inventory = inventory;
+        fillAuctionFrame(inventory);
+
+        setAuctionItem(inventory, 4, Material.EMERALD, "&a&lGASMP AUCTION HOUSE",
+                "&7Browse player listings and purchase with Coins.",
+                "&7Click a listing to review it before buying.",
+                "&8Items are delivered to your /ah collect mailbox.");
+        setAuctionItem(inventory, 47, Material.GOLD_INGOT, "&6&lSELL AN ITEM",
+                "&7Hold an item in your main hand, then use:",
+                "&e/ah sell <price>");
+
+        int index = 0;
+        for (PlayerDataStore.AuctionRecord record : records) {
+            if (index >= AUCTION_SLOTS.length) break;
+            int slot = AUCTION_SLOTS[index++];
+            ItemStack display;
+            try {
+                display = decode(record.itemData());
+                if (display == null || display.getType().isAir()) display = new ItemStack(Material.PAPER);
+            } catch (Exception decodeError) {
+                display = new ItemStack(Material.BARRIER);
+            }
+            ItemMeta meta = display.getItemMeta();
+            if (meta != null) {
+                String itemName = record.itemName() == null || record.itemName().isBlank()
+                        ? display.getType().name().replace('_', ' ') : record.itemName();
+                meta.setDisplayName(color("&f&l" + itemName));
+                List<String> lore = new ArrayList<>();
+                lore.add(color("&7Seller: &f" + record.sellerName()));
+                lore.add(color("&7Price: &6" + money(record.price()) + " Coins"));
+                lore.add(color("&7Listing: &e#" + record.id()));
+                lore.add(color("&8"));
+                lore.add(color(record.sellerUuid().equals(player.getUniqueId())
+                        ? "&cYour own listing" : "&aClick to review purchase"));
+                meta.setLore(lore);
+                display.setItemMeta(meta);
+            }
+            inventory.setItem(slot, display);
+            holder.listings.put(slot, record.id());
+        }
+
+        if (records.isEmpty()) {
+            setAuctionItem(inventory, 22, Material.BARREL, "&7&lNO ACTIVE LISTINGS",
+                    "&7There are currently no auctions on this page.");
+        }
+        if (page > 0) setAuctionItem(inventory, 45, Material.ARROW, "&f&lPREVIOUS PAGE");
+        setAuctionItem(inventory, 49, Material.BARRIER, "&c&lCLOSE");
+        if (records.size() >= AUCTION_PAGE_SIZE) setAuctionItem(inventory, 53, Material.ARROW, "&f&lNEXT PAGE");
+        player.openInventory(inventory);
+    }
+
+    private void openAuctionConfirm(Player player, int page, long auctionId) {
+        plugin.getDataStore().getAuction(auctionId).whenComplete((record, error) ->
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    if (!player.isOnline()) return;
+                    if (error != null || record == null || !"ACTIVE".equalsIgnoreCase(record.status())
+                            || record.expiresAtMs() <= System.currentTimeMillis()) {
+                        player.sendMessage(color("&cThat auction is no longer available."));
+                        list(player, page);
+                        return;
+                    }
+                    ItemStack display;
+                    try {
+                        display = decode(record.itemData());
+                        if (display == null || display.getType().isAir()) display = new ItemStack(Material.PAPER);
+                    } catch (Exception decodeError) {
+                        player.sendMessage(color("&cThis auction contains invalid item data."));
+                        return;
+                    }
+                    AuctionMenuHolder holder = new AuctionMenuHolder(AuctionMenuHolder.Stage.CONFIRM, page, auctionId);
+                    Inventory inventory = Bukkit.createInventory(holder, 27,
+                            ScreenUi.title("auction_confirm", "&8Review Auction"));
+                    holder.inventory = inventory;
+                    setAuctionFrame27(inventory);
+                    ItemMeta meta = display.getItemMeta();
+                    if (meta != null) {
+                        meta.setDisplayName(color("&f&l" + record.itemName()));
+                        meta.setLore(List.of(
+                                color("&7Seller: &f" + record.sellerName()),
+                                color("&7Price: &6" + money(record.price()) + " Coins"),
+                                color("&7Listing: &e#" + record.id())
+                        ));
+                        display.setItemMeta(meta);
+                    }
+                    inventory.setItem(13, display);
+                    setAuctionItem(inventory, 11, Material.LIME_DYE, "&a&lCONFIRM PURCHASE",
+                            "&7Pay &6" + money(record.price()) + " Coins",
+                            "&7The item goes to your mailbox.");
+                    setAuctionItem(inventory, 15, Material.RED_DYE, "&c&lCANCEL",
+                            "&7Return to the auction listings.");
+                    player.openInventory(inventory);
+                }));
+    }
+
+    private void fillAuctionFrame(Inventory inventory) {
+        ItemStack filler = namedAuctionPane(Material.BLACK_STAINED_GLASS_PANE);
+        ItemStack accent = namedAuctionPane(Material.LIME_STAINED_GLASS_PANE);
+        for (int slot = 0; slot < 54; slot++) {
+            int row = slot / 9, column = slot % 9;
+            if (row == 0 || row == 5 || column == 0 || column == 8) inventory.setItem(slot, filler.clone());
+        }
+        for (int slot : new int[]{2, 3, 5, 6, 47, 48, 50, 51}) inventory.setItem(slot, accent.clone());
+    }
+
+    private void setAuctionFrame27(Inventory inventory) {
+        ItemStack filler = namedAuctionPane(Material.BLACK_STAINED_GLASS_PANE);
+        ItemStack accent = namedAuctionPane(Material.LIME_STAINED_GLASS_PANE);
+        for (int slot = 0; slot < 27; slot++) {
+            int row = slot / 9, column = slot % 9;
+            if (row == 0 || row == 2 || column == 0 || column == 8) inventory.setItem(slot, filler.clone());
+        }
+        inventory.setItem(2, accent.clone());
+        inventory.setItem(6, accent.clone());
+    }
+
+    private ItemStack namedAuctionPane(Material material) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) { meta.setDisplayName(" "); item.setItemMeta(meta); }
+        return item;
+    }
+
+    private void setAuctionItem(Inventory inventory, int slot, Material material,
+                                String name, String... lore) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(color(name));
+            if (lore.length > 0) meta.setLore(Arrays.stream(lore).map(this::color).toList());
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(slot, item);
+    }
+
+    @EventHandler
+    public void onAuctionMenuClick(InventoryClickEvent event) {
+        if (!(event.getView().getTopInventory().getHolder() instanceof AuctionMenuHolder holder)) return;
+        event.setCancelled(true);
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        int slot = event.getRawSlot();
+        if (slot < 0 || slot >= event.getView().getTopInventory().getSize()) return;
+
+        if (holder.stage == AuctionMenuHolder.Stage.LIST) {
+            if (slot == 49) { player.closeInventory(); return; }
+            if (slot == 45 && holder.page > 0) { list(player, holder.page - 1); return; }
+            if (slot == 53 && holder.inventory.getItem(53) != null) { list(player, holder.page + 1); return; }
+            Long id = holder.listings.get(slot);
+            if (id != null) {
+                openAuctionConfirm(player, holder.page, id);
+                return;
+            }
+            return;
+        }
+
+        if (slot == 15) { list(player, holder.page); return; }
+        if (slot == 11) {
+            player.closeInventory();
+            buy(player, new String[]{"buy", Long.toString(holder.auctionId)});
+        }
+    }
+
+    @EventHandler
+    public void onAuctionMenuDrag(InventoryDragEvent event) {
+        if (event.getView().getTopInventory().getHolder() instanceof AuctionMenuHolder) event.setCancelled(true);
     }
 
     private void mine(Player player) {
