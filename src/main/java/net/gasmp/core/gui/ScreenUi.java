@@ -1,31 +1,17 @@
 package net.gasmp.core.gui;
 
-import java.util.Locale;
 import org.bukkit.ChatColor;
 
-/**
- * Shared title renderer for GASMP inventories.
- * Glyph aliases resolve to ItemsAdder font images in the gasmp namespace.
- * The client must accept/download the generated ItemsAdder resource pack.
- */
+/** Shared title renderer. GASMP uses native inventory titles and item icons. */
 public final class ScreenUi {
-    private ScreenUi() {
-    }
+    private ScreenUi() { }
 
+    /**
+     * Keep the supplied title readable in the vanilla inventory container.
+     * Large font-image overlays are deliberately not used: they cover slots,
+     * vary with client resource-pack scaling, and are not Bedrock friendly.
+     */
     public static String title(String screenId, String vanillaTitle) {
-        String id = screenId == null ? "" : screenId.toLowerCase(Locale.ROOT);
-        String glyph = switch (id) {
-            case "crates", "crate", "crate_details" -> "ui_crate";
-            case "shard_shop", "shop" -> "ui_shop";
-            case "statistics", "stats" -> "ui_stats";
-            case "decorations" -> "ui_decor";
-            case "shards" -> "ui_shards";
-            case "casino" -> "ui_arcade";
-            case "profile" -> "ui_profile";
-            case "settings" -> "ui_settings";
-            case "adventure" -> "ui_adventure";
-            default -> "ui_main";
-        };
-        return ChatColor.WHITE + ":offset_-8::" + glyph + ":";
+        return ChatColor.translateAlternateColorCodes('&', vanillaTitle == null ? "GASMP" : vanillaTitle);
     }
 }
