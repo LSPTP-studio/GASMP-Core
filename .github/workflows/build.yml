@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - itemsadder-edition-0.8.3
+      - craftengine-edition-0.8.3
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -78,10 +78,10 @@ jobs:
           TARGET="${{ matrix.paper_target }}"
           JAR="build/libs/GASMP-Core-0.8.3-${TARGET}.jar"
           ROOT="dist/GASMP-Core-0.8.3-${TARGET}"
-          mkdir -p "$ROOT/plugins/ItemsAdder/contents"
+          mkdir -p "$ROOT/plugins/CraftEngine/resources"
           cp "$JAR" "$ROOT/plugins/"
-          cp -a integrations/itemsadder/contents/gasmp "$ROOT/plugins/ItemsAdder/contents/"
-          cp -a integrations/itemsadder/contents/gasmp_ranks "$ROOT/plugins/ItemsAdder/contents/"
+          cp -a integrations/craftengine/resources/gasmp "$ROOT/plugins/CraftEngine/resources/"
+          
           cp README.md "$ROOT/"
           cp docs/COMMANDS.md "$ROOT/"
           cat > "$ROOT/INSTALL.txt" <<EOF
@@ -90,13 +90,13 @@ jobs:
           Server target: Paper ${{ matrix.paper_target == 'paper-26.2' && '26.2 OFFICIAL' || '26.3 TEST' }}
           Plugin version: 0.8.3 (unchanged)
           Java: 25
-          Required: ItemsAdder 4.x, Vault, LuckPerms and a Vault economy provider.
+          Required: CraftEngine 26.9.2+, Vault, LuckPerms and a Vault economy provider. Optional: VoidRP UI 0.4.0 (separate plugin JAR).
 
           INSTALL
-          1. Stop the target server and back up plugins/GASMP-Core/ and plugins/ItemsAdder/.
+          1. Stop the target server and back up plugins/GASMP-Core/ and plugins/CraftEngine/.
           2. Copy the JAR from plugins/ into the server plugins/ folder.
-          3. Merge the ItemsAdder contents folder into plugins/ItemsAdder/contents/.
-          4. Start the server and check the console for GASMP or ItemsAdder errors.
+          3. Merge the CraftEngine contents folder into plugins/CraftEngine/resources/.
+          4. Start the server and check the console for GASMP or CraftEngine errors.
           5. Run /iareload, then /iazip, and make sure clients accept the updated pack.
           6. Test menus, purchases and teleports before using the build on a live server.
 

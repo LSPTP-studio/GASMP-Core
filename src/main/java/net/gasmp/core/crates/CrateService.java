@@ -305,7 +305,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         ItemStack custom = createCraftEngineItem(contentId, amount);
         if (custom == null) {
             actor.sendMessage(color("&cCould not create &f" + contentId
-                    + "&c. Confirm CraftEngine has loaded the GASMP contents folder, then run /iareload."));
+                    + "&c. Confirm CraftEngine has loaded the GASMP contents folder, then run /ce reload all."));
             return;
         }
         Map<Integer, ItemStack> left = target.getInventory().addItem(custom);
@@ -336,7 +336,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         ItemStack keyItem = createKey(id, amount);
         if (crateItem == null || keyItem == null) {
             actor.sendMessage(color("&cThe CraftEngine crate or matching key is missing for &f" + id
-                    + "&c. Run /iareload and check the console."));
+                    + "&c. Run /ce reload all and check the console."));
             return;
         }
         target.getInventory().addItem(crateItem).values()
