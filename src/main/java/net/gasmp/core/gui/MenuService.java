@@ -63,6 +63,7 @@ public final class MenuService implements Listener {
 
         switch (page) {
             case MAIN -> buildMain(holder, inventory);
+            case RTP -> buildRtp(holder, inventory);
             case SHOP -> buildShop(holder, inventory);
             case STATISTICS -> buildStatistics(holder, inventory, player);
             case SHARDS -> buildShards(holder, inventory);
@@ -93,8 +94,8 @@ public final class MenuService implements Listener {
         set(inventory, 14, Material.ARMOR_STAND, "&9&lDecorations", "&7Browse cosmetic decorations", "&eClick to open");
         holder.navigate(14, MenuPage.DECORATIONS);
 
-        set(inventory, 20, Material.ENDER_PEARL, "&b&lRandom Teleport", "&7Find a safe wilderness location", "&eClick to use /rtp");
-        holder.notice(20, "&bUse /rtp to find a safe wilderness location.");
+        set(inventory, 20, Material.ENDER_PEARL, "&b&lRandom Teleport", "&7Choose Overworld or Nether", "&7End is locked for now", "&eClick to choose a world");
+        holder.navigate(20, MenuPage.RTP);
         set(inventory, 22, Material.FIREWORK_ROCKET, "&6&lGame Worlds", "&7Paintball, Go Karts and Skatepark", "&eClick to choose a game world");
         holder.navigate(22, MenuPage.GAME_WORLDS);
         set(inventory, 24, Material.TARGET, "&6&lBounties", "&7Place and claim player bounties", "&eUse /bounty");
@@ -113,6 +114,54 @@ public final class MenuService implements Listener {
         holder.navigate(34, MenuPage.SETTINGS);
 
         set(inventory, 49, Material.BARRIER, "&c&lClose", "&7Close this menu");
+    }
+
+    private void buildRtp(MenuHolder holder, Inventory inventory) {
+        boolean overworldEnabled = plugin.getRtpService().isDestinationEnabled("overworld");
+        boolean netherEnabled = plugin.getRtpService().isDestinationEnabled("nether");
+
+        set(inventory, 20, overworldEnabled ? Material.GRASS_BLOCK : Material.BARRIER,
+                overworldEnabled ? "&a&lOVERWORLD" : "&c&lOVERWORLD DISABLED",
+                "&7Random safe location in the main world",
+                "&8Configured destination: overworld",
+                overworldEnabled ? "&eClick to teleport" : "&cCurrently unavailable");
+        if (overworldEnabled) holder.command(20, "rtp overworld");
+        else holder.notice(20, "&cThe Overworld RTP destination is disabled.");
+
+        set(inventory, 22, netherEnabled ? Material.NETHERRACK : Material.BARRIER,
+                netherEnabled ? "&c&lTHE NETHER" : "&c&lNETHER DISABLED",
+                "&7Random safe location in the Nether",
+                "&8Uses a lower scan ceiling to avoid the bedrock roof",
+                netherEnabled ? "&eClick to teleport" : "&cCurrently unavailable");
+        if (netherEnabled) holder.command(22, "rtp nether");
+        else holder.notice(22, "&cThe Nether RTP destination is disabled.");
+
+        set(inventory, 24, Material.END_PORTAL_FRAME, "&8&lTHE END",
+                "&7This destination is not available yet.",
+                "&c&lLOCKED",
+                "&8Coming in a future GASMP update");
+        holder.notice(24, "&cThe End RTP destination is locked.");
+
+        setQuickWarp(holder, inventory, 29, "crates", Material.CHEST, "&6&lCRATES",
+                "&7Travel to the crate area");
+        setQuickWarp(holder, inventory, 31, "spawn", Material.COMPASS, "&b&lSPAWN",
+                "&7Return to the server spawn");
+        setQuickWarp(holder, inventory, 33, "mystery", Material.ENDER_EYE, "&5&lMYSTERY",
+                "&7A secret destination that is not configured yet");
+    }
+
+    private void setQuickWarp(MenuHolder holder, Inventory inventory, int slot,
+                              String warpId, Material icon, String title, String description) {
+        String command = plugin.getRtpService().quickWarpCommand(warpId);
+        if (command == null) {
+            String clean = title.replace("&6&l", "").replace("&b&l", "").replace("&5&l", "");
+            set(inventory, slot, Material.GRAY_DYE, "&8" + clean + " &7(COMING SOON)",
+                    description, "&8No destination command is configured.");
+            holder.notice(slot, "&7That quick warp is not available yet.");
+            return;
+        }
+        set(inventory, slot, icon, title, description, "&eClick to travel");
+        holder.command(slot, command);
     }
 
     private void buildShop(MenuHolder holder, Inventory inventory) {
@@ -200,6 +249,7 @@ public final class MenuService implements Listener {
     private String screenFor(MenuPage page) {
         return switch (page) {
             case MAIN -> "main_menu";
+            case RTP -> "rtp";
             case SHOP, KEY_SHOP -> "shard_shop";
             case STATISTICS -> "statistics";
             case DECORATIONS -> "decorations";
@@ -341,6 +391,7 @@ public final class MenuService implements Listener {
     private void fillFrame(Inventory inventory, MenuPage page) {
         Material frame = switch (page) {
             case MAIN, STATISTICS, PROFILE -> Material.MAGENTA_STAINED_GLASS_PANE;
+            case RTP -> Material.CYAN_STAINED_GLASS_PANE;
             case SHOP, DECORATIONS -> Material.BLUE_STAINED_GLASS_PANE;
             case SHARDS, KEY_SHOP -> Material.PURPLE_STAINED_GLASS_PANE;
             case GAME_WORLDS -> Material.BLUE_STAINED_GLASS_PANE;
@@ -382,6 +433,7 @@ public final class MenuService implements Listener {
         String custom = plugin.getConfig().getString("menus.main-menu-title", "&d&lGASMP &8• &5Menu");
         return switch (page) {
             case MAIN -> color(custom);
+            case RTP -> color("&b&lGASMP &8• &3World Select");
             case SHOP -> color("&d&lGASMP &8• &5Shard Shop");
             case STATISTICS -> color("&d&lGASMP &8• &5Statistics");
             case DECORATIONS -> color("&9&lGASMP &8• &3Decorations");
