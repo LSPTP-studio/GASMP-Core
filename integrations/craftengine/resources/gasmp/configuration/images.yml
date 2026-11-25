@@ -1,0 +1,627 @@
+# GASMP rank and badge images migrated to CraftEngine.
+images:
+  gasmp:admin:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_admin
+  gasmp:badge_01:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_01
+  gasmp:badge_02:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_02
+  gasmp:badge_03:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_03
+  gasmp:badge_04:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_04
+  gasmp:badge_05:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_05
+  gasmp:badge_06:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_06
+  gasmp:badge_07:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_07
+  gasmp:badge_08:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_08
+  gasmp:badge_09:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_09
+  gasmp:badge_10:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_10
+  gasmp:badge_11:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_11
+  gasmp:badge_12:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_12
+  gasmp:badge_13:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_13
+  gasmp:badge_14:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_14
+  gasmp:badge_15:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_15
+  gasmp:badge_16:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_16
+  gasmp:badge_17:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_17
+  gasmp:badge_18:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_18
+  gasmp:badge_19:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_19
+  gasmp:badge_20:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_20
+  gasmp:badge_21:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_21
+  gasmp:badge_22:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_22
+  gasmp:badge_23:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_23
+  gasmp:badge_24:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_24
+  gasmp:badge_25:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_25
+  gasmp:badge_26:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_26
+  gasmp:badge_27:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_27
+  gasmp:badge_28:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_28
+  gasmp:badge_29:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_29
+  gasmp:badge_30:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_30
+  gasmp:badge_31:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_31
+  gasmp:badge_32:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_32
+  gasmp:badge_33:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_33
+  gasmp:badge_34:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_34
+  gasmp:badge_35:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_35
+  gasmp:badge_36:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_36
+  gasmp:badge_37:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_37
+  gasmp:badge_38:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_38
+  gasmp:badge_39:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_39
+  gasmp:badge_40:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_40
+  gasmp:badge_41:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_41
+  gasmp:badge_42:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_42
+  gasmp:badge_43:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_43
+  gasmp:badge_44:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_44
+  gasmp:badge_45:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_45
+  gasmp:badge_46:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_46
+  gasmp:badge_47:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_47
+  gasmp:badge_48:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_48
+  gasmp:badge_49:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_49
+  gasmp:badge_50:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_50
+  gasmp:badge_51:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_51
+  gasmp:badge_52:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_52
+  gasmp:badge_53:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_53
+  gasmp:badge_54:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_54
+  gasmp:badge_55:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_55
+  gasmp:badge_56:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_56
+  gasmp:badge_57:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_57
+  gasmp:badge_58:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_58
+  gasmp:badge_59:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_59
+  gasmp:badge_60:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_60
+  gasmp:badge_61:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_61
+  gasmp:badge_62:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_62
+  gasmp:badge_63:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_63
+  gasmp:badge_64:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_64
+  gasmp:badge_65:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_65
+  gasmp:badge_66:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_66
+  gasmp:badge_67:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_67
+  gasmp:badge_68:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_68
+  gasmp:badge_69:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_69
+  gasmp:badge_70:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_70
+  gasmp:badge_71:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_71
+  gasmp:badge_72:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_badge_72
+  gasmp:booster:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_booster
+  gasmp:builder:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_builder
+  gasmp:common:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_common
+  gasmp:dev:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_dev
+  gasmp:epic:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_epic
+  gasmp:famous:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_famous
+  gasmp:helper:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_helper
+  gasmp:heroic:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_heroic
+  gasmp:legendary:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_legendary
+  gasmp:manager:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_manager
+  gasmp:mod:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_mod
+  gasmp:mvp:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_mvp
+  gasmp:mvpplus:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_mvpplus
+  gasmp:owner:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_owner
+  gasmp:rare:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_rare
+  gasmp:streamer:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_streamer
+  gasmp:tiktoker:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_tiktoker
+  gasmp:uncommon:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_uncommon
+  gasmp:user:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_user
+  gasmp:vip:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_vip
+  gasmp:vipplus:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_vipplus
+  gasmp:youtuber:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/gasmp_youtuber
+  gasmp:bundle_rank_1:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_1
+  gasmp:bundle_rank_1_0:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_1_0
+  gasmp:bundle_rank_1_1:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_1_1
+  gasmp:bundle_rank_1_2:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_1_2
+  gasmp:bundle_rank_1_3:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_1_3
+  gasmp:bundle_rank_2:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_2
+  gasmp:bundle_rank_2_0:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_2_0
+  gasmp:bundle_rank_2_1:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_2_1
+  gasmp:bundle_rank_2_2:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_2_2
+  gasmp:bundle_rank_2_3:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_2_3
+  gasmp:bundle_rank_3:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_3
+  gasmp:bundle_rank_3_0:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_3_0
+  gasmp:bundle_rank_3_1:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_3_1
+  gasmp:bundle_rank_3_2:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_3_2
+  gasmp:bundle_rank_3_3:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_3_3
+  gasmp:bundle_rank_4:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_4
+  gasmp:bundle_rank_4_0:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_4_0
+  gasmp:bundle_rank_4_1:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_4_1
+  gasmp:bundle_rank_4_2:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_4_2
+  gasmp:bundle_rank_4_3:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_4_3
+  gasmp:bundle_rank_5:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_5
+  gasmp:bundle_rank_5_0:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_5_0
+  gasmp:bundle_rank_5_1:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_5_1
+  gasmp:bundle_rank_5_2:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_5_2
+  gasmp:bundle_rank_5_3:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_5_3
+  gasmp:bundle_rank_6:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_6
+  gasmp:bundle_rank_6_0:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_6_0
+  gasmp:bundle_rank_6_1:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_6_1
+  gasmp:bundle_rank_6_2:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_6_2
+  gasmp:bundle_rank_6_3:
+    height: 18
+    ascent: 8
+    font: gasmp:default
+    file: gasmp:font/rank_6_3

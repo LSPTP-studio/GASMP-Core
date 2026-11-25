@@ -1,0 +1,890 @@
+# GASMP CraftEngine furniture.
+furniture:
+  gasmp:normal_crate:
+    settings:
+      item: gasmp:normal_crate
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:normal_crate
+            translation: 0,0.04,0
+            scale: 0.94,0.94,0.94
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:normal_crate
+  gasmp:medium_crate:
+    settings:
+      item: gasmp:medium_crate
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:medium_crate
+            translation: 0,0.04,0
+            scale: 0.94,0.94,0.94
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:medium_crate
+  gasmp:premium_crate:
+    settings:
+      item: gasmp:premium_crate
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:premium_crate
+            translation: 0,0.04,0
+            scale: 0.94,0.94,0.94
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:premium_crate
+  gasmp:aether_crate:
+    settings:
+      item: gasmp:aether_crate
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:aether_crate
+            translation: 0,0.04,0
+            scale: 0.94,0.94,0.94
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:aether_crate
+  gasmp:tidal_crate:
+    settings:
+      item: gasmp:tidal_crate
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:tidal_crate
+            translation: 0,0.04,0
+            scale: 0.94,0.94,0.94
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:tidal_crate
+  gasmp:obsidian_crate:
+    settings:
+      item: gasmp:obsidian_crate
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:obsidian_crate
+            translation: 0,0.04,0
+            scale: 0.94,0.94,0.94
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:obsidian_crate
+  gasmp:bed_large:
+    settings:
+      item: gasmp:bed_large
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:bed_large
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:bed_large
+  gasmp:bed_small:
+    settings:
+      item: gasmp:bed_small
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:bed_small
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:bed_small
+  gasmp:bench:
+    settings:
+      item: gasmp:bench
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:bench
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+            seats:
+              - 0.5,0.45,0
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:bench
+  gasmp:bonnie_plush:
+    settings:
+      item: gasmp:bonnie_plush
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:bonnie_plush
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:bonnie_plush
+  gasmp:chandelier:
+    settings:
+      item: gasmp:chandelier
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:chandelier
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:chandelier
+  gasmp:chica_plush:
+    settings:
+      item: gasmp:chica_plush
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:chica_plush
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:chica_plush
+  gasmp:chimney:
+    settings:
+      item: gasmp:chimney
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:chimney
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:chimney
+  gasmp:decorative_plant:
+    settings:
+      item: gasmp:decorative_plant
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:decorative_plant
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:decorative_plant
+  gasmp:door_frame:
+    settings:
+      item: gasmp:door_frame
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:door_frame
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:door_frame
+  gasmp:enchants:
+    settings:
+      item: gasmp:enchants
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:enchants
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:enchants
+  gasmp:foxy_plush:
+    settings:
+      item: gasmp:foxy_plush
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:foxy_plush
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:foxy_plush
+  gasmp:freddy_plush:
+    settings:
+      item: gasmp:freddy_plush
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:freddy_plush
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:freddy_plush
+  gasmp:fridge:
+    settings:
+      item: gasmp:fridge
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:fridge
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:fridge
+  gasmp:glass_table:
+    settings:
+      item: gasmp:glass_table
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:glass_table
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:glass_table
+  gasmp:golden_freddy_plush:
+    settings:
+      item: gasmp:golden_freddy_plush
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:golden_freddy_plush
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:golden_freddy_plush
+  gasmp:kitchen_cabinet:
+    settings:
+      item: gasmp:kitchen_cabinet
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:kitchen_cabinet
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:kitchen_cabinet
+  gasmp:kitchen_cabinet_1:
+    settings:
+      item: gasmp:kitchen_cabinet_1
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:kitchen_cabinet_1
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:kitchen_cabinet_1
+  gasmp:kitchen_cabinet_2:
+    settings:
+      item: gasmp:kitchen_cabinet_2
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:kitchen_cabinet_2
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:kitchen_cabinet_2
+  gasmp:kitchen_chair:
+    settings:
+      item: gasmp:kitchen_chair
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:kitchen_chair
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+            seats:
+              - 0.5,0.45,0
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:kitchen_chair
+  gasmp:kitchen_sink:
+    settings:
+      item: gasmp:kitchen_sink
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:kitchen_sink
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:kitchen_sink
+  gasmp:kitchen_table:
+    settings:
+      item: gasmp:kitchen_table
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:kitchen_table
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:kitchen_table
+  gasmp:lamp:
+    settings:
+      item: gasmp:lamp
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:lamp
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:lamp
+  gasmp:laptop:
+    settings:
+      item: gasmp:laptop
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:laptop
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:laptop
+  gasmp:modern_sofa:
+    settings:
+      item: gasmp:modern_sofa
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:modern_sofa
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:modern_sofa
+  gasmp:pizza_box:
+    settings:
+      item: gasmp:pizza_box
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:pizza_box
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:pizza_box
+  gasmp:sofa:
+    settings:
+      item: gasmp:sofa
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:sofa
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+            seats:
+              - 0.5,0.45,0
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:sofa
+  gasmp:sofa_large:
+    settings:
+      item: gasmp:sofa_large
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:sofa_large
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+            seats:
+              - 0.5,0.45,0
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:sofa_large
+  gasmp:stove:
+    settings:
+      item: gasmp:stove
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:stove
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:stove
+  gasmp:the_puppet_plush:
+    settings:
+      item: gasmp:the_puppet_plush
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:the_puppet_plush
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:the_puppet_plush
+  gasmp:tv:
+    settings:
+      item: gasmp:tv
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:tv
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:tv
+  gasmp:wardrobe:
+    settings:
+      item: gasmp:wardrobe
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:wardrobe
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:wardrobe
+  gasmp:washing_machine:
+    settings:
+      item: gasmp:washing_machine
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:washing_machine
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:washing_machine
+  gasmp:window:
+    settings:
+      item: gasmp:window
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:window
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:window
+  gasmp:window_curtains:
+    settings:
+      item: gasmp:window_curtains
+      hit_times: 2
+    variants:
+      ground:
+        elements:
+          - type: item_display
+            item: gasmp:window_curtains
+            translation: 0,0.08,0
+            scale: 0.88,0.88,0.88
+        hitboxes:
+          - type: interaction
+            position: 0,0,0
+            width: 1
+            height: 1
+            interactive: true
+            blocks_building: true
+    loot:
+      template: default:loot_table/furniture
+      arguments:
+        item: gasmp:window_curtains

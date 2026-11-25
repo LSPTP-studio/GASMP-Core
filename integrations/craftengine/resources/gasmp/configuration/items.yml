@@ -1,0 +1,1534 @@
+# GASMP CraftEngine items; all prior gasmp:<id> identifiers retained.
+items:
+  gasmp:normal_key:
+    material: tripwire_hook
+    data:
+      item_name: "<!i><green><bold>VERDANT SEAL"
+      lore:
+        - "<!i><gray>Unlocks the VERDANT CACHE."
+        - "<!i><dark_gray>GASMP • KEY ITEM"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/key
+  gasmp:medium_key:
+    material: tripwire_hook
+    data:
+      item_name: "<!i><dark_purple><bold>RUNIC SIGIL"
+      lore:
+        - "<!i><gray>Unlocks the RUNIC RELIQUARY."
+        - "<!i><dark_gray>GASMP • KEY ITEM"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/key
+  gasmp:premium_key:
+    material: tripwire_hook
+    data:
+      item_name: "<!i><gold><bold>ECLIPSE CREST"
+      lore:
+        - "<!i><gray>Unlocks the ECLIPSE VAULT."
+        - "<!i><dark_gray>GASMP • KEY ITEM"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/key
+  gasmp:normal_crate:
+    material: paper
+    data:
+      item_name: "<!i><green><bold>THE VERDANT CACHE"
+      lore:
+        - "<!i><gray>An emerald-sealed cache holding classic GASMP cosmetics."
+        - "<!i><dark_gray>GASMP • CRATE"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/normal_crate
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:normal_crate
+  gasmp:medium_crate:
+    material: paper
+    data:
+      item_name: "<!i><dark_purple><bold>THE RUNIC RELIQUARY"
+      lore:
+        - "<!i><gray>A rune-bound reliquary with improved rare cosmetic odds."
+        - "<!i><dark_gray>GASMP • CRATE"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/medium_crate
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:medium_crate
+  gasmp:premium_crate:
+    material: paper
+    data:
+      item_name: "<!i><gold><bold>THE ECLIPSE VAULT"
+      lore:
+        - "<!i><gray>A gilded eclipse vault with the rarest cosmetic odds."
+        - "<!i><dark_gray>GASMP • CRATE"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/premium_crate
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:premium_crate
+  gasmp:aether_key:
+    material: tripwire_hook
+    data:
+      item_name: "<!i><aqua><bold>AETHER SIGIL"
+      lore:
+        - "<!i><gray>Unlocks AETHER SANCTUM cosmetics."
+        - "<!i><dark_gray>GASMP • KEY ITEM"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/aether_key
+  gasmp:aether_crate:
+    material: paper
+    data:
+      item_name: "<!i><aqua><bold>THE AETHER SANCTUM"
+      lore:
+        - "<!i><gray>An emerald-sealed cache holding classic GASMP cosmetics."
+        - "<!i><dark_gray>GASMP • CRATE"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/aether_crate
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:aether_crate
+  gasmp:tidal_key:
+    material: tripwire_hook
+    data:
+      item_name: "<!i><dark_aqua><bold>TIDAL TOKEN"
+      lore:
+        - "<!i><gray>Unlocks TIDAL TROVE cosmetics."
+        - "<!i><dark_gray>GASMP • KEY ITEM"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/tidal_key
+  gasmp:tidal_crate:
+    material: paper
+    data:
+      item_name: "<!i><dark_aqua><bold>THE TIDAL TROVE"
+      lore:
+        - "<!i><gray>An emerald-sealed cache holding classic GASMP cosmetics."
+        - "<!i><dark_gray>GASMP • CRATE"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/tidal_crate
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:tidal_crate
+  gasmp:obsidian_key:
+    material: tripwire_hook
+    data:
+      item_name: "<!i><red><bold>OBSIDIAN SEAL"
+      lore:
+        - "<!i><gray>Unlocks OBSIDIAN RELIC cosmetics."
+        - "<!i><dark_gray>GASMP • KEY ITEM"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/obsidian_key
+  gasmp:obsidian_crate:
+    material: paper
+    data:
+      item_name: "<!i><red><bold>THE OBSIDIAN RELIC"
+      lore:
+        - "<!i><gray>An emerald-sealed cache holding classic GASMP cosmetics."
+        - "<!i><dark_gray>GASMP • CRATE"
+    model:
+      type: minecraft:model
+      path: gasmp:item/crates/obsidian_crate
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:obsidian_crate
+  gasmp:angel_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Angel Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:astronaut_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Astronaut Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:aviator:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Aviator Cap"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:axolotl_hood:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Axolotl Hood"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:backpack:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Backpack"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/backpack
+  gasmp:bed_large:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Large Bed"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/bed
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:bed_large
+  gasmp:bed_small:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Small Bed"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/bed
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:bed_small
+  gasmp:bench:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Bench"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/seat
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:bench
+  gasmp:bloom_crown:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Flower Crown"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:bluefire_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Bluefire Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:bonnie_plush:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Bonnie Plush"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/plush
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:bonnie_plush
+  gasmp:brown_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Brown Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:bumblebee:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Bumblebee Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:bunny_beanie:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Bunny Beanie"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:butterfly_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Butterfly Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:chandelier:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Chandelier"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/lamp
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:chandelier
+  gasmp:chef:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Chef Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:chica_plush:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Chica Plush"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/plush
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:chica_plush
+  gasmp:chicken_hat:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Chicken Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:chimney:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Kitchen Chimney"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/lamp
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:chimney
+  gasmp:corsair:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Corsair"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:cozy_pom:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Cozy Pom Beanie"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:decorative_plant:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Decorative Plant"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/plant
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:decorative_plant
+  gasmp:demon_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Demon Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:diving_helmet:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Diving Helmet"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:door_frame:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Door Frame"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/window
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:door_frame
+  gasmp:dragon_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Dragon Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:dusty_cowboy:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Dusty Cowboy"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:eagle_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Eagle Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:enchants:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Enchantment Display"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/props
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:enchants
+  gasmp:feral_bear_ears:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Bear Ears"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/ears
+  gasmp:feral_bear_tail:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Bear Tail"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/tails
+  gasmp:feral_cat_ears:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Cat Ears"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/ears
+  gasmp:feral_cat_tail:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Cat Tail"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/tails
+  gasmp:feral_fox_ears:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Fox Ears"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/ears
+  gasmp:feral_fox_tail:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Fox Tail"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/tails
+  gasmp:feral_rabbit_ears:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Rabbit Ears"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/ears
+  gasmp:feral_rabbit_tail:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Rabbit Tail"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/tails
+  gasmp:feral_tiger_ears:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Tiger Ears"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/ears
+  gasmp:feral_tiger_tail:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Tiger Tail"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/tails
+  gasmp:feral_wolf_ears:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Wolf Ears"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/ears
+  gasmp:feral_wolf_tail:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Wolf Tail"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/tails
+  gasmp:fiesta:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Fiesta Sombrero"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:flight_hat:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Flight Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:fox_ears:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Fox Cap"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:foxy_plush:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Foxy Plush"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/plush
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:foxy_plush
+  gasmp:freddy_plush:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Freddy Plush"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/plush
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:freddy_plush
+  gasmp:fridge:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Fridge"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/cabinet
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:fridge
+  gasmp:frog_bucket:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Frog Bucket Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:frost_diadem:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Frost Diadem"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:glass_table:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Glass Table"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/table
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:glass_table
+  gasmp:golden_freddy_plush:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Golden Freddy Plush"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/plush
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:golden_freddy_plush
+  gasmp:golden_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Golden Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:jellyfish:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Jellyfish Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:kitchen_cabinet:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Kitchen Cabinet"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/cabinet
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:kitchen_cabinet
+  gasmp:kitchen_cabinet_1:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Open Kitchen Cabinet"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/cabinet
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:kitchen_cabinet_1
+  gasmp:kitchen_cabinet_2:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Large Open Kitchen Cabinet"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/cabinet
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:kitchen_cabinet_2
+  gasmp:kitchen_chair:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Kitchen Chair"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/seat
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:kitchen_chair
+  gasmp:kitchen_sink:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Kitchen Sink"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/sink
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:kitchen_sink
+  gasmp:kitchen_table:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Kitchen Table"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/table
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:kitchen_table
+  gasmp:lamp:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Lamp"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/lamp
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:lamp
+  gasmp:laptop:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Laptop"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/screen
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:laptop
+  gasmp:little_dragon:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Little Dragon"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:midnight_wizard:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Midnight Wizard"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:military_helmet:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Military Helmet"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:miner:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Miner Helmet"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:modern_sofa:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Modern Sofa"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/seat
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:modern_sofa
+  gasmp:motorcycle_helmet:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Motorcycle Helmet"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:ocean_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Ocean Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:panda_cap:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Panda Cap"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:parcel:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Parcel Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:phoenix_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Phoenix Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:pizza_box:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Pizza Box"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/box
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:pizza_box
+  gasmp:pot_hat:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Pot Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:purple_wings:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Purple Wings"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/wings
+  gasmp:retro_tv:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Retro TV Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:royal_crown:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Royal Crown"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:rubber_duck:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Rubber Duck"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:sea_captain:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Sea Captain"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:sofa:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Small Sofa"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/seat
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:sofa
+  gasmp:sofa_large:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Large Sofa"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/seat
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:sofa_large
+  gasmp:steam_topper:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Steampunk Top Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:stove:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Stove"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/cabinet
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:stove
+  gasmp:straw_garden:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Garden Straw Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:street_cap:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Street Cap"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:sushi:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Salmon Sushi"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:the_puppet_plush:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>The Puppet Plush"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/plush
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:the_puppet_plush
+  gasmp:toadstool:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Toadstool"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:top_hat:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Top Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:trailblazer:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Trailblazer"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:tv:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Television"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/screen
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:tv
+  gasmp:ufo:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>UFO Hat"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • COSMETIC COLLECTION"
+      equippable:
+        slot: head
+        allowed_entities: minecraft:player
+        swappable: true
+    model:
+      type: minecraft:model
+      path: gasmp:item/cosmetics/hat
+  gasmp:wardrobe:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Wardrobe"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/cabinet
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:wardrobe
+  gasmp:washing_machine:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Washing Machine"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/cabinet
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:washing_machine
+  gasmp:window:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Window"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/window
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:window
+  gasmp:window_curtains:
+    material: paper
+    data:
+      item_name: "<!i><light_purple><bold>Window Curtains"
+      lore:
+        - "<!i><gray>GASMP Cosmetic Collectible"
+        - "<!i><dark_gray>GASMP • DECOR COLLECTION"
+    model:
+      type: minecraft:model
+      path: gasmp:item/furniture/window
+    behavior:
+      type: furniture_item
+      rules:
+        ground:
+          rotation: four
+          alignment: center
+      furniture: gasmp:window_curtains
