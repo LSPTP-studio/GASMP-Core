@@ -46,12 +46,11 @@ jobs:
       - name: Verify target metadata
         shell: bash
         run: |
-          echo "Plugin version: 0.8.3 (unchanged)"
-          echo "Paper API line: ${{ matrix.paper_api_version }}"
-          echo "Target: ${{ matrix.paper_target }} (${{ matrix.server_role }})"
+          set -euo pipefail
           test -f build.gradle.kts
           test -f src/main/resources/plugin.yml
-          test -d src/main/java
+          test -d integrations/itemsadder/contents/gasmp
+          ! grep -Ril "craftengine" src/main README.md docs integrations
 
       - name: Build plugin
         run: >-
@@ -67,9 +66,11 @@ jobs:
           JAR="build/libs/GASMP-Core-0.8.3-${{ matrix.paper_target }}.jar"
           test -s "$JAR"
           jar tf "$JAR" | grep -q '^plugin.yml$'
+          jar tf "$JAR" | grep -q '^net/gasmp/core/ui/GASMPCustomUi.class$'
+          jar tf "$JAR" | grep -q '^net/gasmp/core/ui/GASMPHomePage.class$'
           unzip -p "$JAR" plugin.yml | grep -q "version: '0.8.3'"
-          unzip -p "$JAR" plugin.yml | grep -q "api-version: '26.2'"
-          echo "Verified: $JAR"
+          unzip -p "$JAR" plugin.yml | grep -q "ItemsAdder"
+          ! unzip -p "$JAR" plugin.yml | grep -qi "CraftEngine"
 
       - name: Assemble install package
         shell: bash
@@ -85,23 +86,27 @@ jobs:
           cp README.md "$ROOT/"
           cp docs/COMMANDS.md "$ROOT/"
           cat > "$ROOT/INSTALL.txt" <<EOF
-          GASMP CORE 0.8.3 — ${TARGET}
-          =================================
-          Server target: Paper ${{ matrix.paper_target == 'paper-26.2' && '26.2 OFFICIAL' || '26.3 TEST' }}
-          Plugin version: 0.8.3 (unchanged)
-          Java: 25
-          Required: ItemsAdder 4.0.18, Vault, LuckPerms and a Vault economy provider.
+          GASMP CORE 0.8.3 — ITEMSADDER 4.0.18 EDITION
+          ============================================
+          Target: Paper ${{ matrix.paper_target == 'paper-26.2' && '26.2 OFFICIAL' || '26.3 COMPILE/TEST ONLY' }}
+          Runtime: Java 25
+          Required: ItemsAdder 4.0.18, Vault + Vault Economy provider, LuckPerms.
+          Optional dashboard: VoidRP UI 0.4.0 (separate plugin JAR).
 
           INSTALL
-          1. Stop the target server and back up plugins/GASMP-Core/ and plugins/ItemsAdder/.
-          2. Copy the JAR from plugins/ into the server plugins/ folder.
-          3. Merge the ItemsAdder contents folder into plugins/ItemsAdder/contents/.
-          4. Start the server and check the console for GASMP or ItemsAdder errors.
-          5. Run /iareload, then /iazip, and make sure clients accept the ItemsAdder pack. VoidRP UI sends a separate pack when installed; clients must accept that too.
-          6. Optional: install VoidRP UI 0.4.0 as a separate plugin JAR.\n          7. Test menus, purchases and teleports before using the build on a live server.\n\n          ItemsAdder 4.0.18 documents Paper 26.2 compatibility. The 26.3 artifact is compile/test only.
+          1. Stop the server and back up worlds, plugins/GASMP-Core/ and its SQLite database.
+          2. Install the original ItemsAdder 4.0.18 JAR directly in plugins/.
+          3. Start once, let ItemsAdder create plugins/ItemsAdder/, then stop the server.
+          4. Copy gasmp/ and gasmp_ranks/ into plugins/ItemsAdder/contents/.
+          5. Copy the GASMP Core JAR directly into plugins/.
+          6. Install Vault, a Vault Economy provider and LuckPerms.
+          7. Optional: install VoidRP UI 0.4.0 as a separate plugin JAR.
+          8. Start the server; run /iareload and then /iazip.
+          9. Ensure players accept the ItemsAdder pack. VoidRP UI sends a separate pack; accept that too.
 
-          This package is built for the ${{ matrix.paper_target }} API line.
-          Do not put the Paper 26.3 compile/test only build on the official Paper 26.2 server.
+          COMPATIBILITY
+          ItemsAdder 4.0.18's published compatibility list documents Paper 26.2.
+          The Paper 26.3 JAR is compile/test only and is not runtime-certified with ItemsAdder 4.0.18.
           EOF
           (cd dist && zip -qr "GASMP-Core-0.8.3-${TARGET}-Full-Package.zip" "GASMP-Core-0.8.3-${TARGET}")
           test -s "dist/GASMP-Core-0.8.3-${TARGET}-Full-Package.zip"
@@ -109,7 +114,7 @@ jobs:
       - name: Upload JAR and install package
         uses: actions/upload-artifact@v4
         with:
-          name: GASMP-Core-0.8.3-${{ matrix.paper_target }}
+          name: GASMP-Core-0.8.3-${{ matrix.paper_target }}-ItemsAdder-4.0.18
           path: |
             build/libs/GASMP-Core-0.8.3-${{ matrix.paper_target }}.jar
             dist/GASMP-Core-0.8.3-${{ matrix.paper_target }}-Full-Package.zip

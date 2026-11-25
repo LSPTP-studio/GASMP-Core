@@ -1,117 +1,64 @@
-# GASMP Core 0.8.3 — ItemsAdder Edition
+# GASMP Core 0.8.3 — ItemsAdder 4.0.18 Edition
 
-**GASMP Core** is an all-in-one Paper SMP plugin for the GASMP server, with Shards, Coins, shops, teams, casino arcade, Battle Pass, moderation, furniture, cosmetic collections and animated crate systems.
+All-in-one GASMP SMP plugin: Shards, Vault Coins, shops, teams, Arcade, Battle Pass, moderation, cosmetics, furniture and six animated cosmetic crates.
 
-**Official server:** Paper 26.2 · **Test server:** Paper 26.3 · **Runtime:** Java 25 · **Build:** Gradle 9.x · **Custom item provider:** ItemsAdder 4.x
+**Documented runtime target:** Paper 26.2 + ItemsAdder 4.0.18 · **Paper 26.3:** compile/test artifact only · **Java:** 25.
 
-## Downloads
+## Required plugins
 
-- **[Download EVERYTHING — Full Package ZIP](https://github.com/LSPTP-studio/GASMP-Core/releases/download/v0.8.3/GASMP-Core-0.8.3-Full-Package.zip)** — source code, plugin JAR, ItemsAdder models, custom item icons and installation guide.
-- **[Plugin JAR only](https://github.com/LSPTP-studio/GASMP-Core/releases/download/v0.8.3/GASMP-Core-0.8.3.jar)**
-- **[All releases](https://github.com/LSPTP-studio/GASMP-Core/releases)**
-- **[0.8.3 source branch](https://github.com/LSPTP-studio/GASMP-Core/tree/itemsadder-edition-0.8.3)**
-
-## What's new in 0.8.3
-
-- Replaced oversized font-image overlays with native Minecraft inventory menus, clear item grids and compact titles.
-- Added RTP world selection (Overworld / Nether; End locked) and a Warps menu (Crates / Spawn / Mystery locked / minigame destinations).
-- Added a paged Auction House inventory with listing preview and explicit purchase confirmation.
-- Unified the shop, decoration, Arcade and main menu borders with a dark pixel-grid frame and cyan / purple accents; added custom ItemsAdder category icons where available.
-- Added three new GASMP crate themes: AETHER SANCTUM, TIDAL TROVE and OBSIDIAN RELIC.
-- Added matching AETHER SIGIL, TIDAL TOKEN and OBSIDIAN SEAL keys, furniture items and unique model textures.
-- Added crate-specific roulette color palettes and tier particles during the opening animation.
-- Added /crates preview, /crates info and /crates givebundle.
-- Added migration logic to add the new crate tiers and Shards key prices to existing servers without replacing saved reward pools or placed locations.
-- Expanded crate list output, help messages, tab completion and command documentation.
-
-## Required server plugins
-
-- Paper 26.2 and Java 25 for the official server; Paper 26.3 and Java 25 for the test server
-- ItemsAdder 4.x (4.0.13+ recommended)
+- ItemsAdder **4.0.18**
+- Vault and an economy plugin that registers a Vault Economy provider
 - LuckPerms 5.x
-- Vault plus a plugin that registers Vault Economy for Coins features
 
-Optional integrations include PlaceholderAPI, TAB, Geyser + Floodgate, ProtocolLib, ImageFrame, Typewriter, OpenInv, Lib's Disguises, HeadDatabase/HeadDB and Multiverse-Core.
+**Optional dashboard:** VoidRP UI 0.4.0 (separate plugin JAR). When installed and its UI pack is accepted, `/gasmp` opens the custom GASMP dashboard. Without it, the existing native inventory menu remains available.
 
-**RP Engine is not required or used by this edition.** The old integrations/rp-engine directory is retained only as a legacy reference. Do not install its pack for this ItemsAdder edition.
+Other optional integrations: PlaceholderAPI, ProtocolLib, TAB, Geyser + Floodgate, ImageFrame, Typewriter, OpenInv, Lib's Disguises, HeadDatabase/HeadDB and Multiverse-Core.
 
 ## Install
 
-1. Stop the server and make a full backup, including plugins/GASMP-Core/ and its SQLite database.
-2. Put GASMP-Core-0.8.3.jar in the server's plugins/ folder.
-3. Copy the included plugins/ItemsAdder/contents/gasmp/ and gasmp_ranks/ folders into your server's plugins/ItemsAdder/contents/ folder. The optional rank_bundle/ folder adds extra rank emblems.
-4. Start or restart the server.
-5. Run /iareload and fix any YAML or model warnings in the console.
-6. Run /iazip to rebuild the resource pack.
-7. Ensure the ItemsAdder pack is hosted and delivered to players, then reconnect and ACCEPT the updated pack. A stale cached pack or declined pack will show missing custom item and furniture models.
-8. Test the menus and all six crate/key pairs before production use.
+1. Use **Paper 26.2** for the documented ItemsAdder 4.0.18 target. Back up your worlds and `plugins/GASMP-Core/`, including its SQLite database.
+2. Stop the server.
+3. Put the original ItemsAdder 4.0.18 JAR directly into `plugins/`. Install ProtocolLib too if your setup requires it.
+4. Start once and let ItemsAdder create `plugins/ItemsAdder/`. Stop the server after it finishes.
+5. Copy the included `gasmp/` and `gasmp_ranks/` folders into `plugins/ItemsAdder/contents/`.
+6. Put the GASMP Core JAR directly into `plugins/`. Install Vault, a Vault Economy provider and LuckPerms.
+7. Optional: put the separate VoidRP UI 0.4.0 JAR directly into `plugins/`.
+8. Start the server, run `/iareload`, check console warnings, then run `/iazip`.
+9. Ensure ItemsAdder's pack is hosted and delivered to players. With VoidRP UI, players must also accept its separate UI pack.
 
-GASMP menus use native Minecraft inventory slots and do not need custom font-image background overlays. ItemsAdder supplies the custom crate, cosmetic and furniture icons.
+**Important:** `ItemsAdder.jar` belongs directly in `plugins/`, not inside `plugins/ItemsAdder/`. The `contents/` folder is for the GASMP content folders.
 
-## Six cosmetic crates
+## Bundled GASMP content
 
-| ID | Crate display name | Matching key | Default Shards price |
-|---|---|---|---:|
-| normal | VERDANT CACHE | VERDANT SEAL | 100 |
-| medium | RUNIC RELIQUARY | RUNIC SIGIL | 300 |
-| premium | ECLIPSE VAULT | ECLIPSE CREST | 800 |
-| aether | AETHER SANCTUM | AETHER SIGIL | 1,200 |
-| tidal | TIDAL TROVE | TIDAL TOKEN | 1,800 |
-| obsidian | OBSIDIAN RELIC | OBSIDIAN SEAL | 2,500 |
+- Six named cosmetic crate tiers with matching keys, placeable crate furniture and tier-themed opening animations.
+- 108 custom item definitions under the `gasmp:` namespace, including crate models, keys, collectibles and furniture.
+- Cosmetic hats, wings, backpacks, ears, tails and furniture assets.
+- Rank icons, 72 badge images and optional rank-bundle artwork.
+- Existing Shards, profiles, crate rewards, shop IDs and database data are retained. Do not delete the GASMP data folder when upgrading.
 
-All six are cosmetic crates. Their configured pools award ItemsAdder cosmetics and small Shards bonuses, not weapons or combat equipment. Each crate has its own matching key, placeable furniture model, display name, color and opening-animation palette.
+All six crates award cosmetics and Shards bonuses, not combat equipment. Keys are consumed only after the final reward reveal.
 
-The animation uses a decelerating three-slot roulette, themed border materials, portal/tier particles, staged titles and sounds, a final reward reveal and burst particles. Keys are consumed only after the final reveal; closing or disconnecting before that point cancels the opening without consuming the key.
+## VoidRP UI integration
 
-## Crate commands
+With VoidRP UI 0.4.0 installed and its pack accepted, `/gasmp` opens a custom GASMP dashboard with live Shards, Coins and online counts. Its quick-access tiles open the existing GASMP shop, Crate Vaults, Decorations, Auction House, RTP, Warps, Arcade, Battle Pass, Teams, Statistics, Profile and Settings.
 
-```text
-/crates list
-/crates info <crate-id>
-/crates preview <crate-id>
-/crates givekey <player> <crate-id> [amount]
-/crates giveblock <player> <crate-id> [amount]
-/crates givebundle <player> <crate-id> [amount]
-/crates givemodel <player> <crate-id> [amount]
-/crates set <crate-id>
-/crates unset <crate-id>
-/crates reload
-/keyall <crate-id|all> <amount> [world:<world>] [silent]
-```
+The custom dashboard is a presentation layer; the economy, crate rewards and player data remain in GASMP Core. If VoidRP UI is absent or its pack is not accepted, GASMP falls back to its existing inventory menu.
 
-Crate administration is restricted to Owner/Developer staff by the service checks. The console can run crate distribution and administration commands. Players can sneak + left-click or sneak-punch a placed crate to open its reward preview.
+VoidRP UI is separate and is not shaded into the GASMP JAR:
+- Project: <https://github.com/VOIDRP-MINECRAFT/voidrp-ui>
+- Releases: <https://github.com/VOIDRP-MINECRAFT/voidrp-ui/releases>
 
-See docs/COMMANDS.md for the full player, staff, console and crate command reference.
+Its documented target is Paper 26.2 and clients 1.21.6+. Test the custom interface on a staging server before production.
 
-## Other systems
+## ItemsAdder compatibility
 
-Player profiles, Shards ledger, Vault Coins shop, RTP, combat tagging, bounties, auction house and item mailbox, Battle Pass progression, Shards Decoration Shop, casino arcade, teams, chat games, moderation, maintenance, holograms, leaderboards, staff vanish, tool skills and rank administration.
+ItemsAdder's published compatibility listing for 4.0.18 includes Paper 26.2, but does not list Paper 26.3. The Paper 26.3 artifact in this repository is only for compilation and testing; it is **not runtime-certified** with ItemsAdder 4.0.18.
 
-## Dual Paper build targets
+The earlier Adventure `NoSuchMethodError` came from the ItemsAdder plugin itself. A GASMP Core update cannot repair an incompatible, modified or repackaged ItemsAdder JAR. Use the original, unmodified ItemsAdder 4.0.18 download.
 
-The plugin version remains **0.8.3**. Two separate artifacts are produced:
+## Build outputs
 
-| Artifact | Purpose |
-|---|---|
-| `GASMP-Core-0.8.3-paper-26.2.jar` | Official Paper 26.2 server |
-| `GASMP-Core-0.8.3-paper-26.3.jar` | Paper 26.3 test server only |
+- `GASMP-Core-0.8.3-paper-26.2.jar` — intended Paper 26.2 + ItemsAdder 4.0.18 build.
+- `GASMP-Core-0.8.3-paper-26.3.jar` — compile/test only; do not treat it as runtime support.
 
-Use JDK 25 and Gradle 9.x:
-
-```bash
-# Official server
-gradle clean build -PreleaseVersion=0.8.3 -PpaperApiVersion=26.2.build.+ -PpaperTarget=paper-26.2
-
-# Test server only
-gradle clean build -PreleaseVersion=0.8.3 -PpaperApiVersion=26.3.build.+ -PpaperTarget=paper-26.3
-```
-
-GitHub Actions builds both targets separately and uploads the JAR and full install ZIP for each. Never place the 26.3 test JAR on the official 26.2 server. SQLite JDBC is bundled into both plugin JARs.
-
-## Asset notes
-
-The menus are built from native Minecraft inventory slots; they do not use full-screen background panels. The themed crate and furniture models are GASMP starter assets using vanilla Minecraft textures. The source snapshot did not contain the original custom model exports for the previously referenced plush, wing and Feral Fantasy packs. Replace those starter models only with licensed final art, keeping the item IDs and model paths unchanged.
-
-## Release validation
-
-The release pipeline verifies the Java build, checks the JAR, assembles the source + server-install ZIP and uploads both assets to GitHub Releases. A successful build does not replace a live Paper/ItemsAdder staging test. Validate resource-pack delivery, model rendering, menu alignment, crate interactions, key consumption, economy transactions and database persistence on a staging server.
+JDK 25 and Gradle 9.x are used. CI packages each JAR with the matching ItemsAdder content folders. A successful CI build is not a substitute for an in-game Paper 26.2 + ItemsAdder 4.0.18 staging test.
