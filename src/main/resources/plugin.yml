@@ -21,6 +21,7 @@ softdepend:
   - HeadDatabase
   - HeadDB
   - Multiverse-Core
+  - VoidRpUI
 commands:
   gasmp:
     description: Opens the GASMP player menu.

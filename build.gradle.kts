@@ -1,4 +1,7 @@
-plugins { java }
+plugins {
+    java
+    kotlin("jvm") version "2.4.20"
+}
 
 group = "net.gasmp"
 version = providers.gradleProperty("releaseVersion").getOrElse("0.8.3")
@@ -18,8 +21,10 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:${paperApiVersion.get()}")
-    compileOnly("net.momirealms:craft-engine-core:26.9")
-    compileOnly("net.momirealms:craft-engine-bukkit:26.9")
+    compileOnly("net.momirealms:craft-engine-core:26.9.2")
+    compileOnly("net.momirealms:craft-engine-bukkit:26.9.2")
+    compileOnly("com.github.VOIDRP-MINECRAFT:voidrp-ui:v0.4.0")
+    compileOnly(kotlin("stdlib"))
     compileOnly("net.luckperms:api:5.5")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
         exclude(group = "org.bukkit", module = "bukkit")
@@ -29,6 +34,25 @@ dependencies {
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(25))
+}
+
+// VoidRP UI API is Kotlin/JVM 21 bytecode, built with JDK 25 against Paper 26.2.
+kotlin {
+    jvmToolchain(25)
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
+configurations.compileClasspath {
+    attributes {
+        attribute(org.gradle.api.attributes.java.TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
+    }
+}
+configurations.testCompileClasspath {
+    attributes {
+        attribute(org.gradle.api.attributes.java.TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
+    }
 }
 
 tasks.withType<JavaCompile> {

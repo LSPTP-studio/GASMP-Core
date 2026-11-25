@@ -79,7 +79,7 @@ public final class GASMPCore extends JavaPlugin {
 
         craftEngineBridge = new CraftEngineBridge(this);
         if (!craftEngineBridge.isAvailable()) {
-            getLogger().severe("CraftEngine is required for GASMP CraftEngine Edition. Install CraftEngine 4.x and restart.");
+            getLogger().severe("CraftEngine is required for GASMP CraftEngine Edition. Install CraftEngine 26.9.2 or newer and restart.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
