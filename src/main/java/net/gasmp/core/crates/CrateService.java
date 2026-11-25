@@ -1256,25 +1256,6 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         };
     }
 
-
-    private String crateKeyName(String crateId) {
-        return switch (canonicalCrateId(crateId)) {
-            case "normal" -> "VERDANT SEAL";
-            case "medium" -> "RUNIC SIGIL";
-            case "premium" -> "ECLIPSE CREST";
-            default -> canonicalCrateId(crateId).toUpperCase(Locale.ROOT) + " KEY";
-        };
-    }
-
-    private String crateColor(String crateId) {
-        return switch (canonicalCrateId(crateId)) {
-            case "normal" -> "&a";
-            case "medium" -> "&5";
-            case "premium" -> "&6";
-            default -> "&f";
-        };
-    }
-
     private String canonicalCrateId(String rawId) {
         if (rawId == null) return "";
         return switch (rawId.toLowerCase(Locale.ROOT)) {
