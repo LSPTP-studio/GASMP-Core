@@ -44,7 +44,11 @@ public final class RtpService implements Listener {
         if (!file.exists()) plugin.saveResource("rtp.yml", false);
     }
 
-    public void start(Player player) {\n        start(player, null);\n    }\n\n    public void start(Player player, String selectedWorld) {
+    public void start(Player player) {
+        start(player, null);
+    }
+
+    public void start(Player player, String selectedWorld) {
         if (!Bukkit.isPrimaryThread()) {
             Bukkit.getScheduler().runTask(plugin, () -> start(player));
             return;
