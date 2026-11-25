@@ -91,13 +91,13 @@ public final class MenuService implements Listener {
     }
 
     private void buildMain(MenuHolder holder, Inventory inventory) {
-        set(inventory, 10, Material.SHULKER_BOX, "&d&lSHARD SHOP", "&7Six themed GASMP cosmetic crates and keys", "&7Custom GASMP cosmetics and crates", "&eClick to browse");
+        setCustomOrFallback(inventory, 10, "gasmp:normal_crate", Material.SHULKER_BOX, "&d&lSHARD SHOP", "&7Six themed GASMP cosmetic crates and keys", "&7Custom GASMP cosmetics and crates", "&eClick to browse");
         holder.navigate(10, MenuPage.KEY_SHOP);
 
         set(inventory, 12, Material.WRITABLE_BOOK, "&d&lStatistics", "&7View your server statistics", "&eClick to open");
         holder.navigate(12, MenuPage.STATISTICS);
 
-        set(inventory, 14, Material.ARMOR_STAND, "&9&lDecorations", "&7Browse cosmetic decorations", "&eClick to open");
+        setCustomOrFallback(inventory, 14, "gasmp:modern_sofa", Material.ARMOR_STAND, "&9&lDecorations", "&7Browse cosmetic decorations", "&eClick to open");
         holder.navigate(14, MenuPage.DECORATIONS);
 
         set(inventory, 20, Material.ENDER_PEARL, "&b&lRANDOM TELEPORT", "&7Choose where your adventure begins", "&eClick to select a world");
@@ -442,22 +442,24 @@ public final class MenuService implements Listener {
     }
 
     private void fillFrame(Inventory inventory, MenuPage page) {
-        Material frame = switch (page) {
-            case MAIN, STATISTICS, PROFILE -> Material.MAGENTA_STAINED_GLASS_PANE;
-            case SHOP, DECORATIONS -> Material.BLUE_STAINED_GLASS_PANE;
-            case SHARDS, KEY_SHOP -> Material.PURPLE_STAINED_GLASS_PANE;
-            case RTP, GAME_WORLDS -> Material.CYAN_STAINED_GLASS_PANE;
-            case WARPS -> Material.PURPLE_STAINED_GLASS_PANE;
-            case CASINO -> Material.ORANGE_STAINED_GLASS_PANE;
-            case SETTINGS -> Material.BLACK_STAINED_GLASS_PANE;
+        Material accent = switch (page) {
+            case RTP, GAME_WORLDS, SHOP -> Material.CYAN_STAINED_GLASS_PANE;
+            case WARPS, KEY_SHOP, SHARDS, DECORATIONS -> Material.PURPLE_STAINED_GLASS_PANE;
+            case CASINO -> Material.MAGENTA_STAINED_GLASS_PANE;
+            case MAIN, STATISTICS, PROFILE, SETTINGS -> Material.LIGHT_BLUE_STAINED_GLASS_PANE;
         };
-        ItemStack filler = item(frame, " ");
+        ItemStack frame = item(Material.BLACK_STAINED_GLASS_PANE, " ");
+        ItemStack highlight = item(accent, " ");
         for (int slot = 0; slot < MENU_SIZE; slot++) {
             int row = slot / 9;
             int column = slot % 9;
             if (row == 0 || row == 5 || column == 0 || column == 8) {
-                inventory.setItem(slot, filler.clone());
+                inventory.setItem(slot, frame.clone());
             }
+        }
+        // Pixel-like accent blocks keep the frame readable without covering the item grid.
+        for (int slot : new int[]{2, 3, 5, 6, 47, 48, 50, 51}) {
+            inventory.setItem(slot, highlight.clone());
         }
     }
 
