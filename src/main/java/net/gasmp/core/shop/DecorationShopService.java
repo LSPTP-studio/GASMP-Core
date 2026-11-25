@@ -90,15 +90,15 @@ public final class DecorationShopService implements Listener {
     public void openCategories(Player player) {
         Holder holder = new Holder(Stage.CATEGORIES, null, 0);
         Inventory inventory = create(holder, 54, ScreenUi.title("decorations", "&8GASMP • Decorations"));
-        set(inventory, 20, Material.FLOWER_POT, "&b&lFURNITURE",
+        setCustomIcon(inventory, 20, "gasmp:modern_sofa", Material.FLOWER_POT, "&b&lFURNITURE",
                 "&7Furniture, props and plushies",
                 "&7" + count("furniture") + " items",
                 "&eClick to browse");
-        set(inventory, 24, Material.ELYTRA, "&d&lCOSMETICS",
+        setCustomIcon(inventory, 24, "gasmp:angel_wings", Material.ELYTRA, "&d&lCOSMETICS",
                 "&7Wings, Feral Fantasy and collectible cosmetics",
                 "&7" + count("cosmetics") + " items",
                 "&eClick to browse");
-        set(inventory, 31, Material.SHULKER_BOX, "&5&lCOSMETIC SHULKER",
+        setCustomIcon(inventory, 31, "gasmp:premium_crate", Material.SHULKER_BOX, "&5&lCOSMETIC SHULKER",
                 "&7Buy a key in the Cosmetics catalogue.",
                 "&7Open it for a random cosmetic drop.");
         set(inventory, 49, Material.ARROW, "&f&lBack", "&7Return to the GASMP main menu");
@@ -226,12 +226,14 @@ public final class DecorationShopService implements Listener {
     private Inventory create(Holder holder, int size, String title) {
         Inventory inventory = Bukkit.createInventory(holder, size, title);
         holder.setInventory(inventory);
-        ItemStack filler = new ItemStack(Material.PURPLE_STAINED_GLASS_PANE);
-        ItemMeta meta = filler.getItemMeta();
-        if (meta != null) { meta.setDisplayName(" "); filler.setItemMeta(meta); }
+        ItemStack filler = namedPane(Material.BLACK_STAINED_GLASS_PANE);
+        ItemStack accent = namedPane(Material.CYAN_STAINED_GLASS_PANE);
         for (int slot = 0; slot < size; slot++) {
             int row = slot / 9, column = slot % 9;
             if (row == 0 || row == 5 || column == 0 || column == 8) inventory.setItem(slot, filler.clone());
+        }
+        for (int slot : new int[]{2, 3, 5, 6, 47, 48, 50, 51}) {
+            inventory.setItem(slot, accent.clone());
         }
         return inventory;
     }
@@ -249,6 +251,26 @@ public final class DecorationShopService implements Listener {
 
     private ItemStack createItemsAdderItem(String contentIdText) {
         return plugin.getCrateService().createContentItem(contentIdText, 1);
+    }
+
+    private void setCustomIcon(Inventory inventory, int slot, String id, Material fallback,
+                               String title, String... lore) {
+        ItemStack icon = createItemsAdderItem(id);
+        if (icon == null) icon = new ItemStack(fallback);
+        ItemMeta meta = icon.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(color(title));
+            if (lore.length > 0) meta.setLore(Arrays.stream(lore).map(this::color).toList());
+            icon.setItemMeta(meta);
+        }
+        inventory.setItem(slot, icon);
+    }
+
+    private ItemStack namedPane(Material material) {
+        ItemStack pane = new ItemStack(material);
+        ItemMeta meta = pane.getItemMeta();
+        if (meta != null) { meta.setDisplayName(" "); pane.setItemMeta(meta); }
+        return pane;
     }
     private Throwable root(Throwable error) {
         Throwable current = error;
