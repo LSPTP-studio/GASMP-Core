@@ -10,3 +10,33 @@ settings:
   avoid-danger: true
   blocked-worlds: [world_nether, world_the_end]
 
+destinations:
+  overworld:
+    enabled: true
+    world: world
+    min-radius: 750
+    max-radius: 6000
+    min-y: -60
+    max-y: 318
+  nether:
+    enabled: true
+    world: world_nether
+    min-radius: 400
+    max-radius: 3000
+    min-y: 8
+    max-y: 118
+  end:
+    enabled: false
+    world: world_the_end
+
+# Quick warp buttons are configurable commands. Remove/disable a command to hide its tile.
+quick-warps:
+  crates:
+    enabled: true
+    command: "warp crates"
+  spawn:
+    enabled: true
+    command: "spawn"
+  mystery:
+    enabled: false
+    command: ""
