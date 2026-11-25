@@ -13,7 +13,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import net.gasmp.core.gui.ScreenUi;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.nio.charset.StandardCharsets;
@@ -26,6 +32,25 @@ public final class AuctionService implements CommandExecutor, TabCompleter, List
     private final Set<UUID> busy = ConcurrentHashMap.newKeySet();
     private final Set<UUID> collectingMail = ConcurrentHashMap.newKeySet();
     private BukkitTask expiryTask;
+
+    private static final int[] LISTING_SLOTS = {
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34,
+            37, 38, 39, 40, 41, 42, 43
+    };
+
+    private static final class AuctionMenuHolder implements InventoryHolder {
+        private final int page;
+        private final Map<Integer, Long> listingIds = new HashMap<>();
+        private Inventory inventory;
+
+        private AuctionMenuHolder(int page) { this.page = page; }
+        private void setInventory(Inventory inventory) { this.inventory = inventory; }
+        private void listingAt(int slot, long id) { listingIds.put(slot, id); }
+        private Long listingAt(int slot) { return listingIds.get(slot); }
+        @Override public Inventory getInventory() { return inventory; }
+    }
 
     public AuctionService(GASMPCore plugin) { this.plugin = plugin; }
 
@@ -170,17 +195,126 @@ public final class AuctionService implements CommandExecutor, TabCompleter, List
     }
 
     private void list(Player player, int page) {
-        plugin.getDataStore().getActiveAuctions(10, page * 10).whenComplete((records, error) ->
+        int pageSize = Math.max(1, Math.min(LISTING_SLOTS.length,
+                plugin.getConfig().getInt("auction-house.page-size", LISTING_SLOTS.length)));
+        plugin.getDataStore().getActiveAuctions(pageSize, page * pageSize).whenComplete((records, error) ->
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                    if (error != null) { player.sendMessage(color("&cCould not load auctions.")); return; }
-                    player.sendMessage(color("&6&lGASMP AUCTION HOUSE &8- &7Page " + (page + 1)));
-                    if (records.isEmpty()) { player.sendMessage(color("&7No active listings on this page.")); return; }
-                    for (PlayerDataStore.AuctionRecord record : records) {
-                        player.sendMessage(color("&e#" + record.id() + " &f" + record.itemName()
-                                + " &8by &7" + record.sellerName() + " &8- &6" + money(record.price()) + " Coins"));
+                    if (error != null) {
+                        player.sendMessage(color("&cCould not load auctions."));
+                        return;
                     }
-                    player.sendMessage(color("&7Use &f/ah buy <id> &7to purchase or &f/ah list <page> &7to browse."));
+                    openAuctionMenu(player, page, pageSize, records);
                 }));
+    }
+
+    private void openAuctionMenu(Player player, int page, int pageSize,
+                                 List<PlayerDataStore.AuctionRecord> records) {
+        AuctionMenuHolder holder = new AuctionMenuHolder(page);
+        Inventory inventory = Bukkit.createInventory(holder, 54,
+                ScreenUi.title("auction_house", "&8GASMP • Auction House"));
+        holder.setInventory(inventory);
+
+        ItemStack dark = named(Material.BLACK_STAINED_GLASS_PANE, " ");
+        for (int slot = 0; slot < 54; slot++) {
+            int row = slot / 9;
+            int column = slot % 9;
+            if (row == 0 || row == 5 || column == 0 || column == 8) inventory.setItem(slot, dark.clone());
+        }
+        ItemStack accent = named(Material.LIME_STAINED_GLASS_PANE, " ");
+        for (int slot : new int[]{0, 8, 45, 53}) inventory.setItem(slot, accent.clone());
+
+        int shown = Math.min(records.size(), LISTING_SLOTS.length);
+        for (int i = 0; i < shown; i++) {
+            PlayerDataStore.AuctionRecord record = records.get(i);
+            int slot = LISTING_SLOTS[i];
+            ItemStack icon;
+            try {
+                icon = decode(record.itemData());
+                if (icon == null || icon.getType().isAir()) icon = new ItemStack(Material.PAPER);
+            } catch (Exception exception) {
+                icon = new ItemStack(Material.PAPER);
+            }
+            ItemMeta meta = icon.getItemMeta();
+            if (meta != null) {
+                meta.setDisplayName(color("&f&l" + record.itemName()));
+                List<String> lore = meta.getLore() == null
+                        ? new ArrayList<>() : new ArrayList<>(meta.getLore());
+                lore.add(color("&8&m----------------"));
+                lore.add(color("&7Seller: &f" + record.sellerName()));
+                lore.add(color("&7Price: &a" + money(record.price()) + " Coins"));
+                lore.add(color("&7Listing: &8#" + record.id()));
+                long secondsLeft = Math.max(0L, (record.expiresAtMs() - System.currentTimeMillis()) / 1000L);
+                long hoursLeft = secondsLeft / 3600L;
+                long minutesLeft = (secondsLeft % 3600L) / 60L;
+                lore.add(color("&7Time left: &e" + hoursLeft + "h " + minutesLeft + "m"));
+                lore.add(color("&eClick to purchase"));
+                meta.setLore(lore);
+                icon.setItemMeta(meta);
+            }
+            inventory.setItem(slot, icon);
+            holder.listingAt(slot, record.id());
+        }
+
+        if (records.isEmpty()) {
+            inventory.setItem(22, named(Material.BARRIER, "&c&lNO ACTIVE LISTINGS",
+                    "&7There are no auctions on this page.",
+                    "&7Check again later or list an item with /ah sell."));
+        }
+        if (page > 0) inventory.setItem(45, named(Material.ARROW, "&a&lPrevious page"));
+        inventory.setItem(47, named(Material.SUNFLOWER, "&e&lRefresh",
+                "&7Reload current listings"));
+        inventory.setItem(49, named(Material.BOOK, "&a&lAUCTION HOUSE",
+                "&7Buy and sell items using Coins.",
+                "&7Use &f/ah sell <price> &7to list an item.",
+                "&8Transactions use the server Vault economy."));
+        inventory.setItem(51, named(Material.BARRIER, "&c&lClose"));
+        if (records.size() >= pageSize) {
+            inventory.setItem(53, named(Material.ARROW, "&a&lNext page"));
+        }
+        player.openInventory(inventory);
+    }
+
+    @EventHandler
+    public void onAuctionMenuClick(InventoryClickEvent event) {
+        if (!(event.getView().getTopInventory().getHolder() instanceof AuctionMenuHolder holder)) return;
+        event.setCancelled(true);
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        int slot = event.getRawSlot();
+        if (slot < 0 || slot >= event.getView().getTopInventory().getSize()) return;
+
+        Long listingId = holder.listingAt(slot);
+        if (listingId != null) {
+            player.closeInventory();
+            buy(player, new String[]{"buy", Long.toString(listingId)});
+            return;
+        }
+        if (slot == 45 && holder.page > 0) {
+            list(player, holder.page - 1);
+        } else if (slot == 47) {
+            list(player, holder.page);
+        } else if (slot == 49 || slot == 51) {
+            player.closeInventory();
+        } else if (slot == 53) {
+            list(player, holder.page + 1);
+        }
+    }
+
+    @EventHandler
+    public void onAuctionMenuDrag(InventoryDragEvent event) {
+        if (event.getView().getTopInventory().getHolder() instanceof AuctionMenuHolder) {
+            event.setCancelled(true);
+        }
+    }
+
+    private ItemStack named(Material material, String displayName, String... lore) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(color(displayName));
+            if (lore.length > 0) meta.setLore(Arrays.stream(lore).map(this::color).toList());
+            item.setItemMeta(meta);
+        }
+        return item;
     }
 
     private void mine(Player player) {
