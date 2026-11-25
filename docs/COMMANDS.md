@@ -11,12 +11,12 @@ Commands are registered in src/main/resources/plugin.yml. Actual access is also 
 | /shop | Open the Coins/Shards shop selector. |
 | /shop coins | Open the Vault Coins catalogue. |
 | /shop shards | Open the Shards key and decoration shop. |
-| /rtp | Request a safe random teleport. |
+| /rtp | Open the RTP world selector. Choose Overworld or Nether; The End is locked. |
 | /bounty place <player> <amount> | Place a Coins bounty on an online player. |
 | /bounty top | View active bounties. |
-| /ah list [page] | Browse auction listings. |
+| /ah or /ah list [page] | Open the paged auction GUI. Click a listing to review and confirm a purchase. |
 | /ah sell <price> | List the item held in your main hand. |
-| /ah buy <id> | Buy a listing; the item goes to your mailbox. |
+| /ah buy <id> | Buy a listing directly; the item goes to your mailbox. |
 | /ah cancel <id> | Cancel your own listing; the item returns to your mailbox. |
 | /ah mine | List your active listings. |
 | /ah collect | Collect pending auction items. |
@@ -35,6 +35,14 @@ Commands are registered in src/main/resources/plugin.yml. Actual access is also 
 | /casino challenge <player> <game> <shards> | Invite a player to a Shards-staked duel. |
 | /casino accept, /casino decline, /casino duel | Accept, decline or reopen an Arcade duel. |
 | /gvanish | Toggle staff vanish when permitted. |
+
+## RTP and warps
+
+- /rtp opens the world selector. Overworld and Nether are selectable; The End is intentionally locked.
+- Configure destination world names in plugins/GASMP-Core/rtp.yml under worlds.overworld and worlds.nether.
+- If the selected world is not loaded, its button is disabled.
+- The GASMP main menu has a Warps page with Crates, Spawn, Mystery (locked/coming soon), Minigame Worlds and the Shard Shop.
+- Configure the Crates and Spawn command targets in plugins/GASMP-Core/config.yml under warps.crates-command and warps.spawn-command. Defaults are `warp crates` and `spawn`.
 
 ## Cosmetic crate commands
 
@@ -100,6 +108,27 @@ The opening GUI uses a decelerating three-slot roulette, tier-colored frame mate
 
 /gcrateopen <player> <normal|medium|premium|aether|tidal|obsidian> is an internal console-only crate-opening dispatcher retained for integrations. Player senders are rejected by its handler; do not expose it as a player command.
 
+## Dual Paper build targets
+
+The plugin version remains **0.8.3** for both builds. The JAR classifier identifies the server API target:
+
+| Artifact | Server role | Install on |
+|---|---|---|
+| `GASMP-Core-0.8.3-paper-26.2.jar` | Official | Paper 26.2 official server |
+| `GASMP-Core-0.8.3-paper-26.3.jar` | Test only | Paper 26.3 test server |
+
+Build either target with JDK 25 and Gradle 9.x:
+
+```bash
+# Official server
+gradle clean build -PreleaseVersion=0.8.3 -PpaperApiVersion=26.2.build.+ -PpaperTarget=paper-26.2
+
+# Test server only
+gradle clean build -PreleaseVersion=0.8.3 -PpaperApiVersion=26.3.build.+ -PpaperTarget=paper-26.3
+```
+
+The GitHub Actions workflow builds both targets independently and uploads separate JAR + full-package artifacts. **Never install the Paper 26.3 test artifact on the official 26.2 server.** The plugin descriptor keeps API minimum 26.2; the two builds differ by compile target, not by plugin version.
+
 ## ItemsAdder setup and custom menu UI
 
 1. Copy the gasmp and gasmp_ranks folders into plugins/ItemsAdder/contents/.
@@ -108,4 +137,4 @@ The opening GUI uses a decelerating three-slot roulette, tier-colored frame mate
 4. Ensure the ItemsAdder resource pack is hosted and pushed to players.
 5. Reconnect and accept the updated pack. Clients using an older cached pack or declining the pack will not see the custom UI panels or custom models.
 
-The custom menu titles reference the font-image aliases in gasmp/configs/ui.yml; the corresponding PNG files are in gasmp/textures/font/. ItemsAdder uses font-image placeholders such as :offset_-8::ui_main:.
+GASMP menus use native Minecraft inventory grids and do not require font-image overlays. ItemsAdder is still required for the custom item icons, cosmetics, crates and furniture models.
