@@ -2,7 +2,7 @@
 
 **GASMP Core** is an all-in-one Paper SMP plugin for the GASMP server, with Shards, Coins, shops, teams, casino arcade, Battle Pass, moderation, furniture, cosmetic collections and animated crate systems.
 
-**Target:** Paper 26.2 · **Runtime:** Java 25 · **Build:** Gradle 9.x · **Custom item and font provider:** ItemsAdder 4.x
+**Official server:** Paper 26.2 · **Test server:** Paper 26.3 · **Runtime:** Java 25 · **Build:** Gradle 9.x · **Custom item provider:** ItemsAdder 4.x
 
 ## Downloads
 
@@ -13,8 +13,10 @@
 
 ## What's new in 0.8.3
 
-- Fixed inventory title rendering so menus use ItemsAdder font-image panels rather than ignoring the screen ID.
-- Added custom panel artwork for the main menu, shop screens and crate screens.
+- Replaced oversized font-image overlays with native Minecraft inventory menus, clear item grids and compact titles.
+- Added RTP world selection (Overworld / Nether; End locked) and a Warps menu (Crates / Spawn / Mystery locked / minigame destinations).
+- Added a paged Auction House inventory with listing preview and explicit purchase confirmation.
+- Unified the shop, decoration, Arcade and main menu borders with a dark pixel-grid frame and cyan / purple accents; added custom ItemsAdder category icons where available.
 - Added three new GASMP crate themes: AETHER SANCTUM, TIDAL TROVE and OBSIDIAN RELIC.
 - Added matching AETHER SIGIL, TIDAL TOKEN and OBSIDIAN SEAL keys, furniture items and unique model textures.
 - Added crate-specific roulette color palettes and tier particles during the opening animation.
@@ -24,7 +26,7 @@
 
 ## Required server plugins
 
-- Paper 26.2 and Java 25
+- Paper 26.2 and Java 25 for the official server; Paper 26.3 and Java 25 for the test server
 - ItemsAdder 4.x (4.0.13+ recommended)
 - LuckPerms 5.x
 - Vault plus a plugin that registers Vault Economy for Coins features
@@ -39,12 +41,12 @@ Optional integrations include PlaceholderAPI, TAB, Geyser + Floodgate, ProtocolL
 2. Put GASMP-Core-0.8.3.jar in the server's plugins/ folder.
 3. Copy the included plugins/ItemsAdder/contents/gasmp/ and gasmp_ranks/ folders into your server's plugins/ItemsAdder/contents/ folder. The optional rank_bundle/ folder adds extra rank emblems.
 4. Start or restart the server.
-5. Run /iareload and fix any YAML, model or font-image warnings in the console.
+5. Run /iareload and fix any YAML or model warnings in the console.
 6. Run /iazip to rebuild the resource pack.
 7. Ensure the ItemsAdder pack is hosted and delivered to players, then reconnect and ACCEPT the updated pack. A stale cached pack or declined pack will show missing glyphs and models.
 8. Test the menus and all six crate/key pairs before production use.
 
-The UI background files live in gasmp/textures/font/ and their glyph definitions live in gasmp/configs/ui.yml. The Java menu title helper references the aliases defined there. See the ItemsAdder Font Images guide: https://wiki.itemsadder.com/adding-content/font-images/font-images/.
+GASMP menus use native Minecraft inventory slots and do not need custom font-image background overlays. ItemsAdder supplies the custom crate, cosmetic and furniture icons.
 
 ## Six cosmetic crates
 
@@ -85,15 +87,26 @@ See docs/COMMANDS.md for the full player, staff, console and crate command refer
 
 Player profiles, Shards ledger, Vault Coins shop, RTP, combat tagging, bounties, auction house and item mailbox, Battle Pass progression, Shards Decoration Shop, casino arcade, teams, chat games, moderation, maintenance, holograms, leaderboards, staff vanish, tool skills and rank administration.
 
-## Build from source
+## Dual Paper build targets
+
+The plugin version remains **0.8.3**. Two separate artifacts are produced:
+
+| Artifact | Purpose |
+|---|---|
+| `GASMP-Core-0.8.3-paper-26.2.jar` | Official Paper 26.2 server |
+| `GASMP-Core-0.8.3-paper-26.3.jar` | Paper 26.3 test server only |
 
 Use JDK 25 and Gradle 9.x:
 
 ```bash
-gradle clean build
+# Official server
+gradle clean build -PreleaseVersion=0.8.3 -PpaperApiVersion=26.2.build.+ -PpaperTarget=paper-26.2
+
+# Test server only
+gradle clean build -PreleaseVersion=0.8.3 -PpaperApiVersion=26.3.build.+ -PpaperTarget=paper-26.3
 ```
 
-Output: build/libs/GASMP-Core-0.8.3.jar. SQLite JDBC is bundled into the plugin JAR.
+GitHub Actions builds both targets separately and uploads the JAR and full install ZIP for each. Never place the 26.3 test JAR on the official 26.2 server. SQLite JDBC is bundled into both plugin JARs.
 
 ## Asset notes
 
