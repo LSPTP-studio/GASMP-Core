@@ -460,9 +460,16 @@ public final class CasinoService implements Listener, CommandExecutor, TabComple
         ItemMeta meta = filler.getItemMeta();
         meta.setDisplayName(" ");
         filler.setItemMeta(meta);
+        ItemStack accent = new ItemStack(Material.MAGENTA_STAINED_GLASS_PANE);
+        ItemMeta accentMeta = accent.getItemMeta();
+        accentMeta.setDisplayName(" ");
+        accent.setItemMeta(accentMeta);
         for (int i = 0; i < size; i++) {
             int row = i / 9, col = i % 9;
             if (row == 0 || row == size / 9 - 1 || col == 0 || col == 8) inventory.setItem(i, filler.clone());
+        }
+        if (size == 54) {
+            for (int slot : new int[]{2, 3, 5, 6, 47, 48, 50, 51}) inventory.setItem(slot, accent.clone());
         }
         return inventory;
     }
