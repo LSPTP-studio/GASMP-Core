@@ -2,6 +2,7 @@ package net.gasmp.core.gui;
 
 public enum MenuPage {
     MAIN,
+    RTP,
     SHOP,
     STATISTICS,
     DECORATIONS,
