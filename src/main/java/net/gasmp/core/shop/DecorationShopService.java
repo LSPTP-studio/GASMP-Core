@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** Shards-funded Furniture and Cosmetics catalogue backed by ItemsAdder custom items. */
+/** Shards-funded Furniture and Cosmetics catalogue backed by CraftEngine custom items. */
 public final class DecorationShopService implements Listener {
     private static final int[] PRODUCT_SLOTS = {
             10, 11, 12, 13, 14, 15, 16,
@@ -125,7 +125,7 @@ public final class DecorationShopService implements Listener {
         for (int index = start; index < end; index++) {
             Product product = visible.get(index);
             int slot = PRODUCT_SLOTS[index - start];
-            ItemStack icon = createItemsAdderItem(product.contentId());
+            ItemStack icon = createCraftEngineItem(product.contentId());
             if (icon == null) icon = new ItemStack(category.equals("furniture") ? Material.ARMOR_STAND : Material.PAPER);
             ItemMeta meta = icon.getItemMeta();
             if (meta != null) {
@@ -155,11 +155,11 @@ public final class DecorationShopService implements Listener {
             player.sendMessage(color("&cYour previous decoration purchase is still processing."));
             return;
         }
-        ItemStack reward = createItemsAdderItem(product.contentId());
+        ItemStack reward = createCraftEngineItem(product.contentId());
         if (reward == null) {
             purchasing.remove(player.getUniqueId());
-            player.sendMessage(color("&cThis ItemsAdder item is not loaded: &f" + product.contentId()));
-            player.sendMessage(color("&7Ask staff to run /iareload and verify the GASMP ItemsAdder contents folder."));
+            player.sendMessage(color("&cThis CraftEngine item is not loaded: &f" + product.contentId()));
+            player.sendMessage(color("&7Ask staff to run /iareload and verify the GASMP CraftEngine contents folder."));
             return;
         }
         plugin.getDataStore().changeShards(player.getUniqueId(), player.getName(), player.getUniqueId(),
@@ -249,13 +249,13 @@ public final class DecorationShopService implements Listener {
         inventory.setItem(slot, item);
     }
 
-    private ItemStack createItemsAdderItem(String contentIdText) {
+    private ItemStack createCraftEngineItem(String contentIdText) {
         return plugin.getCrateService().createContentItem(contentIdText, 1);
     }
 
     private void setCustomIcon(Inventory inventory, int slot, String id, Material fallback,
                                String title, String... lore) {
-        ItemStack icon = createItemsAdderItem(id);
+        ItemStack icon = createCraftEngineItem(id);
         if (icon == null) icon = new ItemStack(fallback);
         ItemMeta meta = icon.getItemMeta();
         if (meta != null) {

@@ -25,7 +25,7 @@ import net.gasmp.core.rank.RankService;
 import net.gasmp.core.rtp.RtpService;
 import net.gasmp.core.shop.ShopService;
 import net.gasmp.core.shop.DecorationShopService;
-import net.gasmp.core.integration.ItemsAdderBridge;
+import net.gasmp.core.integration.CraftEngineBridge;
 import net.gasmp.core.skills.ToolSkillsService;
 import net.gasmp.core.staff.CommandRestrictionService;
 import net.gasmp.core.staff.StaffAccess;
@@ -51,7 +51,7 @@ public final class GASMPCore extends JavaPlugin {
     private BattlePassService battlePassService;
     private CasinoService casinoService;
     private CrateService crateService;
-    private ItemsAdderBridge itemsAdderBridge;
+    private CraftEngineBridge craftEngineBridge;
     private TeamService teamService;
     private MaintenanceService maintenanceService;
     private ModerationService moderationService;
@@ -77,9 +77,9 @@ public final class GASMPCore extends JavaPlugin {
             return;
         }
 
-        itemsAdderBridge = new ItemsAdderBridge(this);
-        if (!itemsAdderBridge.isAvailable()) {
-            getLogger().severe("ItemsAdder is required for GASMP ItemsAdder Edition. Install ItemsAdder 4.x and restart.");
+        craftEngineBridge = new CraftEngineBridge(this);
+        if (!craftEngineBridge.isAvailable()) {
+            getLogger().severe("CraftEngine is required for GASMP CraftEngine Edition. Install CraftEngine 4.x and restart.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -173,7 +173,7 @@ public final class GASMPCore extends JavaPlugin {
         if (getConfig().getBoolean("modules.chat-games", true)) chatGameService.startScheduler();
 
         getLogger().info("GASMP Core v" + getPluginMeta().getVersion() + " enabled.");
-        getLogger().info("GASMP ItemsAdder Edition active: profiles, Shards, Vault Coins, decorations, custom cosmetic crates, casino, ranks, chat games, teams and staff tools.");
+        getLogger().info("GASMP CraftEngine Edition active: profiles, Shards, Vault Coins, decorations, custom cosmetic crates, casino, ranks, chat games, teams and staff tools.");
         if (!BukkitCompatibleVault()) getLogger().warning("Vault economy unavailable; Coins features are disabled until a provider registers Economy.class.");
     }
 
@@ -223,7 +223,7 @@ public final class GASMPCore extends JavaPlugin {
     public ShopService getShopService() { return shopService; }
     public DecorationShopService getDecorationShopService() { return decorationShopService; }
     public CrateService getCrateService() { return crateService; }
-    public ItemsAdderBridge getItemsAdderBridge() { return itemsAdderBridge; }
+    public CraftEngineBridge getCraftEngineBridge() { return craftEngineBridge; }
     public CombatService getCombatService() { return combatService; }
     public RtpService getRtpService() { return rtpService; }
 

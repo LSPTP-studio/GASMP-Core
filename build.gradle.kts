@@ -13,10 +13,13 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     mavenCentral()
     maven("https://jitpack.io")
+    maven("https://repo.momirealms.net/releases/")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:${paperApiVersion.get()}")
+    compileOnly("net.momirealms:craft-engine-core:26.9")
+    compileOnly("net.momirealms:craft-engine-bukkit:26.9")
     compileOnly("net.luckperms:api:5.5")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
         exclude(group = "org.bukkit", module = "bukkit")

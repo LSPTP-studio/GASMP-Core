@@ -5,7 +5,7 @@ api-version: '26.2'
 author: GASMP Development
 description: "GASMP Core: native inventory GUIs, six themed cosmetic crates, keys, animations, Shards, shops, casino, teams and staff tools."
 depend:
-  - ItemsAdder
+  - CraftEngine
   - Vault
   - LuckPerms
 softdepend:

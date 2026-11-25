@@ -176,7 +176,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
 
     /**
      * Upgrade saved cosmetic reward IDs from previous item-provider prefixes to
-     * the native ItemsAdder IDs shipped in the current crates.yml resource.
+     * the native CraftEngine IDs shipped in the current crates.yml resource.
      *
      * Existing weights, display names, amounts, custom rewards and placed
      * locations are preserved. The original file is backed up once.
@@ -189,7 +189,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             defaults = YamlConfiguration.loadConfiguration(
                     new java.io.InputStreamReader(input, java.nio.charset.StandardCharsets.UTF_8));
         } catch (java.io.IOException error) {
-            plugin.getLogger().warning("Could not load bundled crate defaults for ItemsAdder ID migration: " + error.getMessage());
+            plugin.getLogger().warning("Could not load bundled crate defaults for CraftEngine ID migration: " + error.getMessage());
             return;
         }
 
@@ -215,14 +215,14 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             File backup = new File(plugin.getDataFolder(), "crates-provider-backup.yml");
             if (!backup.exists()) java.nio.file.Files.copy(file.toPath(), backup.toPath());
             current.save(file);
-            plugin.getLogger().info("Migrated " + migrated + " saved crate reward IDs to the ItemsAdder gasmp namespace. Backup: crates-provider-backup.yml.");
+            plugin.getLogger().info("Migrated " + migrated + " saved crate reward IDs to the CraftEngine gasmp namespace. Backup: crates-provider-backup.yml.");
         } catch (Exception error) {
             plugin.getLogger().severe("Could not migrate saved crate reward IDs: " + error.getMessage());
         }
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // ItemsAdder furniture can be opened by the Core furniture interaction listener; this command remains a staff/testing fallback.
+        // CraftEngine furniture can be opened by the Core furniture interaction listener; this command remains a staff/testing fallback.
         if (command.getName().equalsIgnoreCase("keyall")) return keyAll(sender, args);
         if (command.getName().equalsIgnoreCase("gcrateopen")) {
             if (!(sender instanceof ConsoleCommandSender)) {
@@ -299,13 +299,13 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             actor.sendMessage(color("&cAmount must be between 1 and 64."));
             return;
         }
-        // ItemsAdder furniture is a placeable item, not a note-block custom block.
+        // CraftEngine furniture is a placeable item, not a note-block custom block.
         // Both historical subcommands intentionally issue that same furniture stack.
         String contentId = "gasmp:" + id + "_crate";
-        ItemStack custom = createItemsAdderItem(contentId, amount);
+        ItemStack custom = createCraftEngineItem(contentId, amount);
         if (custom == null) {
             actor.sendMessage(color("&cCould not create &f" + contentId
-                    + "&c. Confirm ItemsAdder has loaded the GASMP contents folder, then run /iareload."));
+                    + "&c. Confirm CraftEngine has loaded the GASMP contents folder, then run /iareload."));
             return;
         }
         Map<Integer, ItemStack> left = target.getInventory().addItem(custom);
@@ -332,10 +332,10 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             actor.sendMessage(color("&cAmount must be between 1 and 64."));
             return;
         }
-        ItemStack crateItem = createItemsAdderItem("gasmp:" + id + "_crate", amount);
+        ItemStack crateItem = createCraftEngineItem("gasmp:" + id + "_crate", amount);
         ItemStack keyItem = createKey(id, amount);
         if (crateItem == null || keyItem == null) {
-            actor.sendMessage(color("&cThe ItemsAdder crate or matching key is missing for &f" + id
+            actor.sendMessage(color("&cThe CraftEngine crate or matching key is missing for &f" + id
                     + "&c. Run /iareload and check the console."));
             return;
         }
@@ -416,7 +416,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         if (args.length == 4) try { amount = Integer.parseInt(args[3]); } catch (NumberFormatException ex) { amount = 0; }
         if (amount < 1 || amount > 64) { player.sendMessage(color("&cAmount must be between 1 and 64.")); return; }
         ItemStack key = createKey(id, amount);
-        if (key == null) { player.sendMessage(color("&cItemsAdder key item is not loaded: gasmp:" + id + "_key")); return; }
+        if (key == null) { player.sendMessage(color("&cCraftEngine key item is not loaded: gasmp:" + id + "_key")); return; }
         Map<Integer, ItemStack> left = target.getInventory().addItem(key);
         left.values().forEach(item -> target.getWorld().dropItemNaturally(target.getLocation(), item));
         player.sendMessage(color("&aGave " + amount + "x " + crateKeyName(id) + " to " + target.getName() + "."));
@@ -436,7 +436,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             player.sendMessage(color(crateColor(id) + "&l" + crateDisplayName(id)
                     + " &8[" + id + "] &7• &f" + crateKeyName(id)
                     + " &7• &f" + count + " rewards &7• "
-                    + (placed ? "&aLegacy location set" : "&8ItemsAdder furniture enabled")));
+                    + (placed ? "&aLegacy location set" : "&8CraftEngine furniture enabled")));
         }
         player.sendMessage(color("&7Use /crates info <id> or /crates preview <id> for details."));
     }
@@ -457,7 +457,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             return;
         }
 
-        // Sneak + left-click previews. Normal mining is left to ItemsAdder so
+        // Sneak + left-click previews. Normal mining is left to CraftEngine so
         // its furniture/custom-block handler can return the placed item.
         if (event.getPlayer().isSneaking()) {
             event.setCancelled(true);
@@ -475,7 +475,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         openCrate(event.getPlayer(), id);
     }
 
-    /** Sneak-punch previews; ordinary punches are handled by ItemsAdder to pick up furniture. */
+    /** Sneak-punch previews; ordinary punches are handled by CraftEngine to pick up furniture. */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onCrateModelPunch(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player player)
@@ -502,9 +502,8 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     }
 
     private String crateIdAt(Block block) {
-        String custom = crateTierFromContentId(plugin.getItemsAdderBridge().furnitureIdAt(block));
-        if (custom == null) custom = crateTierFromContentId(plugin.getItemsAdderBridge().customBlockIdAt(block));
-        if (custom != null) return custom;
+        // CraftEngine crates are furniture entities, not custom Bukkit blocks.
+        // The block-location fallback remains for legacy vanilla chest/barrel crates.
         String configured = configuredCrateAt(block);
         String canonical = configured == null ? null : canonicalCrateId(configured);
         return canonical != null && config.getConfigurationSection("crates." + canonical) != null ? canonical : null;
@@ -514,7 +513,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private boolean isProtectedCrate(Block block) { return crateIdAt(block) != null; }
 
     private String crateIdFromModelEntity(Entity entity) {
-        return crateTierFromContentId(plugin.getItemsAdderBridge().furnitureIdAt(entity));
+        return crateTierFromContentId(plugin.getCraftEngineBridge().furnitureIdAt(entity));
     }
 
     private String crateTierFromContentId(String namespacedId) {
@@ -876,7 +875,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         }
         if (type.equals("cosmetic")) {
             String contentId = reward.getString("content", "");
-            ItemStack cosmetic = contentId.isBlank() ? null : createItemsAdderItem(contentId, 1);
+            ItemStack cosmetic = contentId.isBlank() ? null : createCraftEngineItem(contentId, 1);
             return cosmetic == null ? new ItemStack(Material.BARRIER) : cosmetic;
         }
         Material material = switch (type) {
@@ -1034,9 +1033,9 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
                     refundKey(player, crateId, "Configured cosmetic amount must be between 1 and 64.");
                     return;
                 }
-                ItemStack cosmetic = createItemsAdderItem(contentId, (int) amount);
+                ItemStack cosmetic = createCraftEngineItem(contentId, (int) amount);
                 if (cosmetic == null) {
-                    refundKey(player, crateId, "Cosmetic '" + contentId + "' is not loaded by ItemsAdder.");
+                    refundKey(player, crateId, "Cosmetic '" + contentId + "' is not loaded by CraftEngine.");
                     plugin.getLogger().warning("Could not create cosmetic reward " + contentId + " from crate " + crateId);
                     return;
                 }
@@ -1200,14 +1199,14 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
     private ItemStack createKey(String id, int amount) {
         String canonical = canonicalCrateId(id);
         String contentId = "gasmp:" + canonical + "_key";
-        ItemStack item = createItemsAdderItem(contentId, amount);
+        ItemStack item = createCraftEngineItem(contentId, amount);
         if (item == null) {
-            plugin.getLogger().warning("ItemsAdder key item is missing: " + contentId);
+            plugin.getLogger().warning("CraftEngine key item is missing: " + contentId);
             return null;
         }
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            // Keep the styled ItemsAdder display name and lore. GASMP only adds
+            // Keep the styled CraftEngine display name and lore. GASMP only adds
             // its internal crate-tier identity tag.
             meta.getPersistentDataContainer().set(crateKey, PersistentDataType.STRING, canonical);
             item.setItemMeta(meta);
@@ -1215,18 +1214,18 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         return item;
     }
 
-    /** Resolve a GASMP item from the ItemsAdder registry. */
-    private ItemStack createItemsAdderItem(String contentIdText, int amount) {
+    /** Resolve a GASMP item from the CraftEngine registry. */
+    private ItemStack createCraftEngineItem(String contentIdText, int amount) {
         if (contentIdText == null || contentIdText.isBlank() || amount < 1 || amount > 64) return null;
-        ItemStack stack = plugin.getItemsAdderBridge().createItem(contentIdText.trim());
+        ItemStack stack = plugin.getCraftEngineBridge().createItem(contentIdText.trim());
         if (stack == null) return null;
         stack.setAmount(Math.min(amount, stack.getMaxStackSize()));
         return stack;
     }
 
-    /** Public bridge used by the Shards decoration shop; ItemsAdder is the sole item provider. */
+    /** Public bridge used by the Shards decoration shop; CraftEngine is the sole item provider. */
     public ItemStack createContentItem(String contentIdText, int amount) {
-        return createItemsAdderItem(contentIdText, amount);
+        return createCraftEngineItem(contentIdText, amount);
     }
 
     private String crateDisplayName(String crateId) {
@@ -1281,7 +1280,7 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
         String canonical = canonicalCrateId(id);
         String tagged = item.getItemMeta().getPersistentDataContainer().get(crateKey, PersistentDataType.STRING);
         if (canonical.equals(canonicalCrateId(tagged))) return true;
-        String actual = plugin.getItemsAdderBridge().idOf(item);
+        String actual = plugin.getCraftEngineBridge().idOf(item);
         if (actual == null) return false;
         String expected = "gasmp:" + canonical + "_key";
         if (expected.equalsIgnoreCase(actual)) return true;
