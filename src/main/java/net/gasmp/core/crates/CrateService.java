@@ -86,18 +86,21 @@ public final class CrateService implements Listener, CommandExecutor, TabComplet
             YamlConfiguration current = YamlConfiguration.loadConfiguration(file);
             boolean changed = false;
             for (String id : List.of("normal", "medium", "premium", "aether", "tidal", "obsidian")) {
+                ConfigurationSection template = defaults.getConfigurationSection("crates." + id);
+                if (template == null) continue;
                 if (current.getConfigurationSection("crates." + id) == null) {
-                    Object template = defaults.get("crates." + id);
-                    if (template != null) {
-                        current.set("crates." + id, template);
-                        changed = true;
+                    // Copy leaf values one at a time; do not store Bukkit MemorySection objects.
+                    for (String nestedPath : template.getKeys(true)) {
+                        if (template.isConfigurationSection(nestedPath)) continue;
+                        current.set("crates." + id + "." + nestedPath, template.get(nestedPath));
                     }
+                    changed = true;
                     continue;
                 }
                 for (String field : List.of("display-name", "key-name", "color", "description")) {
                     String path = "crates." + id + "." + field;
-                    if (!current.contains(path) && defaults.contains(path)) {
-                        current.set(path, defaults.get(path));
+                    if (!current.contains(path) && template.contains(field)) {
+                        current.set(path, template.get(field));
                         changed = true;
                     }
                 }

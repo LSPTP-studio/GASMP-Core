@@ -138,11 +138,11 @@ items:
       - "&7Unlocks AETHER SANCTUM cosmetics."
       - "&8GASMP • KEY ITEM"
     graphics:
-      model: item/crates/key
+      model: item/crates/aether_key
     resource:
       material: TRIPWIRE_HOOK
       generate: false
-      model_path: item/crates/key
+      model_path: item/crates/aether_key
 
   aether_crate:
     name: "&b&lTHE AETHER SANCTUM"
@@ -183,11 +183,11 @@ items:
       - "&7Unlocks TIDAL TROVE cosmetics."
       - "&8GASMP • KEY ITEM"
     graphics:
-      model: item/crates/key
+      model: item/crates/tidal_key
     resource:
       material: TRIPWIRE_HOOK
       generate: false
-      model_path: item/crates/key
+      model_path: item/crates/tidal_key
 
   tidal_crate:
     name: "&3&lTHE TIDAL TROVE"
@@ -228,11 +228,11 @@ items:
       - "&7Unlocks OBSIDIAN RELIC cosmetics."
       - "&8GASMP • KEY ITEM"
     graphics:
-      model: item/crates/key
+      model: item/crates/obsidian_key
     resource:
       material: TRIPWIRE_HOOK
       generate: false
-      model_path: item/crates/key
+      model_path: item/crates/obsidian_key
 
   obsidian_crate:
     name: "&c&lTHE OBSIDIAN RELIC"
