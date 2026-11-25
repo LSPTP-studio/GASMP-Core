@@ -18,12 +18,15 @@ public final class ScreenUi {
             case "crates", "crate", "crate_details" -> "ui_crate";
             case "shard_shop", "shop" -> "ui_shop";
             case "statistics", "stats" -> "ui_stats";
-            case "decorations" -> "ui_decor";
+            case "decorations", "decoration_shop" -> "ui_decor";
+            case "auction", "auction_house" -> "ui_auction";
+            case "rtp", "world_select" -> "ui_rtp";
+            case "cosmetics" -> "ui_cosmetics";
             case "shards" -> "ui_shards";
             case "casino" -> "ui_arcade";
             case "profile" -> "ui_profile";
             case "settings" -> "ui_settings";
-            case "adventure" -> "ui_adventure";
+            case "adventure" -> "ui_rtp";
             default -> "ui_main";
         };
         return ChatColor.WHITE + ":offset_-8::" + glyph + ":";
