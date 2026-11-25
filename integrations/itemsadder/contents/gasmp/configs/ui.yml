@@ -19,8 +19,17 @@ font_images:
     y_position: 222
     shadow:
       enabled: false
+  ui_crate:
+    path: font/ui_crate.png
+    permission: 0
+    show_in_gui: true
+    suggest_in_command: false
+    scale_ratio: 222
+    y_position: 222
+    shadow:
+      enabled: false
   ui_stats:
-    path: font/ui_main.png
+    path: font/ui_stats.png
     permission: 0
     show_in_gui: true
     suggest_in_command: false
@@ -29,7 +38,7 @@ font_images:
     shadow:
       enabled: false
   ui_decor:
-    path: font/ui_shop.png
+    path: font/ui_decor.png
     permission: 0
     show_in_gui: true
     suggest_in_command: false
@@ -38,7 +47,7 @@ font_images:
     shadow:
       enabled: false
   ui_shards:
-    path: font/ui_shop.png
+    path: font/ui_shards.png
     permission: 0
     show_in_gui: true
     suggest_in_command: false
@@ -47,7 +56,7 @@ font_images:
     shadow:
       enabled: false
   ui_arcade:
-    path: font/ui_shop.png
+    path: font/ui_arcade.png
     permission: 0
     show_in_gui: true
     suggest_in_command: false
@@ -56,7 +65,7 @@ font_images:
     shadow:
       enabled: false
   ui_profile:
-    path: font/ui_main.png
+    path: font/ui_profile.png
     permission: 0
     show_in_gui: true
     suggest_in_command: false
@@ -65,7 +74,7 @@ font_images:
     shadow:
       enabled: false
   ui_settings:
-    path: font/ui_main.png
+    path: font/ui_settings.png
     permission: 0
     show_in_gui: true
     suggest_in_command: false
@@ -74,7 +83,7 @@ font_images:
     shadow:
       enabled: false
   ui_adventure:
-    path: font/ui_main.png
+    path: font/ui_rtp.png
     permission: 0
     show_in_gui: true
     suggest_in_command: false
@@ -82,8 +91,26 @@ font_images:
     y_position: 222
     shadow:
       enabled: false
-  ui_crate:
-    path: font/ui_crate.png
+  ui_rtp:
+    path: font/ui_rtp.png
+    permission: 0
+    show_in_gui: true
+    suggest_in_command: false
+    scale_ratio: 222
+    y_position: 222
+    shadow:
+      enabled: false
+  ui_auction:
+    path: font/ui_auction.png
+    permission: 0
+    show_in_gui: true
+    suggest_in_command: false
+    scale_ratio: 222
+    y_position: 222
+    shadow:
+      enabled: false
+  ui_cosmetics:
+    path: font/ui_cosmetics.png
     permission: 0
     show_in_gui: true
     suggest_in_command: false
